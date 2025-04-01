@@ -1,6 +1,6 @@
 # Next.js + Jest
 
-This example shows how to configure Jest to work with Next.js.
+## Getting Startededed
 
 This includes Next.js' built-in support for Global CSS, CSS Modules and TypeScript. This example also shows how to use Jest with the App Router and React Server Components.
 
