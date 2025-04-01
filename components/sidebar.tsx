@@ -1,5 +1,6 @@
-"use client"
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 
@@ -15,6 +16,7 @@ interface SidebarProps {
 
 export default function Sidebar({ routes }: SidebarProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const pathname = usePathname(); // Get the current route
 
   return (
     <aside
@@ -33,7 +35,9 @@ export default function Sidebar({ routes }: SidebarProps) {
           <Link
             key={href}
             href={href}
-            className="text-gray-800 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200"
+            className={`text-gray-800 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 ${
+              pathname === href ? "bg-gray-300 font-bold" : ""
+            }`}
           >
             <Icon /> {isSidebarOpen && label}
           </Link>
