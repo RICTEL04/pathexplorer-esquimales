@@ -1,11 +1,12 @@
 "use client";
 import Sidebar from "@/components/sidebar";
-import { BookOpen, Users, Home } from "lucide-react"; // Import Home icon
+import { Home, Users, Folder, MessageCircle } from "lucide-react"; // Import MessageCircle icon
 
 const routes = [
-  { href: "/capability-lead", label: "Inicio", Icon: Home }, // Root route
-  { href: "/capability-lead/validar-cursos", label: "Validar Cursos", Icon: BookOpen },
+  { href: "/capability-lead", label: "Inicio", Icon: Home }, // Restored Home route
+  { href: "/capability-lead/proyectos", label: "Proyectos", Icon: Folder }, // Proyectos as its own route
   { href: "/capability-lead/perfiles-de-empleados", label: "Perfiles de Empleados", Icon: Users },
+  { href: "/capability-lead/talent-discussions", label: "Talent Discussions", Icon: MessageCircle }, // New Talent Discussions route
 ];
 
 export default function CapabilityLeadLayout({ children }: { children: React.ReactNode }) {
