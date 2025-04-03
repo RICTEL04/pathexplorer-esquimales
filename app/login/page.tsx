@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import './login.css';
 import backgroundImage from './Imagenes/milad.jpg';
@@ -24,7 +25,11 @@ export default function Home() {
             <input type="password" placeholder="Contraseña" />
           </div>
           <button type="submit">Sign in</button>
-          <a href="http://endless.horse/" style={{fontSize: 15, padding: 15, fontFamily: "system-ui"}}>¿Se te olvidó tu contraseña? Skill issue.</a>
+          
+          {/* Use Link instead of <a> */}
+          <Link href="/recuperacion" style={{ fontSize: 15, padding: 15, fontFamily: "system-ui" }}>
+            ¿Se te olvidó tu contraseña? Skill issue.
+          </Link>
         </form>
       </div>
     </div>
