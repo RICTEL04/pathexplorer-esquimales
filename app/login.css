@@ -30,7 +30,7 @@
     z-index: 1;
     float: right;
     height: 100%;
-    width: 55%;
+    width: 45%;
     background-color: #fff;
     display: flex;
     flex-direction: column;
@@ -46,9 +46,10 @@
 
 .icon{
     color: #8b36db;
-    font-size: 20px;
-    translate: 90% 120%;
+    font-size: 16px;
+    translate: 130% 160%;
     position: absolute;
+
 }
 
 form {
@@ -79,7 +80,7 @@ form input {
     border-radius: 10px;
     width: 300px;
     padding: 12px 40px;
-    margin: 12px 10px;
+    margin: 10px 10px;
 }
 
 form input::placeholder {
@@ -104,7 +105,7 @@ form button:hover {
 .cubo1{
     position: absolute;
     top: 0%; 
-    left: 38%;
+    left: 48%;
     z-index: 2;
     width: 5%;
     height: 100%;
@@ -114,7 +115,7 @@ form button:hover {
 .cubo2{
     position: absolute;
     top: 0%; 
-    left: 33%;
+    left: 43%;
     z-index: 2;
     width: 3%;
     height: 100%;
@@ -124,7 +125,7 @@ form button:hover {
 .cubo3{
     position: absolute;
     top: 0%; 
-    left: 30%;
+    left: 40%;
     z-index: 2;
     width: 1%;
     height: 100%;
