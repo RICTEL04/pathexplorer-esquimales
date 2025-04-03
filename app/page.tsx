@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import './login.css';
+import '@/app/login/login.css';
 import { FaUser } from "react-icons/fa6";
 import { FaLock } from "react-icons/fa";
 import { useState } from "react";
