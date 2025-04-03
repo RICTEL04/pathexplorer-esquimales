@@ -14,15 +14,17 @@ export default function Home() {
       <div className="contenedor">
         <form action="">
           <p className="thick" style={{ fontFamily: "system-ui", fontSize: 48 }}>Login</p>
+          <p className="thin" style={{ fontFamily: "system-ui", fontSize: 15 }}>Inicia sesión para continuar</p>
           <div className="input-container">
             <FaUser className="icon" />
-            <input type="text" placeholder="Username" />
+            <input type="text" placeholder="Usuario" />
           </div>
           <div className="input-container">
             <FaLock className="icon" />
-            <input type="password" placeholder="Password" />
+            <input type="password" placeholder="Contraseña" />
           </div>
           <button type="submit">Sign in</button>
+          <a href="http://endless.horse/" style={{fontSize: 15, padding: 15, fontFamily: "system-ui"}}>¿Se te olvidó tu contraseña? Skill issue.</a>
         </form>
       </div>
     </div>
