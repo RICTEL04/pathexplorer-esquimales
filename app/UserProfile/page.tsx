@@ -40,7 +40,7 @@ const UserProfile = () => {
     projects: [
       {
         id: "1",
-        name: "Project A",
+        name: "Project Aaaaaaaaaaaaaaaaaaaaaaaaaaa",
         client: "Client X",
         cargability: "80",
         endDate: "2025-01-01"
