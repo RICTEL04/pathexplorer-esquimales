@@ -1,20 +1,23 @@
 "use client";
 import { useState } from "react";
-
-const employees = [
-  { id: 1, name: "Juan Pérez", position: "Desarrollador Frontend", email: "juan.perez@example.com", level: 3, project: "Proyecto A" },
-  { id: 2, name: "María López", position: "Diseñadora UX/UI", email: "maria.lopez@example.com", level: 2, project: "Proyecto B" },
-  { id: 3, name: "Carlos García", position: "Gerente de Proyecto", email: "carlos.garcia@example.com", level: 1, project: "Proyecto A" },
-  { id: 4, name: "Ana Torres", position: "Ingeniera de Software", email: "ana.torres@example.com", level: 5, project: "Proyecto C" },
-];
+import { employees } from "./employeesData"; // Import the dummy data
+import EmployeeCard from "./EmployeeCard"; // Import the EmployeeCard component
 
 export default function PerfilesDeEmpleadosPage() {
   const [selectedProject, setSelectedProject] = useState("Todos");
+  const [isLeadFilter, setIsLeadFilter] = useState("Todos");
+  const [showProjectFilter, setShowProjectFilter] = useState(false); // Toggle for project filter
+  const [showLeadFilter, setShowLeadFilter] = useState(false); // Toggle for isProjectLead filter
 
-  const filteredEmployees =
-    selectedProject === "Todos"
-      ? employees
-      : employees.filter((employee) => employee.project === selectedProject);
+  const filteredEmployees = employees.filter((employee) => {
+    const projectMatch =
+      selectedProject === "Todos" || employee.project === selectedProject;
+    const leadMatch =
+      isLeadFilter === "Todos" ||
+      (isLeadFilter === "Sí" && employee.isProjectLead) ||
+      (isLeadFilter === "No" && !employee.isProjectLead);
+    return projectMatch && leadMatch;
+  });
 
   const uniqueProjects = ["Todos", ...new Set(employees.map((employee) => employee.project))];
 
@@ -23,36 +26,64 @@ export default function PerfilesDeEmpleadosPage() {
       <h1 className="text-gray-800 text-2xl font-bold mb-4">Perfiles de Empleados</h1>
       <p className="text-gray-600 mb-6">Aquí puedes gestionar los perfiles de los empleados.</p>
 
-      {/* Filter Bar */}
-      <div className="flex space-x-4 mb-6">
-        {uniqueProjects.map((project) => (
-          <button
-            key={project}
-            onClick={() => setSelectedProject(project)}
-            className={`px-4 py-2 rounded-md border ${
-              selectedProject === project
-                ? "bg-purple-600 text-white border-purple-600"
-                : "bg-gray-100 text-gray-700 border-gray-300"
-            }`}
-          >
-            {project}
-          </button>
-        ))}
+      {/* Expandable Project Filter */}
+      <div className="mb-4">
+        <button
+          onClick={() => setShowProjectFilter(!showProjectFilter)}
+          className="w-full text-left px-4 py-2 bg-gray-200 rounded-md font-medium text-gray-800"
+        >
+          Filtro por Proyecto {showProjectFilter ? "▲" : "▼"}
+        </button>
+        {showProjectFilter && (
+          <div className="flex space-x-4 mt-2">
+            {uniqueProjects.map((project) => (
+              <button
+                key={project}
+                onClick={() => setSelectedProject(project)}
+                className={`px-4 py-2 rounded-md border ${
+                  selectedProject === project
+                    ? "bg-purple-600 text-white border-purple-600"
+                    : "bg-gray-100 text-gray-700 border-gray-300"
+                }`}
+              >
+                {project}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Expandable isProjectLead Filter */}
+      <div className="mb-4">
+        <button
+          onClick={() => setShowLeadFilter(!showLeadFilter)}
+          className="w-full text-left px-4 py-2 bg-gray-200 rounded-md font-medium text-gray-800"
+        >
+          Filtro por Líder de Proyecto {showLeadFilter ? "▲" : "▼"}
+        </button>
+        {showLeadFilter && (
+          <div className="flex space-x-4 mt-2">
+            {["Todos", "Sí", "No"].map((option) => (
+              <button
+                key={option}
+                onClick={() => setIsLeadFilter(option)}
+                className={`px-4 py-2 rounded-md border ${
+                  isLeadFilter === option
+                    ? "bg-purple-600 text-white border-purple-600"
+                    : "bg-gray-100 text-gray-700 border-gray-300"
+                }`}
+              >
+                {option === "Todos" ? "Todos" : option === "Sí" ? "Líderes" : "No Líderes"}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Employee Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredEmployees.map((employee) => (
-          <div
-            key={employee.id}
-            className="bg-white shadow-md rounded-lg p-4 border border-gray-200"
-          >
-            <h2 className="text-lg font-bold text-gray-800">{employee.name}</h2>
-            <p className="text-gray-600">{employee.position}</p>
-            <p className="text-gray-500 text-sm">{employee.email}</p>
-            <p className="text-gray-700 font-medium">Nivel: {employee.level}</p>
-            <p className="text-gray-500 text-sm">Proyecto: {employee.project}</p>
-          </div>
+          <EmployeeCard key={employee.id} employee={employee} />
         ))}
       </div>
     </div>
