@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter,  } from "next/navigation";
 
 export default function Recuperacion() {
   const [newPassword, setNewPassword] = useState("");
@@ -11,14 +11,6 @@ export default function Recuperacion() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const accessToken = searchParams.get("access_token");
-
-  useEffect(() => {
-    if (!accessToken) {
-      setError("");
-    }
-  }, [accessToken]);
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
