@@ -9,7 +9,7 @@ export default function Recuperacion() {
         <p>Ingresa tu correo electrónico para recibir un enlace de recuperación.</p>
         <input type="email" placeholder="Correo electrónico" />
         <button>Enviar</button>
-        <Link href="/" className="back-link">Volver al inicio</Link>
+        <Link href="/login" className="back-link">Volver al inicio</Link>
       </div>
     </div>
   );
