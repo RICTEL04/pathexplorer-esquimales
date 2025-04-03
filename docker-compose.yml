@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: eskimales123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Data persistence
+      - ./initdb.sql:/docker-entrypoint-initdb.d/init.sql # SQL script to initialize DB
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d esk" ]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  nextjs-app:
+    build: . # Build from Dockerfile in current directory
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for DB to finish initializing
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: eskimales123
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "500"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+
+
+      
+volumes:
+  postgres_data: # Named volume for DB persistence
