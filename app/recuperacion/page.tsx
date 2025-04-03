@@ -1,5 +1,6 @@
 import Link from "next/link";
 import "./recuperacion.css";
+import SendEmailButton from "../../components/enviar-email";
 
 export default function Recuperacion() {
   return (
@@ -11,6 +12,10 @@ export default function Recuperacion() {
         <button>Enviar</button>
         <Link href="/login" className="back-link">Volver al inicio</Link>
       </div>
+      <div>
+      <h1>Enviar Email</h1>
+      <SendEmailButton />
+    </div>
     </div>
   );
 }

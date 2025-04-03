@@ -25,8 +25,7 @@ export default function Home() {
             <input type="password" placeholder="Contraseña" />
           </div>
           <button type="submit">Sign in</button>
-          
-          {/* Use Link instead of <a> */}
+        
           <Link href="/recuperacion" style={{ fontSize: 15, padding: 15, fontFamily: "system-ui" }}>
             ¿Se te olvidó tu contraseña? Skill issue.
           </Link>
