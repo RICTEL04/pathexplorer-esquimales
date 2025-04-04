@@ -107,7 +107,8 @@ ALTER TABLE "public"."Cliente" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Contacto" (
     "PK_Contacto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "Email" character varying
+    "Email" character varying,
+    "Num_Telefono" numeric
 );
 
 
@@ -172,7 +173,8 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "Cargabilidad" character varying,
     "ID_Contacto" "uuid",
     "ID_CapabilityLead" "uuid",
-    "ID_Usuario" "uuid"
+    "ID_Usuario" "uuid",
+    "Soft_Skills" "text"[]
 );
 
 
@@ -271,7 +273,7 @@ ALTER TABLE "public"."Proyectos" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Puestos_proyecto" (
     "ID_Proyecto" "uuid" NOT NULL,
-    "ID_Empleado" "uuid" NOT NULL,
+    "ID_Empleado" "uuid",
     "Puesto" character varying
 );
 
@@ -303,18 +305,6 @@ CREATE TABLE IF NOT EXISTS "public"."Talent_Lead" (
 
 
 ALTER TABLE "public"."Talent_Lead" OWNER TO "postgres";
-
-
-CREATE TABLE IF NOT EXISTS "public"."Telefono" (
-    "ID_Telefono" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "Tipo" character varying,
-    "Pais" character varying,
-    "Num_Telefono" character varying,
-    "ID_Contacto" "uuid" NOT NULL
-);
-
-
-ALTER TABLE "public"."Telefono" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Usuario" (
@@ -413,7 +403,7 @@ ALTER TABLE ONLY "public"."Proyectos"
 
 
 ALTER TABLE ONLY "public"."Puestos_proyecto"
-    ADD CONSTRAINT "Puestos_proyecto_pkey" PRIMARY KEY ("ID_Proyecto", "ID_Empleado");
+    ADD CONSTRAINT "Puestos_proyecto_pkey" PRIMARY KEY ("ID_Proyecto");
 
 
 
@@ -424,11 +414,6 @@ ALTER TABLE ONLY "public"."Talent_Discussion"
 
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_pkey" PRIMARY KEY ("ID_TalentLead");
-
-
-
-ALTER TABLE ONLY "public"."Telefono"
-    ADD CONSTRAINT "Telefono_pkey" PRIMARY KEY ("ID_Telefono");
 
 
 
@@ -594,11 +579,6 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_ID_Departamento_fkey" FOREIGN KEY ("ID_Departamento") REFERENCES "public"."Departamento"("ID_Departamento");
-
-
-
-ALTER TABLE ONLY "public"."Telefono"
-    ADD CONSTRAINT "Telefono_ID_Contacto_fkey" FOREIGN KEY ("ID_Contacto") REFERENCES "public"."Contacto"("PK_Contacto");
 
 
 
@@ -902,11 +882,6 @@ GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Discussion" TO "anon";
 
 GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Lead" TO "authenticated";
 GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Lead" TO "anon";
-
-
-
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Telefono" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Telefono" TO "anon";
 
 
 
