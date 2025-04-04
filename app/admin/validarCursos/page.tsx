@@ -4,15 +4,28 @@ import { useEffect, useState } from "react";
 import { getEmpleados } from "@/lib/empleadoService";
 import { deleteCertificado } from "@/lib/borrarCertificado";
 
+interface Certificado {
+  ID_Certificado: string;
+  Nombre: string;
+  Fecha_caducidad: string;
+}
+
+interface Empleado {
+  ID_Empleado: string;
+  Nombre: string;
+  Rol: string;
+  Certificados: Certificado[];
+}
+
 export default function EmpleadosPage() {
-  const [empleados, setEmpleados] = useState<any[]>([]);
+  const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedEmpleado, setSelectedEmpleado] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchEmpleados = async () => {
       try {
-        const data = await getEmpleados();
+        const data: Empleado[] = await getEmpleados();
         setEmpleados(data);
       } catch (err) {
         console.error("Error fetching empleados:", err);
@@ -50,7 +63,7 @@ export default function EmpleadosPage() {
               <td className="py-2 px-4 border font-semibold">{empleado.Nombre}</td>
               <td className="py-2 px-4 border">{empleado.Rol}</td>
               <td className="py-2 px-4 border text-center">
-                {empleado.Certificados && empleado.Certificados.length > 0
+                {empleado.Certificados.length > 0
                   ? `📜 ${empleado.Certificados.length}`
                   : "❌ Sin certificados"}
               </td>
@@ -58,8 +71,6 @@ export default function EmpleadosPage() {
           ))}
         </tbody>
       </table>
-
- 
       {selectedEmpleado && (
         <div className="mt-4 p-4 border rounded bg-gray-50">
           <h2 className="text-xl font-semibold">
@@ -68,17 +79,18 @@ export default function EmpleadosPage() {
           <ul className="list-disc ml-6">
             {empleados
               .find((e) => e.ID_Empleado === selectedEmpleado)
-              ?.Certificados.map((cert) => (
+              ?.Certificados.map((cert: Certificado) => (
                 <li key={cert.ID_Certificado} className="mt-2">
                   📜 <strong>{cert.Nombre}</strong> - Expira el {cert.Fecha_caducidad}
-                    <button onClick={() => deleteCertificado(cert.ID_Certificado)} 
-                    className="mt-4 bg-red-500 text-white py-4 px-8 rounded">
-                    </button>
+                  <button 
+                    onClick={() => deleteCertificado(cert.ID_Certificado)} 
+                    className="ml-4 bg-red-500 text-white py-1 px-3 rounded"
+                  >
+                    Eliminar
+                  </button>
                 </li>
               ))}
           </ul>
-            
-            
         </div>
       )}
     </div>
