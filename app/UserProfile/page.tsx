@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
-import Profile from '../components/Profile'; // Asegúrate de importar correctamente el componente
-import Card from '../components/Card'
+import Profile from '@/components/Profile'; // Asegúrate de importar correctamente el componente
+import Card from '@/components/Card'
 
 interface PeopleLead {
   id: string;
