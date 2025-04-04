@@ -7,7 +7,7 @@ on:
     branches: [main, dev]
   workflow_dispatch:
   schedule:
-    - cron: "* * * * *" # Runs every day at midnight
+    - cron: "0 0 * * *" # Runs every day at midnight
 
 env:
   BACKUP_ENABLED: true
@@ -18,8 +18,9 @@ jobs:
     permissions:
       contents: write
     env:
-      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_POOLER_DB_URL }} # Usamos el Pooler en lugar de la conexión directa
       BACKUP_ENABLED: ${{ vars.BACKUP_ENABLED }} # Repository variable (true or false)
+
     steps:
       - name: Check if backups are enabled
         run: |
