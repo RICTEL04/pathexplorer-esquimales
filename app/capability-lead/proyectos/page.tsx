@@ -1,11 +1,16 @@
 "use client";
 
 import { useState } from 'react';
-import { Plus, Calendar, Users2, Target } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 export default function ProyectosPage() {
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
   const [roles, setRoles] = useState([{ role: '', quantity: 1 }]);
+  const [projectName, setProjectName] = useState('');
+  const [description, setDescription] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [projectJson, setProjectJson] = useState(null); // Variable para almacenar el JSON generado
 
   const handleRoleChange = (index: number, field: string, value: string | number) => {
     const updatedRoles = [...roles];
@@ -20,6 +25,34 @@ export default function ProyectosPage() {
   const removeRole = (index: number) => {
     const updatedRoles = roles.filter((_, i) => i !== index);
     setRoles(updatedRoles);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Generar el JSON con los datos del proyecto
+    const projectData = {
+      nombre: projectName,
+      descripcion: description,
+      fechaInicio: startDate,
+      fechaFin: endDate,
+      roles: roles.map((role) => ({
+        puesto: role.role,
+        cantidad: role.quantity,
+      })),
+    };
+
+    // Guardar el JSON en la variable y mostrarlo en la consola
+    setProjectJson(projectData);
+    console.log('JSON generado:', projectData);
+
+    // Cerrar el modal y limpiar el formulario
+    setShowNewProjectModal(false);
+    setProjectName('');
+    setDescription('');
+    setStartDate('');
+    setEndDate('');
+    setRoles([{ role: '', quantity: 1 }]);
   };
 
   return (
@@ -42,17 +75,21 @@ export default function ProyectosPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-8 max-w-2xl w-full mx-4 rounded-lg shadow-xl">
             <h2 className="text-2xl font-bold mb-6 text-red-600">Nuevo Proyecto</h2>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-gray-700 mb-2">Nombre del Proyecto</label>
                 <input 
                   type="text"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
                   className="w-full p-3 bg-gray-50 border border-gray-300 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
               </div>
               <div>
                 <label className="block text-gray-700 mb-2">Descripción</label>
                 <textarea 
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   className="w-full p-3 bg-gray-50 border border-gray-300 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-red-500 h-32"
                 ></textarea>
               </div>
@@ -61,6 +98,8 @@ export default function ProyectosPage() {
                   <label className="block text-gray-700 mb-2">Fecha de Inicio</label>
                   <input 
                     type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
                     className="w-full p-3 bg-gray-50 border border-gray-300 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                 </div>
@@ -68,6 +107,8 @@ export default function ProyectosPage() {
                   <label className="block text-gray-700 mb-2">Fecha de Fin</label>
                   <input 
                     type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
                     className="w-full p-3 bg-gray-50 border border-gray-300 text-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
                   />
                 </div>
@@ -124,6 +165,14 @@ export default function ProyectosPage() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* Mostrar el JSON generado (opcional) */}
+      {projectJson && (
+        <div className="mt-8 p-4 bg-gray-100 border border-gray-300 rounded">
+          <h3 className="text-lg font-bold mb-2">JSON Generado:</h3>
+          <pre className="text-sm text-gray-700">{JSON.stringify(projectJson, null, 2)}</pre>
         </div>
       )}
     </div>
