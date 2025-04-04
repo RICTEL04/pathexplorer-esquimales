@@ -3,6 +3,18 @@
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
 
+// Define el tipo del JSON del proyecto
+interface ProjectJson {
+  nombre: string;
+  descripcion: string;
+  fechaInicio: string;
+  fechaFin: string;
+  roles: {
+    puesto: string;
+    cantidad: number;
+  }[];
+}
+
 export default function ProyectosPage() {
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
   const [roles, setRoles] = useState([{ role: '', quantity: 1 }]);
@@ -10,7 +22,7 @@ export default function ProyectosPage() {
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [projectJson, setProjectJson] = useState(null); // Variable para almacenar el JSON generado
+  const [projectJson, setProjectJson] = useState<ProjectJson | null>(null); // Ajuste del tipo
 
   const handleRoleChange = (index: number, field: string, value: string | number) => {
     const updatedRoles = [...roles];
@@ -31,7 +43,7 @@ export default function ProyectosPage() {
     e.preventDefault();
 
     // Generar el JSON con los datos del proyecto
-    const projectData = {
+    const projectData: ProjectJson = {
       nombre: projectName,
       descripcion: description,
       fechaInicio: startDate,
