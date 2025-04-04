@@ -1,77 +1,62 @@
-name: Supabase DB Backup to Storage
+name: supabase-backup
 
 on:
-  schedule:
-    - cron: '* * * * *' # todos los días a medianoche
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
   workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *" # Runs every day at midnight
+
+env:
+  BACKUP_ENABLED: true
 
 jobs:
-  backup:
+  run_db_backup:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     env:
-      SUPABASE_PROJECT_URL: ${{ secrets.SUPABASE_PROJECT_URL }}
-      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_POOLER_DB_URL }} # Usamos el Pooler en lugar de la conexión directa
+      BACKUP_ENABLED: ${{ vars.BACKUP_ENABLED }} # Repository variable (true or false)
 
     steps:
-      - name: Checkout repo
+      - name: Check if backups are enabled
+        run: |
+          if [ "$BACKUP_ENABLED" != "true" ]; then
+            echo "Backups are disabled. Exiting workflow."
+            exit 0
+          fi
+
+      - name: Checkout repository
+        if: env.BACKUP_ENABLED == 'true'
         uses: actions/checkout@v3
 
       - name: Setup Supabase CLI
+        if: env.BACKUP_ENABLED == 'true'
         uses: supabase/setup-cli@v1
         with:
           version: latest
 
-      - name: Create backup directory
+      - name: Create timestamp folder
+        if: env.BACKUP_ENABLED == 'true'
         run: mkdir -p prisma/backups
 
-      - name: Dump roles
+      - name: Backup roles
+        if: env.BACKUP_ENABLED == 'true'
         run: supabase db dump --db-url "$SUPABASE_DB_URL" -f prisma/backups/roles.sql --role-only
 
-      - name: Dump schema
+      - name: Backup schema
+        if: env.BACKUP_ENABLED == 'true'
         run: supabase db dump --db-url "$SUPABASE_DB_URL" -f prisma/backups/schema.sql
 
-      - name: Dump data
+      - name: Backup data
+        if: env.BACKUP_ENABLED == 'true'
         run: supabase db dump --db-url "$SUPABASE_DB_URL" -f prisma/backups/data.sql --data-only --use-copy
 
-      - name: Create storage bucket if not exists
-        run: |
-          BUCKET_NAME="backups"
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${SUPABASE_PROJECT_URL}/storage/v1/bucket" \
-            -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-            -H "Content-Type: application/json" \
-            -d "{\"name\": \"$BUCKET_NAME\", \"public\": false}")
-
-          if [ "$RESPONSE" = "409" ]; then
-            echo "Bucket already exists, continuing..."
-          elif [ "$RESPONSE" = "200" ]; then
-            echo "Bucket created successfully."
-          else
-            echo "Unexpected response creating bucket: $RESPONSE"
-            exit 1
-          fi
-
-      - name: Upload roles.sql to Supabase Storage
-        run: |
-          TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
-          curl -X POST "${SUPABASE_PROJECT_URL}/storage/v1/object/backups/roles_$TIMESTAMP.sql" \
-            -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-            -H "Content-Type: application/octet-stream" \
-            --data-binary @prisma/backups/roles.sql
-
-      - name: Upload schema.sql to Supabase Storage
-        run: |
-          TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
-          curl -X POST "${SUPABASE_PROJECT_URL}/storage/v1/object/backups/schema_$TIMESTAMP.sql" \
-            -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-            -H "Content-Type: application/octet-stream" \
-            --data-binary @prisma/backups/schema.sql
-
-      - name: Upload data.sql to Supabase Storage
-        run: |
-          TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
-          curl -X POST "${SUPABASE_PROJECT_URL}/storage/v1/object/backups/data_$TIMESTAMP.sql" \
-            -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-            -H "Content-Type: application/octet-stream" \
-            --data-binary @prisma/backups/data.sql
+      - name: Commit backups
+        if: env.BACKUP_ENABLED == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Supabase backup
