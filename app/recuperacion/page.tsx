@@ -51,7 +51,7 @@ export default function Recuperacion() {
 
         {message && <p className="text-sm mt-2">{message}</p>}
 
-        <Link href="/login" className="back-link">Volver al inicio</Link>
+        <Link href="/" className="back-link">Volver al inicio</Link>
       </div>
     </div>
   );
