@@ -70,6 +70,15 @@ SET default_tablespace = '';
 SET default_table_access_method = "heap";
 
 
+CREATE TABLE IF NOT EXISTS "public"."Administrador" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE "public"."Administrador" OWNER TO "postgres";
+
+
 CREATE TABLE IF NOT EXISTS "public"."Capability_Lead" (
     "ID_CapabilityLead" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Nombre" character varying,
@@ -171,10 +180,10 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "ID_Departamento" "uuid",
     "Nivel" character varying,
     "Cargabilidad" character varying,
-    "ID_Contacto" "uuid",
     "ID_CapabilityLead" "uuid",
-    "ID_Usuario" "uuid",
-    "Soft_Skills" "text"[]
+    "FechaContratacion" "date",
+    "FechaUltNivel" "date",
+    "Contacto_ID" "uuid"
 );
 
 
@@ -307,14 +316,9 @@ CREATE TABLE IF NOT EXISTS "public"."Talent_Lead" (
 ALTER TABLE "public"."Talent_Lead" OWNER TO "postgres";
 
 
-CREATE TABLE IF NOT EXISTS "public"."Usuario" (
-    "ID_Usuario" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "Username" character varying,
-    "Password" character varying
-);
+ALTER TABLE ONLY "public"."Administrador"
+    ADD CONSTRAINT "Administrador_pkey" PRIMARY KEY ("id");
 
-
-ALTER TABLE "public"."Usuario" OWNER TO "postgres";
 
 
 ALTER TABLE ONLY "public"."Capability_Lead"
@@ -417,11 +421,6 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 
 
 
-ALTER TABLE ONLY "public"."Usuario"
-    ADD CONSTRAINT "Usuario_pkey" PRIMARY KEY ("ID_Usuario");
-
-
-
 ALTER TABLE ONLY "public"."Capability_Lead"
     ADD CONSTRAINT "Capability_Lead_ID_Departamento_fkey" FOREIGN KEY ("ID_Departamento") REFERENCES "public"."Departamento"("ID_Departamento");
 
@@ -457,6 +456,11 @@ ALTER TABLE ONLY "public"."Direccion"
 
 
 
+ALTER TABLE ONLY "public"."Empleado"
+    ADD CONSTRAINT "Empleado_Contacto_ID_fkey" FOREIGN KEY ("Contacto_ID") REFERENCES "public"."Contacto"("PK_Contacto");
+
+
+
 ALTER TABLE ONLY "public"."Empleado_Habilidades"
     ADD CONSTRAINT "Empleado_Habilidades_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
@@ -473,17 +477,7 @@ ALTER TABLE ONLY "public"."Empleado"
 
 
 ALTER TABLE ONLY "public"."Empleado"
-    ADD CONSTRAINT "Empleado_ID_Contacto_fkey" FOREIGN KEY ("ID_Contacto") REFERENCES "public"."Contacto"("PK_Contacto");
-
-
-
-ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_ID_Departamento_fkey" FOREIGN KEY ("ID_Departamento") REFERENCES "public"."Departamento"("ID_Departamento");
-
-
-
-ALTER TABLE ONLY "public"."Empleado"
-    ADD CONSTRAINT "Empleado_ID_Usuario_fkey" FOREIGN KEY ("ID_Usuario") REFERENCES "public"."Usuario"("ID_Usuario");
 
 
 
@@ -580,6 +574,9 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_ID_Departamento_fkey" FOREIGN KEY ("ID_Departamento") REFERENCES "public"."Departamento"("ID_Departamento");
 
+
+
+ALTER TABLE "public"."Administrador" ENABLE ROW LEVEL SECURITY;
 
 
 
@@ -882,11 +879,6 @@ GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Discussion" TO "anon";
 
 GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Lead" TO "authenticated";
 GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Lead" TO "anon";
-
-
-
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Usuario" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Usuario" TO "anon";
 
 
 
