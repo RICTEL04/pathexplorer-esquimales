@@ -44,7 +44,7 @@ export default function Home() {
           
           {error && <p className="text-red-500">{error}</p>} {/* Muestra el error */}
 
-          <div className="input-container">
+          <div >
             <FaUser className="icon" />
             <input className="formInput" type="email" 
               value={email}
@@ -52,7 +52,7 @@ export default function Home() {
               required
               placeholder="Email" />
           </div>
-          <div className="input-container">
+          <div>
             <FaLock className="icon" />
             <input className="formInput" type="password" 
               value={password}
