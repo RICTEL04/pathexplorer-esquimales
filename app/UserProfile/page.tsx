@@ -3,8 +3,8 @@ import React from 'react';
 import Profile from '@/components/Profile'; // Asegúrate de importar correctamente el componente
 import Card from '@/components/Card'
 import { useEffect, useState } from 'react';
-import { fetchProfile } from '../lib/profile';
-import { UserProfile as UserProfileType } from '../lib/definitions';
+import { fetchProfile } from '../../lib/profile';
+import { UserProfile as UserProfileType } from '../../lib/definitions';
 
 const UserProfile = () => {
   const [user, setUserData] = useState<UserProfileType | null>(null);

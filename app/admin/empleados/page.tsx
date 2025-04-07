@@ -2,9 +2,9 @@
 import { FormEvent, useState, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/app/lib/supabase'
-import { Employee } from '@/app/lib/definitions';
-import { filterEmployees } from '@/app/lib/utilities';
+import { supabase } from '@/lib/supabase'
+import { Employee } from '@/lib/definitions';
+import { filterEmployees } from '@/lib/utilities';
 
 
 const STANDARD_PASSWORD = "Empresa123!"; // Contraseña estándar
