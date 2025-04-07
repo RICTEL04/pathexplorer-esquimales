@@ -183,7 +183,8 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "ID_CapabilityLead" "uuid",
     "FechaContratacion" "date",
     "FechaUltNivel" "date",
-    "Contacto_ID" "uuid"
+    "Contacto_ID" "uuid",
+    "ID_PeopleLead" "uuid"
 );
 
 
@@ -242,7 +243,7 @@ ALTER TABLE "public"."Metas" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."People_lead" (
     "ID" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "ID_Contacto" "uuid" NOT NULL
+    "ID_Empleado" "uuid"
 );
 
 
@@ -481,6 +482,11 @@ ALTER TABLE ONLY "public"."Empleado"
 
 
 
+ALTER TABLE ONLY "public"."Empleado"
+    ADD CONSTRAINT "Empleado_ID_PeopleLead_fkey" FOREIGN KEY ("ID_PeopleLead") REFERENCES "public"."People_lead"("ID");
+
+
+
 ALTER TABLE ONLY "public"."FeedBack"
     ADD CONSTRAINT "FeedBack_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
@@ -512,7 +518,7 @@ ALTER TABLE ONLY "public"."People_lead_Empleado"
 
 
 ALTER TABLE ONLY "public"."People_lead"
-    ADD CONSTRAINT "People_lead_ID_Contacto_fkey" FOREIGN KEY ("ID_Contacto") REFERENCES "public"."Contacto"("PK_Contacto");
+    ADD CONSTRAINT "People_lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
