@@ -38,29 +38,29 @@ export default function Home() {
       <div className="cubo2"></div>
       <div className="cubo3"></div>
       <div className="contenedor">
-        <form onSubmit={handleLogin}>
+        <form className="form" onSubmit={handleLogin}>
           <p className="text-gray-800 thick" style={{ fontFamily: "system-ui", fontSize: 48 }}>Login</p>
           <p className="text-gray-700 thin" style={{ fontFamily: "system-ui", fontSize: 15 }}>Inicia sesión para continuar</p>
           
           {error && <p className="text-red-500">{error}</p>} {/* Muestra el error */}
 
-          <div className="input-container">
+          <div >
             <FaUser className="icon" />
-            <input type="email" 
+            <input className="formInput" type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Email" />
           </div>
-          <div className="input-container">
+          <div>
             <FaLock className="icon" />
-            <input type="password" 
+            <input className="formInput" type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Contraseña" />
           </div>
-          <button type="submit">Sign in</button>
+          <button className="formButton" type="submit">Sign in</button>
           
           <Link href="/recuperacion" className="text-gray-700" style={{ fontSize: 15, padding: 15, fontFamily: "system-ui" }}>
             ¿Se te olvidó tu contraseña? Skill issue.

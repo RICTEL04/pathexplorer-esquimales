@@ -34,19 +34,19 @@ export default function Recuperacion() {
   return (
     <div className="recovery-container">
       <div className="recovery-box">
-        <h2 className="text-purple-600">Recuperar Contraseña</h2>
-        <p>Ingresa tu correo electrónico para recibir un enlace de recuperación.</p>
+        <h2 className="h2Recuperacion">Recuperar Contraseña</h2>
+        <p className="pRecuperacion">Ingresa tu correo electrónico para recibir un enlace de recuperación.</p>
         
         <form onSubmit={handleReset}>
           <input
-            className="text-gray-800"
+            className="inputRecuperacion"
             type="email"
             placeholder="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <button type="submit">Enviar</button>
+          <button className="buttonRecuperacion" type="submit">Enviar</button>
         </form>
 
         {message && <p className="text-sm mt-2">{message}</p>}
