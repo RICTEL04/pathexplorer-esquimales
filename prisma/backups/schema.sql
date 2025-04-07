@@ -798,103 +798,108 @@ GRANT USAGE ON SCHEMA "public" TO "authenticated";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Capability_Lead" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Capability_Lead" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Administrador" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Administrador" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Certificados" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Certificados" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Capability_Lead" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Capability_Lead" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Cliente" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Cliente" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Certificados" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Certificados" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Contacto" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Contacto" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Cliente" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Cliente" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Cursos" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Cursos" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Contacto" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Contacto" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Delivery_Lead" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Delivery_Lead" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Cursos" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Cursos" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Departamento" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Departamento" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Delivery_Lead" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Delivery_Lead" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Direccion" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Direccion" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Departamento" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Departamento" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Empleado" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Empleado" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Direccion" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Direccion" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."FeedBack" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."FeedBack" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Habilidades" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Habilidades" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Metas" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Metas" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Habilidades" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Habilidades" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."People_lead" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."People_lead" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Metas" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Metas" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."People_lead_Empleado" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."People_lead_Empleado" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Proyecto_Habilidades" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Proyecto_Habilidades" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead_Empleado" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead_Empleado" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Proyectos" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Proyectos" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyecto_Habilidades" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyecto_Habilidades" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Puestos_proyecto" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Puestos_proyecto" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Discussion" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Discussion" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puestos_proyecto" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puestos_proyecto" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Lead" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Talent_Lead" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Discussion" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Discussion" TO "anon";
+
+
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Lead" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Lead" TO "anon";
 
 
 
