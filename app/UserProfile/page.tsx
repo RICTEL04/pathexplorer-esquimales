@@ -2,27 +2,29 @@
 import React from 'react';
 import Profile from '@/components/Profile'; // Asegúrate de importar correctamente el componente
 import Card from '@/components/Card'
-
-interface PeopleLead {
-  id: string;
-  name: string;
-  avatarUrl: string
-}
-
-interface CapabilityLead {
-  id: string;
-  name: string;
-  avatarUrl: string;
-}
-
-interface Informe {
-  id: string;
-  name: string;
-}
+import { useEffect, useState } from 'react';
+import { fetchProfile } from '../lib/profile';
+import { UserProfile as UserProfileType } from '../lib/definitions';
 
 const UserProfile = () => {
+  const [user, setUserData] = useState<UserProfileType | null>(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchProfile();
+      if (data) {
+        console.log(data);
+        setUserData(data);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!user) return <div>Cargando...</div>; // Manejo de carga
+  if (user === null) return <div>Error al cargar el perfil</div>; // Manejo de error
+
   // Aquí puedes obtener los datos de un usuario, ya sea desde un estado o una API.
-  const user = {
+  const user2 = {
     id: "123456789",
     name: "Jane Doe",
     role: "Software Engineer",
@@ -128,7 +130,6 @@ const UserProfile = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
         {/* Columna izquierda */}
         <div className="lg:col-span-2 space-y-6">
-
           {/* People Lead */}
           <h2 className="text-lg font-bold mb-4">People Lead</h2>
           <Card className="p-4 h-auto">
@@ -168,7 +169,6 @@ const UserProfile = () => {
               </div>
             </div>
           </Card>
-
         </div>
 
         {/* Columna central */}
@@ -197,13 +197,14 @@ const UserProfile = () => {
         {/* Columna derecha */}
         <div className="lg:col-span-2 space-y-6">
           {/* Sección de Informes */}
+          {/*
           <div>
             <h2 className="text-lg font-bold mb-4">Informes</h2>
             <div className="space-y-3">
               {user.informe.map((informe) => (
                 <Card key={informe.id} className="p-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="flex items-start justify-between"> {/* Cambiado a items-start */}
-                    <p className="text-sm font-medium break-words min-w-0 flex-1"> {/* Añadidas clases */}
+                  <div className="flex items-start justify-between">
+                    <p className="text-sm font-medium break-words min-w-0 flex-1">
                       {informe.name}
                     </p>
                     <svg 
@@ -225,6 +226,7 @@ const UserProfile = () => {
               ))}
             </div>
           </div>
+          */}
         </div>
       </div>
     </div>

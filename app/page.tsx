@@ -6,7 +6,7 @@ import { FaUser } from "react-icons/fa6";
 import { FaLock } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/app/lib/supabase";
 
 export default function Home() {
   const [email, setEmail] = useState("");

@@ -1,38 +1,31 @@
 "use client"
-import {FormEvent, useState, useMemo } from 'react';
+import { FormEvent, useState, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/app/lib/supabase'
+import { Employee } from '@/app/lib/definitions';
+import { filterEmployees } from '@/app/lib/utilities';
 
-type Employee = {
-  id: string;
-  name: string;
-  email: string;
-  position: string;
-  department: string;
-  hireDate: string;
-  level: string;
-};
 
 const STANDARD_PASSWORD = "Empresa123!"; // Contraseña estándar
 
 export default function EmployeeManagement() {
-    const router = useRouter();
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState({ type: '', content: '' });
-    const [showModal, setShowModal] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ type: '', content: '' });
+  const [showModal, setShowModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-    const [newEmployee, setNewEmployee] = useState<Omit<Employee, 'id'>>({
-        name: '',
-        email: '',
-        position: '',
-        department: '',
-        hireDate: '',
-        level: ''
-    });
-    const initialEmployees: Employee[] = [
+  const [newEmployee, setNewEmployee] = useState<Omit<Employee, 'id'>>({
+    name: '',
+    email: '',
+    position: '',
+    department: '',
+    hireDate: '',
+    level: ''
+  });
+  const initialEmployees: Employee[] = [
     {
       id: '1',
       name: 'Juan Pérez',
@@ -63,15 +56,7 @@ export default function EmployeeManagement() {
   ];
   const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
 
-  // Filtrar empleados basado en el término de búsqueda
-  const filteredEmployees = useMemo(() => {
-    return employees.filter(employee =>
-      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.department.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [employees, searchTerm]);
+  const filteredEmployees = filterEmployees(employees, searchTerm);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -84,7 +69,7 @@ export default function EmployeeManagement() {
     setMessage({ type: '', content: '' });
 
     try {
-    //1. Registrar el usuario en Auth
+      //1. Registrar el usuario en Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: newEmployee.email,
         password: STANDARD_PASSWORD,
@@ -95,27 +80,27 @@ export default function EmployeeManagement() {
           }
         }
       });
-    
+
       if (authError) throw authError;
 
       // 2. Insertar el empleado en la tabla
       const { error: dbError } = await supabase
         .from('Empleado')
         .insert({
-        ID_Empleado: authData.user?.id,
-        Nombre: newEmployee.name,
-        Rol: newEmployee.position,
-        Nivel: newEmployee.level,
+          ID_Empleado: authData.user?.id,
+          Nombre: newEmployee.name,
+          Rol: newEmployee.position,
+          Nivel: newEmployee.level,
         });
-      
+
       if (dbError) throw dbError;
 
       // 3. Actualizar UI y estado
-      setMessage({ 
-        type: 'success', 
-        content: 'Empleado registrado exitosamente. Contraseña estándar asignada.' 
+      setMessage({
+        type: 'success',
+        content: 'Empleado registrado exitosamente. Contraseña estándar asignada.'
       });
-      
+
       // Resetear formulario después de 2 segundos
       setTimeout(() => {
         setNewEmployee({
@@ -131,9 +116,9 @@ export default function EmployeeManagement() {
       }, 2000);
 
     } catch (error: any) {
-      setMessage({ 
-        type: 'error', 
-        content: error.message || 'Error al registrar empleado' 
+      setMessage({
+        type: 'error',
+        content: error.message || 'Error al registrar empleado'
       });
     } finally {
       setLoading(false);
@@ -232,141 +217,140 @@ export default function EmployeeManagement() {
       </div>
 
       {/* Modal para nuevo empleado */}
-    {showModal && (
-    <div className="fixed inset-0 bg-gray-950/70  flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-        <div className="p-6">
-            <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-800">Registrar Nuevo Empleado</h2>
-            <button 
-                onClick={() => setShowModal(false)}
-                className="text-gray-500 hover:text-gray-700"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            </div>
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-950/70  flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold text-gray-800">Registrar Nuevo Empleado</h2>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-            <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                Nombre Completo
-                </label>
-                <input
-                type="text"
-                id="name"
-                name="name"
-                value={newEmployee.name}
-                onChange={handleInputChange}
-                className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                />
-            </div>
-
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                Email
-                </label>
-                <input
-                type="text"
-                id="email"
-                name="email"
-                value={newEmployee.email}
-                onChange={handleInputChange}
-                className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                />
-            </div>
-
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="position">
-                Cargo
-                </label>
-                <input
-                type="text"
-                id="position"
-                name="position"
-                value={newEmployee.position}
-                onChange={handleInputChange}
-                className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                />
-            </div>
-
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="department">
-                Departamento
-                </label>
-                <input
-                type="text"
-                id="department"
-                name="department"
-                value={newEmployee.department}
-                onChange={handleInputChange}
-                className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                />
-            </div>
-
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="hireDate">
-                Fecha de Contratación
-                </label>
-                <input
-                type="date"
-                id="hireDate"
-                name="hireDate"
-                value={newEmployee.hireDate}
-                onChange={handleInputChange}
-                className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-                />
-            </div>
-
-            <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="level">
-                Nivel
-            </label>
-            <input
-                type="text"
-                id="level"
-                name="level"
-                value={newEmployee.level}
-                onChange={handleInputChange}
-                className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-            />
-            </div>
-
-            {message.content && (
-                <div className={`mb-4 p-3 rounded-md ${
-                message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
-                }`}>
-                {message.content}
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                    Nombre Completo
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={newEmployee.name}
+                    onChange={handleInputChange}
+                    className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
                 </div>
-            )}
 
-            <div className="flex justify-end">
-                <button
-                type="button"
-                onClick={() => setShowModal(false)}
-                className="mr-2 px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
-                >
-                Cancelar
-                </button>
-                <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-                disabled={loading}
-                >
-                {loading ? 'Enviando invitación...' : 'Guardar y Enviar Invitación'}
-                </button>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                    Email
+                  </label>
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    value={newEmployee.email}
+                    onChange={handleInputChange}
+                    className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="position">
+                    Cargo
+                  </label>
+                  <input
+                    type="text"
+                    id="position"
+                    name="position"
+                    value={newEmployee.position}
+                    onChange={handleInputChange}
+                    className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="department">
+                    Departamento
+                  </label>
+                  <input
+                    type="text"
+                    id="department"
+                    name="department"
+                    value={newEmployee.department}
+                    onChange={handleInputChange}
+                    className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="hireDate">
+                    Fecha de Contratación
+                  </label>
+                  <input
+                    type="date"
+                    id="hireDate"
+                    name="hireDate"
+                    value={newEmployee.hireDate}
+                    onChange={handleInputChange}
+                    className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="level">
+                    Nivel
+                  </label>
+                  <input
+                    type="text"
+                    id="level"
+                    name="level"
+                    value={newEmployee.level}
+                    onChange={handleInputChange}
+                    className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                {message.content && (
+                  <div className={`mb-4 p-3 rounded-md ${message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+                    }`}>
+                    {message.content}
+                  </div>
+                )}
+
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                    className="mr-2 px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                    disabled={loading}
+                  >
+                    {loading ? 'Enviando invitación...' : 'Guardar y Enviar Invitación'}
+                  </button>
+                </div>
+              </form>
             </div>
-            </form>
+          </div>
         </div>
-        </div>
-    </div>
       )}
     </div>
   );
