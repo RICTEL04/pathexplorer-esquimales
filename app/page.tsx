@@ -4,53 +4,15 @@ import Image from "next/image";
 import '@/app/login/login.css';
 import { FaUser } from "react-icons/fa6";
 import { FaLock } from "react-icons/fa";
-
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-  const [session, setSession] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-      // Obtener la sesión actual
-      supabase.auth.getSession().then(({ data: { session } }) => {
-          setSession(session);
-          setLoading(false);
-          console.log("ID del usuario:", session?.user.id);
-          // Si no hay sesión, redirigir al login
-          if (!session) {
-              router.push('/login');
-          }
-          else
-          {
-            router.push('/admin');
-          }
-      });
-
-      // Escuchar cambios en la autenticación
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-          setSession(session);
-      });
-
-      // Limpiar la suscripción al desmontar el componente
-      return () => subscription.unsubscribe();
-  }, [router]);
-
-  if (loading) {
-      return <div>Cargando...</div>;
-  }
-
-  if (!session) {
-      return <div>No autenticado...</div>;
-  }
-
-  console.log(session.user.id)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
