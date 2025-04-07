@@ -1,10 +1,10 @@
 "use client"
-import {FormEvent, useState, useMemo } from 'react';
+import {FormEvent, useState, useMemo, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase'
 
-type Employee = {
+type NewEmployee = {
   id: string;
   name: string;
   email: string;
@@ -14,17 +14,58 @@ type Employee = {
   level: string;
 };
 
-const STANDARD_PASSWORD = "Empresa123!"; // Contraseña estándar
+interface Departamento {
+  ID_Departamento: string;
+  Nombre: string;
+}
+
+const STANDARD_PASSWORD = "password123"; // Contraseña estándar
 
 export default function EmployeeManagement() {
     const router = useRouter();
+    const [departments, setDepartments] = useState<Departamento[]>([]);
+    const [selectedValue, setSelectedValue] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', content: '' });
     const [showModal, setShowModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedDepartment, setSelectedDepartment] = useState('');
 
-    const [newEmployee, setNewEmployee] = useState<Omit<Employee, 'id'>>({
+    
+
+    useEffect(() => {
+      const fetchDepartments = async () => {
+        try {
+          setLoading(true);
+          
+          const { data, error } = await supabase
+            .from('Departamento')  // Match your table name
+            .select('ID_Departamento, Nombre');
+  
+          if (error) throw error;
+  
+          setDepartments(data as Departamento[]);
+        } catch (err) {
+          console.error('Error fetching departments:', err);
+          setError(
+            err instanceof Error 
+              ? err.message 
+              : 'Failed to load departments'
+          );
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchDepartments();
+    }, []);
+
+    const handleDepartmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedDepartment(e.target.value);
+    };
+
+    const [newEmployee, setNewEmployee] = useState<Omit<NewEmployee, 'id'>>({
         name: '',
         email: '',
         position: '',
@@ -32,7 +73,7 @@ export default function EmployeeManagement() {
         hireDate: '',
         level: ''
     });
-    const initialEmployees: Employee[] = [
+    const initialEmployees: NewEmployee[] = [
     {
       id: '1',
       name: 'Juan Pérez',
@@ -61,7 +102,7 @@ export default function EmployeeManagement() {
       level: '12'
     }
   ];
-  const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
+  const [employees, setEmployees] = useState<NewEmployee[]>(initialEmployees);
 
   // Filtrar empleados basado en el término de búsqueda
   const filteredEmployees = useMemo(() => {
@@ -105,7 +146,11 @@ export default function EmployeeManagement() {
         ID_Empleado: authData.user?.id,
         Nombre: newEmployee.name,
         Rol: newEmployee.position,
+        ID_Departamento: newEmployee.department,
         Nivel: newEmployee.level,
+        Cargabilidad:"0%",
+        FechaContratacion: newEmployee.hireDate,
+        FechaUltNivel: newEmployee.hireDate,
         });
       
       if (dbError) throw dbError;
@@ -295,18 +340,24 @@ export default function EmployeeManagement() {
             </div>
 
             <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="department">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="department">
                 Departamento
-                </label>
-                <input
-                type="text"
+              </label>
+              <select
                 id="department"
                 name="department"
                 value={newEmployee.department}
                 onChange={handleInputChange}
                 className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
-                />
+              >
+                <option value="">-- Seleccione un departamento --</option>
+                {departments.map((dept) => (
+                  <option key={dept.ID_Departamento} value={dept.ID_Departamento}>
+                    {dept.Nombre}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="mb-4">
