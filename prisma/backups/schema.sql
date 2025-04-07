@@ -216,11 +216,16 @@ ALTER TABLE "public"."FeedBack" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Habilidades" (
     "ID_Habilidad" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Tipo" character varying,
-    "Descripcion" character varying
+    "Descripcion" character varying,
+    "ID_Empleado" "uuid"
 );
 
 
 ALTER TABLE "public"."Habilidades" OWNER TO "postgres";
+
+
+COMMENT ON COLUMN "public"."Habilidades"."ID_Empleado" IS 'ID del empleado al que pertenece esa skill';
+
 
 
 CREATE TABLE IF NOT EXISTS "public"."Metas" (
@@ -494,6 +499,11 @@ ALTER TABLE ONLY "public"."FeedBack"
 
 ALTER TABLE ONLY "public"."FeedBack"
     ADD CONSTRAINT "FeedBack_ID_People_lead_fkey" FOREIGN KEY ("ID_People_lead") REFERENCES "public"."People_lead"("ID");
+
+
+
+ALTER TABLE ONLY "public"."Habilidades"
+    ADD CONSTRAINT "Habilidades_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
