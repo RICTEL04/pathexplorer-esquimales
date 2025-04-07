@@ -1,5 +1,7 @@
 "use client"; // Asegura que se ejecuta en el cliente
 
+import '@/app/admin/validarCursos/validarCursos.css';
+
 import { useEffect, useState } from "react";
 import { getEmpleados } from "@/lib/empleadoService";
 import { deleteCertificado } from "@/lib/borrarCertificado";
@@ -36,33 +38,33 @@ export default function EmpleadosPage() {
   }, []);
 
   return (
-    <div className="container mx-auto p-6">
+    <div>
       <h1 className="text-2xl font-bold mb-4">Lista de Empleados</h1>
 
       {error && <p className="text-red-500">{error}</p>}
 
-      <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-md">
+      <table className="tablaCursos">
         <thead>
-          <tr className="bg-gray-200">
-            <th className="py-2 px-4 border">Nombre</th>
-            <th className="py-2 px-4 border">Rol</th>
-            <th className="py-2 px-4 border">Certificados</th>
+          <tr>
+            <th className="titulo">NOMBRE</th>
+            <th className="titulo">ROL</th>
+            <th className="titulo">CERTIFICADOS</th>
           </tr>
         </thead>
         <tbody>
           {empleados.map((empleado) => (
             <tr
               key={empleado.ID_Empleado}
-              className="hover:bg-gray-100 cursor-pointer"
+              className="rat"
               onClick={() =>
                 setSelectedEmpleado(
                   selectedEmpleado === empleado.ID_Empleado ? null : empleado.ID_Empleado
                 )
               }
             >
-              <td className="py-2 px-4 border font-semibold">{empleado.Nombre}</td>
-              <td className="py-2 px-4 border">{empleado.Rol}</td>
-              <td className="py-2 px-4 border text-center">
+              <td className="cuerpo">{empleado.Nombre}</td>
+              <td className="cuerpo">{empleado.Rol}</td>
+              <td className="cuerpo2">
                 {empleado.Certificados.length > 0
                   ? `📜 ${empleado.Certificados.length}`
                   : "❌ Sin certificados"}
@@ -82,10 +84,16 @@ export default function EmpleadosPage() {
               ?.Certificados.map((cert: Certificado) => (
                 <li key={cert.ID_Certificado} className="mt-2">
                   📜 <strong>{cert.Nombre}</strong> - Expira el {cert.Fecha_caducidad}
-                  <button 
-                    onClick={() => deleteCertificado(cert.ID_Certificado)} 
-                    className="ml-4 bg-red-500 text-white py-1 px-3 rounded"
-                  >
+                  <button
+                    onClick={async () => {
+                      try {
+                        await deleteCertificado(cert.ID_Certificado); // Call the deleteCertificado method
+                        window.location.reload(); // Reload the page
+                      } catch (error) {
+                        console.error("Error deleting certificado:", error);
+                      }
+                    }}
+                    className="ml-4 bg-red-500 text-white py-1 px-3 rounded">
                     Eliminar
                   </button>
                 </li>
