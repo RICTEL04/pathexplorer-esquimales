@@ -462,11 +462,6 @@ ALTER TABLE ONLY "public"."Direccion"
 
 
 
-ALTER TABLE ONLY "public"."Empleado"
-    ADD CONSTRAINT "Empleado_Contacto_ID_fkey" FOREIGN KEY ("Contacto_ID") REFERENCES "public"."Contacto"("PK_Contacto");
-
-
-
 ALTER TABLE ONLY "public"."Empleado_Habilidades"
     ADD CONSTRAINT "Empleado_Habilidades_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
