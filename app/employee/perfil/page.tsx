@@ -6,6 +6,14 @@ import { supabase } from '@/lib/supabase'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+interface Habilidad
+{
+  ID_Habilidad: string,
+  Tipo: string,
+  Descripcion: string,
+}
+
+
 interface Employee {
   ID_Empleado: string;
   Nombre: string;
@@ -18,6 +26,7 @@ interface Employee {
   Contacto_ID: string;
   FechaContratacion: string;
   FechaUltNivel: string;
+  Habilidad : Habilidad;
 }
 
 interface PeopleLead {
@@ -37,6 +46,7 @@ interface Informe {
   name: string;
 }
 
+
 const UserProfile = () => {
     const [session, setSession] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -44,6 +54,7 @@ const UserProfile = () => {
     const [peopleLead, setPeopleLead] = useState<PeopleLead | null>(null);
     const [capabilityLead, setCapabilityLead] = useState<CapabilityLead | null>(null);
     const [informes, setInformes] = useState<Informe[]>([]);
+    const [habilidades, setHabilidades] = useState<Habilidad[]>([])
     const router = useRouter();
 
     useEffect(() => {
@@ -84,7 +95,7 @@ const UserProfile = () => {
                         });
                     }
                 }
-
+                
                 // Obtener Capability Lead si existe
                 if (employeeData?.ID_CapabilityLead) {
                     const { data: capabilityLeadData, error: capabilityLeadError } = await supabase
@@ -112,10 +123,24 @@ const UserProfile = () => {
                     setInformes(informesData || []);
                 }
 
+                // Obtener datos de habilidades
+                const { data: habilidadesData, error: habilidadesError } = await supabase
+                .from('Habilidades')
+                .select('ID_Habilidad, Tipo, Descripcion')
+                .eq('ID_Empleado', session.user.id);
+
+
+
+                if (!habilidadesError) {
+                    setHabilidades(habilidadesData || []);
+                }
+
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
+                console.log("Habilidades" + habilidades)
             }
         };
 
@@ -141,6 +166,87 @@ const UserProfile = () => {
         return <div>No se encontraron datos del empleado</div>;
     }
 
+    const softSkills = habilidades
+    .filter(h => h.Tipo === 'soft')
+    .map(h => h.Descripcion);
+
+    const hardSkills = habilidades
+        .filter(h => h.Tipo === 'hard')
+        .map(h => h.Descripcion);
+
+    const interests = habilidades
+        .filter(h => h.Tipo === 'interest')
+        .map(h => h.Descripcion);
+        
+
+    const handleInterestsChange = async (newInterests: string[]) => {
+        try {
+
+    
+            // 2. Identificar cambios
+            const interestsToAdd = newInterests.filter(
+                interest => !interests.includes(interest)
+            );
+            
+            const interestsToRemove = interests.filter(
+                interest => !newInterests.includes(interest)
+            );
+    
+            // 3. Procesar eliminaciones
+            if (interestsToRemove.length > 0) {
+                // Obtener IDs de los intereses a eliminar
+                const idsToRemove = habilidades
+                    .filter(h => 
+                        h.Tipo === 'interest' && 
+                        interestsToRemove.includes(h.Descripcion)
+                    )
+                    .map(h => h.ID_Habilidad);
+    
+                if (idsToRemove.length > 0) {
+                    const { error } = await supabase
+                        .from('Habilidades')
+                        .delete()
+                        .in('ID_Habilidad', idsToRemove);
+                    
+                    if (error) throw error;
+                }
+            }
+    
+            // 4. Procesar adiciones
+            if (interestsToAdd.length > 0) {
+                const newRecords = interestsToAdd.map(descripcion => ({
+                    ID_Empleado: session?.user.id,
+                    Tipo: 'interest',
+                    Descripcion: descripcion
+                }));
+    
+                const { error } = await supabase
+                    .from('Habilidades')
+                    .insert(newRecords);
+                
+                if (error) throw error;
+            }
+    
+            // 5. Actualizar el estado local
+            if (interestsToAdd.length > 0 || interestsToRemove.length > 0) {
+                // Refrescar los datos desde Supabase
+                const { data: updatedHabilidades, error } = await supabase
+                    .from('Habilidades')
+                    .select('ID_Habilidad, Tipo, Descripcion')
+                    .eq('ID_Empleado', session?.user.id);
+                
+                if (error) throw error;
+                
+                setHabilidades(updatedHabilidades || []);
+            }
+    
+            console.log('Intereses actualizados correctamente');
+        } catch (error) {
+            console.error('Error al actualizar intereses:', error);
+            // Aquí podrías mostrar una notificación al usuario
+        }
+    };
+
     // Datos para el componente Profile
     const userProfileData = {
         id: employee.ID_Empleado,
@@ -160,9 +266,11 @@ const UserProfile = () => {
         projects: [],
         certifications: [],
         goals: [],
-        softSkills: [],
-        hardSkills: [],
-        interests: []
+        softSkills,
+        hardSkills,
+        interests,
+        onInterestsChange: handleInterestsChange
+
     };
 
     return (

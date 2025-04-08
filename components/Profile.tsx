@@ -1,5 +1,6 @@
 import React from 'react';
 import CardTable from '../components/Table';
+import SkillSection from '../components/SkillSection';
 
 interface Project {
   id: string;
@@ -29,6 +30,13 @@ interface Direction {
   country?: string;
 }
 
+interface Habilidad
+{
+  id: string,
+  tipo: string,
+  descripcion: string,
+}
+
 interface ProfileProps {
   className?: string; 
   name?: string;
@@ -47,6 +55,11 @@ interface ProfileProps {
   softSkills?: string[];
   hardSkills?: string[];
   interests?: string[];
+  onSoftSkillsChange?: (newSkills: string[]) => void;
+  onHardSkillsChange?: (newSkills: string[]) => void;
+  onInterestsChange?: (newInterests: string[]) => void;
+  
+  
 }
 
 const Profile: React.FC<ProfileProps> = ({
@@ -67,6 +80,9 @@ const Profile: React.FC<ProfileProps> = ({
   softSkills = [],
   hardSkills = [],
   interests = [],
+  onSoftSkillsChange,
+  onHardSkillsChange,
+  onInterestsChange,
 }) => {
   const projectColumns: { key: keyof Project; label: string }[] = [
     { key: 'id', label: 'ID'},
@@ -167,55 +183,31 @@ const Profile: React.FC<ProfileProps> = ({
       </div>
 
       {/* Sección de softSkills */}
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">SoftSkills</h3>
-        {softSkills.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {softSkills.map((ability, index) => (
-              <span 
-                key={index}
-                className="px-3 py-1 text-sm rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
-              >
-                {ability}
-              </span>
-            ))}
-          </div>
-        ) : renderEmptyMessage("soft skills")}
-      </div>
+      <SkillSection
+        title="SoftSkills"
+        items={softSkills}
+        color="blue"
+        editable={!!onSoftSkillsChange}
+        onItemsChange={onSoftSkillsChange}
+      />
 
       {/* Sección de hardSkills */}
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Habilidades</h3>
-        {hardSkills.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {hardSkills.map((ability, index) => (
-              <span 
-                key={index}
-                className="px-3 py-1 text-sm rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
-              >
-                {ability}
-              </span>
-            ))}
-          </div>
-        ) : renderEmptyMessage("habilidades técnicas")}
-      </div>
+      <SkillSection
+        title="HardSkills"
+        items={hardSkills}
+        color="green"
+        editable={!!onHardSkillsChange}
+        onItemsChange={onHardSkillsChange}
+      />
 
       {/* Sección de intereses */}
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Intereses</h3>
-        {interests.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {interests.map((interest, index) => (
-              <span 
-                key={index}
-                className="px-3 py-1 text-sm rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
-              >
-                {interest}
-              </span>
-            ))}
-          </div>
-        ) : renderEmptyMessage("intereses")}
-      </div>
+      <SkillSection
+        title="Intereses"
+        items={interests}
+        color="purple"
+        editable={!!onInterestsChange}
+        onItemsChange={onInterestsChange}
+      />
 
       {/* Sección de proyectos */}
       <div className="mt-8">
