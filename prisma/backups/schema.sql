@@ -71,8 +71,7 @@ SET default_table_access_method = "heap";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Administrador" (
-    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL
 );
 
 
