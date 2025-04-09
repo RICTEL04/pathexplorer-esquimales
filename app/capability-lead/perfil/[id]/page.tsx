@@ -1,18 +1,19 @@
-// app/capability-lead/perfil/page.tsx
+// app/capability-lead/perfil/[id]/page.tsx
 "use client"
 import React from 'react';
 import Profile from '@/components/Profile';
 import Card from '@/components/Card';
-import {  ownProfile } from '@/lib/hooks/useEmployeeProfile';
+import { useEmployeeProfile } from '@/lib/hooks/useEmployeeProfile';
 
-const UserProfilePage = () => {
+const UserProfilePage = ({ params }: { params: { id: string } }) => {
+  const { id } = params;
   const {
     session,
     loading,
     profileData,
     isOwner,
     handleInterestsChange
-  } = ownProfile();
+  } = useEmployeeProfile(id);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;

@@ -6,6 +6,8 @@ interface Project {
   id: string;
   name: string;
   client: string;
+  puesto: string;
+  status: string;
   cargability: string;
   endDate: string;
 }
@@ -88,8 +90,8 @@ const Profile: React.FC<ProfileProps> = ({
     { key: 'id', label: 'ID'},
     { key: 'name', label: 'Nombre' },
     { key: 'client', label: 'Cliente' },
-    { key: 'cargability', label: 'Cargabilidad' },
-    { key: 'endDate', label: 'Fecha Límite' },
+    { key: 'puesto', label: 'Puesto' },
+    { key: 'status', label: 'Status' },
   ];
 
   const certificationsColumns: { key: keyof Certification; label: string }[] = [
