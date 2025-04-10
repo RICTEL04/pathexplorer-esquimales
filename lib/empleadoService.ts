@@ -12,15 +12,15 @@ export async function getEmpleados() {
       ID_Certificado,
       Nombre,
       Fecha_caducidad,
-      Documento,
-      Verificacion,
-      Descripcion
+      Documento
     )
   `);
     
     if (error) throw error
     return data
   }
+
+
 
 
 
