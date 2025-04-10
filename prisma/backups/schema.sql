@@ -80,10 +80,9 @@ ALTER TABLE "public"."Administrador" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Capability_Lead" (
     "ID_CapabilityLead" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "Nombre" character varying,
-    "ID_Departamento" "uuid" NOT NULL,
+    "ID_Departamento" "uuid",
     "Rol" character varying,
-    "ID_Empleado" "uuid" NOT NULL
+    "ID_Empleado" "uuid"
 );
 
 
@@ -95,7 +94,9 @@ CREATE TABLE IF NOT EXISTS "public"."Certificados" (
     "Nombre" character varying,
     "Fecha_caducidad" "date",
     "Documento" character varying,
-    "ID_Empleado" "uuid" NOT NULL
+    "ID_Empleado" "uuid" NOT NULL,
+    "Verificacion" boolean,
+    "Descripcion" character varying DEFAULT ''::character varying
 );
 
 
@@ -116,7 +117,8 @@ ALTER TABLE "public"."Cliente" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Contacto" (
     "PK_Contacto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Email" character varying,
-    "Num_Telefono" numeric
+    "Num_Telefono" numeric,
+    "ID_empleado" "uuid"
 );
 
 
@@ -140,8 +142,7 @@ CREATE TABLE IF NOT EXISTS "public"."Delivery_Lead" (
     "ID_DeliveryLead" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Nombre" character varying,
     "Rol" character varying,
-    "Nivel" character varying,
-    "ID_Contacto" "uuid" NOT NULL
+    "ID_Empleado" "uuid"
 );
 
 
@@ -182,7 +183,6 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "ID_CapabilityLead" "uuid",
     "FechaContratacion" "date",
     "FechaUltNivel" "date",
-    "Contacto_ID" "uuid",
     "ID_PeopleLead" "uuid"
 );
 
@@ -215,15 +215,24 @@ ALTER TABLE "public"."FeedBack" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Habilidades" (
     "ID_Habilidad" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Tipo" character varying,
-    "Descripcion" character varying,
-    "ID_Empleado" "uuid"
+    "Descripcion" character varying
 );
 
 
 ALTER TABLE "public"."Habilidades" OWNER TO "postgres";
 
 
-COMMENT ON COLUMN "public"."Habilidades"."ID_Empleado" IS 'ID del empleado al que pertenece esa skill';
+CREATE TABLE IF NOT EXISTS "public"."Intereses" (
+    "ID_Interes" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "Descripcion" character varying,
+    "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"()
+);
+
+
+ALTER TABLE "public"."Intereses" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."Intereses" IS 'Tabla con todos los intereses de los empleados';
 
 
 
@@ -252,15 +261,6 @@ CREATE TABLE IF NOT EXISTS "public"."People_lead" (
 
 
 ALTER TABLE "public"."People_lead" OWNER TO "postgres";
-
-
-CREATE TABLE IF NOT EXISTS "public"."People_lead_Empleado" (
-    "ID_People_lead" "uuid" NOT NULL,
-    "ID_Empleado" "uuid" NOT NULL
-);
-
-
-ALTER TABLE "public"."People_lead_Empleado" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Proyecto_Habilidades" (
@@ -310,11 +310,9 @@ ALTER TABLE "public"."Talent_Discussion" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Talent_Lead" (
     "ID_TalentLead" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "Nombre" character varying,
-    "ID_Departamento" "uuid" NOT NULL,
+    "ID_Departamento" "uuid",
     "Rol" character varying,
-    "Nivel" character varying,
-    "ID_Contacto" "uuid" NOT NULL
+    "ID_Empleado" "uuid"
 );
 
 
@@ -323,6 +321,11 @@ ALTER TABLE "public"."Talent_Lead" OWNER TO "postgres";
 
 ALTER TABLE ONLY "public"."Administrador"
     ADD CONSTRAINT "Administrador_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."Capability_Lead"
+    ADD CONSTRAINT "Capability_Lead_ID_Empleado_key" UNIQUE ("ID_Empleado");
 
 
 
@@ -348,6 +351,11 @@ ALTER TABLE ONLY "public"."Contacto"
 
 ALTER TABLE ONLY "public"."Cursos"
     ADD CONSTRAINT "Cursos_pkey" PRIMARY KEY ("ID_Curso");
+
+
+
+ALTER TABLE ONLY "public"."Delivery_Lead"
+    ADD CONSTRAINT "Delivery_Lead_ID_Empleado_key" UNIQUE ("ID_Empleado");
 
 
 
@@ -386,13 +394,18 @@ ALTER TABLE ONLY "public"."Habilidades"
 
 
 
+ALTER TABLE ONLY "public"."Intereses"
+    ADD CONSTRAINT "Intereses_pkey" PRIMARY KEY ("ID_Interes");
+
+
+
 ALTER TABLE ONLY "public"."Metas"
     ADD CONSTRAINT "Metas_pkey" PRIMARY KEY ("ID_meta");
 
 
 
-ALTER TABLE ONLY "public"."People_lead_Empleado"
-    ADD CONSTRAINT "People_lead_Empleado_pkey" PRIMARY KEY ("ID_People_lead", "ID_Empleado");
+ALTER TABLE ONLY "public"."People_lead"
+    ADD CONSTRAINT "People_lead_ID_Empleado_key" UNIQUE ("ID_Empleado");
 
 
 
@@ -422,6 +435,11 @@ ALTER TABLE ONLY "public"."Talent_Discussion"
 
 
 ALTER TABLE ONLY "public"."Talent_Lead"
+    ADD CONSTRAINT "Talent_Lead_ID_Empleado_key" UNIQUE ("ID_Empleado");
+
+
+
+ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_pkey" PRIMARY KEY ("ID_TalentLead");
 
 
@@ -446,13 +464,18 @@ ALTER TABLE ONLY "public"."Cliente"
 
 
 
+ALTER TABLE ONLY "public"."Contacto"
+    ADD CONSTRAINT "Contacto_ID_empleado_fkey" FOREIGN KEY ("ID_empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+
+
+
 ALTER TABLE ONLY "public"."Cursos"
     ADD CONSTRAINT "Cursos_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
 ALTER TABLE ONLY "public"."Delivery_Lead"
-    ADD CONSTRAINT "Delivery_Lead_ID_Contacto_fkey" FOREIGN KEY ("ID_Contacto") REFERENCES "public"."Contacto"("PK_Contacto");
+    ADD CONSTRAINT "Delivery_Lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
@@ -496,8 +519,8 @@ ALTER TABLE ONLY "public"."FeedBack"
 
 
 
-ALTER TABLE ONLY "public"."Habilidades"
-    ADD CONSTRAINT "Habilidades_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+ALTER TABLE ONLY "public"."Intereses"
+    ADD CONSTRAINT "Intereses_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
@@ -508,16 +531,6 @@ ALTER TABLE ONLY "public"."Metas"
 
 ALTER TABLE ONLY "public"."Metas"
     ADD CONSTRAINT "Metas_ID_Revisor_fkey" FOREIGN KEY ("ID_Revisor") REFERENCES "public"."People_lead"("ID");
-
-
-
-ALTER TABLE ONLY "public"."People_lead_Empleado"
-    ADD CONSTRAINT "People_lead_Empleado_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."People_lead_Empleado"
-    ADD CONSTRAINT "People_lead_Empleado_ID_People_lead_fkey" FOREIGN KEY ("ID_People_lead") REFERENCES "public"."People_lead"("ID");
 
 
 
@@ -577,12 +590,12 @@ ALTER TABLE ONLY "public"."Talent_Discussion"
 
 
 ALTER TABLE ONLY "public"."Talent_Lead"
-    ADD CONSTRAINT "Talent_Lead_ID_Contacto_fkey" FOREIGN KEY ("ID_Contacto") REFERENCES "public"."Contacto"("PK_Contacto");
+    ADD CONSTRAINT "Talent_Lead_ID_Departamento_fkey" FOREIGN KEY ("ID_Departamento") REFERENCES "public"."Departamento"("ID_Departamento");
 
 
 
 ALTER TABLE ONLY "public"."Talent_Lead"
-    ADD CONSTRAINT "Talent_Lead_ID_Departamento_fkey" FOREIGN KEY ("ID_Departamento") REFERENCES "public"."Departamento"("ID_Departamento");
+    ADD CONSTRAINT "Talent_Lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
@@ -857,6 +870,11 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Habilidades" TO "anon";
 
 
 
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Intereses" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Intereses" TO "anon";
+
+
+
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Metas" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Metas" TO "anon";
 
@@ -864,11 +882,6 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Metas" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead" TO "anon";
-
-
-
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead_Empleado" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead_Empleado" TO "anon";
 
 
 
