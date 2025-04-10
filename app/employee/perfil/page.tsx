@@ -76,7 +76,13 @@ const UserProfilePage = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4 w-full">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
-        {/* Columna izquierda */}
+
+        {/* Columna central */}
+        <div className="lg:col-span-8 space-y-6">
+          <Profile {...userProfileData} />
+        </div>
+
+        {/* Columna derecha */}
         <div className="lg:col-span-2 space-y-6">
           {/* People Lead */}
           <h2 className="text-lg font-bold mb-4">People Lead</h2>
@@ -133,15 +139,8 @@ const UserProfilePage = () => {
               </div>
             </Card>
           )}
-        </div>
 
-        {/* Columna central */}
-        <div className="lg:col-span-8 space-y-6">
-          <Profile {...userProfileData} />
-        </div>
 
-        {/* Columna derecha */}
-        <div className="lg:col-span-2 space-y-6">
           <h2 className="text-lg font-bold mb-4">Informes</h2>
           {informes.length > 0 ? (
             <div className="space-y-3">
