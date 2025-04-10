@@ -1,15 +1,17 @@
-"use client"; // Asegura que se ejecuta en el cliente
+"use client";
 
 import '@/app/admin/validarCursos/validarCursos.css';
 
 import { useEffect, useState } from "react";
 import { getEmpleados } from "@/lib/empleadoService";
-import { deleteCertificado } from "@/lib/borrarCertificado";
+import { updateCertificado } from "@/lib/empleadoUpdate";
 
 interface Certificado {
   ID_Certificado: string;
   Nombre: string;
   Fecha_caducidad: string;
+  Verificacion: boolean;
+  Descripcion: string;
 }
 
 interface Empleado {
@@ -22,7 +24,10 @@ interface Empleado {
 export default function EmpleadosPage() {
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [selectedEmpleado, setSelectedEmpleado] = useState<string | null>(null);
+  const [selectedEmpleado, setSelectedEmpleado] = useState<Empleado | null>(null);
+  const [selectedCertificado, setSelectedCertificado] = useState<Certificado | null>(null);
+  const [descripcion, setDescripcion] = useState<string>("");
+  const [verificacion, setVerificacion] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchEmpleados = async () => {
@@ -37,68 +42,133 @@ export default function EmpleadosPage() {
     fetchEmpleados();
   }, []);
 
+  const handleCertificadoSelect = (cert: Certificado) => {
+    setSelectedCertificado(cert);
+    setDescripcion(cert.Descripcion);
+    setVerificacion(cert.Verificacion);
+  };
+
+  const handleUpdateCertificado = async () => {
+    if (selectedCertificado) {
+      try {
+        await updateCertificado(selectedCertificado.ID_Certificado, verificacion, descripcion);
+        alert("Certificado actualizado correctamente.");
+        setSelectedCertificado(null); // Cerrar el formulario
+        window.location.reload(); // Recargar los datos
+      } catch (error) {
+        console.error("Error al actualizar el certificado:", error);
+        alert("Hubo un error al actualizar el certificado.");
+      }
+    }
+  };
+
+  const closePopup = () => {
+    setSelectedEmpleado(null);
+    setSelectedCertificado(null);
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Lista de Empleados</h1>
 
       {error && <p className="text-red-500">{error}</p>}
 
-      <table className="tablaCursos">
-        <thead>
-          <tr>
-            <th className="titulo">NOMBRE</th>
-            <th className="titulo">ROL</th>
-            <th className="titulo">CERTIFICADOS</th>
-          </tr>
-        </thead>
-        <tbody>
-          {empleados.map((empleado) => (
-            <tr
+      <div className="grid-container">
+        {empleados
+          .filter((empleado) => empleado.Certificados.length > 0)
+          .map((empleado) => (
+            <div
               key={empleado.ID_Empleado}
-              className="rat"
-              onClick={() =>
-                setSelectedEmpleado(
-                  selectedEmpleado === empleado.ID_Empleado ? null : empleado.ID_Empleado
-                )
-              }
+              className="card"
+              onClick={() => setSelectedEmpleado(empleado)} // Mostrar popup al hacer clic
+              style={{ cursor: "pointer" }}
             >
-              <td className="cuerpo">{empleado.Nombre}</td>
-              <td className="cuerpo">{empleado.Rol}</td>
-              <td className="cuerpo2">
-                {empleado.Certificados.length > 0
-                  ? `📜 ${empleado.Certificados.length}`
-                  : "❌ Sin certificados"}
-              </td>
-            </tr>
+              <h2 className="card-title">{empleado.Nombre}</h2>
+              <p className="card-role">Rol: {empleado.Rol}</p>
+              <p className="card-certificates">
+                Certificados: 📜 {empleado.Certificados.length}
+              </p>
+            </div>
           ))}
-        </tbody>
-      </table>
+      </div>
+
       {selectedEmpleado && (
-        <div className="mt-4 p-4 border rounded bg-gray-50">
-          <h2 className="text-xl font-semibold">
-            Certificados de {empleados.find((e) => e.ID_Empleado === selectedEmpleado)?.Nombre}
-          </h2>
-          <ul className="list-disc ml-6">
-            {empleados
-              .find((e) => e.ID_Empleado === selectedEmpleado)
-              ?.Certificados.map((cert: Certificado) => (
-                <li key={cert.ID_Certificado} className="mt-2">
-                  📜 <strong>{cert.Nombre}</strong> - Expira el {cert.Fecha_caducidad}
-                  <button
-                    onClick={async () => {
-                      try {
-                        await deleteCertificado(cert.ID_Certificado); // Call the deleteCertificado method
-                        window.location.reload(); // Reload the page
-                      } catch (error) {
-                        console.error("Error deleting certificado:", error);
-                      }
-                    }}
-                    className="ml-4 bg-red-500 text-white py-1 px-3 rounded">
-                    Eliminar
-                  </button>
-                </li>
-              ))}
-          </ul>
+        <div className="popup-overlay" onClick={closePopup}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <h2 className="popup-title">
+              Certificados de {selectedEmpleado.Nombre}
+            </h2>
+
+            <table className="popup-table">
+              <thead>
+                <tr>
+                  <th>Titulo</th>
+                  <th>Fecha de caducidad</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {selectedEmpleado.Certificados.map((cert) => (
+                  <tr key={cert.ID_Certificado}>
+                    <td><strong>{cert.Nombre}</strong></td>
+                    <td>{cert.Fecha_caducidad}</td>
+                    <td>
+                      <button
+                        className="edit-button"
+                        onClick={() => handleCertificadoSelect(cert)}
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <button className="popup-close-button" onClick={closePopup}>
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {selectedCertificado && (
+        <div className="popup-overlay" onClick={() => setSelectedCertificado(null)}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <h2 className="popup-title">Editar Certificado</h2>
+            <form onSubmit={(e) => { e.preventDefault(); handleUpdateCertificado(); }}>
+              <div className="form-group">
+                <label >Descripción:</label>
+                <textarea
+                  id="descripcion"
+                  value={descripcion}
+                  onChange={(e) => setDescripcion(e.target.value)}
+                  className="form-input"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="verificacion">Verificación:</label>
+                <input
+                  id="verificacion"
+                  type="checkbox"
+                  checked={verificacion}
+                  onChange={(e) => setVerificacion(e.target.checked)}
+                  className="form-checkbox"
+                />
+              </div>
+              <button type="submit" className="save-button">
+                Guardar
+              </button>
+              <button
+                type="button"
+                className="cancel-button"
+                onClick={() => setSelectedCertificado(null)}
+              >
+                Cancelar
+              </button>
+            </form>
+          </div>
         </div>
       )}
     </div>
