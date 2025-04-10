@@ -95,7 +95,9 @@ CREATE TABLE IF NOT EXISTS "public"."Certificados" (
     "Nombre" character varying,
     "Fecha_caducidad" "date",
     "Documento" character varying,
-    "ID_Empleado" "uuid" NOT NULL
+    "ID_Empleado" "uuid" NOT NULL,
+    "Verificacion" boolean,
+    "Descripcion" character varying DEFAULT ''::character varying
 );
 
 
@@ -215,15 +217,24 @@ ALTER TABLE "public"."FeedBack" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Habilidades" (
     "ID_Habilidad" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Tipo" character varying,
-    "Descripcion" character varying,
-    "ID_Empleado" "uuid"
+    "Descripcion" character varying
 );
 
 
 ALTER TABLE "public"."Habilidades" OWNER TO "postgres";
 
 
-COMMENT ON COLUMN "public"."Habilidades"."ID_Empleado" IS 'ID del empleado al que pertenece esa skill';
+CREATE TABLE IF NOT EXISTS "public"."Intereses" (
+    "ID_Interes" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "Descripcion" character varying,
+    "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"()
+);
+
+
+ALTER TABLE "public"."Intereses" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."Intereses" IS 'Tabla con todos los intereses de los empleados';
 
 
 
@@ -386,6 +397,11 @@ ALTER TABLE ONLY "public"."Habilidades"
 
 
 
+ALTER TABLE ONLY "public"."Intereses"
+    ADD CONSTRAINT "Intereses_pkey" PRIMARY KEY ("ID_Interes");
+
+
+
 ALTER TABLE ONLY "public"."Metas"
     ADD CONSTRAINT "Metas_pkey" PRIMARY KEY ("ID_meta");
 
@@ -501,8 +517,8 @@ ALTER TABLE ONLY "public"."FeedBack"
 
 
 
-ALTER TABLE ONLY "public"."Habilidades"
-    ADD CONSTRAINT "Habilidades_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+ALTER TABLE ONLY "public"."Intereses"
+    ADD CONSTRAINT "Intereses_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
@@ -859,6 +875,11 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Habilidades" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Habilidades" TO "anon";
+
+
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Intereses" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Intereses" TO "anon";
 
 
 
