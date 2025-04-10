@@ -56,12 +56,12 @@ export default function ProyectosPage() {
   ]
 
   const proyectosActuales: Project[] = [
-    { id: "4", nombre: "Proyecto en progreso 1", cargabilidad: 50, enProgreso: true, cliente: "CLIENT" },
-    { id: "5", nombre: "Proyecto en progreso 2", cargabilidad: 30, enProgreso: true, cliente: "CLIENT" },
+    { id: "4", nombre: "Proyecto en progreso 1", descripcion: "Descripcion de proyecto en progreso 1", status: "En progreso", habilidad: "Habilidad requerida", cargabilidad: 50, enProgreso: true, cliente: "CLIENT" },
+    { id: "5", nombre: "Proyecto en progreso 2", descripcion: "Descripcion de proyecto en progreso 2", status: "En progreso", habilidad: "Habilidad requerida", cargabilidad: 30, enProgreso: true, cliente: "CLIENT" },
   ]
 
   const proyectosPostulados: Project[] = [
-    { id: "6", nombre: "Proyecto 3", cargabilidad: 20, postulado: true, cliente: "CLIENT" },
+    { id: "6", nombre: "Proyecto 3", descripcion: "Descripcion de proyecto 3", status: "Postulado", habilidad: "Habilidad requerida", cargabilidad: 20, postulado: true, cliente: "CLIENT" },
   ]
 
   const handleRoleChange = (index: number, field: string, value: string | number) => {
