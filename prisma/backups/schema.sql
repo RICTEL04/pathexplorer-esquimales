@@ -71,7 +71,8 @@ SET default_table_access_method = "heap";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Administrador" (
-    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_Admin" "uuid"
 );
 
 
@@ -317,6 +318,11 @@ CREATE TABLE IF NOT EXISTS "public"."Talent_Lead" (
 
 
 ALTER TABLE "public"."Talent_Lead" OWNER TO "postgres";
+
+
+ALTER TABLE ONLY "public"."Administrador"
+    ADD CONSTRAINT "Administrador_ID_Admin_key" UNIQUE ("ID_Admin");
+
 
 
 ALTER TABLE ONLY "public"."Administrador"
@@ -597,9 +603,6 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
-
-
-ALTER TABLE "public"."Administrador" ENABLE ROW LEVEL SECURITY;
 
 
 
