@@ -168,7 +168,7 @@ export default function ProyectosPage() {
                       <p className="text-gray-600 text-sm">{proyecto.status}</p>
                       <p className="text-gray-600 mt-2">{proyecto.descripcion}</p>
                       <div className="mt-4">
-                        <span className="inline-block bg-gray-100 rounded-full px-4 py-1 text-sm">
+                        <span className="text-black inline-block bg-gray-100 rounded-full px-4 py-1 text-sm">
                           {proyecto.habilidad}
                         </span>
                       </div>
@@ -191,13 +191,13 @@ export default function ProyectosPage() {
           <div>
             <div className="bg-white rounded-lg p-4 mb-6">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg">Empleado</h3>
-                <span className="font-bold">lv.11</span>
+                <h3 className="text-black">Empleado</h3>
+                <span className="text-black font-bold">lv.11</span>
               </div>
               <div className="flex justify-center mt-4">
                 <div className="relative w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
                   <div className="text-center">
-                    <span className="text-3xl font-bold">80%</span>
+                    <span className="text-black 3xl font-bold">80%</span>
                     <p className="text-xs text-gray-600">Cargabilidad</p>
                   </div>
                 </div>
@@ -206,7 +206,8 @@ export default function ProyectosPage() {
 
             {/* Current Projects */}
             <div className="bg-white rounded-lg p-4 mb-6">
-              <h3 className="text-lg font-bold mb-4">Proyectos actuales</h3>
+             
+              <h3 className="text-black font-bold mb-4">Proyectos actuales</h3>
               {proyectosActuales.map((proyecto) => (
                 <div key={proyecto.id} className="mb-4 border-b pb-4 last:border-0 last:pb-0">
                   <div className="flex items-center gap-3">
@@ -214,10 +215,10 @@ export default function ProyectosPage() {
                       <span className="text-white text-xs">{proyecto.cliente}</span>
                     </div>
                     <div>
-                      <p className="font-medium">{proyecto.nombre}</p>
+                      <p className="text-black font-medium">{proyecto.nombre}</p>
                       <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold">{proyecto.cargabilidad}%</span>
-                        <span className="text-xs text-gray-600">Cargabilidad</span>
+                        <span className="text-black font-bold">{proyecto.cargabilidad}%</span>
+                        <span className="text-black text-gray-600">Cargabilidad</span>
                       </div>
                     </div>
                   </div>
@@ -227,7 +228,7 @@ export default function ProyectosPage() {
 
             {/* Applied Projects */}
             <div className="bg-white rounded-lg p-4">
-              <h3 className="text-lg font-bold mb-4">Proyectos postulados</h3>
+              <h3 className="text-black font-bold mb-4">Proyectos postulados</h3>
               {proyectosPostulados.map((proyecto) => (
                 <div key={proyecto.id} className="mb-4 last:mb-0">
                   <div className="flex items-center gap-3">
@@ -235,10 +236,10 @@ export default function ProyectosPage() {
                       <span className="text-white text-xs">{proyecto.cliente}</span>
                     </div>
                     <div>
-                      <p className="font-medium">{proyecto.nombre}</p>
+                      <p className="text-black font-medium">{proyecto.nombre}</p>
                       <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold">{proyecto.cargabilidad}%</span>
-                        <span className="text-xs text-gray-600">Cargabilidad</span>
+                        <span className="text-black font-bold">{proyecto.cargabilidad}%</span>
+                        <span className="text-black text-gray-600">Cargabilidad</span>
                       </div>
                     </div>
                   </div>
