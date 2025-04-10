@@ -1,6 +1,8 @@
 import React from 'react';
 import CardTable from '../components/Table';
-import SkillSection from '../components/SkillSection';
+import InterestSection from './InterestSection';
+import SkillSection from './SkillSection';
+import { Habilidad as Hability } from '@/lib/employeeService';
 
 interface Project {
   id: string;
@@ -54,11 +56,11 @@ interface ProfileProps {
   projects?: Project[];
   certifications?: Certification[];
   goals?: Goal[];
-  softSkills?: string[];
-  hardSkills?: string[];
+  SoftSkills?: Hability[];
+  HardSkills?: Hability[];
   interests?: string[];
-  onSoftSkillsChange?: (newSkills: string[]) => void;
-  onHardSkillsChange?: (newSkills: string[]) => void;
+  onSoftSkillsChange?: (newSkills: Hability[]) => void;
+  onHardSkillsChange?: (newSkills: Hability[]) => void;
   onInterestsChange?: (newInterests: string[]) => void;
   
   
@@ -79,8 +81,8 @@ const Profile: React.FC<ProfileProps> = ({
   projects = [],
   certifications = [],
   goals = [],
-  softSkills = [],
-  hardSkills = [],
+  SoftSkills = [],
+  HardSkills = [],
   interests = [],
   onSoftSkillsChange,
   onHardSkillsChange,
@@ -186,24 +188,26 @@ const Profile: React.FC<ProfileProps> = ({
 
       {/* Sección de softSkills */}
       <SkillSection
-        title="SoftSkills"
-        items={softSkills}
+        title="Soft Skills"
+        items={SoftSkills}
+        type='soft'
         color="blue"
-        editable={!!onSoftSkillsChange}
+        editable={true}
         onItemsChange={onSoftSkillsChange}
       />
 
       {/* Sección de hardSkills */}
       <SkillSection
-        title="HardSkills"
-        items={hardSkills}
+        title="Hard Skills"
+        items={HardSkills}
+        type='hard'
         color="green"
-        editable={!!onHardSkillsChange}
+        editable={true}
         onItemsChange={onHardSkillsChange}
       />
 
       {/* Sección de intereses */}
-      <SkillSection
+      <InterestSection
         title="Intereses"
         items={interests}
         color="purple"

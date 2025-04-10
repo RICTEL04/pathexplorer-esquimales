@@ -1,69 +1,115 @@
-import React, { useState } from 'react';
+// components/SkillSection.tsx
+import React, { useState, useEffect } from 'react';
+import { getAllHardSkills, getAllSoftSkills, Habilidad } from '@/lib/employeeService';
 
 interface SkillSectionProps {
   title: string;
-  items: string[];
+  items: Habilidad[];
+  type: 'soft' | 'hard';
+  employeeId?: string;
   color?: 'blue' | 'green' | 'purple';
   editable?: boolean;
-  onItemsChange?: (newItems: string[]) => void;
+  onItemsChange?: (newItems: Habilidad[]) => void;
   maxItemWidth?: string;
 }
 
 const SkillSection: React.FC<SkillSectionProps> = ({
   title,
   items = [],
+  type,
+  employeeId,
   color = 'blue',
   editable = false,
   onItemsChange,
   maxItemWidth = '200px'
 }) => {
-
   const [isEditing, setIsEditing] = useState(false);
-  const [newItem, setNewItem] = useState('');
-  const [localItems, setLocalItems] = useState(items);
-  
+  const [allSkills, setAllSkills] = useState<Habilidad[]>([]);
+  const [availableSkills, setAvailableSkills] = useState<Habilidad[]>([]);
+  const [localItems, setLocalItems] = useState<Habilidad[]>(items);
+  const [initialItems, setInitialItems] = useState<Habilidad[]>(items);
+  const [isLoading, setIsLoading] = useState(false);
 
   const colorClasses = {
     blue: {
       bg: 'bg-blue-100 dark:bg-blue-900',
       text: 'text-blue-800 dark:text-blue-200',
+      border: 'border-blue-200 dark:border-blue-700',
       btn: 'bg-blue-500 hover:bg-blue-600'
     },
     green: {
       bg: 'bg-green-100 dark:bg-green-900',
       text: 'text-green-800 dark:text-green-200',
+      border: 'border-green-200 dark:border-green-700',
       btn: 'bg-green-500 hover:bg-green-600'
     },
     purple: {
       bg: 'bg-purple-100 dark:bg-purple-900',
       text: 'text-purple-800 dark:text-purple-200',
+      border: 'border-purple-200 dark:border-purple-700',
       btn: 'bg-purple-500 hover:bg-purple-600'
     },
   };
 
-  const handleAddItem = () => {
-    if (newItem.trim() && !localItems.includes(newItem.trim())) {
-      const updatedItems = [...localItems, newItem.trim()];
-      setLocalItems(updatedItems);
-      setNewItem('');
+  // Reset local state when items prop changes
+  useEffect(() => {
+    setLocalItems(items);
+    setInitialItems(items);
+  }, [items]);
+
+  // Fetch all skills from the database when editing starts
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        setIsLoading(true);
+        const response = await (type === 'soft' ? getAllSoftSkills() : getAllHardSkills());
+        setAllSkills(response);
+        
+        // Filter out skills that are already selected
+        const filtered = response.filter(skill => 
+          !localItems.some(item => item.ID_Habilidad === skill.ID_Habilidad)
+        );
+        setAvailableSkills(filtered);
+      } catch (error) {
+        console.error('Error fetching skills:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isEditing && editable) {
+      fetchSkills();
     }
+  }, [isEditing, editable, type, localItems]);
+
+  const handleAddSkill = (skillToAdd: Habilidad) => {
+    setLocalItems(prev => [...prev, skillToAdd]);
+    setAvailableSkills(prev => prev.filter(skill => skill.ID_Habilidad !== skillToAdd.ID_Habilidad));
   };
 
-  const handleRemoveItem = (itemToRemove: string) => {
-    const updatedItems = localItems.filter(item => item !== itemToRemove);
-    setLocalItems(updatedItems);
+  const handleRemoveSkill = (skillToRemove: Habilidad) => {
+    setLocalItems(prev => prev.filter(item => item.ID_Habilidad !== skillToRemove.ID_Habilidad));
+    setAvailableSkills(prev => [...prev, skillToRemove].sort((a, b) => a.Descripcion.localeCompare(b.Descripcion)));
   };
 
   const handleSave = () => {
-    setIsEditing(false);
     if (onItemsChange) {
       onItemsChange(localItems);
+      setInitialItems(localItems);
     }
+    setIsEditing(false);
   };
 
   const handleCancel = () => {
+    setLocalItems(initialItems);
     setIsEditing(false);
-    setLocalItems(items);
+  };
+
+  const hasChanges = () => {
+    if (localItems.length !== initialItems.length) return true;
+    return !localItems.every(item => 
+      initialItems.some(initialItem => initialItem.ID_Habilidad === item.ID_Habilidad)
+    );
   };
 
   return (
@@ -94,43 +140,70 @@ const SkillSection: React.FC<SkillSectionProps> = ({
 
       {isEditing ? (
         <div className="space-y-4">
+          {/* Selected skills */}
           <div className="flex flex-wrap gap-2">
-            {localItems.map((item, index) => (
-              <div
-                key={index}
-                className={`flex items-center ${colorClasses[color].bg} ${colorClasses[color].text} px-3 py-1 rounded-full`}
-                style={{ maxWidth: maxItemWidth }}
-              >
-                <span className="truncate flex-1">{item}</span>
-                <button
-                  onClick={() => handleRemoveItem(item)}
-                  className="ml-2 text-red-500 hover:text-red-700 dark:hover:text-red-400 flex-shrink-0"
-                  aria-label={`Eliminar ${item}`}
+            {localItems.length > 0 ? (
+              localItems.map((item) => (
+                <div
+                  key={item.ID_Habilidad}
+                  className={`px-3 py-1 rounded-full ${colorClasses[color].bg} ${colorClasses[color].text} flex items-center`}
+                  style={{ maxWidth: maxItemWidth }}
                 >
-                  ×
-                </button>
+                  <span className="truncate">{item.Descripcion}</span>
+                  <button
+                    onClick={() => handleRemoveSkill(item)}
+                    className="ml-2 text-red-500 hover:text-red-700 dark:hover:text-red-400"
+                    aria-label={`Quitar ${item.Descripcion}`}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400 italic">
+                No hay {title.toLowerCase()} seleccionadas
+              </p>
+            )}
+          </div>
+
+          {/* Available skills */}
+          <div className={`border rounded-lg p-4 ${colorClasses[color].border}`}>
+            <h4 className="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">
+              Habilidades disponibles
+            </h4>
+            
+            {isLoading ? (
+              <p className="text-gray-500 dark:text-gray-400 italic">Cargando habilidades...</p>
+            ) : availableSkills.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {availableSkills.map(skill => (
+                  <div
+                    key={skill.ID_Habilidad}
+                    className={`p-3 rounded-lg transition-all ${
+                      colorClasses[color].bg
+                    } ${colorClasses[color].text} flex justify-between items-center`}
+                  >
+                    <span className="font-medium truncate" style={{ maxWidth: maxItemWidth }}>
+                      {skill.Descripcion}
+                    </span>
+                    <button
+                      onClick={() => handleAddSkill(skill)}
+                      className="w-6 h-6 rounded-full bg-white text-green-500 flex items-center justify-center ml-2"
+                      aria-label={`Agregar ${skill.Descripcion}`}
+                    >
+                      +
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400 italic">
+                No hay habilidades disponibles
+              </p>
+            )}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-2">
-            <input
-              type="text"
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleAddItem()}
-              className="flex-1 p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-              placeholder={`Añadir ${title.toLowerCase()}`}
-              aria-label={`Añadir nuevo ${title.toLowerCase()}`}
-            />
-            <button
-              onClick={handleAddItem}
-              className={`px-4 py-2 ${colorClasses[color].btn} text-white rounded hover:opacity-90 transition-opacity`}
-            >
-              Agregar
-            </button>
-          </div>
-
+          {/* Action buttons */}
           <div className="flex flex-col sm:flex-row justify-end gap-2">
             <button
               onClick={handleCancel}
@@ -140,7 +213,8 @@ const SkillSection: React.FC<SkillSectionProps> = ({
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+              disabled={!hasChanges()}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors disabled:opacity-50"
             >
               Guardar cambios
             </button>
@@ -149,19 +223,19 @@ const SkillSection: React.FC<SkillSectionProps> = ({
       ) : (
         <div className="flex flex-wrap gap-2">
           {localItems.length > 0 ? (
-            localItems.map((item, index) => (
+            localItems.map((item) => (
               <div
-                key={index}
-                className={`px-3 py-1 text-sm rounded-full ${colorClasses[color].bg} ${colorClasses[color].text} flex items-center`}
+                key={item.ID_Habilidad}
+                className={`px-3 py-1 rounded-full ${colorClasses[color].bg} ${colorClasses[color].text} flex items-center`}
                 style={{ maxWidth: maxItemWidth }}
-                title={item} 
+                title={item.Descripcion}
               >
-                <span className="truncate">{item}</span>
+                <span className="truncate">{item.Descripcion}</span>
               </div>
             ))
           ) : (
             <p className="text-gray-500 dark:text-gray-400 italic">
-              No hay {title.toLowerCase()} disponibles
+              No hay {title.toLowerCase()} seleccionadas
             </p>
           )}
         </div>

@@ -12,7 +12,9 @@ const UserProfilePage = ({ params }: { params: { id: string } }) => {
     loading,
     profileData,
     isOwner,
-    handleInterestsChange
+    handleInterestsChange,
+    handleSoftSkillsChange,
+    handleHardSkillsChange
   } = useEmployeeProfile(id);
 
   if (loading) {
@@ -28,18 +30,13 @@ const UserProfilePage = ({ params }: { params: { id: string } }) => {
   }
 
   // Preparar datos para el componente Profile
-  const { employee, contacto, peopleLead, capabilityLead, informes, habilidades } = profileData;
+  const { employee, contacto, peopleLead, capabilityLead, informes, softSkills, hardSkills, intereses } = profileData;
 
-  const softSkills = habilidades
-    .filter(h => h.Tipo === 'soft')
-    .map(h => h.Descripcion);
+  const SoftSkills = softSkills
 
-  const hardSkills = habilidades
-    .filter(h => h.Tipo === 'hard')
-    .map(h => h.Descripcion);
+  const HardSkills = hardSkills
 
-  const interests = habilidades
-    .filter(h => h.Tipo === 'interest')
+  const interests = intereses
     .map(h => h.Descripcion);
 
   const userProfileData = {
@@ -68,10 +65,12 @@ const UserProfilePage = ({ params }: { params: { id: string } }) => {
       })),
     certifications: [],
     goals: [],
-    softSkills,
-    hardSkills,
+    SoftSkills,
+    HardSkills,
     interests,
     onInterestsChange: isOwner ? handleInterestsChange : undefined,
+    onSoftSkillsChange: handleSoftSkillsChange,
+    onHardSkillsChange: handleHardSkillsChange,
     editable: isOwner
   };
 

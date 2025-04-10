@@ -27,9 +27,19 @@ export interface Cliente {
   Nombre: string;
 }
 
+export interface Empleado_Habilidad
+{
+  ID_Habilidad : string;
+}
+
 export interface Habilidad {
-  ID_Habilidad: string;
+  ID_Habilidad?: string;
   Tipo: string;
+  Descripcion: string;
+}
+
+export interface Interes {
+  ID_Interes: string;
   Descripcion: string;
 }
 
@@ -46,6 +56,7 @@ export interface Employee {
   FechaContratacion: string;
   FechaUltNivel: string;
   Habilidad: Habilidad;
+  Interes: Interes;
   Contacto: Contacto;
   Proyecto: Proyecto;
 }
@@ -78,7 +89,9 @@ export interface EmployeeFullData {
   peopleLead: PeopleLead | null;
   capabilityLead: CapabilityLead | null;
   informes: Informe[];
-  habilidades: Habilidad[];
+  softSkills: Habilidad[]; 
+  hardSkills: Habilidad[];  
+  intereses : Interes[];
   contacto: Contacto | null;
   proyectos: ProyectoEmpleado[]; // Añadir esta línea
 }
@@ -170,16 +183,111 @@ const fetchInformes = async (employeeId: string): Promise<Informe[]> => {
     .select('id, name')
     .eq('empleado_id', employeeId);
 
+  return error ? [] : data || []; 
+};
+
+const fetchHabilidad = async (habilidadId: string): Promise<Habilidad[]> => {
+  const { data, error } = await supabase
+    .from('Habilidades')
+    .select('Tipo, Descripcion')
+    .eq('ID_Habilidad', habilidadId);
+
   return error ? [] : data || [];
 };
 
-const fetchHabilidades = async (employeeId: string): Promise<Habilidad[]> => {
+const fetchAllHabilidades = async (): Promise<Habilidad[]> => {
+  const{data, error} = await supabase
+    .from('Habilidades')
+    .select("ID_Habilidad, Tipo, Descripcion")
+
+    return error ? [] : data || [];
+}
+
+const fetchHabilidades = async (habilidadesIds: string[]): Promise<Habilidad[]> => {
+  if(habilidadesIds.length === 0) return [];
+  const { data, error } = await supabase
+    .from('Habilidades')
+    .select('Tipo, Descripcion')
+    .in('ID_Habilidad', habilidadesIds);
+
+  return error ? [] : data || [];
+};
+
+const fetchHabilidadesByType = async (type: 'soft' | 'hard'): Promise<Habilidad[]> => {
   const { data, error } = await supabase
     .from('Habilidades')
     .select('ID_Habilidad, Tipo, Descripcion')
+    .eq('Tipo', type);
+
+  return error ? [] : data || [];
+};
+
+
+// Función para obtener las habilidades de un empleado por tipo
+const fetchEmployeeHabilidadesByType = async (employeeId: string, type: 'soft' | 'hard'): Promise<Habilidad[]> => {
+  try {
+    // 1. Obtener todas las habilidades del empleado
+    const empleadoHabilidades = await fetchEmpleado_Habilidades(employeeId);
+    if (empleadoHabilidades.length === 0) return [];
+
+    // 2. Obtener los datos de las habilidades filtradas por tipo
+    const habilidadesIds = empleadoHabilidades.map(eh => eh.ID_Habilidad);
+    const { data, error } = await supabase
+      .from('Habilidades')
+      .select('ID_Habilidad, Tipo, Descripcion')
+      .in('ID_Habilidad', habilidadesIds)
+      .eq('Tipo', type);
+
+    return error ? [] : data || [];
+  } catch (error) {
+    console.error(`Error fetching employee ${type} skills:`, error);
+    return [];
+  }
+};
+
+// Funciones específicas para cada tipo
+export const getEmployeeSoftSkills = async (employeeId: string): Promise<Habilidad[]> => {
+  return fetchEmployeeHabilidadesByType(employeeId, 'soft');
+};
+
+export const getEmployeeHardSkills = async (employeeId: string): Promise<Habilidad[]> => {
+  return fetchEmployeeHabilidadesByType(employeeId, 'hard');
+};
+
+export const getAllSoftSkills = async (): Promise<Habilidad[]> => {
+  return fetchHabilidadesByType('soft');
+};
+
+export const getAllHardSkills = async (): Promise<Habilidad[]> => {
+  return fetchHabilidadesByType('hard');
+};
+
+
+const fetchEmpleado_Habilidades = async (employeeId: string): Promise<Empleado_Habilidad[]> => {
+  const { data, error } = await supabase
+    .from('Empleado_Habilidades')
+    .select('ID_Habilidad')
     .eq('ID_Empleado', employeeId);
 
   return error ? [] : data || [];
+};
+
+const fetchIntereses = async (employeeId: string): Promise<Interes[]> => {
+  const { data, error } = await supabase
+    .from('Intereses')
+    .select('ID_Interes, Descripcion')
+    .eq('ID_Empleado', employeeId);
+
+    if (error) {
+      console.error('Error fetching intereses:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      });
+      return [];
+    }
+    return data || [];
 };
 
 const fetchPuestosProyecto = async (employeeId: string): Promise<PuestoProyecto[]> => {
@@ -224,14 +332,18 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       capabilityLead,
       contacto,
       informes,
-      habilidades,
+      softSkills,
+      hardSkills,
+      intereses,
       proyectos
     ] = await Promise.all([
       fetchPeopleLead(employee.ID_PeopleLead),
       fetchCapabilityLead(employee.ID_CapabilityLead),
       fetchContacto(employee.Contacto_ID),
       fetchInformes(employeeId),
-      fetchHabilidades(employeeId),
+      getEmployeeSoftSkills(employeeId),  
+      getEmployeeHardSkills(employeeId),  
+      fetchIntereses(employeeId),
       getEmployeeProjects(employeeId) 
     ]);
 
@@ -241,7 +353,9 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       capabilityLead,
       contacto,
       informes,
-      habilidades,
+      softSkills,
+      hardSkills,
+      intereses,
       proyectos 
     };
   } catch (error) {
@@ -250,64 +364,6 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
   }
 };
 
-// Funciones para actualizar datos
-export const updateInterests = async (employeeId: string, currentHabilidades: Habilidad[], newInterests: string[]): Promise<Habilidad[]> => {
-  const currentInterests = currentHabilidades
-    .filter(h => h.Tipo === 'interest')
-    .map(h => h.Descripcion);
-
-  const interestsToAdd = newInterests.filter(
-    interest => !currentInterests.includes(interest)
-  );
-  
-  const interestsToRemove = currentInterests.filter(
-    interest => !newInterests.includes(interest)
-  );
-
-  // Eliminar intereses que ya no están
-  if (interestsToRemove.length > 0) {
-    const idsToRemove = currentHabilidades
-      .filter(h => 
-        h.Tipo === 'interest' && 
-        interestsToRemove.includes(h.Descripcion)
-      )
-      .map(h => h.ID_Habilidad);
-
-    if (idsToRemove.length > 0) {
-      const { error } = await supabase
-        .from('Habilidades')
-        .delete()
-        .in('ID_Habilidad', idsToRemove);
-      
-      if (error) throw error;
-    }
-  }
-
-  // Añadir nuevos intereses
-  if (interestsToAdd.length > 0) {
-    const newRecords = interestsToAdd.map(descripcion => ({
-      ID_Empleado: employeeId,
-      Tipo: 'interest',
-      Descripcion: descripcion
-    }));
-
-    const { error } = await supabase
-      .from('Habilidades')
-      .insert(newRecords);
-    
-    if (error) throw error;
-  }
-
-  // Obtener habilidades actualizadas
-  const { data: updatedHabilidades, error } = await supabase
-    .from('Habilidades')
-    .select('ID_Habilidad, Tipo, Descripcion')
-    .eq('ID_Empleado', employeeId);
-  
-  if (error) throw error;
-  
-  return updatedHabilidades || [];
-};
 
 export const getEmployeeProjects = async (employeeId: string): Promise<ProyectoEmpleado[]> => {
   try {
@@ -339,5 +395,133 @@ export const getEmployeeProjects = async (employeeId: string): Promise<ProyectoE
   } catch (error) {
     console.error('Error fetching employee projects:', error);
     return [];
+  }
+};
+
+
+// Funciones para actualizar datos
+export const updateInterests = async (employeeId: string, currentIntereses: Interes[], newInterests: string[]): Promise<Interes[]> => {
+  try {
+    // Validación de entrada
+    if (!employeeId || !Array.isArray(newInterests)) {
+      throw new Error('Invalid input parameters');
+    }
+
+    const currentInterests = currentIntereses.map(h => h.Descripcion);
+
+    const interestsToAdd = newInterests.filter(
+      interest => !currentInterests.includes(interest)
+    );
+    
+    const interestsToRemove = currentInterests.filter(
+      interest => !newInterests.includes(interest)
+    );
+
+    // Eliminar intereses que ya no están
+    if (interestsToRemove.length > 0) {
+      const idsToRemove = currentIntereses
+        .filter(h => interestsToRemove.includes(h.Descripcion))
+        .map(h => h.ID_Interes);
+
+      if (idsToRemove.length > 0) {
+        const { error } = await supabase
+          .from('Intereses')
+          .delete()
+          .in('ID_Interes', idsToRemove);
+        
+        if (error) throw error;
+      }
+    }
+
+    // Añadir nuevos intereses
+    if (interestsToAdd.length > 0) {
+      const newRecords = interestsToAdd.map(descripcion => ({
+        ID_Empleado: employeeId,
+        Descripcion: descripcion
+      }));
+
+      const { error } = await supabase
+        .from('Intereses')
+        .insert(newRecords);
+      
+      if (error) throw error;
+    }
+
+    // Obtener intereses actualizados
+    const { data: updatedIntereses, error } = await supabase
+      .from('Intereses')
+      .select('ID_Interes, Descripcion')
+      .eq('ID_Empleado', employeeId);
+    
+    if (error) throw error;
+    
+    return updatedIntereses || [];
+  } catch (error) {
+    console.error('Detailed error updating interests:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      employeeId,
+      currentIntereses,
+      newInterests,
+      fullError: error
+    });
+    throw error;
+  }
+};
+
+export const updateEmployeeSkills = async (
+  employeeId: string,
+  skillType: 'soft' | 'hard',
+  currentSkills: Habilidad[],
+  newSkills: Habilidad[]
+): Promise<Habilidad[]> => {
+  // Validación de entrada
+  if (!employeeId || !Array.isArray(newSkills)) {
+    throw new Error('Invalid input parameters');
+  }
+
+  try {
+    // 1. Extraer IDs de las habilidades actuales y nuevas
+    const currentSkillIds = currentSkills.map(s => s.ID_Habilidad);
+    const newSkillIds = newSkills.map(s => s.ID_Habilidad);
+
+    // 2. Identificar habilidades a añadir y eliminar
+    const skillsToAdd = newSkillIds.filter(id => !currentSkillIds.includes(id));
+    const skillsToRemove = currentSkillIds.filter(id => !newSkillIds.includes(id));
+
+    // 3. Eliminar relaciones que ya no están
+    if (skillsToRemove.length > 0) {
+      const { error: deleteError } = await supabase
+        .from('Empleado_Habilidades')
+        .delete()
+        .eq('ID_Empleado', employeeId)
+        .in('ID_Habilidad', skillsToRemove);
+
+      if (deleteError) throw deleteError;
+    }
+
+    // 4. Añadir nuevas relaciones
+    if (skillsToAdd.length > 0) {
+      const newRecords = skillsToAdd.map(skillId => ({
+        ID_Empleado: employeeId,
+        ID_Habilidad: skillId
+      }));
+
+      const { error: insertError } = await supabase
+        .from('Empleado_Habilidades')
+        .insert(newRecords);
+
+      if (insertError) throw insertError;
+    }
+
+    // 5. Devolver habilidades actualizadas
+    return fetchEmployeeHabilidadesByType(employeeId, skillType);
+  } catch (error) {
+    console.error(`Error updating ${skillType} skills:`, {
+      employeeId,
+      currentSkills,
+      newSkills,
+      error
+    });
+    throw error;
   }
 };

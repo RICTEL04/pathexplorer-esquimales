@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { 
   getEmployeeFullData, 
   updateInterests,
+  updateEmployeeSkills,
   EmployeeFullData,
   Habilidad
 } from '@/lib/employeeService';
@@ -19,7 +20,9 @@ export const useEmployeeProfile = (employeeId: string) => {
     capabilityLead: null,
     contacto: null,
     informes: [], 
-    habilidades: [],
+    softSkills: [],
+    hardSkills: [],
+    intereses: [],
     proyectos: [] 
   });
 
@@ -61,20 +64,59 @@ export const useEmployeeProfile = (employeeId: string) => {
 
   const handleInterestsChange = async (newInterests: string[]) => {
     if (!isOwner || !profileData.employee) return;
-    
+  
     try {
-      const updatedHabilidades = await updateInterests(
+
+      
+      const updatedIntereses = await updateInterests(
         profileData.employee.ID_Empleado,
-        profileData.habilidades,
+        profileData.intereses, 
         newInterests
       );
       
       setProfileData(prev => ({
         ...prev,
-        habilidades: updatedHabilidades
+        intereses: updatedIntereses
       }));
     } catch (error) {
-      console.error('Error updating interests:', error);
+      console.error('Error handling interests change:', {
+        error: error instanceof Error ? error.message : error,
+        employeeId: profileData.employee?.ID_Empleado,
+        newInterests
+      });
+    }
+  };
+
+
+    // En tu componente o hook
+  const handleSoftSkillsChange = async (newSkill: Habilidad[]) => {
+
+    try {
+      const updatedSkills = await updateEmployeeSkills(
+        employeeId,
+        'soft',
+        profileData.softSkills,
+        newSkill
+      );
+      // Actualizar el estado con las nuevas habilidades
+    } catch (error) {
+      console.error('Error updating soft skills:', error);
+    }
+  };
+
+  const handleHardSkillsChange = async (newSkill: Habilidad[]) => {
+
+
+    try {
+      const updatedSkills = await updateEmployeeSkills(
+        employeeId,
+        'hard',
+        profileData.hardSkills,
+        newSkill
+      );
+      // Actualizar el estado con las nuevas habilidades
+    } catch (error) {
+      console.error('Error updating hard skills:', error);
     }
   };
 
@@ -83,7 +125,9 @@ export const useEmployeeProfile = (employeeId: string) => {
     loading,
     profileData,
     isOwner,
-    handleInterestsChange
+    handleInterestsChange,
+    handleSoftSkillsChange,
+    handleHardSkillsChange
   };
 };
 
@@ -97,7 +141,9 @@ export const ownProfile = () => {
       capabilityLead: null,
       contacto: null,
       informes: [], 
-      habilidades: [],
+      softSkills: [],
+      hardSkills: [],
+      intereses: [],
       proyectos: [] 
     });
   
@@ -143,26 +189,63 @@ export const ownProfile = () => {
       if (!isOwner || !profileData.employee) return;
       
       try {
-        const updatedHabilidades = await updateInterests(
+        const updatedIntereses = await updateInterests(
           profileData.employee.ID_Empleado,
-          profileData.habilidades,
+          profileData.intereses,
           newInterests
         );
         
         setProfileData(prev => ({
           ...prev,
-          habilidades: updatedHabilidades
+          intereses: updatedIntereses
         }));
       } catch (error) {
         console.error('Error updating interests:', error);
       }
     };
   
+
+    const handleSoftSkillsChange = async (newSkill: Habilidad[]) => {
+
+      if (!isOwner || !profileData.employee) return;
+
+      try {
+        const updatedSkills = await updateEmployeeSkills(
+          profileData.employee?.ID_Empleado,
+          'soft',
+          profileData.softSkills,
+          newSkill
+        );
+        // Actualizar el estado con las nuevas habilidades
+      } catch (error) {
+        console.error('Error updating soft skills:', error);
+      }
+    };
+
+    const handleHardSkillsChange = async (newSkill: Habilidad[]) => {
+
+      if (!isOwner || !profileData.employee) return;
+
+      try {
+        const updatedSkills = await updateEmployeeSkills(
+          profileData.employee?.ID_Empleado,
+          'hard',
+          profileData.hardSkills,
+          newSkill
+        );
+  
+      } catch (error) {
+        console.error('Error updating hard skills:', error);
+      }
+    };
+
     return {
       session,
       loading,
       profileData,
       isOwner,
-      handleInterestsChange
+      handleInterestsChange,
+      handleSoftSkillsChange,
+      handleHardSkillsChange
     };
   };
