@@ -765,7 +765,6 @@ COPY "public"."Capability_Lead" ("ID_CapabilityLead", "Nombre", "ID_Departamento
 
 COPY "public"."Certificados" ("ID_Certificado", "Nombre", "Fecha_caducidad", "Documento", "ID_Empleado", "Verificacion", "Descripcion") FROM stdin;
 3e0b6281-980f-4493-989e-dcae95344b68	Curso en FreakyAhh	\N	FreakyEats.pdf	17be3a68-8d97-4557-85e8-8e8cc9ecbc13	\N	
-5433b79a-aebc-442c-938c-fb88ec95e052	Experto en Gooning	2025-04-07	Goon.exe	17be3a68-8d97-4557-85e8-8e8cc9ecbc13	\N	
 7e7fead8-5dd7-4f49-b7dc-1a660c17bf5a	Maestria en Maestro	2025-04-30	Dr.pdf	17be3a68-8d97-4557-85e8-8e8cc9ecbc13	\N	
 7f2b6ca6-6e9c-4505-b9ae-4831a2061129	Doctorado en R.A.T	1869-01-21	ratapata.pdf	5314bfcf-8401-457f-b7a7-2221ea64777c	\N	
 95ec4907-2222-4352-aadc-f049cdba8fcb	God de Cursos	2026-09-03	FreakyGod.goon	17be3a68-8d97-4557-85e8-8e8cc9ecbc13	\N	
