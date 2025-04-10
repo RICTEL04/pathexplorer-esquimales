@@ -116,7 +116,8 @@ ALTER TABLE "public"."Cliente" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Contacto" (
     "PK_Contacto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Email" character varying,
-    "Num_Telefono" numeric
+    "Num_Telefono" numeric,
+    "ID_empleado" "uuid"
 );
 
 
@@ -182,7 +183,6 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "ID_CapabilityLead" "uuid",
     "FechaContratacion" "date",
     "FechaUltNivel" "date",
-    "Contacto_ID" "uuid",
     "ID_PeopleLead" "uuid"
 );
 
@@ -443,6 +443,11 @@ ALTER TABLE ONLY "public"."Certificados"
 
 ALTER TABLE ONLY "public"."Cliente"
     ADD CONSTRAINT "Cliente_ID_Contacto_fkey" FOREIGN KEY ("ID_Contacto") REFERENCES "public"."Contacto"("PK_Contacto");
+
+
+
+ALTER TABLE ONLY "public"."Contacto"
+    ADD CONSTRAINT "Contacto_ID_empleado_fkey" FOREIGN KEY ("ID_empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
