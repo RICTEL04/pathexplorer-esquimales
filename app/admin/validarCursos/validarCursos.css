@@ -53,7 +53,7 @@
 /* Pop-up content */
 .popup-content {
   position: relative;
-  background-color: #fff;
+  background-color: #eae7ee;
   padding: 24px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -64,12 +64,11 @@
   text-align: center;
 }
 
-/* Contenedor scrollable para la tabla */
 .popup-scroll {
-    max-height: 60vh; /* Altura máxima del contenedor de la tabla */
-    overflow-y: auto; /* Habilitar scroll vertical */
-    margin-top: 16px; /* Espaciado superior */
-    border-radius: 4px; /* Opcional: bordes redondeados */
+    max-height: 60vh; 
+    overflow-y: auto; 
+    margin-top: 16px; 
+    border-radius: 4px; 
   }
   
   .popup-title {
@@ -88,8 +87,8 @@
     cursor: pointer;
     margin-bottom: 12px;
     position: absolute;
-    bottom: 16px; /* Espaciado desde la parte inferior */
-    left: 50%; /* Centra horizontalmente */
+    bottom: 16px;
+    left: 50%; 
     transform: translateX(-50%);
   }
   
@@ -103,6 +102,9 @@
     margin-top: 16px;
     font-size: 0.9rem;
     text-align: left;
+    border-radius: 8px; 
+    overflow: hidden;
+    background-color: #f9f9f9;
   }
   
   .popup-table thead th {
@@ -133,7 +135,6 @@
     text-align: center;
   }
 
-  /* Fila desplegable */
 .dropdown-row td {
   padding: 16px;
 
@@ -174,7 +175,6 @@
     background-color: #c53030;
   }
 
-  /* Formulario de edición */
 .form-group {
     margin-bottom: 16px;
     text-align: left;
@@ -195,4 +195,13 @@
   
   .form-checkbox {
     margin-left: 8px;
+  }
+
+  .edit-button {
+
+    color: #4837b4;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
   }

@@ -5,6 +5,7 @@ import '@/app/admin/validarCursos/validarCursos.css';
 import { useEffect, useState } from "react";
 import { getEmpleados } from "@/lib/empleadoService";
 import { updateCertificado } from "@/lib/empleadoUpdate";
+import { Certificate } from 'crypto';
 
 interface Certificado {
   ID_Certificado: string;
@@ -26,7 +27,7 @@ export default function EmpleadosPage() {
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedEmpleado, setSelectedEmpleado] = useState<Empleado | null>(null);
-  const [expandedCertificado, setExpandedCertificado] = useState<string | null>(null); // ID del certificado expandido
+  const [expandedCertificado, setExpandedCertificado] = useState<string | null>(null); 
   const [descripcion, setDescripcion] = useState<string>("");
   const [verificacion, setVerificacion] = useState<boolean>(false);
 
@@ -45,10 +46,10 @@ export default function EmpleadosPage() {
 
   const handleCertificadoExpand = (cert: Certificado) => {
     if (expandedCertificado === cert.ID_Certificado) {
-      // Si ya está expandido, colapsarlo
+      
       setExpandedCertificado(null);
     } else {
-      // Expandir el certificado seleccionado
+      
       setExpandedCertificado(cert.ID_Certificado);
       setDescripcion(cert.Descripcion);
       setVerificacion(cert.Verificacion);
@@ -59,8 +60,8 @@ export default function EmpleadosPage() {
     try {
       await updateCertificado(certId, verificacion, descripcion);
       alert("Certificado actualizado correctamente.");
-      setExpandedCertificado(null); // Colapsar la fila después de guardar
-      window.location.reload(); // Recargar los datos
+      setExpandedCertificado(null); 
+      window.location.reload();
     } catch (error) {
       console.error("Error al actualizar el certificado:", error);
       alert("Hubo un error al actualizar el certificado.");
@@ -91,7 +92,7 @@ export default function EmpleadosPage() {
               <h2 className="card-title">{empleado.Nombre}</h2>
               <p className="card-role">Rol: {empleado.Rol}</p>
               <p className="card-certificates">
-                Certificados: 📜 {empleado.Certificados.length}
+                Certificados: 📜 {empleado.Certificados.filter((cert) => cert.Verificacion === null).length}
               </p>
             </div>
           ))}
@@ -113,11 +114,13 @@ export default function EmpleadosPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedEmpleado.Certificados.map((cert) => (
+                  {selectedEmpleado.Certificados
+                  .filter((cert => cert.Verificacion === null))
+                  .map((cert) => (
                     <>
                       <tr key={cert.ID_Certificado}>
                         <td><strong>{cert.Nombre}</strong></td>
-                        <td>{cert.Documento}</td>
+                        <td><a href={cert.Documento} target='_blank'>{cert.Documento}</a></td>
                         <td>
                           <button
                             className="edit-button"
