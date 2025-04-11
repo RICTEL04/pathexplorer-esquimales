@@ -1,13 +1,13 @@
+import certification from "@/lib/certificados-empleados/definitions";
 import React, { useState } from "react";
 import { FaEye, FaEdit } from "react-icons/fa";
 
 interface CertificationCardProps {
-    certification: any;
-    setModalOpen: (open: boolean) => void;
-    onSave: (updatedCertification: any) => void; // Callback for saving changes
+    certification: certification;
+    onSave: (updatedCertification: certification) => void;
 }
 
-function CertificationsRow({ certification, setModalOpen, onSave }: CertificationCardProps) {
+function CertificationsRow({ certification, onSave }: CertificationCardProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempValues, setTempValues] = useState({
         Nombre: certification.Nombre,

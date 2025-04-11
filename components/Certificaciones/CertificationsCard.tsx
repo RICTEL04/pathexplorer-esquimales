@@ -1,13 +1,15 @@
+import certification from "@/lib/certificados-empleados/definitions";
 import React, { useState } from "react";
 import { FaEye, FaEdit } from "react-icons/fa";
 
 interface CertificationCardProps {
-    certification: any;
-    setModalOpen: (open: boolean) => void;
+    certification: certification;
     onSave: (updatedCertification: any) => void; // Callback for saving changes
+    setSelectedCertification: (id: number) => void; // Callback to set selected certification
+    index: number;
 }
 
-function CertificationCard({ certification, setModalOpen, onSave }: CertificationCardProps) {
+function CertificationCard({ certification, onSave, setSelectedCertification, index }: CertificationCardProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempValues, setTempValues] = useState({
         Nombre: certification.Nombre,
@@ -43,7 +45,7 @@ function CertificationCard({ certification, setModalOpen, onSave }: Certificatio
     };
 
     return (
-        <div className="bg-white text-gray-500 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+        <div className="bg-white text-gray-500 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow hover:bg-gray-200 cursor-pointer">
             {isEditing ? (
                 <div>
                     <input
@@ -74,7 +76,7 @@ function CertificationCard({ certification, setModalOpen, onSave }: Certificatio
                     </button>
                 </div>
             ) : (
-                <div>
+                <div onClick={() => setSelectedCertification(index)}>
                     <h3 className="text-lg font-bold text-gray-800">{certification.Nombre}</h3>
                     <p className="text-gray-600">Fecha: {certification.Fecha_caducidad}</p>
                     <div className="text-gray-600 mb-2">
@@ -85,12 +87,6 @@ function CertificationCard({ certification, setModalOpen, onSave }: Certificatio
                             : "Procesando"}
                     </div>
                     <div className="mt-2 flex items-center space-x-2">
-                        <button
-                            className="text-blue-500 hover:underline flex items-center"
-                            onClick={() => setModalOpen(true)}
-                        >
-                            <FaEye className="mr-1" /> Ver
-                        </button>
                         <button
                             className="text-blue-500 hover:underline flex items-center"
                             onClick={handleEdit}

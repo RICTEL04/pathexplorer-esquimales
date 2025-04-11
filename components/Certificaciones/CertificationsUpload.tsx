@@ -1,4 +1,4 @@
-import { uploadCertificado } from "@/lib/certificados/uploadCertificado";
+import { uploadCertificado } from "@/lib/certificados-empleados/uploadCertificado";
 import React, { useState } from "react";
 
 interface UploadCertificadoFormProps {

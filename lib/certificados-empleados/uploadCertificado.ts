@@ -48,7 +48,7 @@ export async function uploadCertificado(
             Nombre: NombreCertificado,
             Fecha_caducidad: Fecha,
             ID_Empleado: ID_Empleado,
-            documento: publicUrl, // Store the public URL in the "documento" column
+            Documento: publicUrl,
         });
 
     if (error) {
