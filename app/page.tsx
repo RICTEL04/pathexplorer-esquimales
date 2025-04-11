@@ -121,7 +121,7 @@ export default function Home() {
           <button className="formButton" type="submit">Sign in</button>
           
           <Link href="/recuperacion" className="text-gray-700" style={{ fontSize: 15, padding: 15, fontFamily: "system-ui" }}>
-            ¿Se te olvidó tu contraseña? Skill issue.
+            ¿Se te olvidó tu contraseña?
           </Link>
         </form>
       </div>
