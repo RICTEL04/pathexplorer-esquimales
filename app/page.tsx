@@ -80,7 +80,7 @@ export default function Home() {
       } else if (userRoles.talentLead) {
         router.replace("/talent-lead"); // Cambiado de "/capability-lead" a "/talent-lead"
       } else {
-        router.replace("/empleados");
+        router.replace("/employee");
       }
   
     } catch (err) {

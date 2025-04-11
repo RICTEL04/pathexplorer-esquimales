@@ -8,6 +8,8 @@ import { handleTalentLeadActions } from "@/lib/insertTalentLead";
 import { handleCapabilityLeadActions } from "@/lib/insertCapabilityLead";
 import { handleDeliveryLeadActions } from "@/lib/insertDeliveryLead";
 import { handlePeopleLeadActions } from "@/lib/insertPeopleLead";
+import Link from "next/link";
+import { handleRemovePeopleLead, handleRemoveCapabilityLead, handleRemoveDeliveryLead, handleRemoveTalentLead  } from "@/lib/removeRoles";
 
 type NewEmployee = {
   id: string;
@@ -60,6 +62,12 @@ export default function EmployeeManagement() {
     const [showRoleModal, setShowRoleModal] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState<Empleado | null>(null);
     const [roles, setRoles] = useState({
+      peopleLead: false,
+      capabilityLead: false,
+      deliveryLead: false,
+      talentLead: false
+    });
+    const [initialRoles, setInitialRoles] = useState({
       peopleLead: false,
       capabilityLead: false,
       deliveryLead: false,
@@ -244,40 +252,57 @@ export default function EmployeeManagement() {
     }
   };
 
-  const handleSaveRoles = async () => {
-    if (!selectedEmployee) return;
-  
-    try {
-      if (roles.capabilityLead) {
-        // Ejecutar funciones específicas para Capability Lead
-        await handleCapabilityLeadActions(selectedEmployee.ID_Empleado);
-      }
-  
-      if (roles.deliveryLead) {
-        // Ejecutar funciones específicas para Delivery Lead
-        await handleDeliveryLeadActions(selectedEmployee.ID_Empleado);
-      }
+  // Modifica la función handleSaveRoles para manejar cambios individuales
+const handleSaveRoles = async () => {
+  if (!selectedEmployee || !hasRoleChanges()) return;
 
+  try {
+    // Verificar cambios individuales para cada rol
+    if (roles.peopleLead !== initialRoles.peopleLead) {
       if (roles.peopleLead) {
-        // Ejecutar funciones específicas para Capability Lead
         await handlePeopleLeadActions(selectedEmployee.ID_Empleado);
+      } else {
+        await handleRemovePeopleLead(selectedEmployee.ID_Empleado); // Necesitarías implementar esta función
       }
-  
-      if (roles.talentLead) {
-        // Ejecutar funciones específicas para Delivery Lead
-        await handleTalentLeadActions(selectedEmployee.ID_Empleado);
-      }
-  
-      // Cerrar el modal y actualizar la UI
-      setShowRoleModal(false);
-      // Opcional: Mostrar notificación de éxito
-      alert('Roles actualizados correctamente');
-  
-    } catch (error) {
-      console.error('Error al actualizar roles:', error);
-      alert('Error al actualizar roles');
     }
-  };
+
+    if (roles.capabilityLead !== initialRoles.capabilityLead) {
+      if (roles.capabilityLead) {
+        await handleCapabilityLeadActions(selectedEmployee.ID_Empleado);
+      } else {
+        await handleRemoveCapabilityLead(selectedEmployee.ID_Empleado);
+      }
+    }
+
+    if (roles.deliveryLead !== initialRoles.deliveryLead) {
+      if (roles.deliveryLead) {
+        await handleDeliveryLeadActions(selectedEmployee.ID_Empleado);
+      } else {
+        await handleRemoveDeliveryLead(selectedEmployee.ID_Empleado);
+      }
+    }
+
+    if (roles.talentLead !== initialRoles.talentLead) {
+      if (roles.talentLead) {
+        await handleTalentLeadActions(selectedEmployee.ID_Empleado);
+      } else {
+        await handleRemoveTalentLead(selectedEmployee.ID_Empleado);
+      }
+    }
+
+    // Actualizar los roles iniciales solo con los que cambiaron
+    setInitialRoles(roles);
+    setShowRoleModal(false);
+    alert('Roles actualizados correctamente');
+
+  } catch (error) {
+    console.error('Error al actualizar roles:', error);
+    alert('Error al actualizar roles');
+    // Opcional: Revertir los cambios en el estado si falla
+    setRoles(initialRoles);
+  }
+};
+
 
   const checkRoles = async (employeeId:string) => {
     try {
@@ -313,10 +338,29 @@ export default function EmployeeManagement() {
         deliveryLead: deliveryLeadData !== null,
         talentLead: talentLeadData !== null
       });
+
+      const currentRoles = {
+        peopleLead: peopleLeadData !== null,
+        capabilityLead: capabilityLeadData !== null,
+        deliveryLead: deliveryLeadData !== null,
+        talentLead: talentLeadData !== null
+      };
+
+      setRoles(currentRoles);
+      setInitialRoles(currentRoles); // Guarda los roles iniciales
   
     } catch (error) {
       console.error("Error al verificar roles:", error);
     }
+  };
+
+  const hasRoleChanges = () => {
+    return (
+      roles.peopleLead !== initialRoles.peopleLead ||
+      roles.capabilityLead !== initialRoles.capabilityLead ||
+      roles.deliveryLead !== initialRoles.deliveryLead ||
+      roles.talentLead !== initialRoles.talentLead
+    );
   };
 
   return (
@@ -402,14 +446,15 @@ export default function EmployeeManagement() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <div className="flex items-center space-x-2">
                             {/* Icono para editar usuario */}
-                            <button 
+                            <Link 
+                              href={`/admin/empleados/${employee.ID_Empleado}`} // Reemplaza con tu ruta real
                               className="text-blue-600 hover:text-blue-900"
                               title="Editar usuario"
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                               </svg>
-                            </button>
+                            </Link>
                             
                             {/* Icono para modificar rol */}
                             <button 
@@ -725,7 +770,12 @@ export default function EmployeeManagement() {
                 <button
                   type="button"
                   onClick={handleSaveRoles}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  disabled={!hasRoleChanges()}
+                  className={`px-4 py-2 rounded-md ${
+                    hasRoleChanges() 
+                      ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
                 >
                   Guardar Cambios
                 </button>

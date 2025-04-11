@@ -28,7 +28,7 @@ export default function Sidebar({ routes }: SidebarProps) {
         className="mb-4 p-2 rounded-md bg-gray-800"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
-        <Menu />
+        <Menu color="white"/>
       </button>
       <nav className="space-y-4">
         {routes.map(({ href, label, Icon }) => (
