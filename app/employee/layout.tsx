@@ -1,6 +1,9 @@
 "use client";
 import Sidebar from "@/components/sidebar";
 import { Home, Briefcase, Award, TrendingUp, User, Target } from "lucide-react"; // Import the Target icon for Objetivos
+import {supabase} from "@/lib/supabase"
+
+const {data: {session}} = await supabase.auth.getSession();
 
 const routes = [
   { href: "/employee", label: "Inicio", Icon: Home }, // Home route for Employee Dashboard
@@ -8,7 +11,7 @@ const routes = [
   { href: "/employee/certificaciones", label: "Certificaciones", Icon: Award }, // Certifications route
   { href: "/employee/path-de-carrera", label: "Path de Carrera", Icon: TrendingUp }, // Career Path route with TrendingUp icon
   { href: "/employee/objetivos", label: "Objetivos", Icon: Target }, // Objectives route with Target icon
-  { href: "/employee/perfil", label: "Perfil", Icon: User }, // Profile route with User icon
+  { href: "/employee/perfil/" + session?.user.id, label: "Perfil", Icon: User }, // Profile route with User icon
 ];
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
