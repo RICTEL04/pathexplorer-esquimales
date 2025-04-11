@@ -71,8 +71,7 @@ SET default_table_access_method = "heap";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Administrador" (
-    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "ID_Admin" "uuid"
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL
 );
 
 
@@ -318,11 +317,6 @@ CREATE TABLE IF NOT EXISTS "public"."Talent_Lead" (
 
 
 ALTER TABLE "public"."Talent_Lead" OWNER TO "postgres";
-
-
-ALTER TABLE ONLY "public"."Administrador"
-    ADD CONSTRAINT "Administrador_ID_Admin_key" UNIQUE ("ID_Admin");
-
 
 
 ALTER TABLE ONLY "public"."Administrador"
