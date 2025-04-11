@@ -33,7 +33,7 @@ export default function EmpleadosPage() {
 
   useEffect(() => {
     const fetchEmpleados = async () => {
-      try {rol
+      try {
         const data: Empleado[] = await getEmpleados();
         setEmpleados(data);
       } catch (err) {
