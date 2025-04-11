@@ -285,14 +285,16 @@ CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
 ALTER TABLE "public"."Proyectos" OWNER TO "postgres";
 
 
-CREATE TABLE IF NOT EXISTS "public"."Puestos_proyecto" (
-    "ID_Proyecto" "uuid" NOT NULL,
-    "ID_Empleado" "uuid",
+CREATE TABLE IF NOT EXISTS "public"."Puesto_proyecto" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_Proyecto" "uuid" DEFAULT "gen_random_uuid"(),
     "Puesto" character varying
 );
 
 
-ALTER TABLE "public"."Puestos_proyecto" OWNER TO "postgres";
+ALTER TABLE "public"."Puesto_proyecto" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Talent_Discussion" (
@@ -424,8 +426,8 @@ ALTER TABLE ONLY "public"."Proyectos"
 
 
 
-ALTER TABLE ONLY "public"."Puestos_proyecto"
-    ADD CONSTRAINT "Puestos_proyecto_pkey" PRIMARY KEY ("ID_Proyecto");
+ALTER TABLE ONLY "public"."Puesto_proyecto"
+    ADD CONSTRAINT "Puesto_proyecto_pkey" PRIMARY KEY ("id");
 
 
 
@@ -559,13 +561,13 @@ ALTER TABLE ONLY "public"."Proyectos"
 
 
 
-ALTER TABLE ONLY "public"."Puestos_proyecto"
-    ADD CONSTRAINT "Puestos_proyecto_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+ALTER TABLE ONLY "public"."Puesto_proyecto"
+    ADD CONSTRAINT "Puesto_proyecto_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
-ALTER TABLE ONLY "public"."Puestos_proyecto"
-    ADD CONSTRAINT "Puestos_proyecto_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
+ALTER TABLE ONLY "public"."Puesto_proyecto"
+    ADD CONSTRAINT "Puesto_proyecto_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
@@ -889,11 +891,6 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyecto_Habilidades" TO "a
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "anon";
-
-
-
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puestos_proyecto" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puestos_proyecto" TO "anon";
 
 
 
