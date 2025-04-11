@@ -4,9 +4,19 @@ import React from 'react';
 import Profile from '@/components/Profile';
 import Card from '@/components/Card';
 import { useEmployeeProfile } from '@/lib/hooks/useEmployeeProfile';
+import { usePathname } from 'next/navigation';
 
-const UserProfilePage = ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+const UserProfilePage = () => {
+  const pathname = usePathname();
+  // Extraer el ID de la URL: /capability-lead/perfil/123 → ["", "capability-lead", "perfil", "123"]
+  const pathSegments = pathname.split('/');
+  const id = pathSegments[3]; // El ID está en la 4ª posición (índice 3)
+
+  if (!id) {
+    return <div>ID no encontrado en la URL</div>;
+  }
+
+  // Resto de tu lógica usando id...
   const {
     session,
     loading,
