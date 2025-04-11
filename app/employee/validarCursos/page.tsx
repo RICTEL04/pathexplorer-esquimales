@@ -1,6 +1,6 @@
 "use client";
 
-import '@/app/admin/validarCursos/validarCursos.css';
+import '@/app/employee/validarCursos/validarCursos.css';
 
 import { useEffect, useState } from "react";
 import { getEmpleados } from "@/lib/empleadoService";
@@ -33,7 +33,7 @@ export default function EmpleadosPage() {
 
   useEffect(() => {
     const fetchEmpleados = async () => {
-      try {
+      try {rol
         const data: Empleado[] = await getEmpleados();
         setEmpleados(data);
       } catch (err) {
@@ -75,13 +75,14 @@ export default function EmpleadosPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Lista de Empleados</h1>
+      <h1 className="text-2xl font-bold mb-4">Certificados Pendientes</h1>
+      <p className="mb-4">Haz clic en un empleado para ver sus certificados pendientes.</p>
 
       {error && <p className="text-red-500">{error}</p>}
 
       <div className="grid-container">
         {empleados
-          .filter((empleado) => empleado.Certificados.length > 0)
+          .filter((empleado) => empleado.Certificados.length > 0 && empleado.Certificados.some((cert) => cert.Verificacion === null))
           .map((empleado) => (
             <div
               key={empleado.ID_Empleado}
@@ -120,7 +121,14 @@ export default function EmpleadosPage() {
                     <>
                       <tr key={cert.ID_Certificado}>
                         <td><strong>{cert.Nombre}</strong></td>
-                        <td><a href={cert.Documento} target='_blank'>{cert.Documento}</a></td>
+                        <td>
+                          <button
+                            className="document-button"
+                            onClick={() => window.open(cert.Documento, '_blank')}
+                          >
+                            Ver Documento
+                          </button>
+                        </td>
                         <td>
                           <button
                             className="edit-button"

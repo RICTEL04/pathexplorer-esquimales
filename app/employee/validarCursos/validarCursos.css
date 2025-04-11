@@ -205,3 +205,17 @@
     border-radius: 4px;
     cursor: pointer;
   }
+
+  .document-button {
+    background-color: #8b36db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .document-button:hover {
+    background-color: #7328b9;
+  }
