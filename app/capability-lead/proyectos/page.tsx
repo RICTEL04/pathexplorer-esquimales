@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
+import { supabase } from '@/lib/supabase'
+
 
 // Define el tipo del JSON del proyecto
 interface ProjectJson {
@@ -24,6 +26,10 @@ export default function ProyectosPage() {
   const [endDate, setEndDate] = useState('');
   const [projectJson, setProjectJson] = useState<ProjectJson | null>(null); // Ajuste del tipo
 
+  const [projectId, setProjectId] = useState<string | null>(null); // State to store the Proyecto_id
+
+
+
   const handleRoleChange = (index: number, field: string, value: string | number) => {
     const updatedRoles = [...roles];
     updatedRoles[index] = { ...updatedRoles[index], [field]: value };
@@ -39,10 +45,10 @@ export default function ProyectosPage() {
     setRoles(updatedRoles);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Generar el JSON con los datos del proyecto
+  
+    // Generate the JSON with the project data
     const projectData: ProjectJson = {
       nombre: projectName,
       descripcion: description,
@@ -53,18 +59,38 @@ export default function ProyectosPage() {
         cantidad: role.quantity,
       })),
     };
+  
+    try {
+      // Insert the project into the Proyectos table
+      const { data: proyecto, error: proyectoError } = await supabase
+        .from('Proyectos')
+        .insert({
+          Nombre: projectData.nombre,
+          Descripcion: projectData.descripcion,
+          fecha_inicio: projectData.fechaInicio,
+          fecha_fin: projectData.fechaFin,
+        })
+        .select()
+        .single();
+  
+      if (proyectoError) throw proyectoError;
+  
+      console.log('Project inserted successfully:', proyecto);
 
-    // Guardar el JSON en la variable y mostrarlo en la consola
-    setProjectJson(projectData);
-    console.log('JSON generado:', projectData);
-
-    // Cerrar el modal y limpiar el formulario
-    setShowNewProjectModal(false);
-    setProjectName('');
-    setDescription('');
-    setStartDate('');
-    setEndDate('');
-    setRoles([{ role: '', quantity: 1 }]);
+      // Store the Proyecto_id in state
+      setProjectId(proyecto.id);
+  
+     
+      // Close the modal and reset the form
+      setShowNewProjectModal(false);
+      setProjectName('');
+      setDescription('');
+      setStartDate('');
+      setEndDate('');
+      setRoles([{ role: '', quantity: 1 }]);
+    } catch (error) {
+      console.error('Error inserting data:', error);
+    }
   };
 
   return (
@@ -180,11 +206,11 @@ export default function ProyectosPage() {
         </div>
       )}
 
-      {/* Mostrar el JSON generado (opcional) */}
-      {projectJson && (
+      {/* Display the Proyecto_id for debugging */}
+      {projectId && (
         <div className="mt-8 p-4 bg-gray-100 border border-gray-300 rounded">
-          <h3 className="text-lg font-bold mb-2">JSON Generado:</h3>
-          <pre className="text-sm text-gray-700">{JSON.stringify(projectJson, null, 2)}</pre>
+          <h3 className="text-lg font-bold mb-2">Proyecto ID:</h3>
+          <p className="text-sm text-gray-700">{projectId}</p>
         </div>
       )}
     </div>
