@@ -274,11 +274,13 @@ ALTER TABLE "public"."Proyecto_Habilidades" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
     "ID_Proyecto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "Nombre" character varying,
-    "ID_Cliente" "uuid" NOT NULL,
-    "Descripcion" character varying,
-    "Status" character varying,
-    "ID_DeliveryLead" "uuid" NOT NULL
+    "Nombre" "text" NOT NULL,
+    "ID_Cliente" "uuid",
+    "Descripcion" "text",
+    "Status" "text",
+    "ID_DeliveryLead" "uuid",
+    "fecha_inicio" "date",
+    "fecha_fin" "date"
 );
 
 
@@ -295,6 +297,21 @@ CREATE TABLE IF NOT EXISTS "public"."Puesto_proyecto" (
 
 
 ALTER TABLE "public"."Puesto_proyecto" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."Roles" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "role_name" "text" DEFAULT 'name'::"text" NOT NULL,
+    "Proyecto_id" "uuid" NOT NULL,
+    "cantidad" smallint
+);
+
+
+ALTER TABLE "public"."Roles" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."Roles" IS 'roles para proyectos';
+
 
 
 CREATE TABLE IF NOT EXISTS "public"."Talent_Discussion" (
@@ -428,6 +445,11 @@ ALTER TABLE ONLY "public"."Proyectos"
 
 ALTER TABLE ONLY "public"."Puesto_proyecto"
     ADD CONSTRAINT "Puesto_proyecto_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."Roles"
+    ADD CONSTRAINT "Roles_pkey" PRIMARY KEY ("id");
 
 
 
@@ -568,6 +590,11 @@ ALTER TABLE ONLY "public"."Puesto_proyecto"
 
 ALTER TABLE ONLY "public"."Puesto_proyecto"
     ADD CONSTRAINT "Puesto_proyecto_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Empleado"("ID_Empleado");
+
+
+
+ALTER TABLE ONLY "public"."Roles"
+    ADD CONSTRAINT "Roles_Proyecto_id_fkey" FOREIGN KEY ("Proyecto_id") REFERENCES "public"."Proyectos"("ID_Proyecto");
 
 
 
@@ -891,6 +918,16 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyecto_Habilidades" TO "a
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "anon";
+
+
+
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Puesto_proyecto" TO "authenticated";
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Puesto_proyecto" TO "anon";
+
+
+
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Roles" TO "authenticated";
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Roles" TO "anon";
 
 
 
