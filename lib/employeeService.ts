@@ -160,13 +160,13 @@ const fetchCapabilityLead = async (capabilityLeadId: string | null): Promise<Cap
   };
 };
 
-const fetchContacto = async (contactoId: string | null): Promise<Contacto | null> => {
-  if (!contactoId) return null;
+const fetchContacto = async (employeeID: string | null): Promise<Contacto | null> => {
+  if (!employeeID) return null;
 
   const { data, error } = await supabase
     .from('Contacto')
     .select('Email, Num_Telefono')
-    .eq('PK_Contacto', contactoId)
+    .eq('ID_empleado', employeeID)
     .single();
 
   if (error || !data) return null;
@@ -339,7 +339,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
     ] = await Promise.all([
       fetchPeopleLead(employee.ID_PeopleLead),
       fetchCapabilityLead(employee.ID_CapabilityLead),
-      fetchContacto(employee.Contacto_ID),
+      fetchContacto(employeeId),
       fetchInformes(employeeId),
       getEmployeeSoftSkills(employeeId),  
       getEmployeeHardSkills(employeeId),  

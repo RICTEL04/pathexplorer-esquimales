@@ -4,9 +4,17 @@ import React from 'react';
 import Profile from '@/components/Profile';
 import Card from '@/components/Card';
 import { useEmployeeProfile } from '@/lib/hooks/useEmployeeProfile';
+import { useParams } from 'next/navigation'; // Cambiado a next/navigation
 
-const UserProfilePage = ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+const UserProfilePage = () => {
+
+  const params = useParams(); // Usar useParams en lugar de useRouter
+  const id = params.id as string; // Obtener el ID de los parámetros
+
+  if (!id) {
+    return <div>ID no encontrado en la URL</div>;
+  }
+  
   const {
     session,
     loading,
@@ -69,8 +77,8 @@ const UserProfilePage = ({ params }: { params: { id: string } }) => {
     HardSkills,
     interests,
     onInterestsChange: isOwner ? handleInterestsChange : undefined,
-    onSoftSkillsChange: handleSoftSkillsChange,
-    onHardSkillsChange: handleHardSkillsChange,
+    //onSoftSkillsChange: handleSoftSkillsChange,
+    //onHardSkillsChange: handleHardSkillsChange,
     editable: isOwner
   };
 

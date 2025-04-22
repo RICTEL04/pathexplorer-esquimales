@@ -192,7 +192,7 @@ const Profile: React.FC<ProfileProps> = ({
         items={SoftSkills}
         type='soft'
         color="blue"
-        editable={true}
+        editable={!!onSoftSkillsChange}
         onItemsChange={onSoftSkillsChange}
       />
 
@@ -202,7 +202,7 @@ const Profile: React.FC<ProfileProps> = ({
         items={HardSkills}
         type='hard'
         color="green"
-        editable={true}
+        editable={!!onHardSkillsChange}
         onItemsChange={onHardSkillsChange}
       />
 
