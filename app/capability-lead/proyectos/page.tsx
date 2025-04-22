@@ -77,8 +77,20 @@ export default function ProyectosPage() {
   
       console.log('Project inserted successfully:', proyecto);
 
+      // Use the inserted project's ID to insert roles into the Roles table
+      const rolesData = projectData.roles.map((role) => ({
+        role_name: role.puesto, // Map the role name
+        Proyecto_id: proyecto.ID_Proyecto, // Use the ID_Proyecto as the foreign key
+      }));
+
+      const { error: rolesError } = await supabase.from('Roles').insert(rolesData);
+
+      if (rolesError) throw rolesError;
+
+      console.log('Roles inserted successfully:', rolesData);
+
       // Store the Proyecto_id in state
-      setProjectId(proyecto.id);
+      setProjectId(proyecto.ID_Proyecto);
   
      
       // Close the modal and reset the form
