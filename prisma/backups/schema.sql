@@ -128,7 +128,6 @@ ALTER TABLE "public"."Contacto" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Cursos" (
     "ID_Curso" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Nombre" character varying,
-    "Progreso" character varying,
     "Status" character varying,
     "Fecha_fin_curso" "date",
     "ID_Empleado" "uuid" NOT NULL
@@ -192,11 +191,16 @@ ALTER TABLE "public"."Empleado" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Empleado_Habilidades" (
     "ID_Empleado" "uuid" NOT NULL,
-    "ID_Habilidad" "uuid" NOT NULL
+    "ID_Habilidad" "uuid" NOT NULL,
+    "Estado" character varying
 );
 
 
 ALTER TABLE "public"."Empleado_Habilidades" OWNER TO "postgres";
+
+
+COMMENT ON COLUMN "public"."Empleado_Habilidades"."Estado" IS 'Estado de la habilidad(aceptada, en espera, rechazada)';
+
 
 
 CREATE TABLE IF NOT EXISTS "public"."FeedBack" (
