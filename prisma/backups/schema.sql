@@ -187,11 +187,16 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "ID_CapabilityLead" "uuid",
     "FechaContratacion" "date",
     "FechaUltNivel" "date",
-    "ID_PeopleLead" "uuid"
+    "ID_PeopleLead" "uuid",
+    "Biografia" character varying
 );
 
 
 ALTER TABLE "public"."Empleado" OWNER TO "postgres";
+
+
+COMMENT ON COLUMN "public"."Empleado"."Biografia" IS 'Biografia del empleado(como la del face)';
+
 
 
 CREATE TABLE IF NOT EXISTS "public"."Empleado_Habilidades" (
