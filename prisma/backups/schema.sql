@@ -128,9 +128,9 @@ ALTER TABLE "public"."Contacto" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Cursos" (
     "ID_Curso" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Nombre" character varying,
-    "Status" character varying,
+    "ID_Habilidad" "uuid",
     "Fecha_fin_curso" "date",
-    "ID_Empleado" "uuid" NOT NULL
+    "link" "text"
 );
 
 
@@ -503,7 +503,7 @@ ALTER TABLE ONLY "public"."Contacto"
 
 
 ALTER TABLE ONLY "public"."Cursos"
-    ADD CONSTRAINT "Cursos_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+    ADD CONSTRAINT "Cursos_ID_Habilidad_fkey" FOREIGN KEY ("ID_Habilidad") REFERENCES "public"."Habilidades"("ID_Habilidad");
 
 
 
@@ -603,7 +603,7 @@ ALTER TABLE ONLY "public"."Puesto_proyecto"
 
 
 ALTER TABLE ONLY "public"."Puesto_proyecto"
-    ADD CONSTRAINT "Puesto_proyecto_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Empleado"("ID_Empleado");
+    ADD CONSTRAINT "Puesto_proyecto_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
 
 
 
