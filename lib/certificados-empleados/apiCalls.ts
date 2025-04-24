@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 
+export async function fetchSession(setLoading: (loading: boolean) => void) {
+            // Obtener la sesión actual
+            const { data: { session } } = await supabase.auth.getSession();
+            return session;
+        };
+
+
+
 // This function fetches data from the Supabase database based on the employee ID provided.
 export async function fetchData(employeeID: string, setLoading: (loading: boolean) => void) {
     let data = null;
