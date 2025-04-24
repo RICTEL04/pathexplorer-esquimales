@@ -22,6 +22,14 @@ export interface Proyecto {
   Status: string;
 }
 
+export interface Certificado {
+  ID_Certificado: string;
+  Nombre: string;
+  Fecha_caducidad: string;
+  Verificacion: string;
+  Descripcion: string;
+}
+
 export interface Cliente {
   PK_Cliente: string;
   Nombre: string;
@@ -63,11 +71,8 @@ export interface Contacto {
 }
 
 export interface Direccion {
-  Num_Casa: string| null;
-  Calle: string | null;
   Estado : string | null;
   Pais: string | null;
-  Ciudad: string | null;
 }
 
 export interface Informe {
@@ -81,6 +86,7 @@ export interface EmployeeFullData {
   Rol: string | undefined;
   Nivel: string | undefined;
   Departamento: string | null;
+  Biografia: string | null;
   peopleLead: PeopleLead | null;
   capabilityLead: CapabilityLead | null;
   informes: Informe[];
@@ -89,6 +95,7 @@ export interface EmployeeFullData {
   intereses : Interes[];
   contacto: Contacto | null;
   proyectos: ProyectoEmpleado[]; 
+  certificados: Certificado[];
   direccion: Direccion | null;
 }
 
@@ -193,20 +200,18 @@ const fetchDirection = async (employeeID: string | null): Promise<Direccion | nu
   if (!employeeID) return null;
 
   const { data, error } = await supabase
-    .from('Direccion')
-    .select('Calle, Estado, Pais, Ciudad, Num_Casa')
-    .eq('ID_Empleado', employeeID)
+    .from('Contacto')
+    .select('Estado, Pais')
+    .eq('ID_empleado', employeeID)
     .single();
 
   if (error || !data) return null;
 
   return {
-    Num_Casa : data.Num_Casa,
-    Calle : data.Calle,
+
     Estado : data.Estado,
-    Ciudad : data.Ciudad,
     Pais : data.Pais
-    
+
   };
 };
 
@@ -332,6 +337,19 @@ const fetchPuestosProyecto = async (employeeId: string): Promise<PuestoProyecto[
   return error ? [] : data || [];
 };
 
+const fetchCertificados = async (employeeId: string): Promise<Certificado[]> =>{
+  if(!employeeId){
+    throw new Error('Invalid input parameters');
+  } 
+
+  const {data, error}  =await supabase
+  .from('Certificados')
+  .select('ID_Certificado, Nombre, Fecha_caducidad, Verificacion, Descripcion')
+  .eq('ID_Empleado',employeeId);
+
+  return error ? [] : data || [];
+}
+
 const fetchProyectos = async (proyectoIds: string[]): Promise<Proyecto[]> => {
   if (proyectoIds.length === 0) return [];
   
@@ -343,6 +361,8 @@ const fetchProyectos = async (proyectoIds: string[]): Promise<Proyecto[]> => {
   return error ? [] : data || [];
 };
 
+
+
 const fetchClientes = async (clienteIds: string[]): Promise<Cliente[]> => {
   if (clienteIds.length === 0) return [];
   
@@ -350,7 +370,7 @@ const fetchClientes = async (clienteIds: string[]): Promise<Cliente[]> => {
     .from('Cliente')
     .select('PK_Cliente, Nombre')
     .in('PK_Cliente', clienteIds);
-
+  
   return error ? [] : data || [];
 };
 
@@ -366,6 +386,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       Rol,
       Nivel,
       Departamento,
+      Biografia,
       peopleLead,
       capabilityLead,
       contacto,
@@ -374,6 +395,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       hardSkills,
       intereses,
       proyectos,
+      certificados,
       direccion
     ] = await Promise.all([
       employee.ID_Empleado,
@@ -381,6 +403,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       employee.Rol,
       employee.Nivel,
       fetchDepartamento(employee.ID_Departamento),
+      employee.Biografia,
       fetchPeopleLead(employee.ID_PeopleLead),
       fetchCapabilityLead(employee.ID_CapabilityLead),
       fetchContacto(employeeId),
@@ -389,6 +412,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       getEmployeeHardSkills(employeeId),  
       fetchIntereses(employeeId),
       getEmployeeProjects(employeeId),
+      fetchCertificados(employeeId),
       fetchDirection(employeeId) 
     ]);
 
@@ -398,6 +422,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       Rol,
       Nivel,
       Departamento,
+      Biografia,
       peopleLead,
       capabilityLead,
       contacto,
@@ -406,6 +431,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       hardSkills,
       intereses,
       proyectos,
+      certificados,
       direccion 
     };
   } catch (error) {
@@ -448,6 +474,57 @@ export const getEmployeeProjects = async (employeeId: string): Promise<ProyectoE
   }
 };
 
+export const updateEmployeePhone = async (employeeId: string, newPhone: string): Promise<string> => {
+  try {
+
+    if(!employeeId){
+      throw new Error('Invalid input parameters');
+    } 
+
+    const { error } = await supabase
+      .from('Contacto')
+      .update({ Num_Telefono: newPhone })
+      .eq('ID_empleado', employeeId);
+
+    if (error) throw error;
+    
+    return newPhone;
+  } catch (error) {
+    console.error('Error updating employee phone:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      employeeId,
+      newPhone,
+      fullError: error
+    });
+    throw error;
+  }
+};
+
+export const updateEmployeeBiography = async (employeeId: string, newBiography: string): Promise<string> => {
+  try {
+
+    if(!employeeId){
+      throw new Error('Invalid input parameters');
+    } 
+
+    const { error } = await supabase
+      .from('Empleado')
+      .update({ Biografia: newBiography })
+      .eq('ID_Empleado', employeeId);
+
+    if (error) throw error;
+    
+    return newBiography;
+  } catch (error) {
+    console.error('Error updating employee phone:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      employeeId,
+      newBiography,
+      fullError: error
+    });
+    throw error;
+  }
+};
 
 // Funciones para actualizar datos
 export const updateInterests = async (employeeId: string, currentIntereses: Interes[], newInterests: string[]): Promise<Interes[]> => {
@@ -576,55 +653,54 @@ export const updateEmployeeSkills = async (
   }
 };
 
-// Añade esto a employeeService.ts
 export const updateEmployeeAddress = async (employeeId: string, newAddress: Direccion): Promise<Direccion> => {
   try {
     // Verificar si ya existe una dirección para este empleado
     const { data: existingAddress, error: fetchError } = await supabase
-      .from('Direccion')
+      .from('Contacto')
       .select('*')
-      .eq('ID_Empleado', employeeId)
-      .single();
+      .eq('ID_empleado', employeeId)
+      .maybeSingle(); // Cambiado a maybeSingle para manejar mejor el caso null
 
-    if (fetchError && !fetchError.details?.includes('0 rows')) {
+    // Si hay un error diferente a "no encontrado", lanzar excepción
+    if (fetchError && !fetchError.details?.includes('Results contain 0 rows')) {
       throw fetchError;
     }
 
     // Preparar los datos para Supabase
     const supabaseAddress = {
-      Num_Casa: newAddress.Num_Casa,
-      Calle: newAddress.Calle,
-      Ciudad: newAddress.Ciudad,
       Estado: newAddress.Estado,
       Pais: newAddress.Pais,
-      ID_Empleado: employeeId
     };
 
-    let query;
+    let result;
     if (existingAddress) {
       // Actualizar dirección existente
-      query = supabase
-        .from('Direccion')
+      const { data, error } = await supabase
+        .from('Contacto')
         .update(supabaseAddress)
-        .eq('ID_Empleado', employeeId);
+        .eq('ID_empleado', employeeId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      result = data;
     } else {
       // Crear nueva dirección
-      query = supabase
-        .from('Direccion')
-        .insert(supabaseAddress);
+      const { data, error } = await supabase
+        .from('Contacto')
+        .insert(supabaseAddress)
+        .select()
+        .single();
+
+      if (error) throw error;
+      result = data;
     }
 
-    const { error, data } = await query;
-
-    if (error) throw error;
-
-    // Devolver la dirección actualizada
+    // Devolver la dirección actualizada/creada
     return {
-      Num_Casa: supabaseAddress.Num_Casa,
-      Calle: supabaseAddress.Calle,
-      Ciudad: supabaseAddress.Ciudad,
-      Estado: supabaseAddress.Estado,
-      Pais: supabaseAddress.Pais
+      Estado: result.Estado,
+      Pais: result.Pais
     };
   } catch (error) {
     console.error('Error updating address:', {

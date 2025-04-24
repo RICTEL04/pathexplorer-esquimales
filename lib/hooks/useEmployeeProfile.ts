@@ -4,13 +4,16 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { 
   getEmployeeFullData, 
+  updateEmployeePhone,
   updateEmployeeAddress,
   updateInterests,
+  updateEmployeeBiography,
   updateEmployeeSkills,
   EmployeeFullData,
   Habilidad,
   Direccion
 } from '@/lib/employeeService';
+import { isNull } from 'node:util';
 
 export const useEmployeeProfile = (employeeId: string) => {
   const router = useRouter();
@@ -21,6 +24,7 @@ export const useEmployeeProfile = (employeeId: string) => {
     Nombre: undefined,
     Rol: undefined,
     Nivel: undefined,
+    Biografia : null,
     Departamento: null,
     peopleLead: null,
     capabilityLead: null,
@@ -30,6 +34,7 @@ export const useEmployeeProfile = (employeeId: string) => {
     hardSkills: [],
     intereses: [],
     proyectos: [] ,
+    certificados: [],
     direccion: null,
   });
 
@@ -70,7 +75,68 @@ export const useEmployeeProfile = (employeeId: string) => {
   }, [employeeId, router]);
 
 
-    // Añade esto a tu hook useEmployeeProfile
+    // En useEmployeeProfile.ts
+  const handleLevelChange = async (newLevel: string) => {
+    if (!profileData.ID_Empleado) return;
+    
+    try {
+      const { error } = await supabase
+        .from('Empleado')
+        .update({ Nivel: newLevel })
+        .eq('ID_Empleado', profileData.ID_Empleado);
+
+      if (error) throw error;
+      
+      setProfileData(prev => ({
+        ...prev,
+        Nivel: newLevel
+      }));
+    } catch (error) {
+      console.error('Error updating level:', error);
+      throw error;
+    }
+  };
+
+  const handleRoleChange = async (newRole: string) => {
+    // Implementación similar a handleLevelChange
+  };
+
+  const handlePhoneChange = async (newPhone: string) => {
+    if (!profileData.ID_Empleado) return;
+    
+    try {
+      const updatedPhone = await updateEmployeePhone(profileData.ID_Empleado, newPhone);
+      
+      setProfileData(prev => ({
+        ...prev,
+        contacto: {
+          ...prev.contacto!,
+          Num_Telefono: updatedPhone
+        }
+      }));
+    } catch (error) {
+      console.error('Error updating phone:', error);
+      throw error;
+    }
+  };
+
+  const handleBiographyChange = async (newBiography: string) => {
+    if (!profileData.ID_Empleado) return;
+    
+    try {
+      const updatedBiography = await updateEmployeeBiography(profileData.ID_Empleado, newBiography);
+      
+      setProfileData(prev => ({
+        ...prev,
+        Biografia: updatedBiography
+      }));
+    } catch (error) {
+      console.error('Error updating phone:', error);
+      throw error;
+    }
+  };
+
+
   const handleAddressChange = async (newAddress: Direccion) => {
     if (!profileData.ID_Empleado) return;
     
@@ -154,6 +220,8 @@ export const useEmployeeProfile = (employeeId: string) => {
     loading,
     profileData,
     isOwner,
+    handlePhoneChange,
+    handleBiographyChange,
     handleAddressChange,
     handleInterestsChange,
     handleSoftSkillsChange,

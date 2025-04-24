@@ -4,7 +4,8 @@ import CardTable from '../components/Table';
 import InterestSection from './InterestSection';
 import SkillSection from './SkillSection';
 import AddressSection from './AddressSection';
-import { Habilidad as Hability, Direccion as Direction } from '@/lib/employeeService';
+import StringEditor from './StringEditor';
+import { Habilidad as Hability, Direccion as Direction, Certificado as Certification } from '@/lib/employeeService';
 
 interface Project {
   id: string;
@@ -16,11 +17,6 @@ interface Project {
   endDate: string;
 }
 
-interface Certification {
-  id: string;
-  name: string; 
-  expiration: string;
-}
 
 interface Goal {
   id: string;
@@ -38,17 +34,19 @@ interface ProfileProps {
   id?: string;
   role?: string;
   department?: string | null;
+  biography: string | null;
   email?: string;
   phone?: string;
   direction: Direction | null;
   avatarUrl?: string;
-  bio?: string;
   projects?: Project[];
   certifications?: Certification[];
   goals?: Goal[];
   SoftSkills?: Hability[];
   HardSkills?: Hability[];
   interests?: string[];
+  onPhoneChange?: (newAddress: string) => Promise <void>;
+  onBiographyChange?:(newBiography: string) => Promise <void>;
   onAddressChange?: (newAddress: Direction) => Promise <void>;
   onSoftSkillsChange?: (newSkills: Hability[]) => void;
   onHardSkillsChange?: (newSkills: Hability[]) => void;
@@ -61,19 +59,21 @@ const Profile: React.FC<ProfileProps> = ({
   id,
   name,
   role,
+  biography,
   level,
   department,
   email,
   phone,
   direction,
   avatarUrl,
-  bio,
   projects = [],
   certifications = [],
   goals = [],
   SoftSkills = [],
   HardSkills = [],
   interests = [],
+  onPhoneChange,
+  onBiographyChange,
   onAddressChange,
   onSoftSkillsChange,
   onHardSkillsChange,
@@ -89,9 +89,10 @@ const Profile: React.FC<ProfileProps> = ({
   ];
 
   const certificationsColumns: { key: keyof Certification; label: string }[] = [
-    { key: 'id', label: 'ID'},
-    { key: 'name', label: 'Nombre' },
-    { key: 'expiration', label: 'Fecha Límite' },
+    { key: 'Nombre', label: 'Nombre' },
+    { key: 'Fecha_caducidad', label: 'Fecha Límite' },
+    { key: 'Verificacion', label: 'Verificado' },
+    { key: 'Descripcion', label: 'Descripcion' },
   ];
 
   const renderEmptyMessage = (sectionName: string) => (
@@ -111,7 +112,7 @@ const Profile: React.FC<ProfileProps> = ({
   const renderDirection = (dir?: Direction) => {
     if (!dir) return renderEmptyMessage("información de dirección");
     
-    const directionParts = [dir.Num_Casa, dir.Calle, , dir.Ciudad, dir.Estado, dir.Pais].filter(Boolean);
+    const directionParts = [dir.Estado, dir.Pais].filter(Boolean);
     return directionParts.length > 0 ? (
       <p className="text-gray-600 break-words">
         {directionParts.join(', ')}
@@ -142,7 +143,7 @@ const Profile: React.FC<ProfileProps> = ({
               {name || "Nombre no disponible"}
             </h2>
             {level ? (
-              <p className="text-sm text-gray-500 ">Nivel {level}</p>
+              <p className="text-sm text-gray-500 break-words">Level: {level}</p>  
             ) : (
               <p className="text-sm text-gray-400 italic">Nivel no especificado</p>
             )}
@@ -165,7 +166,13 @@ const Profile: React.FC<ProfileProps> = ({
         <div className="max-w-[300px] md:max-w-none flex-1 min-w-0">
           <div className="mt-3 space-y-1">
             {renderField(email, "email")}
-            {renderField(phone, "teléfono")}
+            <StringEditor
+              value={phone || ''}
+              label="Teléfono"
+              editable={true}
+              onSave={onPhoneChange}
+              placeholder="Ingrese el número telefónico"
+            />
           </div>
           
           
@@ -173,9 +180,6 @@ const Profile: React.FC<ProfileProps> = ({
             {direction ? (
               <AddressSection
                 address={{
-                  Num_Casa: direction.Num_Casa || null,
-                  Calle: direction.Calle || null,
-                  Ciudad: direction.Ciudad || null,
                   Estado: direction.Estado || null,
                   Pais: direction.Pais || null
                 }}
@@ -188,7 +192,13 @@ const Profile: React.FC<ProfileProps> = ({
           </div>
           
           <div className="mt-3">
-            {renderField(bio, "biografía")}
+          <StringEditor
+              value={biography || ''}
+              label="Biografia"
+              editable={true}
+              onSave={onBiographyChange}
+              placeholder="Ingrese la biografia"
+          />
           </div>
         </div>
       </div>
