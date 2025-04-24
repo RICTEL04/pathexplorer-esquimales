@@ -39,7 +39,7 @@ const UserProfilePage = () => {
   }
 
   // Preparar datos para el componente Profile
-  const { employee, contacto, peopleLead, capabilityLead, informes, softSkills, hardSkills, intereses } = profileData;
+  const { employee, contacto, peopleLead, capabilityLead, informes, softSkills, hardSkills, intereses, direccion } = profileData;
 
   const SoftSkills = softSkills
 
@@ -57,9 +57,11 @@ const UserProfilePage = () => {
     email: contacto?.Email,
     phone: contacto?.Num_Telefono,
     direction: {
-      city: "",
-      state: "",
-      country: ""
+      num_Casa : direccion?.Num_Casa,
+      street : direccion?.Calle,
+      city : direccion?.Ciudad,
+      state : direccion?.Estado,
+      country : direccion?.Pais
     },
     avatarUrl: "",
     bio: "",
@@ -78,8 +80,8 @@ const UserProfilePage = () => {
     HardSkills,
     interests,
     onInterestsChange: isOwner ? handleInterestsChange : undefined,
-    //onSoftSkillsChange: handleSoftSkillsChange,
-    //onHardSkillsChange: handleHardSkillsChange,
+    onSoftSkillsChange: handleSoftSkillsChange,
+    onHardSkillsChange: handleHardSkillsChange,
     editable: isOwner
   };
 

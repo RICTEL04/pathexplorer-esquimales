@@ -1,3 +1,4 @@
+//components/Profile.tsx
 import React from 'react';
 import CardTable from '../components/Table';
 import InterestSection from './InterestSection';
@@ -29,16 +30,11 @@ interface Goal {
 }
 
 interface Direction {
-  city?: string;
-  state?: string;
-  country?: string;
-}
-
-interface Habilidad
-{
-  id: string,
-  tipo: string,
-  descripcion: string,
+  num_Casa?: string | null;
+  street?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
 }
 
 interface ProfileProps {
@@ -119,7 +115,7 @@ const Profile: React.FC<ProfileProps> = ({
   const renderDirection = (dir?: Direction) => {
     if (!dir) return renderEmptyMessage("información de dirección");
     
-    const directionParts = [dir.city, dir.state, dir.country].filter(Boolean);
+    const directionParts = [dir.num_Casa, dir.street, , dir.city, dir.state, dir.country].filter(Boolean);
     return directionParts.length > 0 ? (
       <p className="text-gray-600 dark:text-gray-300 break-words">
         {directionParts.join(', ')}
@@ -135,7 +131,7 @@ const Profile: React.FC<ProfileProps> = ({
       <div className="flex flex-col items-center md:flex-row md:items-start gap-6 flex-wrap">
         <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-600 shrink-0">
           <img
-            src={avatarUrl || "https://i.redd.it/dxufnnvawr651.jpg"}
+            src={avatarUrl || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
             alt={`${name || 'Usuario'}'s profile picture`}
             width={112}
             height={112}
@@ -198,7 +194,7 @@ const Profile: React.FC<ProfileProps> = ({
 
       {/* Sección de hardSkills */}
       <SkillSection
-        title="Hard Skills"
+        title="Technical Skills"
         items={HardSkills}
         type='hard'
         color="green"

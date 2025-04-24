@@ -59,6 +59,7 @@ export interface Employee {
   Interes: Interes;
   Contacto: Contacto;
   Proyecto: Proyecto;
+  Direccion: Direccion;
 }
 
 export interface PeopleLead {
@@ -78,6 +79,14 @@ export interface Contacto {
     Num_Telefono: string
 }
 
+export interface Direccion {
+  Num_Casa: string|null;
+  Calle: string | null;
+  Estado : string | null;
+  Pais: string | null;
+  Ciudad: string | null;
+}
+
 export interface Informe {
   id: string;
   name: string;
@@ -94,6 +103,7 @@ export interface EmployeeFullData {
   intereses : Interes[];
   contacto: Contacto | null;
   proyectos: ProyectoEmpleado[]; // Añadir esta línea
+  direccion: Direccion | null;
 }
 
 // Helper functions para cada tipo de dato
@@ -174,6 +184,27 @@ const fetchContacto = async (employeeID: string | null): Promise<Contacto | null
   return {
     Email: data.Email,
     Num_Telefono: data.Num_Telefono
+  };
+};
+
+const fetchDirection = async (employeeID: string | null): Promise<Direccion | null> => {
+  if (!employeeID) return null;
+
+  const { data, error } = await supabase
+    .from('Direccion')
+    .select('Calle, Estado, Pais, Ciudad, Num_Casa')
+    .eq('ID_Empleado', employeeID)
+    .single();
+
+  if (error || !data) return null;
+
+  return {
+    Num_Casa : data.Num_Casa,
+    Calle : data.Calle,
+    Estado : data.Estado,
+    Ciudad : data.Ciudad,
+    Pais : data.Pais
+    
   };
 };
 
@@ -335,7 +366,8 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       softSkills,
       hardSkills,
       intereses,
-      proyectos
+      proyectos,
+      direccion
     ] = await Promise.all([
       fetchPeopleLead(employee.ID_PeopleLead),
       fetchCapabilityLead(employee.ID_CapabilityLead),
@@ -344,7 +376,8 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       getEmployeeSoftSkills(employeeId),  
       getEmployeeHardSkills(employeeId),  
       fetchIntereses(employeeId),
-      getEmployeeProjects(employeeId) 
+      getEmployeeProjects(employeeId),
+      fetchDirection(employeeId) 
     ]);
 
     return {
@@ -356,7 +389,8 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       softSkills,
       hardSkills,
       intereses,
-      proyectos 
+      proyectos,
+      direccion 
     };
   } catch (error) {
     console.error('Error fetching employee full data:', error);

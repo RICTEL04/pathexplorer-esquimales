@@ -7,7 +7,8 @@ import {
   updateInterests,
   updateEmployeeSkills,
   EmployeeFullData,
-  Habilidad
+  Habilidad,
+  Direccion
 } from '@/lib/employeeService';
 
 export const useEmployeeProfile = (employeeId: string) => {
@@ -23,7 +24,8 @@ export const useEmployeeProfile = (employeeId: string) => {
     softSkills: [],
     hardSkills: [],
     intereses: [],
-    proyectos: [] 
+    proyectos: [] ,
+    direccion: null,
   });
 
   const isOwner = session?.user?.id === employeeId;
@@ -131,6 +133,7 @@ export const useEmployeeProfile = (employeeId: string) => {
   };
 };
 
+/*
 export const ownProfile = () => {
     const router = useRouter();
     const [session, setSession] = useState<any>(null);
@@ -148,7 +151,8 @@ export const ownProfile = () => {
     });
   
     const isOwner = true;
-  
+
+
     useEffect(() => {
       const fetchSessionAndData = async () => {
         // Obtener sesión
@@ -248,4 +252,6 @@ export const ownProfile = () => {
       handleSoftSkillsChange,
       handleHardSkillsChange
     };
+    
   };
+  */
