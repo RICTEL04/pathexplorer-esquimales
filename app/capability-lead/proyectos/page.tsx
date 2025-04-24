@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { supabase } from '@/lib/supabase'
 
 
 // Define el tipo del JSON del proyecto
 interface ProjectJson {
-  nombre: string;
-  descripcion: string;
-  fechaInicio: string;
-  fechaFin: string;
+  ID_Proyecto?: string; // ID del proyecto, opcional para la inserción
+  Nombre: string;
+  Descripcion: string;
+  fecha_inicio: string;
+  fecha_fin: string;
   roles: {
     puesto: string;
     cantidad: number;
@@ -24,12 +25,29 @@ export default function ProyectosPage() {
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [projectJson, setProjectJson] = useState<ProjectJson | null>(null); // Ajuste del tipo
 
   const [projectId, setProjectId] = useState<string | null>(null); // State to store the Proyecto_id
 
+  const [projects, setProjects] = useState<ProjectJson[]>([]); // State to store the projects
 
+  const fetchProjects = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('Proyectos')
+        .select('*')
+        .order('ID_Proyecto', { ascending: false });
+      console.log('Fetched projects:', data);
+      if (error) throw error;
+      setProjects(data);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    }
+  }
 
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+  
   const handleRoleChange = (index: number, field: string, value: string | number) => {
     const updatedRoles = [...roles];
     updatedRoles[index] = { ...updatedRoles[index], [field]: value };
@@ -50,10 +68,10 @@ export default function ProyectosPage() {
   
     // Generate the JSON with the project data
     const projectData: ProjectJson = {
-      nombre: projectName,
-      descripcion: description,
-      fechaInicio: startDate,
-      fechaFin: endDate,
+      Nombre: projectName,
+      Descripcion: description,
+      fecha_inicio: startDate,
+      fecha_fin: endDate,
       roles: roles.map((role) => ({
         puesto: role.role,
         cantidad: role.quantity,
@@ -65,10 +83,10 @@ export default function ProyectosPage() {
       const { data: proyecto, error: proyectoError } = await supabase
         .from('Proyectos')
         .insert({
-          Nombre: projectData.nombre,
-          Descripcion: projectData.descripcion,
-          fecha_inicio: projectData.fechaInicio,
-          fecha_fin: projectData.fechaFin,
+          Nombre: projectData.Nombre,
+          Descripcion: projectData.Descripcion,
+          fecha_inicio: projectData.fecha_inicio,
+          fecha_fin: projectData.fecha_fin,
         })
         .select()
         .single();
@@ -225,6 +243,24 @@ export default function ProyectosPage() {
           <p className="text-sm text-gray-700">{projectId}</p>
         </div>
       )}
+
+      {/* Display the projects */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Proyectos</h2>
+        {projects.length === 0 ? (
+          <p className="text-gray-600">No hay proyectos disponibles.</p>
+        ) : (
+          projects.map((project) => (
+            <div key={project.ID_Proyecto} className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
+              <h3 className="text-black font-bold">{project.Nombre}</h3>
+              <p className="text-gray-600 text-sm">{project.Descripcion}</p>
+              <p className="text-gray-600 mt-2">Fecha de Inicio: {project.fecha_inicio}</p>
+              <p className="text-gray-600 mt-2">Fecha de Fin: {project.fecha_fin}</p>
+            </div>
+          ))
+        )}
+      </div>
+
     </div>
   );
 }
