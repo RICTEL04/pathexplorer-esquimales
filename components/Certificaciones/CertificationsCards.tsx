@@ -2,7 +2,6 @@ import React from "react";
 import CertificationsCard from "./CertificationsCard";
 import certification from "@/lib/certificados-empleados/definitions";
 import CertificationView from "./CertificationView";
-import { updateCertificate } from "@/lib/certificados-empleados/apiCalls";
 
 interface CertificationsCardsProps {
     certifications: certification[];
@@ -29,7 +28,13 @@ export default function CertificationsCards({
                 ))}
             </div>
             <div className="flex flex-col w-2/3 pl-2">
-                <CertificationView documentUrl={certifications[selectedCertification].Documento} />
+                {certifications.length > 0 && certifications[selectedCertification] ? (
+                    <CertificationView documentUrl={certifications[selectedCertification].Documento} />
+                ) : (
+                    <div className="flex items-center justify-center h-full text-gray-500">
+                        <p className="text-lg">Selecciona una certificación para ver los detalles</p>
+                    </div>
+                )}
             </div>
         </div>
 
