@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import certification from "./definitions";
 
 export async function fetchSession(setLoading: (loading: boolean) => void) {
     // Obtener la sesión actual
@@ -30,4 +31,23 @@ export async function fetchData(employeeID: string, setLoading: (loading: boolea
         setLoading(false);
     }
     return data;
+}
+
+export async function updateCertificate(updatedData: certification) {
+    try {
+        const { data, error } = await supabase
+            .from("Certificados")
+            .update({
+                Nombre: updatedData.Nombre,
+                Fecha_caducidad: updatedData.Fecha_caducidad,
+            })
+            .eq("ID_Certificado", updatedData.ID_Certificado);
+
+        if (error) {
+            throw error;
+        }
+        return data;
+    } catch (error) {
+        console.error("Error updating certificate:", error);
+    }
 }

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { fetchData } from "@/lib/certificados-empleados/apiCalls";
+import { fetchData, updateCertificate } from "@/lib/certificados-empleados/apiCalls";
 import CertificationsTable from "@/components/Certificaciones/CertificationsTable";
 import CertificationsCards from "@/components/Certificaciones/CertificationsCards";
 import { Menu, LayoutGrid } from "lucide-react";
@@ -18,6 +18,24 @@ export default function CertificacionesPage() {
     const [selectedCertification, setSelectedCertification] = useState<number>(0);
     const [viewMode, setViewMode] = useState<"cards" | "table">("table");
 
+    const handleSave = (updatedCertification: certification) => {
+        // Logic to save the updated certification data
+        updateCertificate(updatedCertification)
+            .then(() => {
+                if (session) {
+                    fetchData(session.user.id, setLoading)
+                        .then((data) => {
+                            if (data) {
+                                setCertifications(data);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error fetching updated data:", error);
+                        });
+                }
+            })
+    };
+
     useEffect(() => {
         const loadData = async () => {
             try {
@@ -29,7 +47,7 @@ export default function CertificacionesPage() {
                         setCertifications(data);
                     }
                 }
-                
+
                 // Update session state at the end
                 setSession(session);
             } catch (error) {
@@ -38,10 +56,10 @@ export default function CertificacionesPage() {
                 setLoading(false);
             }
         };
-    
+
         loadData();
     }, []);
-    
+
 
     return (
         <div className="container h-3/4">
@@ -87,9 +105,18 @@ export default function CertificacionesPage() {
 
             {/* Render the appropriate view */}
             {viewMode === "table" ? (
-                <CertificationsTable certifications={certifications} setModalOpen={setModalOpen} setModalType={setModalType} setSelectedCertification={setSelectedCertification} />
+                <CertificationsTable
+                    certifications={certifications}
+                    setModalOpen={setModalOpen}
+                    setModalType={setModalType}
+                    setSelectedCertification={setSelectedCertification}
+                    handleSave={handleSave}
+                />
             ) : (
-                <CertificationsCards certifications={certifications} />
+                <CertificationsCards
+                    certifications={certifications}
+                    handleSave={handleSave}
+                />
             )}
         </div>
     );
