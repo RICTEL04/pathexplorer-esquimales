@@ -3,7 +3,8 @@ import React from 'react';
 import CardTable from '../components/Table';
 import InterestSection from './InterestSection';
 import SkillSection from './SkillSection';
-import { Habilidad as Hability } from '@/lib/employeeService';
+import AddressSection from './AddressSection';
+import { Habilidad as Hability, Direccion as Direction } from '@/lib/employeeService';
 
 interface Project {
   id: string;
@@ -29,13 +30,6 @@ interface Goal {
   description: string;
 }
 
-interface Direction {
-  num_Casa?: string | null;
-  street?: string | null;
-  city?: string | null;
-  state?: string | null;
-  country?: string | null;
-}
 
 interface ProfileProps {
   className?: string; 
@@ -43,10 +37,10 @@ interface ProfileProps {
   level?: string;
   id?: string;
   role?: string;
-  department?: string;
+  department?: string | null;
   email?: string;
   phone?: string;
-  direction?: Direction;
+  direction: Direction | null;
   avatarUrl?: string;
   bio?: string;
   projects?: Project[];
@@ -55,15 +49,15 @@ interface ProfileProps {
   SoftSkills?: Hability[];
   HardSkills?: Hability[];
   interests?: string[];
+  onAddressChange?: (newAddress: Direction) => Promise <void>;
   onSoftSkillsChange?: (newSkills: Hability[]) => void;
   onHardSkillsChange?: (newSkills: Hability[]) => void;
   onInterestsChange?: (newInterests: string[]) => void;
-  
-  
+
 }
 
 const Profile: React.FC<ProfileProps> = ({
-  className = "max-w-full p-6 bg-blue-50 dark:bg-gray-800 rounded-lg drop-shadow-xl",
+  className = "max-w-full p-6 bg-blue-50 rounded-lg drop-shadow-xl",
   id,
   name,
   role,
@@ -80,9 +74,11 @@ const Profile: React.FC<ProfileProps> = ({
   SoftSkills = [],
   HardSkills = [],
   interests = [],
+  onAddressChange,
   onSoftSkillsChange,
   onHardSkillsChange,
   onInterestsChange,
+
 }) => {
   const projectColumns: { key: keyof Project; label: string }[] = [
     { key: 'id', label: 'ID'},
@@ -99,29 +95,29 @@ const Profile: React.FC<ProfileProps> = ({
   ];
 
   const renderEmptyMessage = (sectionName: string) => (
-    <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
-      <p className="text-gray-500 dark:text-gray-400">No hay {sectionName} disponibles</p>
+    <div className="mt-4 p-4 bg-gray-50 rounded-lg text-center">
+      <p className="text-gray-500">No hay {sectionName} disponibles</p>
     </div>
   );
 
   const renderField = (value: string | undefined, fieldName: string) => (
     value ? (
-      <p className="text-gray-600 dark:text-gray-300 break-words">{value}</p>
+      <p className="text-gray-600 break-words">{value}</p>
     ) : (
-      <p className="text-gray-400 dark:text-gray-500 italic break-words">No hay {fieldName.toLowerCase()}</p>
+      <p className="text-gray-400 italic break-words">No hay {fieldName.toLowerCase()}</p>
     )
   );
 
   const renderDirection = (dir?: Direction) => {
     if (!dir) return renderEmptyMessage("información de dirección");
     
-    const directionParts = [dir.num_Casa, dir.street, , dir.city, dir.state, dir.country].filter(Boolean);
+    const directionParts = [dir.Num_Casa, dir.Calle, , dir.Ciudad, dir.Estado, dir.Pais].filter(Boolean);
     return directionParts.length > 0 ? (
-      <p className="text-gray-600 dark:text-gray-300 break-words">
+      <p className="text-gray-600 break-words">
         {directionParts.join(', ')}
       </p>
     ) : (
-      <p className="text-gray-400 dark:text-gray-500 italic break-words">No hay información de dirección</p>
+      <p className="text-gray-400 italic break-words">No hay información de dirección</p>
     );
   };
 
@@ -129,7 +125,7 @@ const Profile: React.FC<ProfileProps> = ({
     <div className={`${className}`}>
       {/* Sección de información básica */}
       <div className="flex flex-col items-center md:flex-row md:items-start gap-6 flex-wrap">
-        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-600 shrink-0">
+        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gray-200 shrink-0">
           <img
             src={avatarUrl || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
             alt={`${name || 'Usuario'}'s profile picture`}
@@ -142,26 +138,26 @@ const Profile: React.FC<ProfileProps> = ({
         {/* Información principal */}
         <div className="text-center md:text-left max-w-[300px] md:max-w-none flex-1 min-w-0">
           <div className="mb-2">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white break-words">
+            <h2 className="text-2xl font-bold text-gray-800 break-words">
               {name || "Nombre no disponible"}
             </h2>
             {level ? (
-              <p className="text-sm text-gray-500 dark:text-gray-400">Nivel {level}</p>
+              <p className="text-sm text-gray-500 ">Nivel {level}</p>
             ) : (
-              <p className="text-sm text-gray-400 dark:text-gray-500 italic">Nivel no especificado</p>
+              <p className="text-sm text-gray-400 italic">Nivel no especificado</p>
             )}
             {id ? (
-              <p className="text-sm text-gray-500 dark:text-gray-400 break-words">ID: {id}</p>
+              <p className="text-sm text-gray-500 break-words">ID: {id}</p>
             ) : (
-              <p className="text-sm text-gray-400 dark:text-gray-500 italic break-words">ID no disponible</p>
+              <p className="text-sm text-gray-400 italic break-words">ID no disponible</p>
             )}
           </div>
-          <p className="text-lg text-blue-600 dark:text-blue-400 break-words">
+          <p className="text-lg text-blue-600 break-words">
             {role || "Rol no especificado"}
             {department && ` • ${department}`}
           </p>
           {!department && (
-            <p className="text-sm text-gray-400 dark:text-gray-500 italic">Departamento no especificado</p>
+            <p className="text-sm text-gray-400 italic">Departamento no especificado</p>
           )}
         </div>
 
@@ -172,8 +168,23 @@ const Profile: React.FC<ProfileProps> = ({
             {renderField(phone, "teléfono")}
           </div>
           
+          
           <div className="mt-1">
-            {direction ? renderDirection(direction) : renderEmptyMessage("información de dirección")}
+            {direction ? (
+              <AddressSection
+                address={{
+                  Num_Casa: direction.Num_Casa || null,
+                  Calle: direction.Calle || null,
+                  Ciudad: direction.Ciudad || null,
+                  Estado: direction.Estado || null,
+                  Pais: direction.Pais || null
+                }}
+                editable={!!onAddressChange}
+                onSave={onAddressChange}
+              />
+            ) : (
+              renderEmptyMessage("información de dirección")
+            )}
           </div>
           
           <div className="mt-3">
@@ -213,7 +224,7 @@ const Profile: React.FC<ProfileProps> = ({
 
       {/* Sección de proyectos */}
       <div className="mt-8">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Proyectos</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-3">Proyectos</h3>
         {projects.length > 0 ? (
           <CardTable columns={projectColumns} data={projects} />
         ) : renderEmptyMessage("proyectos")}
@@ -221,7 +232,7 @@ const Profile: React.FC<ProfileProps> = ({
 
       {/* Sección de certificados */}
       <div className="mt-8">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Certificados</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-3">Certificados</h3>
         {certifications.length > 0 ? (
           <CardTable columns={certificationsColumns} data={certifications} />
         ) : renderEmptyMessage("certificados")}
@@ -229,20 +240,20 @@ const Profile: React.FC<ProfileProps> = ({
 
       {/* Sección de metas */}
       <div className="mt-8">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Metas</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-3">Metas</h3>
         {goals.length > 0 ? (
           <div className="space-y-4">
             {goals.map((goal) => (
-              <div key={goal.id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <div key={goal.id} className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex justify-between items-center">
-                  <h4 className="font-medium text-gray-800 dark:text-white">
+                  <h4 className="font-medium text-gray-800 ">
                     {goal.name || "Meta sin nombre"}
                   </h4>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                  <span className="text-sm text-gray-500">
                     {goal.startDate || "Fecha no especificada"} - {goal.endDate || "Fecha no especificada"}
                   </span>
                 </div>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                <p className="mt-2 text-sm text-gray-600">
                   {goal.description || "No hay descripción disponible"}
                 </p>
               </div>

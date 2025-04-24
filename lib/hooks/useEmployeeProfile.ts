@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { 
   getEmployeeFullData, 
+  updateEmployeeAddress,
   updateInterests,
   updateEmployeeSkills,
   EmployeeFullData,
@@ -16,7 +17,11 @@ export const useEmployeeProfile = (employeeId: string) => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState<EmployeeFullData>({
-    employee: null,
+    ID_Empleado: undefined,
+    Nombre: undefined,
+    Rol: undefined,
+    Nivel: undefined,
+    Departamento: null,
     peopleLead: null,
     capabilityLead: null,
     contacto: null,
@@ -64,14 +69,36 @@ export const useEmployeeProfile = (employeeId: string) => {
     return () => subscription.unsubscribe();
   }, [employeeId, router]);
 
+
+    // Añade esto a tu hook useEmployeeProfile
+  const handleAddressChange = async (newAddress: Direccion) => {
+    if (!profileData.ID_Empleado) return;
+    
+    try {
+      const updatedAddress = await updateEmployeeAddress(
+        profileData.ID_Empleado, 
+        newAddress
+      );
+      
+      setProfileData(prev => ({
+        ...prev,
+        direccion: updatedAddress
+      }));
+    } catch (error) {
+      console.error('Error updating address:', error);
+      throw error;
+    }
+  };
+
+
   const handleInterestsChange = async (newInterests: string[]) => {
-    if (!isOwner || !profileData.employee) return;
+    if (!isOwner ) return;
   
     try {
 
       
       const updatedIntereses = await updateInterests(
-        profileData.employee.ID_Empleado,
+        employeeId,
         profileData.intereses, 
         newInterests
       );
@@ -83,7 +110,7 @@ export const useEmployeeProfile = (employeeId: string) => {
     } catch (error) {
       console.error('Error handling interests change:', {
         error: error instanceof Error ? error.message : error,
-        employeeId: profileData.employee?.ID_Empleado,
+        employeeId,
         newInterests
       });
     }
@@ -127,9 +154,10 @@ export const useEmployeeProfile = (employeeId: string) => {
     loading,
     profileData,
     isOwner,
+    handleAddressChange,
     handleInterestsChange,
     handleSoftSkillsChange,
-    handleHardSkillsChange
+    handleHardSkillsChange,
   };
 };
 

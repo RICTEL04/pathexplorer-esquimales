@@ -43,24 +43,7 @@ export interface Interes {
   Descripcion: string;
 }
 
-export interface Employee {
-  ID_Empleado: string;
-  Nombre: string;
-  Rol: string;
-  Nivel: string;
-  ID_Departamento: string;
-  Cargabilidad: string;
-  ID_CapabilityLead: string | null;
-  ID_PeopleLead: string | null;
-  Contacto_ID: string;
-  FechaContratacion: string;
-  FechaUltNivel: string;
-  Habilidad: Habilidad;
-  Interes: Interes;
-  Contacto: Contacto;
-  Proyecto: Proyecto;
-  Direccion: Direccion;
-}
+
 
 export interface PeopleLead {
   id: string;
@@ -80,7 +63,7 @@ export interface Contacto {
 }
 
 export interface Direccion {
-  Num_Casa: string|null;
+  Num_Casa: string| null;
   Calle: string | null;
   Estado : string | null;
   Pais: string | null;
@@ -92,9 +75,12 @@ export interface Informe {
   name: string;
 }
 
-
 export interface EmployeeFullData {
-  employee: Employee | null;
+  ID_Empleado: string | undefined;
+  Nombre: string | undefined;
+  Rol: string | undefined;
+  Nivel: string | undefined;
+  Departamento: string | null;
   peopleLead: PeopleLead | null;
   capabilityLead: CapabilityLead | null;
   informes: Informe[];
@@ -102,12 +88,12 @@ export interface EmployeeFullData {
   hardSkills: Habilidad[];  
   intereses : Interes[];
   contacto: Contacto | null;
-  proyectos: ProyectoEmpleado[]; // Añadir esta línea
+  proyectos: ProyectoEmpleado[]; 
   direccion: Direccion | null;
 }
 
 // Helper functions para cada tipo de dato
-const fetchEmployee = async (employeeId: string): Promise<Employee | null> => {
+const fetchEmployee = async (employeeId: string) => {
   const { data, error } = await supabase
     .from('Empleado')
     .select('*')
@@ -118,7 +104,23 @@ const fetchEmployee = async (employeeId: string): Promise<Employee | null> => {
     console.error('Error fetching employee:', error);
     return null;
   }
+  
+
   return data;
+};
+
+const fetchDepartamento = async (idDepartamento: string | null): Promise<string | null> => {
+  if (!idDepartamento) return null;
+
+  const { data, error } = await supabase
+    .from('Departamento')
+    .select('Nombre')
+    .eq('ID_Departamento', idDepartamento)
+    .single();
+
+  if (error || !data) return null;
+
+  return data.Nombre
 };
 
 const fetchPeopleLead = async (peopleLeadId: string | null): Promise<PeopleLead | null> => {
@@ -323,7 +325,7 @@ const fetchIntereses = async (employeeId: string): Promise<Interes[]> => {
 
 const fetchPuestosProyecto = async (employeeId: string): Promise<PuestoProyecto[]> => {
   const { data, error } = await supabase
-    .from('Puestos_proyecto')
+    .from('Puesto_proyecto')
     .select('ID_Proyecto, Puesto')
     .eq('ID_Empleado', employeeId);
 
@@ -359,6 +361,11 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
     if (!employee) throw new Error('Employee not found');
 
     const [
+      ID_Empleado,
+      Nombre,
+      Rol,
+      Nivel,
+      Departamento,
       peopleLead,
       capabilityLead,
       contacto,
@@ -369,6 +376,11 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       proyectos,
       direccion
     ] = await Promise.all([
+      employee.ID_Empleado,
+      employee.Nombre,
+      employee.Rol,
+      employee.Nivel,
+      fetchDepartamento(employee.ID_Departamento),
       fetchPeopleLead(employee.ID_PeopleLead),
       fetchCapabilityLead(employee.ID_CapabilityLead),
       fetchContacto(employeeId),
@@ -381,7 +393,11 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
     ]);
 
     return {
-      employee,
+      ID_Empleado,
+      Nombre,
+      Rol,
+      Nivel,
+      Departamento,
       peopleLead,
       capabilityLead,
       contacto,
@@ -555,6 +571,67 @@ export const updateEmployeeSkills = async (
       currentSkills,
       newSkills,
       error
+    });
+    throw error;
+  }
+};
+
+// Añade esto a employeeService.ts
+export const updateEmployeeAddress = async (employeeId: string, newAddress: Direccion): Promise<Direccion> => {
+  try {
+    // Verificar si ya existe una dirección para este empleado
+    const { data: existingAddress, error: fetchError } = await supabase
+      .from('Direccion')
+      .select('*')
+      .eq('ID_Empleado', employeeId)
+      .single();
+
+    if (fetchError && !fetchError.details?.includes('0 rows')) {
+      throw fetchError;
+    }
+
+    // Preparar los datos para Supabase
+    const supabaseAddress = {
+      Num_Casa: newAddress.Num_Casa,
+      Calle: newAddress.Calle,
+      Ciudad: newAddress.Ciudad,
+      Estado: newAddress.Estado,
+      Pais: newAddress.Pais,
+      ID_Empleado: employeeId
+    };
+
+    let query;
+    if (existingAddress) {
+      // Actualizar dirección existente
+      query = supabase
+        .from('Direccion')
+        .update(supabaseAddress)
+        .eq('ID_Empleado', employeeId);
+    } else {
+      // Crear nueva dirección
+      query = supabase
+        .from('Direccion')
+        .insert(supabaseAddress);
+    }
+
+    const { error, data } = await query;
+
+    if (error) throw error;
+
+    // Devolver la dirección actualizada
+    return {
+      Num_Casa: supabaseAddress.Num_Casa,
+      Calle: supabaseAddress.Calle,
+      Ciudad: supabaseAddress.Ciudad,
+      Estado: supabaseAddress.Estado,
+      Pais: supabaseAddress.Pais
+    };
+  } catch (error) {
+    console.error('Error updating address:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      employeeId,
+      newAddress,
+      fullError: error
     });
     throw error;
   }

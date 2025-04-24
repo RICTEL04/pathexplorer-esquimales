@@ -7,19 +7,21 @@ import { useEmployeeProfile } from '@/lib/hooks/useEmployeeProfile';
 import { useParams } from 'next/navigation'; // Cambiado a next/navigation
 
 const UserProfilePage = () => {
-
   const params = useParams(); // Usar useParams en lugar de useRouter
   const id = params.id as string; // Obtener el ID de los parámetros
 
   if (!id) {
     return <div>ID no encontrado en la URL</div>;
   }
-  
+
+
+  // Resto de tu lógica usando id...
   const {
     session,
     loading,
     profileData,
     isOwner,
+    handleAddressChange,
     handleInterestsChange,
     handleSoftSkillsChange,
     handleHardSkillsChange
@@ -33,33 +35,25 @@ const UserProfilePage = () => {
     return <div className="min-h-screen flex items-center justify-center">No autenticado...</div>;
   }
 
-  if (!profileData.employee) {
-    return <div className="min-h-screen flex items-center justify-center">No se encontraron datos del empleado</div>;
-  }
-
   // Preparar datos para el componente Profile
-  const { employee, contacto, peopleLead, capabilityLead, informes, softSkills, hardSkills, intereses } = profileData;
 
-  const SoftSkills = softSkills
+  
+  const SoftSkills = profileData.softSkills
 
-  const HardSkills = hardSkills
+  const HardSkills = profileData.hardSkills
 
-  const interests = intereses
+  const interests = profileData.intereses
     .map(h => h.Descripcion);
 
   const userProfileData = {
-    id: employee.ID_Empleado,
-    name: employee.Nombre,
-    role: employee.Rol,
-    level: employee.Nivel,
-    department: employee.ID_Departamento,
-    email: contacto?.Email,
-    phone: contacto?.Num_Telefono,
-    direction: {
-      city: "",
-      state: "",
-      country: ""
-    },
+    id: profileData.ID_Empleado,
+    name: profileData.Nombre,
+    role: profileData.Rol,
+    level: profileData.Nivel,
+    department: profileData.Departamento,
+    email: profileData.contacto?.Email,
+    phone: profileData.contacto?.Num_Telefono,
+    direction: profileData.direccion,
     avatarUrl: "",
     bio: "",
     projects: profileData.proyectos.map(p => ({
@@ -76,9 +70,10 @@ const UserProfilePage = () => {
     SoftSkills,
     HardSkills,
     interests,
+    onAddressChange: handleAddressChange,
     onInterestsChange: isOwner ? handleInterestsChange : undefined,
-    //onSoftSkillsChange: handleSoftSkillsChange,
-    //onHardSkillsChange: handleHardSkillsChange,
+    onSoftSkillsChange: handleSoftSkillsChange,
+    onHardSkillsChange: handleHardSkillsChange,
     editable: isOwner
   };
 
@@ -95,20 +90,20 @@ const UserProfilePage = () => {
         <div className="lg:col-span-2 space-y-6">
           {/* People Lead */}
           <h2 className="text-lg font-bold mb-4">People Lead</h2>
-          {peopleLead ? (
+          {profileData.peopleLead ? (
             <Card className="p-4 h-auto">
               <div className="flex items-start space-x-3">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                   <img
-                    src={peopleLead.avatarUrl || "https://via.placeholder.com/60"}
-                    alt={`${peopleLead.Nombre}'s avatar`}
+                    src={profileData.peopleLead.avatarUrl || "https://via.placeholder.com/60"}
+                    alt={`${profileData.peopleLead.Nombre}'s avatar`}
                     width={60}
                     height={60}
                     className="object-cover w-full h-full"
                   />
                 </div>
                 <div className="min-w-0"> 
-                  <p className="font-medium break-words">{peopleLead.Nombre}</p>
+                  <p className="font-medium break-words">{profileData.peopleLead.Nombre}</p>
                   <p className="text-sm text-gray-500 break-words">People Lead</p>
                 </div>
               </div>
@@ -123,20 +118,20 @@ const UserProfilePage = () => {
 
           {/* Capability Lead */}
           <h2 className="text-lg font-bold mb-4">Capability Lead</h2>
-          {capabilityLead ? (
+          {profileData.capabilityLead ? (
             <Card className="p-4 h-auto">
               <div className="flex items-center space-x-3">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-600 shrink-0">
                   <img
-                    src={capabilityLead.avatarUrl || "https://via.placeholder.com/60"}
-                    alt={`${capabilityLead.Nombre}'s avatar`}
+                    src={profileData.capabilityLead.avatarUrl || "https://via.placeholder.com/60"}
+                    alt={`${profileData.capabilityLead.Nombre}'s avatar`}
                     width={112}
                     height={112}
                     className="object-cover w-full h-full"
                   />
                 </div>
                 <div>
-                  <p className="font-medium">{capabilityLead.Nombre}</p>
+                  <p className="font-medium">{profileData.capabilityLead.Nombre}</p>
                   <p className="text-sm text-gray-500">Capability Lead</p>
                 </div>
               </div>
@@ -151,9 +146,9 @@ const UserProfilePage = () => {
 
 
           <h2 className="text-lg font-bold mb-4">Informes</h2>
-          {informes.length > 0 ? (
+          {profileData.informes.length > 0 ? (
             <div className="space-y-3">
-              {informes.map((informe) => (
+              {profileData.informes.map((informe) => (
                 <Card key={informe.id} className="p-3 hover:bg-gray-50 cursor-pointer">
                   <div className="flex items-start justify-between">
                     <p className="text-sm font-medium break-words min-w-0 flex-1">
