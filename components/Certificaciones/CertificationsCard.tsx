@@ -78,7 +78,7 @@ function CertificationCard({ certification, onSave, setSelectedCertification, in
             ) : (
                 <div onClick={() => setSelectedCertification(index)}>
                     <h3 className="text-lg font-bold text-gray-800">{certification.Nombre}</h3>
-                    <p className="text-gray-600">Fecha: {certification.Fecha_caducidad}</p>
+                    <p className="text-gray-600">Fecha Caducidad: {certification.Fecha_caducidad}</p>
                     <div className="text-gray-600 mb-2">
                         Estatus: {certification.Verificacion === true
                             ? "Verificado"

@@ -2,20 +2,18 @@ import React from "react";
 import CertificationsCard from "./CertificationsCard";
 import certification from "@/lib/certificados-empleados/definitions";
 import CertificationView from "./CertificationView";
+import { updateCertificate } from "@/lib/certificados-empleados/apiCalls";
 
 interface CertificationsCardsProps {
     certifications: certification[];
+    handleSave: (updatedCertification: certification) => void;
 }
 
 export default function CertificationsCards({
     certifications,
+    handleSave,
 }: CertificationsCardsProps) {
     const [selectedCertification, setSelectedCertification] = React.useState<number>(0);
-
-    const handleSave = (updatedCertification: certification) => {
-        // Logic to save the updated certification data
-        console.log("Updated Certification:", updatedCertification);
-    }
 
     return (
         <div className="flex flex-row h-[75vh]">
