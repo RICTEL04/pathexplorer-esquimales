@@ -165,11 +165,16 @@ CREATE TABLE IF NOT EXISTS "public"."Direccion" (
     "Pais" character varying,
     "Ciudad" character varying,
     "Num_Casa" character varying,
-    "ID_Cliente" "uuid" NOT NULL
+    "ID_Cliente" "uuid" NOT NULL,
+    "ID_Empleado" "uuid"
 );
 
 
 ALTER TABLE "public"."Direccion" OWNER TO "postgres";
+
+
+COMMENT ON COLUMN "public"."Direccion"."ID_Empleado" IS 'ID del empleado al cual pertenece la posible dirección';
+
 
 
 CREATE TABLE IF NOT EXISTS "public"."Empleado" (
@@ -509,6 +514,11 @@ ALTER TABLE ONLY "public"."Delivery_Lead"
 
 ALTER TABLE ONLY "public"."Direccion"
     ADD CONSTRAINT "Direccion_ID_Cliente_fkey" FOREIGN KEY ("ID_Cliente") REFERENCES "public"."Cliente"("PK_Cliente");
+
+
+
+ALTER TABLE ONLY "public"."Direccion"
+    ADD CONSTRAINT "Direccion_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
