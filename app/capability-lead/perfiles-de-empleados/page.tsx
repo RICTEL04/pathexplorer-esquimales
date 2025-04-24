@@ -75,16 +75,16 @@ export default function PerfilesDeEmpleadosPage() {
   ];
 
   const mapEmployeeData = (employee: Empleado) => ({
-    id: employee.ID_Empleado,
+    id: Number(employee.ID_Empleado),
     name: employee.Nombre,
     position: employee.Rol,
     email: "", 
-    level: employee.Nivel || "N/A", 
+    level: employee.Nivel ? Number(employee.Nivel) : 0, 
     project: employee.Puesto_proyecto?.Puesto || "Sin puesto",
-    companyEntryDate: employee.FechaContratacion, 
-    timeOnLevel: employee.FechaUltNivel, 
+    companyEntryDate: employee.FechaContratacion || "", 
+    timeOnLevel: employee.FechaUltNivel || "", 
     activeProject: employee.Puesto_proyecto?.Proyectos?.[0]?.Nombre || "Sin proyecto",
-    activeProjectStartDate: employee.Puesto_proyecto?.created_at, 
+    activeProjectStartDate: employee.Puesto_proyecto?.created_at || "", 
     projectRole: employee.Rol,
     isProjectLead: false, 
     certificates: [],
