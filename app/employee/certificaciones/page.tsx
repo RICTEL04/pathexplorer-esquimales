@@ -24,10 +24,8 @@ export default function CertificacionesPage() {
                 setLoading(true);
                 const session = await fetchSession(setLoading);
                 if (session) {
-                    console.log("Session data:", session.user.id);
                     const data = await fetchData(session.user.id, setLoading);
                     if (data) {
-                        console.log("Certifications data:", data);
                         setCertifications(data);
                     }
                 }
