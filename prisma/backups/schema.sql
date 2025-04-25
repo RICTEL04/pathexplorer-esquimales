@@ -532,6 +532,16 @@ ALTER TABLE ONLY "public"."Contacto"
 
 
 
+ALTER TABLE ONLY "public"."Cursos_Habilidades"
+    ADD CONSTRAINT "Cursos_Habilidades_ID_Curso_fkey" FOREIGN KEY ("ID_Curso") REFERENCES "public"."Cursos"("ID_Curso");
+
+
+
+ALTER TABLE ONLY "public"."Cursos_Habilidades"
+    ADD CONSTRAINT "Cursos_Habilidades_ID_Habilidad_fkey" FOREIGN KEY ("ID_Habilidad") REFERENCES "public"."Habilidades"("ID_Habilidad");
+
+
+
 ALTER TABLE ONLY "public"."Delivery_Lead"
     ADD CONSTRAINT "Delivery_Lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
