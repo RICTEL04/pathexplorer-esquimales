@@ -207,6 +207,7 @@ const hasChanges = () => {
 
 
 
+// Agrega esta función para actualizar el departamento
 const handleUpdate = async (e: React.FormEvent) => {
   e.preventDefault();
   if (!departamentoEdit) return;
@@ -215,69 +216,50 @@ const handleUpdate = async (e: React.FormEvent) => {
   setMessage({ type: '', content: '' });
 
   try {
-    // Validación básica
-    if (departamentoEdit.ID_Departamento === null) {
-      throw new Error('ID de departamento inválido');
-    }
-
-    // 1. Actualizar el departamento en la base de datos
-    const { data: updatedDept, error: deptError } = await supabase
+    // Actualizar el departamento
+    const { data: deptData, error: deptError } = await supabase
       .from('Departamento')
       .update({
         Nombre: departamentoEdit.Nombre,
-        Descripcion: departamentoEdit.Descripcion,
+        Descripcion: departamentoEdit.Descripcion
       })
       .eq('ID_Departamento', departamentoEdit.ID_Departamento)
-      .select()
-      .single();
+      .select();
 
     if (deptError) throw deptError;
-    if (!updatedDept) throw new Error('No se recibieron datos actualizados');
 
-    // 2. Obtener el nombre del nuevo empleado encargado (si se seleccionó uno)
-    let nombreEmpleadoEncargado = null;
+    if (selectedEmpleado && departamentoEdit.ID_Departamento !== null){
+      const { error: CapError } = await supabase
+      .from('Capability_Lead')
+      .update({ ID_Departamento: null })
+      .eq('ID_Empleado', departamentoEdit.ID_Empleado_Encargado);
+      if (CapError) throw CapError;
+    }
     if (selectedEmpleado) {
-      const { data: empleadoData, error: empleadoError } = await supabase
-        .from('Empleado')
-        .select('Nombre')
-        .eq('ID_Empleado', selectedEmpleado)
-        .single();
-
-      if (!empleadoError) {
-        nombreEmpleadoEncargado = empleadoData.Nombre;
-      }
+    // Manejar la asignación del Capability Lead
+    const { error: CapError2 } = await supabase
+    .from('Capability_Lead')
+    .update({ ID_Departamento: departamentoEdit.ID_Departamento })
+    .eq('ID_Empleado', selectedEmpleado);
+    if (CapError2) throw CapError2;
     }
 
-    // 3. Actualizar el estado local con los nuevos datos
-    setDepartamentos(prev => prev.map(dept => 
-      dept.ID_Departamento === departamentoEdit.ID_Departamento 
-        ? { 
-            ...dept, 
-            Nombre: updatedDept.Nombre,
-            Descripcion: updatedDept.Descripcion,
-            ID_Empleado_Encargado: selectedEmpleado,
-            Empleado_Encargado: nombreEmpleadoEncargado || null
-          } 
-        : dept
-    ));
-
-    setMessage({
+    setMessage({ 
       type: 'success', 
       content: 'Departamento actualizado exitosamente' 
     });
-
-    // Cerrar el modal después de 1 segundo
+    
     setTimeout(() => {
       setEditModalOpen(false);
-      setInitialEditValues(null);
-      setLoading(false);
-    }, 1000);
+      setInitialEditValues(null); // Resetear valores iniciales
+    }, 2000);
 
   } catch (error: any) {
     setMessage({ 
       type: 'error', 
       content: error.message || 'Error al actualizar departamento' 
     });
+  } finally {
     setLoading(false);
   }
 };
