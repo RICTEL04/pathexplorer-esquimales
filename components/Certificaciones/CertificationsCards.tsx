@@ -5,17 +5,14 @@ import CertificationView from "./CertificationView";
 
 interface CertificationsCardsProps {
     certifications: certification[];
+    handleSave: (updatedCertification: certification) => void;
 }
 
 export default function CertificationsCards({
     certifications,
+    handleSave,
 }: CertificationsCardsProps) {
     const [selectedCertification, setSelectedCertification] = React.useState<number>(0);
-
-    const handleSave = (updatedCertification: certification) => {
-        // Logic to save the updated certification data
-        console.log("Updated Certification:", updatedCertification);
-    }
 
     return (
         <div className="flex flex-row h-[75vh]">
@@ -31,7 +28,13 @@ export default function CertificationsCards({
                 ))}
             </div>
             <div className="flex flex-col w-2/3 pl-2">
-                <CertificationView documentUrl={certifications[selectedCertification].Documento} />
+                {certifications.length > 0 && certifications[selectedCertification] ? (
+                    <CertificationView documentUrl={certifications[selectedCertification].Documento} />
+                ) : (
+                    <div className="flex items-center justify-center h-full text-gray-500">
+                        <p className="text-lg">Selecciona una certificación para ver los detalles</p>
+                    </div>
+                )}
             </div>
         </div>
 

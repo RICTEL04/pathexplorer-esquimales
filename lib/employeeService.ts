@@ -22,6 +22,14 @@ export interface Proyecto {
   Status: string;
 }
 
+export interface Certificado {
+  ID_Certificado: string;
+  Nombre: string;
+  Fecha_caducidad: string;
+  Verificacion: string;
+  Descripcion: string;
+}
+
 export interface Cliente {
   PK_Cliente: string;
   Nombre: string;
@@ -43,6 +51,35 @@ export interface Interes {
   Descripcion: string;
 }
 
+
+
+export interface PeopleLead {
+  id: string;
+  Nombre: string;
+  AvatarUrl: string | null;
+}
+
+export interface CapabilityLead {
+  id: string;
+  Nombre: string;
+  AvatarUrl: string | null;
+}
+
+export interface Contacto {
+    Email: string,
+    Num_Telefono: string
+}
+
+export interface Direccion {
+  Estado : string | null;
+  Pais: string | null;
+}
+
+export interface Informe {
+  id: string;
+  name: string;
+}
+
 export interface Employee {
   ID_Empleado: string;
   Nombre: string;
@@ -61,30 +98,7 @@ export interface Employee {
   Proyecto: Proyecto;
 }
 
-export interface PeopleLead {
-  id: string;
-  Nombre: string;
-  avatarUrl: string;
-}
-
-export interface CapabilityLead {
-  id: string;
-  Nombre: string;
-  avatarUrl: string;
-}
-
-export interface Contacto {
-    Email: string,
-    Num_Telefono: string
-}
-
-export interface Informe {
-  id: string;
-  name: string;
-}
-
-
-export interface EmployeeFullData {
+export interface EmployeeFullData2 {
   employee: Employee | null;
   peopleLead: PeopleLead | null;
   capabilityLead: CapabilityLead | null;
@@ -96,8 +110,28 @@ export interface EmployeeFullData {
   proyectos: ProyectoEmpleado[]; // Añadir esta línea
 }
 
+export interface EmployeeFullData {
+  ID_Empleado: string | undefined;
+  Nombre: string | undefined;
+  Rol: string | undefined;
+  Nivel: string | undefined;
+  Departamento: string | null;
+  Biografia: string | null;
+  AvatarURL: string | null;
+  peopleLead: PeopleLead | null;
+  capabilityLead: CapabilityLead | null;
+  informes: Informe[];
+  softSkills: Habilidad[]; 
+  hardSkills: Habilidad[];  
+  intereses : Interes[];
+  contacto: Contacto | null;
+  proyectos: ProyectoEmpleado[]; 
+  certificados: Certificado[];
+  direccion: Direccion | null;
+}
+
 // Helper functions para cada tipo de dato
-const fetchEmployee = async (employeeId: string): Promise<Employee | null> => {
+const fetchEmployee = async (employeeId: string) => {
   const { data, error } = await supabase
     .from('Empleado')
     .select('*')
@@ -108,7 +142,66 @@ const fetchEmployee = async (employeeId: string): Promise<Employee | null> => {
     console.error('Error fetching employee:', error);
     return null;
   }
+  
+
   return data;
+};
+
+const fetchDepartamento = async (idDepartamento: string | null): Promise<string | null> => {
+  if (!idDepartamento) return null;
+
+  const { data, error } = await supabase
+    .from('Departamento')
+    .select('Nombre')
+    .eq('ID_Departamento', idDepartamento)
+    .single();
+
+  if (error || !data) return null;
+
+  return data.Nombre
+};
+
+const fetchAvatarURL = async (employeeID: string | null): Promise<string | null> => {
+  if (!employeeID) return null;
+
+  const bucketName = "profile-pictures";
+  const basePath = `${employeeID}/perfil`;
+  
+  try {
+    // 1. Listar archivos en el directorio para encontrar la imagen real
+    const { data: files, error } = await supabase.storage
+      .from(bucketName)
+      .list(`${employeeID}`, {
+        limit: 1,
+        search: 'perfil'
+      });
+
+    if (error || !files || files.length === 0) {
+      console.log('No se encontró archivo de avatar:', error?.message);
+      return null;
+    }
+
+    // Obtener el nombre real del archivo (con extensión)
+    const actualFileName = files[0].name;
+    const fullFilePath = `${employeeID}/${actualFileName}`;
+
+    // 2. Obtener URL firmada (temporal) para acceder al archivo
+    const { data: signedUrl } = await supabase.storage
+      .from(bucketName)
+      .createSignedUrl(fullFilePath, 3600); // URL válida por 1 hora
+
+    if (!signedUrl?.signedUrl) {
+      console.log('No se pudo generar URL firmada');
+      return null;
+    }
+
+    console.log('Avatar encontrado:', signedUrl.signedUrl);
+    return signedUrl.signedUrl;
+    
+  } catch (error) {
+    console.error('Error verificando avatar:', error);
+    return null;
+  }
 };
 
 const fetchPeopleLead = async (peopleLeadId: string | null): Promise<PeopleLead | null> => {
@@ -131,10 +224,14 @@ const fetchPeopleLead = async (peopleLeadId: string | null): Promise<PeopleLead 
 
     if (empleadoError || !empleadoData) return null;
 
+    const url = await fetchAvatarURL(empleadoData.ID_Empleado);
+    
+    
+
     return {
       id: empleadoData.ID_Empleado,
       Nombre: empleadoData.Nombre,
-      avatarUrl: ""
+      AvatarUrl: url
     };
   } catch (error) {
     console.error('Error fetching people lead:', error);
@@ -142,31 +239,45 @@ const fetchPeopleLead = async (peopleLeadId: string | null): Promise<PeopleLead 
   }
 };
 
+
+
 const fetchCapabilityLead = async (capabilityLeadId: string | null): Promise<CapabilityLead | null> => {
   if (!capabilityLeadId) return null;
+  
 
   const { data, error } = await supabase
-    .from('Capability_Lead')
-    .select('ID_CapabilityLead, Nombre')
+    .from('Capability_lead')
+    .select('ID_Empleado')
     .eq('ID_CapabilityLead', capabilityLeadId)
     .single();
-
+  
   if (error || !data) return null;
+  
+  const { data: empleadoData, error: empleadoError } = await supabase
+    .from('Empleado')
+    .select('ID_Empleado, Nombre')
+    .eq('ID_Empleado', data.ID_Empleado)
+    .single();
+  
+  if (empleadoError || !empleadoData) return null;
+
+  const url = await fetchAvatarURL(empleadoData.ID_Empleado);
 
   return {
-    id: data.ID_CapabilityLead,
-    Nombre: data.Nombre,
-    avatarUrl: ""
+    id: capabilityLeadId,
+    Nombre: empleadoData.Nombre || '',
+    AvatarUrl: url || null,
   };
+  
 };
 
-const fetchContacto = async (contactoId: string | null): Promise<Contacto | null> => {
-  if (!contactoId) return null;
+const fetchContacto = async (employeeID: string | null): Promise<Contacto | null> => {
+  if (!employeeID) return null;
 
   const { data, error } = await supabase
     .from('Contacto')
     .select('Email, Num_Telefono')
-    .eq('PK_Contacto', contactoId)
+    .eq('ID_empleado', employeeID)
     .single();
 
   if (error || !data) return null;
@@ -174,6 +285,25 @@ const fetchContacto = async (contactoId: string | null): Promise<Contacto | null
   return {
     Email: data.Email,
     Num_Telefono: data.Num_Telefono
+  };
+};
+
+const fetchDirection = async (employeeID: string | null): Promise<Direccion | null> => {
+  if (!employeeID) return null;
+
+  const { data, error } = await supabase
+    .from('Contacto')
+    .select('Estado, Pais')
+    .eq('ID_empleado', employeeID)
+    .single();
+
+  if (error || !data) return null;
+
+  return {
+
+    Estado : data.Estado,
+    Pais : data.Pais
+
   };
 };
 
@@ -292,12 +422,25 @@ const fetchIntereses = async (employeeId: string): Promise<Interes[]> => {
 
 const fetchPuestosProyecto = async (employeeId: string): Promise<PuestoProyecto[]> => {
   const { data, error } = await supabase
-    .from('Puestos_proyecto')
+    .from('Puesto_proyecto')
     .select('ID_Proyecto, Puesto')
     .eq('ID_Empleado', employeeId);
 
   return error ? [] : data || [];
 };
+
+const fetchCertificados = async (employeeId: string): Promise<Certificado[]> =>{
+  if(!employeeId){
+    throw new Error('Invalid input parameters');
+  } 
+
+  const {data, error}  =await supabase
+  .from('Certificados')
+  .select('ID_Certificado, Nombre, Fecha_caducidad, Verificacion, Descripcion')
+  .eq('ID_Empleado',employeeId);
+
+  return error ? [] : data || [];
+}
 
 const fetchProyectos = async (proyectoIds: string[]): Promise<Proyecto[]> => {
   if (proyectoIds.length === 0) return [];
@@ -310,6 +453,8 @@ const fetchProyectos = async (proyectoIds: string[]): Promise<Proyecto[]> => {
   return error ? [] : data || [];
 };
 
+
+
 const fetchClientes = async (clienteIds: string[]): Promise<Cliente[]> => {
   if (clienteIds.length === 0) return [];
   
@@ -317,7 +462,7 @@ const fetchClientes = async (clienteIds: string[]): Promise<Cliente[]> => {
     .from('Cliente')
     .select('PK_Cliente, Nombre')
     .in('PK_Cliente', clienteIds);
-
+  
   return error ? [] : data || [];
 };
 
@@ -328,6 +473,13 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
     if (!employee) throw new Error('Employee not found');
 
     const [
+      ID_Empleado,
+      Nombre,
+      Rol,
+      Nivel,
+      Departamento,
+      Biografia,
+      AvatarURL,
       peopleLead,
       capabilityLead,
       contacto,
@@ -335,20 +487,37 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       softSkills,
       hardSkills,
       intereses,
-      proyectos
+      proyectos,
+      certificados,
+      direccion
     ] = await Promise.all([
+      employee.ID_Empleado,
+      employee.Nombre,
+      employee.Rol,
+      employee.Nivel,
+      fetchDepartamento(employee.ID_Departamento),
+      employee.Biografia,
+      fetchAvatarURL(employeeId),
       fetchPeopleLead(employee.ID_PeopleLead),
       fetchCapabilityLead(employee.ID_CapabilityLead),
-      fetchContacto(employee.Contacto_ID),
+      fetchContacto(employeeId),
       fetchInformes(employeeId),
       getEmployeeSoftSkills(employeeId),  
       getEmployeeHardSkills(employeeId),  
       fetchIntereses(employeeId),
-      getEmployeeProjects(employeeId) 
+      getEmployeeProjects(employeeId),
+      fetchCertificados(employeeId),
+      fetchDirection(employeeId) 
     ]);
 
     return {
-      employee,
+      ID_Empleado,
+      Nombre,
+      Rol,
+      Nivel,
+      Departamento,
+      Biografia,
+      AvatarURL,
       peopleLead,
       capabilityLead,
       contacto,
@@ -356,13 +525,16 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       softSkills,
       hardSkills,
       intereses,
-      proyectos 
+      proyectos,
+      certificados,
+      direccion 
     };
   } catch (error) {
     console.error('Error fetching employee full data:', error);
     throw error;
   }
 };
+
 
 
 export const getEmployeeProjects = async (employeeId: string): Promise<ProyectoEmpleado[]> => {
@@ -398,6 +570,57 @@ export const getEmployeeProjects = async (employeeId: string): Promise<ProyectoE
   }
 };
 
+export const updateEmployeePhone = async (employeeId: string, newPhone: string): Promise<string> => {
+  try {
+
+    if(!employeeId){
+      throw new Error('Invalid input parameters');
+    } 
+
+    const { error } = await supabase
+      .from('Contacto')
+      .update({ Num_Telefono: newPhone })
+      .eq('ID_empleado', employeeId);
+
+    if (error) throw error;
+    
+    return newPhone;
+  } catch (error) {
+    console.error('Error updating employee phone:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      employeeId,
+      newPhone,
+      fullError: error
+    });
+    throw error;
+  }
+};
+
+export const updateEmployeeBiography = async (employeeId: string, newBiography: string): Promise<string> => {
+  try {
+
+    if(!employeeId){
+      throw new Error('Invalid input parameters');
+    } 
+
+    const { error } = await supabase
+      .from('Empleado')
+      .update({ Biografia: newBiography })
+      .eq('ID_Empleado', employeeId);
+
+    if (error) throw error;
+    
+    return newBiography;
+  } catch (error) {
+    console.error('Error updating employee phone:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      employeeId,
+      newBiography,
+      fullError: error
+    });
+    throw error;
+  }
+};
 
 // Funciones para actualizar datos
 export const updateInterests = async (employeeId: string, currentIntereses: Interes[], newInterests: string[]): Promise<Interes[]> => {
@@ -521,6 +744,95 @@ export const updateEmployeeSkills = async (
       currentSkills,
       newSkills,
       error
+    });
+    throw error;
+  }
+};
+
+export const updateEmployeeAvatarURL = async (employeeId: string, Imagen: File): Promise<void> => {
+  const bucketName = "profile-pictures";
+  const filePath = `${employeeId}/perfil`;
+
+  // Validate the image
+  if (!Imagen || !(Imagen instanceof File) || Imagen.size === 0) {
+    console.error('La imagen no es válida o está vacía');
+    return;
+  }
+
+  try {
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(filePath, Imagen, {
+        contentType: Imagen.type,
+        upsert: true,
+      });
+
+    if (uploadError) {
+      console.error("Error uploading file:", uploadError);
+      return;
+    }
+    
+    console.log("File uploaded successfully:", uploadData);
+  } catch (error) {
+    console.error("Unexpected error uploading file:", error);
+  }
+};
+
+export const updateEmployeeAddress = async (employeeId: string, newAddress: Direccion): Promise<Direccion> => {
+  try {
+    // Verificar si ya existe una dirección para este empleado
+    const { data: existingAddress, error: fetchError } = await supabase
+      .from('Contacto')
+      .select('*')
+      .eq('ID_empleado', employeeId)
+      .maybeSingle(); // Cambiado a maybeSingle para manejar mejor el caso null
+
+    // Si hay un error diferente a "no encontrado", lanzar excepción
+    if (fetchError && !fetchError.details?.includes('Results contain 0 rows')) {
+      throw fetchError;
+    }
+
+    // Preparar los datos para Supabase
+    const supabaseAddress = {
+      Estado: newAddress.Estado,
+      Pais: newAddress.Pais,
+    };
+
+    let result;
+    if (existingAddress) {
+      // Actualizar dirección existente
+      const { data, error } = await supabase
+        .from('Contacto')
+        .update(supabaseAddress)
+        .eq('ID_empleado', employeeId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      result = data;
+    } else {
+      // Crear nueva dirección
+      const { data, error } = await supabase
+        .from('Contacto')
+        .insert(supabaseAddress)
+        .select()
+        .single();
+
+      if (error) throw error;
+      result = data;
+    }
+
+    // Devolver la dirección actualizada/creada
+    return {
+      Estado: result.Estado,
+      Pais: result.Pais
+    };
+  } catch (error) {
+    console.error('Error updating address:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      employeeId,
+      newAddress,
+      fullError: error
     });
     throw error;
   }

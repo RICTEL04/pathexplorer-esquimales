@@ -1,38 +1,65 @@
 "use client";
 import { useEffect, useState } from "react";
-import { fetchData } from "@/lib/certificados-empleados/apiCalls";
+import { fetchData, updateCertificate } from "@/lib/certificados-empleados/apiCalls";
 import CertificationsTable from "@/components/Certificaciones/CertificationsTable";
 import CertificationsCards from "@/components/Certificaciones/CertificationsCards";
 import { Menu, LayoutGrid } from "lucide-react";
 import UploadCertificadoForm from "@/components/Certificaciones/CertificationsUpload";
 import CertificationView from "@/components/Certificaciones/CertificationView";
 import certification from "@/lib/certificados-empleados/definitions";
+import { fetchSession } from "@/lib/certificados-empleados/apiCalls"; // Assuming fetchSession is defined here
 
 export default function CertificacionesPage() {
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
+    const [session, setSession] = useState<any>(null);
     const [modalType, setModalType] = useState<"upload" | "view" | "edit">("view");
     const [certifications, setCertifications] = useState<certification[]>([]);
     const [selectedCertification, setSelectedCertification] = useState<number>(0);
     const [viewMode, setViewMode] = useState<"cards" | "table">("table");
 
-    const employeeID = "9bb0e5e0-bc27-4ee3-b98c-7dcf44abe2e2"; // Change when session is implemented
-
-    useEffect(() => {
-        fetchData(employeeID, setLoading)
-            .then((data) => {
-                if (data) {
-                    console.log("Certifications data:", data);
-                    setCertifications(data);
+    const handleSave = (updatedCertification: certification) => {
+        // Logic to save the updated certification data
+        updateCertificate(updatedCertification)
+            .then(() => {
+                if (session) {
+                    fetchData(session.user.id, setLoading)
+                        .then((data) => {
+                            if (data) {
+                                setCertifications(data);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error fetching updated data:", error);
+                        });
                 }
             })
-            .catch((error) => {
-                console.error("Error fetching certifications:", error);
-            })
-            .finally(() => {
+    };
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                setLoading(true);
+                const session = await fetchSession(setLoading);
+                if (session) {
+                    const data = await fetchData(session.user.id, setLoading);
+                    if (data) {
+                        setCertifications(data);
+                    }
+                }
+
+                // Update session state at the end
+                setSession(session);
+            } catch (error) {
+                console.error("Error:", error);
+            } finally {
                 setLoading(false);
-            });
+            }
+        };
+
+        loadData();
     }, []);
+
 
     return (
         <div className="container h-3/4">
@@ -40,12 +67,12 @@ export default function CertificacionesPage() {
                 <div className="fixed inset-0 z-10 w-screen flex justify-center items-center">
                     <div className="bg-zinc-300 rounded-lg shadow-lg p-6 w-3/4 h-3/4">
                         <button className="text-blue-500 hover:underline" onClick={() => setModalOpen(false)}>Cerrar</button>
-                        {modalType === "upload" && (
+                        {modalType === "upload" && session && (
                             <UploadCertificadoForm
-                                ID_Empleado={employeeID}
+                                ID_Empleado={session.user.id}
                             />
                         )}
-                        {modalType === "view" && (
+                        {modalType === "view" && certifications[selectedCertification] && (
                             <CertificationView documentUrl={certifications[selectedCertification].Documento} />
                         )}
                     </div>
@@ -65,7 +92,6 @@ export default function CertificacionesPage() {
                                 {viewMode === "table" ? <Menu /> : <LayoutGrid />}
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <button
@@ -79,9 +105,18 @@ export default function CertificacionesPage() {
 
             {/* Render the appropriate view */}
             {viewMode === "table" ? (
-                <CertificationsTable certifications={certifications} setModalOpen={setModalOpen} setModalType={setModalType} setSelectedCertification={setSelectedCertification} />
+                <CertificationsTable
+                    certifications={certifications}
+                    setModalOpen={setModalOpen}
+                    setModalType={setModalType}
+                    setSelectedCertification={setSelectedCertification}
+                    handleSave={handleSave}
+                />
             ) : (
-                <CertificationsCards certifications={certifications} />
+                <CertificationsCards
+                    certifications={certifications}
+                    handleSave={handleSave}
+                />
             )}
         </div>
     );
