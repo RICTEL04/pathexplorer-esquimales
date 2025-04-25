@@ -112,15 +112,15 @@ export default function DepartmentManagement() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Head>
-        <title>Administración de Departamentos</title>
+        <title>Administración de Capabilities</title>
       </Head>
 
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Gestión de Departamentos</h1>
+            <h1 className="text-3xl font-bold text-gray-800">Gestión de Capabilities</h1>
             <p className="text-gray-600 mt-1">
-              Total de departamentos: <span className="font-semibold">{departamentos.length}</span>
+              Total de capabilities: <span className="font-semibold">{departamentos.length}</span>
               {searchTerm && (
                 <span className="ml-2">
                   (Mostrando {departamentosFiltrados.length} resultados)
@@ -130,12 +130,12 @@ export default function DepartmentManagement() {
           </div>
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
+            className="bg-violet-800 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
             </svg>
-            Nuevo Departamento
+            Nuevo Capability
           </button>
         </div>
 
@@ -149,7 +149,7 @@ export default function DepartmentManagement() {
             </div>
             <input
               type="text"
-              placeholder="Buscar departamentos..."
+              placeholder="Buscar capabilities..."
               className="text-gray-700 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -160,7 +160,7 @@ export default function DepartmentManagement() {
         {/* Tabla de departamentos */}
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           {loading && departamentos.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">Cargando departamentos...</div>
+            <div className="p-8 text-center text-gray-500">Cargando capabilities...</div>
           ) : departamentosFiltrados.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               {departamentos.length === 0 ? 'No hay departamentos registrados' : 'No se encontraron departamentos que coincidan con la búsqueda.'}
@@ -172,6 +172,7 @@ export default function DepartmentManagement() {
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Capability lead</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
@@ -180,6 +181,7 @@ export default function DepartmentManagement() {
                     <tr key={dept.ID_Departamento}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{dept.Nombre}</td>
                       <td className="px-6 py-4 text-sm text-gray-500">{dept.Descripcion || 'Sin descripción'}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{'Sin Asignar'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <button className="text-blue-600 hover:text-blue-900 mr-3">Editar</button>
                       </td>

@@ -1,13 +1,15 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { Menu, ChevronDown, ChevronRight, LogOut, User } from "lucide-react";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 interface Route {
   href: string;
   label: string;
-  Icon: React.ComponentType;
+  Icon: React.ComponentType<{ className?: string }>;
+  subRoutes?: Route[];
 }
 
 interface SidebarProps {
@@ -16,33 +18,117 @@ interface SidebarProps {
 
 export default function Sidebar({ routes }: SidebarProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const pathname = usePathname(); // Get the current route
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const toggleDropdown = (label: string) => {
+    setExpandedItems(prev => ({
+      ...prev,
+      [label]: !prev[label]
+    }));
+  };
+
+  const isActive = (href: string, subRoutes?: Route[]) => {
+    if (pathname === href) return true;
+    if (subRoutes) {
+      return subRoutes.some(route => pathname.startsWith(route.href));
+    }
+    return false;
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
 
   return (
     <aside
       className={`${
         isSidebarOpen ? "w-64" : "w-16"
-      } bg-white p-4 shadow-md transition-all`}
+      } bg-white p-4 shadow-md flex flex-col justify-between h-screen transition-all duration-300`}
     >
-      <button
-        className="mb-4 p-2 rounded-md bg-gray-800"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        <Menu color="white"/>
-      </button>
-      <nav className="space-y-4">
-        {routes.map(({ href, label, Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={`text-gray-800 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 ${
-              pathname === href ? "bg-gray-300 font-bold" : ""
-            }`}
-          >
-            <Icon /> {isSidebarOpen && label}
-          </Link>
-        ))}
-      </nav>
+      <div>
+      <div className="flex items-center justify-between mb-4">
+  <button
+    className="p-2 rounded-md bg-violet-800 text-white"
+    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+  >
+    <Menu className="w-5 h-5" />
+  </button>
+
+  {isSidebarOpen && (
+    <div className="flex items-center gap-2">
+      <img
+        src="/imagenes/Accenture-logo.png"
+        alt="Accenture"
+        className="h-10 w-auto"
+      />
+    </div>
+  )}
+</div>
+
+        <nav className="space-y-1">
+          {routes.map(({ href, label, Icon, subRoutes }) => (
+            <div key={label} className="flex flex-col">
+              <div className="flex items-center">
+                <Link
+                  href={href}
+                  className={`text-gray-800 flex-1 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 ${
+                    isActive(href, subRoutes) ? "bg-gray-300 font-bold" : ""
+                  }`}
+                >
+                  <Icon className="w-5 h-5" /> {isSidebarOpen && label}
+                </Link>
+                
+                {isSidebarOpen && subRoutes && (
+                  <button 
+                    onClick={() => toggleDropdown(label)}
+                    className="p-1 rounded-md hover:bg-gray-200"
+                  >
+                    {expandedItems[label] ? (
+                      <ChevronDown className="w-4 h-4" />
+                    ) : (
+                      <ChevronRight className="w-4 h-4" />
+                    )}
+                  </button>
+                )}
+              </div>
+
+              {isSidebarOpen && subRoutes && expandedItems[label] && (
+                <div className="ml-6 mt-1 space-y-1">
+                  {subRoutes.map((subRoute) => (
+                    <Link
+                      key={subRoute.href}
+                      href={subRoute.href}
+                      className={`text-gray-600 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 text-sm ${
+                        pathname === subRoute.href ? "bg-gray-200 font-medium" : ""
+                      }`}
+                    >
+                      <subRoute.Icon className="w-4 h-4" /> {subRoute.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </nav>
+      </div>
+
+      <div className="mt-4 border-t pt-4 space-y-2">
+        <Link
+          href="/employee/perfil"
+          className="flex items-center gap-2 p-2 rounded-md text-gray-700 hover:bg-gray-200"
+        >
+          <User className="w-5 h-5" /> {isSidebarOpen && "Ver perfil"}
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 p-2 rounded-md text-gray-700 hover:bg-gray-200 w-full"
+        >
+          <LogOut className="w-5 h-5" /> {isSidebarOpen && "Cerrar sesión"}
+        </button>
+      </div>
     </aside>
   );
 }

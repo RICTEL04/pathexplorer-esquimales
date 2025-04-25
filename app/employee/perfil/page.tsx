@@ -53,7 +53,7 @@ const UserProfile = () => {
             setSession(session);
             
             if (!session) {
-                router.push('/login');
+                router.push('/');
                 return;
             }
 

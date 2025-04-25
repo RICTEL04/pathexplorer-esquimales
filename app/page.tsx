@@ -72,13 +72,13 @@ export default function Home() {
       if (userRoles.admin) {
         router.replace("/admin");
       } else if (userRoles.capabilityLead) {
-        router.replace("/capability-lead");
+        router.replace("/employee");
       } else if (userRoles.deliveryLead) {
-        router.replace("/delivery-lead"); // Cambiado de "/capability-lead" a "/delivery-lead"
+        router.replace("/employee"); // Cambiado de "/capability-lead" a "/delivery-lead"
       } else if (userRoles.peopleLead) {
-        router.replace("/people-lead"); // Cambiado de "/capability-lead" a "/people-lead"
+        router.replace("/employee"); // Cambiado de "/capability-lead" a "/people-lead"
       } else if (userRoles.talentLead) {
-        router.replace("/talent-lead"); // Cambiado de "/capability-lead" a "/talent-lead"
+        router.replace("/employee"); // Cambiado de "/capability-lead" a "/talent-lead"
       } else {
         router.replace("/employee");
       }

@@ -1,6 +1,6 @@
 "use client";
 
-import '@/app/employee/validarCursos/validarCursos.css';
+import '@/app/employee/people-lead/validarCursos/validarCursos.css';
 
 import { useEffect, useState } from "react";
 import { getEmpleados } from "@/lib/empleadoService";

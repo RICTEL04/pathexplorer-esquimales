@@ -6,7 +6,8 @@ const routes = [
   { href: "/admin", label: "Inicio", Icon: Home }, // Root route
   { href: "/admin/validarCursos ", label: "Validar Cursos", Icon: BookOpen },
   { href: "/admin/empleados", label: "Perfiles de Empleados", Icon: Users },
-  { href: "/admin/departamento", label: "Administrar departamentos", Icon: Ratio },
+  { href: "/admin/departamento", label: "Administrar Capabilities", Icon: Ratio },
+  { href: "/admin/habilidades", label: "Administrar Habilidades", Icon: Ratio },
 ];
 
 export default function CapabilityLeadLayout({ children }: { children: React.ReactNode }) {
