@@ -7,6 +7,8 @@ const routes = [
   { href: "/admin/validarCursos ", label: "Validar Cursos", Icon: BookOpen },
   { href: "/admin/empleados", label: "Perfiles de Empleados", Icon: Users },
   { href: "/admin/departamento", label: "Administrar departamentos", Icon: Ratio },
+  { href: "/admin/cursos", label: "Administrar cursos", Icon: Ratio },
+  { href: "/admin/habilidades", label: "Administrar habilidades", Icon: Ratio },
 ];
 
 export default function CapabilityLeadLayout({ children }: { children: React.ReactNode }) {
