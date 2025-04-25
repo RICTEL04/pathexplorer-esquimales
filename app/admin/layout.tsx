@@ -9,6 +9,8 @@ const routes = [
   { href: "/admin/departamento", label: "Administrar departamentos", Icon: Ratio },
   { href: "/admin/cursos", label: "Administrar cursos", Icon: Ratio },
   { href: "/admin/habilidades", label: "Administrar habilidades", Icon: Ratio },
+  { href: "/admin/leads", label: "Administrar People leads", Icon: Ratio },
+  
 ];
 
 export default function CapabilityLeadLayout({ children }: { children: React.ReactNode }) {
