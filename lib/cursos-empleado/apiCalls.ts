@@ -18,6 +18,17 @@ export async function fetchCoursesData(employeeID: string, setLoading: (loading:
 
         const courses = coursesResponse.data;
 
+        // Fetch the associative entity (Cursos_Habilidades)
+        const cursosHabilidadesResponse = await supabase
+            .from("Cursos_Habilidades")
+            .select("*");
+
+        if (cursosHabilidadesResponse.error) {
+            throw cursosHabilidadesResponse.error;
+        }
+
+        const cursosHabilidades = cursosHabilidadesResponse.data;
+
         // Fetch skills
         const skillsResponse = await supabase
             .from("Habilidades")
@@ -29,11 +40,17 @@ export async function fetchCoursesData(employeeID: string, setLoading: (loading:
 
         const skills = skillsResponse.data;
 
-        // Attach skills to courses
-        data = courses.map((course: course) => ({
-            ...course,
-            skill: skills.find((skill: skill) => skill.ID_Habilidad === course.ID_Habilidad) || null,
-        }));
+        // Attach all related skills to each course
+        data = courses.map((course: course) => {
+            const relatedSkills = cursosHabilidades
+                .filter((ch) => ch.ID_Curso === course.ID_Curso) // Find all entries in Cursos_Habilidades for this course
+                .map((ch) => skills.find((skill) => skill.ID_Habilidad === ch.ID_Habilidad)); // Map to actual skill objects
+
+            return {
+                ...course,
+                skills: relatedSkills.filter((skill) => skill !== undefined), // Attach the related skills (filter out undefined)
+            };
+        });
     } catch (error) {
         console.error("Error fetching data:", error);
     } finally {
