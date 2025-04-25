@@ -5,8 +5,11 @@ import InterestSection from './InterestSection';
 import SkillSection from './SkillSection';
 import AddressSection from './AddressSection';
 import StringEditor from './StringEditor';
-import { Habilidad as Hability, Direccion as Direction, Certificado as Certification } from '@/lib/employeeService';
+import AvatarSection from './AvatarSection';
+import { Habilidad as Hability, Direccion as Direction, Certificado as Certification, updateEmployeeAvatarURL } from '@/lib/employeeService';
 import { FiMail, FiPhone, FiMapPin, FiUser, FiAward, FiCode, FiHeart, FiBook, FiCheckCircle, FiCircle } from 'react-icons/fi';
+
+
 interface Project {
   id: string;
   name: string;
@@ -38,7 +41,7 @@ interface ProfileProps {
   email?: string;
   phone?: string;
   direction: Direction | null;
-  avatarUrl?: string;
+  avatarUrl: string |null;
   projects?: Project[];
   certifications?: Certification[];
   goals?: Goal[];
@@ -51,6 +54,7 @@ interface ProfileProps {
   onSoftSkillsChange?: (newSkills: Hability[]) => void;
   onHardSkillsChange?: (newSkills: Hability[]) => void;
   onInterestsChange?: (newInterests: string[]) => void;
+  onUpdateAvatarURL?: (Imagen : File) => Promise <void>;
 
 }
 
@@ -65,7 +69,7 @@ const Profile: React.FC<ProfileProps> = ({
   email,
   phone,
   direction,
-  avatarUrl,
+  avatarUrl ,
   projects = [],
   certifications = [],
   goals = [],
@@ -78,6 +82,7 @@ const Profile: React.FC<ProfileProps> = ({
   onSoftSkillsChange,
   onHardSkillsChange,
   onInterestsChange,
+  onUpdateAvatarURL,
 
 }) => {
   const projectColumns: { key: keyof Project; label: string }[] = [
@@ -100,6 +105,7 @@ const Profile: React.FC<ProfileProps> = ({
       <p className="text-gray-500">No hay {sectionName} disponibles</p>
     </div>
   );
+
 
   const renderField = (value: string | undefined, fieldName: string, icon: React.ReactNode) => (
     <div className="flex items-start gap-3">
@@ -133,11 +139,12 @@ const Profile: React.FC<ProfileProps> = ({
 
       {/* Sección de información básica */}
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Columna 1 - Solo Avatar */}
+        {/* Columna 1 - Solo Avatar 
+        
         <div className="flex justify-center md:justify-start w-full md:w-1/5">
           <div className="relative w-42 h-42 md:w-48 md:h-48 rounded-full overflow-hidden border-2 border-gray-200 shrink-0">
             <img
-              src={avatarUrl || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+              src={avatarUrl ? avatarUrl : "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
               alt={`${name || 'Usuario'}'s profile picture`}
               width={192}
               height={192}
@@ -145,6 +152,16 @@ const Profile: React.FC<ProfileProps> = ({
             />
           </div>
         </div>
+        
+        */}
+        
+        <AvatarSection
+          avatarUrl= {avatarUrl}
+          name = {name}
+          editable = {true}
+          onSave={onUpdateAvatarURL}
+        />
+
 
         {/* Columna 2 - Información principal */}
         <div className="w-full md:w-2/5 space-y-2 md:pl-10"> {/* Añadido pl-4 para espacio del avatar */}

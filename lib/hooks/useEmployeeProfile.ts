@@ -10,6 +10,7 @@ import {
   updateEmployeeBiography,
   updateEmployeeSkills,
   EmployeeFullData,
+  updateEmployeeAvatarURL,
   Habilidad,
   Direccion
 } from '@/lib/employeeService';
@@ -25,6 +26,7 @@ export const useEmployeeProfile = (employeeId: string) => {
     Rol: undefined,
     Nivel: undefined,
     Biografia : null,
+    AvatarURL : null,
     Departamento: null,
     peopleLead: null,
     capabilityLead: null,
@@ -75,31 +77,22 @@ export const useEmployeeProfile = (employeeId: string) => {
   }, [employeeId, router]);
 
 
-    // En useEmployeeProfile.ts
-  const handleLevelChange = async (newLevel: string) => {
+  const handleUpdateEmployeeAvatar = async(Imagen: File) => {
     if (!profileData.ID_Empleado) return;
-    
-    try {
-      const { error } = await supabase
-        .from('Empleado')
-        .update({ Nivel: newLevel })
-        .eq('ID_Empleado', profileData.ID_Empleado);
 
-      if (error) throw error;
-      
-      setProfileData(prev => ({
-        ...prev,
-        Nivel: newLevel
-      }));
+    try {
+      console.log("Agregar " + Imagen + " a: " + profileData.ID_Empleado + "/" + "perfil")
+      if (!Imagen || !(Imagen instanceof File) || Imagen.size === 0) {
+        console.error('La imagen no es válida o está vacía');
+        return;
+      }
+      await updateEmployeeAvatarURL(profileData.ID_Empleado, Imagen);
     } catch (error) {
-      console.error('Error updating level:', error);
+      console.error('Error updating phone:', error);
       throw error;
     }
-  };
 
-  const handleRoleChange = async (newRole: string) => {
-    // Implementación similar a handleLevelChange
-  };
+  }
 
   const handlePhoneChange = async (newPhone: string) => {
     if (!profileData.ID_Empleado) return;
@@ -222,132 +215,11 @@ export const useEmployeeProfile = (employeeId: string) => {
     isOwner,
     handlePhoneChange,
     handleBiographyChange,
+    handleUpdateEmployeeAvatar,
     handleAddressChange,
     handleInterestsChange,
     handleSoftSkillsChange,
     handleHardSkillsChange,
+
   };
 };
-
-/*
-export const ownProfile = () => {
-    const router = useRouter();
-    const [session, setSession] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
-    const [profileData, setProfileData] = useState<EmployeeFullData>({
-      employee: null,
-      peopleLead: null,
-      capabilityLead: null,
-      contacto: null,
-      informes: [], 
-      softSkills: [],
-      hardSkills: [],
-      intereses: [],
-      proyectos: [] 
-    });
-  
-    const isOwner = true;
-
-
-    useEffect(() => {
-      const fetchSessionAndData = async () => {
-        // Obtener sesión
-        const { data: { session } } = await supabase.auth.getSession();
-        setSession(session);
-        
-        if (!session) {
-          router.push('/login');
-          return;
-        }
-        
-        const employeeId = session.user.id;
-
-        try {
-          // Obtener datos del empleado
-          const data = await getEmployeeFullData(employeeId);
-          setProfileData(data);
-        } catch (error) {
-          console.error('Error fetching profile data:', error);
-          router.push('/profile/error');
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchSessionAndData();
-  
-      // Escuchar cambios en la autenticación
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session);
-        if (!session) router.push('/login');
-      });
-  
-      return () => subscription.unsubscribe();
-    }, [ router]);
-  
-    const handleInterestsChange = async (newInterests: string[]) => {
-      if (!isOwner || !profileData.employee) return;
-      
-      try {
-        const updatedIntereses = await updateInterests(
-          profileData.employee.ID_Empleado,
-          profileData.intereses,
-          newInterests
-        );
-        
-        setProfileData(prev => ({
-          ...prev,
-          intereses: updatedIntereses
-        }));
-      } catch (error) {
-        console.error('Error updating interests:', error);
-      }
-    };
-  
-
-    const handleSoftSkillsChange = async (newSkill: Habilidad[]) => {
-
-      if (!isOwner || !profileData.employee) return;
-
-      try {
-        const updatedSkills = await updateEmployeeSkills(
-          profileData.employee?.ID_Empleado,
-          'soft',
-          profileData.softSkills,
-          newSkill
-        );
-        // Actualizar el estado con las nuevas habilidades
-      } catch (error) {
-        console.error('Error updating soft skills:', error);
-      }
-    };
-
-    const handleHardSkillsChange = async (newSkill: Habilidad[]) => {
-
-      if (!isOwner || !profileData.employee) return;
-
-      try {
-        const updatedSkills = await updateEmployeeSkills(
-          profileData.employee?.ID_Empleado,
-          'hard',
-          profileData.hardSkills,
-          newSkill
-        );
-  
-      } catch (error) {
-        console.error('Error updating hard skills:', error);
-      }
-    };
-
-    return {
-      session,
-      loading,
-      profileData,
-      isOwner,
-      handleInterestsChange,
-      handleSoftSkillsChange,
-      handleHardSkillsChange
-    };
-    
-  };
-  */

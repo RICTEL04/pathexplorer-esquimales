@@ -56,13 +56,13 @@ export interface Interes {
 export interface PeopleLead {
   id: string;
   Nombre: string;
-  avatarUrl: string;
+  AvatarUrl: string | null;
 }
 
 export interface CapabilityLead {
   id: string;
   Nombre: string;
-  avatarUrl: string;
+  AvatarUrl: string | null;
 }
 
 export interface Contacto {
@@ -87,6 +87,7 @@ export interface EmployeeFullData {
   Nivel: string | undefined;
   Departamento: string | null;
   Biografia: string | null;
+  AvatarURL: string | null;
   peopleLead: PeopleLead | null;
   capabilityLead: CapabilityLead | null;
   informes: Informe[];
@@ -130,6 +131,49 @@ const fetchDepartamento = async (idDepartamento: string | null): Promise<string 
   return data.Nombre
 };
 
+const fetchAvatarURL = async (employeeID: string | null): Promise<string | null> => {
+  if (!employeeID) return null;
+
+  const bucketName = "profile-pictures";
+  const basePath = `${employeeID}/perfil`;
+  
+  try {
+    // 1. Listar archivos en el directorio para encontrar la imagen real
+    const { data: files, error } = await supabase.storage
+      .from(bucketName)
+      .list(`${employeeID}`, {
+        limit: 1,
+        search: 'perfil'
+      });
+
+    if (error || !files || files.length === 0) {
+      console.log('No se encontró archivo de avatar:', error?.message);
+      return null;
+    }
+
+    // Obtener el nombre real del archivo (con extensión)
+    const actualFileName = files[0].name;
+    const fullFilePath = `${employeeID}/${actualFileName}`;
+
+    // 2. Obtener URL firmada (temporal) para acceder al archivo
+    const { data: signedUrl } = await supabase.storage
+      .from(bucketName)
+      .createSignedUrl(fullFilePath, 3600); // URL válida por 1 hora
+
+    if (!signedUrl?.signedUrl) {
+      console.log('No se pudo generar URL firmada');
+      return null;
+    }
+
+    console.log('Avatar encontrado:', signedUrl.signedUrl);
+    return signedUrl.signedUrl;
+    
+  } catch (error) {
+    console.error('Error verificando avatar:', error);
+    return null;
+  }
+};
+
 const fetchPeopleLead = async (peopleLeadId: string | null): Promise<PeopleLead | null> => {
   if (!peopleLeadId) return null;
 
@@ -150,10 +194,14 @@ const fetchPeopleLead = async (peopleLeadId: string | null): Promise<PeopleLead 
 
     if (empleadoError || !empleadoData) return null;
 
+    const url = await fetchAvatarURL(empleadoData.ID_Empleado);
+    
+    
+
     return {
       id: empleadoData.ID_Empleado,
       Nombre: empleadoData.Nombre,
-      avatarUrl: ""
+      AvatarUrl: url
     };
   } catch (error) {
     console.error('Error fetching people lead:', error);
@@ -161,22 +209,36 @@ const fetchPeopleLead = async (peopleLeadId: string | null): Promise<PeopleLead 
   }
 };
 
+
+
 const fetchCapabilityLead = async (capabilityLeadId: string | null): Promise<CapabilityLead | null> => {
   if (!capabilityLeadId) return null;
+  
 
   const { data, error } = await supabase
-    .from('Capability_Lead')
-    .select('ID_CapabilityLead, Nombre')
+    .from('Capability_lead')
+    .select('ID_Empleado')
     .eq('ID_CapabilityLead', capabilityLeadId)
     .single();
-
+  
   if (error || !data) return null;
+  
+  const { data: empleadoData, error: empleadoError } = await supabase
+    .from('Empleado')
+    .select('ID_Empleado, Nombre')
+    .eq('ID_Empleado', data.ID_Empleado)
+    .single();
+  
+  if (empleadoError || !empleadoData) return null;
+
+  const url = await fetchAvatarURL(empleadoData.ID_Empleado);
 
   return {
-    id: data.ID_CapabilityLead,
-    Nombre: data.Nombre,
-    avatarUrl: ""
+    id: capabilityLeadId,
+    Nombre: empleadoData.Nombre || '',
+    AvatarUrl: url || null,
   };
+  
 };
 
 const fetchContacto = async (employeeID: string | null): Promise<Contacto | null> => {
@@ -387,6 +449,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       Nivel,
       Departamento,
       Biografia,
+      AvatarURL,
       peopleLead,
       capabilityLead,
       contacto,
@@ -404,6 +467,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       employee.Nivel,
       fetchDepartamento(employee.ID_Departamento),
       employee.Biografia,
+      fetchAvatarURL(employeeId),
       fetchPeopleLead(employee.ID_PeopleLead),
       fetchCapabilityLead(employee.ID_CapabilityLead),
       fetchContacto(employeeId),
@@ -423,6 +487,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       Nivel,
       Departamento,
       Biografia,
+      AvatarURL,
       peopleLead,
       capabilityLead,
       contacto,
@@ -439,6 +504,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
     throw error;
   }
 };
+
 
 
 export const getEmployeeProjects = async (employeeId: string): Promise<ProyectoEmpleado[]> => {
@@ -650,6 +716,35 @@ export const updateEmployeeSkills = async (
       error
     });
     throw error;
+  }
+};
+
+export const updateEmployeeAvatarURL = async (employeeId: string, Imagen: File): Promise<void> => {
+  const bucketName = "profile-pictures";
+  const filePath = `${employeeId}/perfil`;
+
+  // Validate the image
+  if (!Imagen || !(Imagen instanceof File) || Imagen.size === 0) {
+    console.error('La imagen no es válida o está vacía');
+    return;
+  }
+
+  try {
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(filePath, Imagen, {
+        contentType: Imagen.type,
+        upsert: true,
+      });
+
+    if (uploadError) {
+      console.error("Error uploading file:", uploadError);
+      return;
+    }
+    
+    console.log("File uploaded successfully:", uploadData);
+  } catch (error) {
+    console.error("Unexpected error uploading file:", error);
   }
 };
 
