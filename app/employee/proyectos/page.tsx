@@ -134,16 +134,6 @@ export default function ProyectosPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-white p-4 shadow-sm flex justify-between items-center">
-        <h1 className="text-2xl font-bold">
-          <span className="text-yellow-500">PATH</span>
-          <span className="text-purple-700">EXPLORER</span>
-        </h1>
-        <div className="w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center">
-          <User className="w-6 h-6" />
-        </div>
-      </header>
 
       {/* Main content */}
       <div className="p-4 md:p-6">
