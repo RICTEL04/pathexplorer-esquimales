@@ -117,24 +117,44 @@ ALTER TABLE "public"."Cliente" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Contacto" (
     "PK_Contacto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Email" character varying,
-    "Num_Telefono" numeric,
-    "ID_empleado" "uuid"
+    "Num_Telefono" character varying,
+    "ID_empleado" "uuid",
+    "Estado" character varying,
+    "Pais" character varying
 );
 
 
 ALTER TABLE "public"."Contacto" OWNER TO "postgres";
 
 
+COMMENT ON COLUMN "public"."Contacto"."Estado" IS 'Estado donde trabaja la persona';
+
+
+
+COMMENT ON COLUMN "public"."Contacto"."Pais" IS 'Pais donde trabaja la persona';
+
+
+
 CREATE TABLE IF NOT EXISTS "public"."Cursos" (
     "ID_Curso" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Nombre" character varying,
-    "ID_Habilidad" "uuid",
     "Fecha_fin_curso" "date",
-    "link" "text"
+    "link" "text",
+    "Descripcion" "text"
 );
 
 
 ALTER TABLE "public"."Cursos" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."Cursos_Habilidades" (
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "ID_Curso" "uuid" NOT NULL,
+    "ID_Habilidad" "uuid" NOT NULL
+);
+
+
+ALTER TABLE "public"."Cursos_Habilidades" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Delivery_Lead" (
@@ -382,6 +402,11 @@ ALTER TABLE ONLY "public"."Contacto"
 
 
 
+ALTER TABLE ONLY "public"."Cursos_Habilidades"
+    ADD CONSTRAINT "Cursos_Habilidades_pkey" PRIMARY KEY ("ID_Curso", "ID_Habilidad");
+
+
+
 ALTER TABLE ONLY "public"."Cursos"
     ADD CONSTRAINT "Cursos_pkey" PRIMARY KEY ("ID_Curso");
 
@@ -504,11 +529,6 @@ ALTER TABLE ONLY "public"."Cliente"
 
 ALTER TABLE ONLY "public"."Contacto"
     ADD CONSTRAINT "Contacto_ID_empleado_fkey" FOREIGN KEY ("ID_empleado") REFERENCES "public"."Empleado"("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."Cursos"
-    ADD CONSTRAINT "Cursos_ID_Habilidad_fkey" FOREIGN KEY ("ID_Habilidad") REFERENCES "public"."Habilidades"("ID_Habilidad");
 
 
 
@@ -877,6 +897,11 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Contacto" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Cursos" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Cursos" TO "anon";
+
+
+
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Cursos_Habilidades" TO "authenticated";
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Cursos_Habilidades" TO "anon";
 
 
 
