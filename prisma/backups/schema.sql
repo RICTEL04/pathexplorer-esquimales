@@ -65,6 +65,28 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+
+CREATE OR REPLACE FUNCTION "public"."insert_into_empleado"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    -- Insert into Empleado if the user has an email and does not already exist
+    IF NEW.email IS NOT NULL THEN
+        INSERT INTO public."Empleado" ("ID_Empleado", "Nombre")
+        SELECT NEW.id, NEW.email
+        WHERE NOT EXISTS (
+            SELECT 1 
+            FROM public."Empleado" e 
+            WHERE e."ID_Empleado" = NEW.id
+        );
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."insert_into_empleado"() OWNER TO "postgres";
+
 SET default_tablespace = '';
 
 SET default_table_access_method = "heap";
@@ -81,7 +103,6 @@ ALTER TABLE "public"."Administrador" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Capability_Lead" (
     "ID_CapabilityLead" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "ID_Departamento" "uuid",
-    "Rol" character varying,
     "ID_Empleado" "uuid"
 );
 
@@ -208,7 +229,8 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "FechaContratacion" "date",
     "FechaUltNivel" "date",
     "ID_PeopleLead" "uuid",
-    "Biografia" character varying
+    "Biografia" character varying,
+    "AvatarURL" character varying
 );
 
 
@@ -230,6 +252,21 @@ ALTER TABLE "public"."Empleado_Habilidades" OWNER TO "postgres";
 
 
 COMMENT ON COLUMN "public"."Empleado_Habilidades"."Estado" IS 'Estado de la habilidad(aceptada, en espera, rechazada)';
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."Empleado_Proyectos" (
+    "ID_Empleado" "uuid" NOT NULL,
+    "ID_Proyecto" "uuid" NOT NULL,
+    "isApproved" boolean DEFAULT false,
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL
+);
+
+
+ALTER TABLE "public"."Empleado_Proyectos" OWNER TO "postgres";
+
+
+COMMENT ON COLUMN "public"."Empleado_Proyectos"."isApproved" IS 'determines wether an employee is approved to a project or still on the postulation process';
 
 
 
@@ -378,6 +415,11 @@ ALTER TABLE ONLY "public"."Administrador"
 
 
 ALTER TABLE ONLY "public"."Capability_Lead"
+    ADD CONSTRAINT "Capability_Lead_ID_Departamento_key" UNIQUE ("ID_Departamento");
+
+
+
+ALTER TABLE ONLY "public"."Capability_Lead"
     ADD CONSTRAINT "Capability_Lead_ID_Empleado_key" UNIQUE ("ID_Empleado");
 
 
@@ -434,6 +476,11 @@ ALTER TABLE ONLY "public"."Direccion"
 
 ALTER TABLE ONLY "public"."Empleado_Habilidades"
     ADD CONSTRAINT "Empleado_Habilidades_pkey" PRIMARY KEY ("ID_Empleado", "ID_Habilidad");
+
+
+
+ALTER TABLE ONLY "public"."Empleado_Proyectos"
+    ADD CONSTRAINT "Empleado_Proyectos_pkey" PRIMARY KEY ("ID_Empleado", "ID_Proyecto", "id");
 
 
 
@@ -504,6 +551,11 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_pkey" PRIMARY KEY ("ID_TalentLead");
+
+
+
+ALTER TABLE ONLY "public"."Empleado_Proyectos"
+    ADD CONSTRAINT "unique_empleado_proyecto" UNIQUE ("ID_Empleado", "ID_Proyecto");
 
 
 
@@ -579,6 +631,16 @@ ALTER TABLE ONLY "public"."Empleado"
 
 ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_ID_PeopleLead_fkey" FOREIGN KEY ("ID_PeopleLead") REFERENCES "public"."People_lead"("ID");
+
+
+
+ALTER TABLE ONLY "public"."Empleado_Proyectos"
+    ADD CONSTRAINT "Empleado_Proyectos_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+
+
+
+ALTER TABLE ONLY "public"."Empleado_Proyectos"
+    ADD CONSTRAINT "Empleado_Proyectos_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
 
 
 
@@ -937,6 +999,11 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "anon";
+
+
+
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Empleado_Proyectos" TO "authenticated";
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Empleado_Proyectos" TO "anon";
 
 
 
