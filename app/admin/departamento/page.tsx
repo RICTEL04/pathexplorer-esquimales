@@ -206,8 +206,6 @@ const hasChanges = () => {
 };
 
 
-
-// Agrega esta función para actualizar el departamento
 const handleUpdate = async (e: React.FormEvent) => {
   e.preventDefault();
   if (!departamentoEdit) return;
@@ -216,7 +214,7 @@ const handleUpdate = async (e: React.FormEvent) => {
   setMessage({ type: '', content: '' });
 
   try {
-    // Actualizar el departamento
+    // 1. Actualizar el departamento en la base de datos
     const { data: deptData, error: deptError } = await supabase
       .from('Departamento')
       .update({
@@ -228,21 +226,53 @@ const handleUpdate = async (e: React.FormEvent) => {
 
     if (deptError) throw deptError;
 
-    if (selectedEmpleado && departamentoEdit.ID_Departamento !== null){
-      const { error: CapError } = await supabase
-      .from('Capability_Lead')
-      .update({ ID_Departamento: null })
-      .eq('ID_Empleado', departamentoEdit.ID_Empleado_Encargado);
-      if (CapError) throw CapError;
+    // 2. Manejar cambios en Capability_Lead si es necesario
+    if (departamentoEdit.ID_Empleado_Encargado !== selectedEmpleado) {
+      // Si había un empleado encargado anteriormente, quitarlo
+      if (departamentoEdit.ID_Empleado_Encargado) {
+        const { error: removeCapError } = await supabase
+          .from('Capability_Lead')
+          .update({ ID_Departamento: null })
+          .eq('ID_Empleado', departamentoEdit.ID_Empleado_Encargado);
+        
+        if (removeCapError) throw removeCapError;
+      }
+
+      // Si se seleccionó un nuevo empleado encargado, asignarlo
+      if (selectedEmpleado) {
+        const { error: addCapError } = await supabase
+          .from('Capability_Lead')
+          .upsert({
+            ID_Empleado: selectedEmpleado,
+            ID_Departamento: departamentoEdit.ID_Departamento
+          }, {
+            onConflict: 'ID_Empleado'
+          });
+        
+        if (addCapError) throw addCapError;
+      }
     }
-    if (selectedEmpleado) {
-    // Manejar la asignación del Capability Lead
-    const { error: CapError2 } = await supabase
-    .from('Capability_Lead')
-    .update({ ID_Departamento: departamentoEdit.ID_Departamento })
-    .eq('ID_Empleado', selectedEmpleado);
-    if (CapError2) throw CapError2;
-    }
+
+    // 3. Actualizar el estado local
+    const updatedDepartamentos = departamentos.map(dept => {
+      if (dept.ID_Departamento === departamentoEdit.ID_Departamento) {
+        // Encontrar el nombre del nuevo empleado encargado si existe
+        const nuevoEncargado = empleadosOptions.find(
+          emp => emp.ID_Empleado === selectedEmpleado
+        )?.Nombre || null;
+
+        return {
+          ...dept,
+          Nombre: departamentoEdit.Nombre,
+          Descripcion: departamentoEdit.Descripcion,
+          Empleado_Encargado: nuevoEncargado,
+          ID_Empleado_Encargado: selectedEmpleado || null
+        };
+      }
+      return dept;
+    });
+
+    setDepartamentos(updatedDepartamentos);
 
     setMessage({ 
       type: 'success', 
@@ -251,7 +281,7 @@ const handleUpdate = async (e: React.FormEvent) => {
     
     setTimeout(() => {
       setEditModalOpen(false);
-      setInitialEditValues(null); // Resetear valores iniciales
+      setInitialEditValues(null);
     }, 2000);
 
   } catch (error: any) {
