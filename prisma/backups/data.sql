@@ -765,6 +765,8 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	2d782c64-a5f7-4a3c-83ec-5b837d71a7f6	{"action":"token_refreshed","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-04-25 19:21:24.826927+00	
 00000000-0000-0000-0000-000000000000	2f955a1f-04b8-4c4a-a446-e6a6685d00bf	{"action":"token_revoked","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-04-25 19:21:24.830789+00	
 00000000-0000-0000-0000-000000000000	50097490-7cc8-4d8f-a1b7-ad308bd38cd3	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 19:21:25.950877+00	
+00000000-0000-0000-0000-000000000000	99296d5f-71ad-4bac-ad53-b995840d1e9b	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 19:29:39.088627+00	
+00000000-0000-0000-0000-000000000000	45b340d9-87fe-45b1-8a05-b56f9f142484	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 19:31:21.901863+00	
 00000000-0000-0000-0000-000000000000	e9808493-875b-4f0e-aef8-50e3e5d25a93	{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"test01@g.com","user_id":"2ccb7762-72c7-4aeb-93ab-5b628ea330f3","user_phone":""}}	2025-04-25 17:53:23.059966+00	
 \.
 
@@ -782,7 +784,7 @@ COPY "auth"."flow_state" ("id", "user_id", "auth_code", "code_challenge_method",
 --
 
 COPY "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at", "is_anonymous") FROM stdin;
-00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-04-25 19:21:25.951582+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-04-25 19:21:25.95599+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-04-25 19:31:21.905426+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-04-25 19:31:21.90979+00	\N	\N			\N		0	\N		\N	f	\N	f
 \.
 
 
@@ -809,7 +811,9 @@ COPY "auth"."instances" ("id", "uuid", "raw_base_config", "created_at", "updated
 
 COPY "auth"."sessions" ("id", "user_id", "created_at", "updated_at", "factor_id", "aal", "not_after", "refreshed_at", "user_agent", "ip", "tag") FROM stdin;
 6eee426d-fbb8-4322-b0ef-7a40cd52c017	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 18:07:22.178609+00	2025-04-25 18:07:22.178609+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	187.190.181.239	\N
+627c22d8-08d2-4fd7-bc2f-a5dcdd416a27	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:29:39.091433+00	2025-04-25 19:29:39.091433+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.168	\N
 ee0ceb79-6cae-4ef3-8f6f-c24dfc96938f	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 18:23:20.016461+00	2025-04-25 19:21:24.839798+00	\N	aal1	\N	2025-04-25 19:21:24.839726	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.200	\N
+2ede6deb-62a5-46fd-b83d-89547e9bc5c9	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:31:21.905508+00	2025-04-25 19:31:21.905508+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.168	\N
 2c768cde-8e18-4c0d-bb4a-7e9fa86f5934	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:14:25.033173+00	2025-04-25 19:14:25.033173+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.168	\N
 18be7444-dded-4a9a-af28-fed268d39843	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:21:25.951654+00	2025-04-25 19:21:25.951654+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 OPR/118.0.0.0 (Edition ASUS)	131.178.102.148	\N
 \.
@@ -822,8 +826,10 @@ ee0ceb79-6cae-4ef3-8f6f-c24dfc96938f	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-0
 COPY "auth"."mfa_amr_claims" ("session_id", "created_at", "updated_at", "authentication_method", "id") FROM stdin;
 6eee426d-fbb8-4322-b0ef-7a40cd52c017	2025-04-25 18:07:22.181991+00	2025-04-25 18:07:22.181991+00	password	e9eda132-272b-45f9-9b75-7d79f3f449f9
 2c768cde-8e18-4c0d-bb4a-7e9fa86f5934	2025-04-25 19:14:25.063623+00	2025-04-25 19:14:25.063623+00	password	9f780cf6-c3ce-476f-8cb7-55684113bfa5
+627c22d8-08d2-4fd7-bc2f-a5dcdd416a27	2025-04-25 19:29:39.097012+00	2025-04-25 19:29:39.097012+00	password	5df82297-74ec-47a3-986e-2233d001327c
 ee0ceb79-6cae-4ef3-8f6f-c24dfc96938f	2025-04-25 18:23:20.022595+00	2025-04-25 18:23:20.022595+00	password	190fb0d3-405d-457a-9b7c-cc3a2998845b
 18be7444-dded-4a9a-af28-fed268d39843	2025-04-25 19:21:25.956748+00	2025-04-25 19:21:25.956748+00	password	4561ed2f-e4b9-4df4-a4ee-25832ef39d9b
+2ede6deb-62a5-46fd-b83d-89547e9bc5c9	2025-04-25 19:31:21.910413+00	2025-04-25 19:31:21.910413+00	password	f2a3a571-3680-4d6a-80a7-fe2a9cb09136
 \.
 
 
@@ -861,6 +867,8 @@ COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked"
 00000000-0000-0000-0000-000000000000	382	_AjdKXzHROeH7GcTrlVMxA	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:14:25.040383+00	2025-04-25 19:14:25.040383+00	\N	2c768cde-8e18-4c0d-bb4a-7e9fa86f5934
 00000000-0000-0000-0000-000000000000	383	aHJarg8iUldcoR92gWUhWA	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:21:24.835747+00	2025-04-25 19:21:24.835747+00	oqHVG30OnYS5bLf4guqeaQ	ee0ceb79-6cae-4ef3-8f6f-c24dfc96938f
 00000000-0000-0000-0000-000000000000	384	Y0dNVt_wS5tbacHunDZEzw	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:21:25.954078+00	2025-04-25 19:21:25.954078+00	\N	18be7444-dded-4a9a-af28-fed268d39843
+00000000-0000-0000-0000-000000000000	385	H0eqqz4bMEcQ-N08qXDIXQ	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:29:39.094521+00	2025-04-25 19:29:39.094521+00	\N	627c22d8-08d2-4fd7-bc2f-a5dcdd416a27
+00000000-0000-0000-0000-000000000000	386	NZyqrcLUB1bBAabnRnygAg	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:31:21.907841+00	2025-04-25 19:31:21.907841+00	\N	2ede6deb-62a5-46fd-b83d-89547e9bc5c9
 \.
 
 
@@ -1191,7 +1199,7 @@ COPY "vault"."secrets" ("id", "name", "description", "secret", "key_id", "nonce"
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 384, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 386, true);
 
 
 --
