@@ -1,5 +1,5 @@
-// components/StringEditor.tsx
 import React, { useState, useEffect } from 'react';
+import { FiEdit2 } from 'react-icons/fi';
 
 interface StringEditorProps {
   value: string;
@@ -8,6 +8,8 @@ interface StringEditorProps {
   onSave?: (newValue: string) => Promise<void>;
   placeholder?: string;
   inputType?: 'text' | 'textarea';
+  className?: string;
+  hideLabel?: boolean;
 }
 
 const StringEditor: React.FC<StringEditorProps> = ({
@@ -16,14 +18,15 @@ const StringEditor: React.FC<StringEditorProps> = ({
   editable = false,
   onSave,
   placeholder = '',
-  inputType = 'text'
+  inputType = 'text',
+  className = '',
+  hideLabel = false
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Sincronizar con el valor externo cuando cambie
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
@@ -52,10 +55,23 @@ const StringEditor: React.FC<StringEditorProps> = ({
   };
 
   return (
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        {label}
-      </label>
+    <div className={`w-full ${className}`}>
+        {!hideLabel && (
+        <div className="flex items-center gap-1 mb-1"> {/* Cambiado a gap-1 y items-center */}
+            <label className="block text-sm font-bold text-gray-700">
+            {label}
+            </label>
+            {editable && !isEditing && (
+            <button
+                onClick={() => setIsEditing(true)}
+                className="text-gray-500 hover:text-blue-600 transition-colors"
+                aria-label={`Editar ${label}`}
+            >
+                <FiEdit2 size={16} />
+            </button>
+            )}
+        </div>
+        )}
       
       {isEditing ? (
         <div className="space-y-2">
@@ -69,51 +85,42 @@ const StringEditor: React.FC<StringEditorProps> = ({
             <textarea
               value={localValue}
               onChange={(e) => setLocalValue(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder={placeholder}
-              rows={3}
+              rows={4}
             />
           ) : (
             <input
               type={inputType}
               value={localValue}
               onChange={(e) => setLocalValue(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder={placeholder}
             />
           )}
 
-          <div className="flex justify-end gap-2 mt-2">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 mt-2">
             <button
               onClick={handleCancel}
               disabled={isLoading}
-              className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors disabled:opacity-50 text-sm"
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors disabled:opacity-50"
             >
               Cancelar
             </button>
             <button
               onClick={handleSave}
               disabled={isLoading}
-              className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors disabled:opacity-50 text-sm"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors disabled:opacity-50"
             >
               {isLoading ? 'Guardando...' : 'Guardar'}
             </button>
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-between">
-          <p className={`p-2 ${value ? 'text-gray-800' : 'text-gray-400 italic'}`}>
+        <div className="bg-blue-50 p-3 rounded-lg">
+          <p className={`break-words ${value ? 'text-gray-800' : 'text-gray-400 italic'}`}>
             {value || `No hay ${label.toLowerCase()}`}
           </p>
-          
-          {editable && (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="ml-2 px-3 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors text-sm"
-            >
-              Editar
-            </button>
-          )}
         </div>
       )}
     </div>

@@ -1,18 +1,24 @@
+// components/AddressSection.tsx
 import React, { useState, useEffect } from 'react';
 import { Direccion } from '@/lib/employeeService';
+import { FiEdit2 } from 'react-icons/fi';
 
 interface AddressSectionProps {
+  label?: string;
   address: Direccion | null;
   editable?: boolean;
   onSave?: (newAddress: Direccion) => Promise<void>;
+  hideLabel?: boolean;
 }
 
 const AddressSection: React.FC<AddressSectionProps> = ({
+  label = 'Dirección',
   address = null,
   editable = false,
   onSave,
+  hideLabel = false
 }) => {
-  const [isEditing, setIsEditing] = useState(address === null); // Inicia en modo edición si no hay dirección
+  const [isEditing, setIsEditing] = useState(address === null);
   const [localAddress, setLocalAddress] = useState<Direccion>({
     Estado: null,
     Pais: null
@@ -20,18 +26,17 @@ const AddressSection: React.FC<AddressSectionProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Inicializar con los datos actuales
   useEffect(() => {
     if (address) {
       setLocalAddress(address);
-      setIsEditing(false); // Asegurarse de no estar en modo edición si recibimos una dirección
+      setIsEditing(false);
     } else {
       setLocalAddress({
         Estado: null,
         Pais: null
       });
       if (editable) {
-        setIsEditing(true); // Entrar automáticamente en modo edición si no hay dirección
+        setIsEditing(true);
       }
     }
   }, [address, editable]);
@@ -65,7 +70,6 @@ const AddressSection: React.FC<AddressSectionProps> = ({
       setLocalAddress(address);
       setIsEditing(false);
     } else {
-      // Si no había dirección previa, simplemente limpiamos
       setLocalAddress({
         Estado: null,
         Pais: null
@@ -76,7 +80,7 @@ const AddressSection: React.FC<AddressSectionProps> = ({
   };
 
   const formatAddress = (addr: Direccion | null) => {
-    if (!addr) return 'No hay información de dirección disponible';
+    if (!addr) return 'No especificado';
     
     const parts = [
       addr.Estado,
@@ -85,35 +89,56 @@ const AddressSection: React.FC<AddressSectionProps> = ({
     
     return parts.length > 0 
       ? parts.join(', ')
-      : 'No hay información de dirección disponible';
+      : 'No especificado';
   };
 
-  // Si no hay dirección y no estamos editando, mostrar solo el botón para agregar
   if (!isEditing && address === null) {
     return (
-      <div className="mt-4">
-        <div className="flex items-center justify-between">
-          <div className="bg-blue-50 p-4 rounded-lg flex-1">
-            <p className="text-gray-400 italic">
-              No hay información de dirección disponible
-            </p>
+      <div className="w-full">
+        {!hideLabel && (
+          <div className="flex justify-between items-center mb-1">
+            <label className="block text-sm font-bold text-gray-700">
+              {label}
+            </label>
+            {editable && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="text-gray-500 hover:text-blue-600 transition-colors ml-2"
+                aria-label={`Agregar ${label.toLowerCase()}`}
+              >
+                <FiEdit2 size={16} />
+              </button>
+            )}
           </div>
-          
-          {editable && (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="ml-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-            >
-              Agregar dirección
-            </button>
-          )}
+        )}
+        <div className="bg-blue-50 p-3 rounded-lg">
+          <p className="text-gray-400 italic">
+            No especificado
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="mt-4">
+    <div className="w-full">
+    {!hideLabel && (
+      <div className="flex items-center gap-1 mb-1"> {/* Cambiado a gap-1 y items-center */}
+        <label className="block text-sm font-bold text-gray-700">
+          {label}
+        </label>
+        {editable && !isEditing && (
+          <button
+            onClick={() => setIsEditing(true)}
+            className="text-gray-500 hover:text-blue-600 transition-colors"
+            aria-label={`Editar ${label.toLowerCase()}`}
+          >
+            <FiEdit2 size={16} />
+          </button>
+        )}
+      </div>
+    )}
+
       {isEditing ? (
         <div className="space-y-4 bg-white p-4 rounded-lg shadow">
           {error && (
@@ -123,8 +148,6 @@ const AddressSection: React.FC<AddressSectionProps> = ({
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-            {/* Estado */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Estado
@@ -138,7 +161,6 @@ const AddressSection: React.FC<AddressSectionProps> = ({
               />
             </div>
 
-            {/* País */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 País
@@ -153,7 +175,7 @@ const AddressSection: React.FC<AddressSectionProps> = ({
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 mt-4">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
             <button
               onClick={handleCancel}
               disabled={isLoading}
@@ -171,21 +193,10 @@ const AddressSection: React.FC<AddressSectionProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex items-start justify-between">
-          <div className="bg-blue-50 p-4 rounded-lg flex-1">
-            <p className="text-gray-800">
-              {formatAddress(localAddress)}
-            </p>
-          </div>
-          
-          {editable && (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="ml-4 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors"
-            >
-              Editar
-            </button>
-          )}
+        <div className="bg-blue-50 p-3 rounded-lg">
+          <p className="text-gray-800">
+            {formatAddress(localAddress)}
+          </p>
         </div>
       )}
     </div>
