@@ -229,8 +229,7 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "FechaContratacion" "date",
     "FechaUltNivel" "date",
     "ID_PeopleLead" "uuid",
-    "Biografia" character varying,
-    "AvatarURL" character varying
+    "Biografia" character varying
 );
 
 
@@ -480,7 +479,7 @@ ALTER TABLE ONLY "public"."Empleado_Habilidades"
 
 
 ALTER TABLE ONLY "public"."Empleado_Proyectos"
-    ADD CONSTRAINT "Empleado_Proyectos_pkey" PRIMARY KEY ("ID_Empleado", "ID_Proyecto", "id");
+    ADD CONSTRAINT "Empleado_Proyectos_pkey" PRIMARY KEY ("id");
 
 
 
