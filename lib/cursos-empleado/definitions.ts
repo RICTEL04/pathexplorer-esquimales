@@ -2,8 +2,9 @@ export interface course {
     Nombre: string;
     Fecha_fin_curso: string;
     link: string;
-    ID_Habilidad: string;
-    skill: skill;
+    ID_Curso: string;
+    Descripcion: string;
+    skills: skill[];
 }
 
 export interface skill {
