@@ -770,6 +770,13 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	124d6b8c-6b7b-4289-a7f0-201b702afdc4	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 19:36:20.637232+00	
 00000000-0000-0000-0000-000000000000	136a03ea-c212-4e4d-a187-ed6a384863c1	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 19:46:05.3027+00	
 00000000-0000-0000-0000-000000000000	6d3b4a8b-b4a2-4a1f-acd7-b86becf32192	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 19:56:44.031442+00	
+00000000-0000-0000-0000-000000000000	010ac5a7-db4b-4056-ae98-94a1df43e31d	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 20:05:01.043764+00	
+00000000-0000-0000-0000-000000000000	cecac6b7-883e-4577-8f15-64bf1dee766f	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 20:05:06.542506+00	
+00000000-0000-0000-0000-000000000000	30069d01-3906-4a83-bb77-11731ddae9d2	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 20:08:23.744581+00	
+00000000-0000-0000-0000-000000000000	0b7a0402-6289-4f4b-9d13-5db227b5756a	{"action":"user_signedup","actor_id":"5ad0bb87-f4fc-413c-adba-ef4b0b9402d1","actor_username":"a01198327@tec.mx","actor_via_sso":false,"log_type":"team","traits":{"provider":"email"}}	2025-04-25 20:16:55.199111+00	
+00000000-0000-0000-0000-000000000000	6140808c-bcf4-4c9e-9021-e925f21206f3	{"action":"login","actor_id":"5ad0bb87-f4fc-413c-adba-ef4b0b9402d1","actor_username":"a01198327@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 20:16:55.207494+00	
+00000000-0000-0000-0000-000000000000	087d7f1f-a936-430d-ba83-7eee6072e76d	{"action":"user_signedup","actor_id":"900fdfaf-7517-4876-8d20-b83da73a8347","actor_username":"correoprofesional@gmail.com","actor_via_sso":false,"log_type":"team","traits":{"provider":"email"}}	2025-04-25 20:22:20.97798+00	
+00000000-0000-0000-0000-000000000000	c0d9c22a-05ad-43eb-8c37-bf6407e010ce	{"action":"login","actor_id":"900fdfaf-7517-4876-8d20-b83da73a8347","actor_username":"correoprofesional@gmail.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-04-25 20:22:20.98696+00	
 00000000-0000-0000-0000-000000000000	e9808493-875b-4f0e-aef8-50e3e5d25a93	{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"test01@g.com","user_id":"2ccb7762-72c7-4aeb-93ab-5b628ea330f3","user_phone":""}}	2025-04-25 17:53:23.059966+00	
 \.
 
@@ -787,7 +794,9 @@ COPY "auth"."flow_state" ("id", "user_id", "auth_code", "code_challenge_method",
 --
 
 COPY "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at", "is_anonymous") FROM stdin;
-00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-04-25 19:56:44.033714+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-04-25 19:56:44.039519+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	900fdfaf-7517-4876-8d20-b83da73a8347	authenticated	authenticated	correoprofesional@gmail.com	$2a$10$iTdJTzLkDI741pNP6ZYjMOLE8V9oZbhK96pGWzmBU9uZ8zBA6c7/q	2025-04-25 20:22:20.983246+00	\N		\N		\N			\N	2025-04-25 20:22:20.988379+00	{"provider": "email", "providers": ["email"]}	{"sub": "900fdfaf-7517-4876-8d20-b83da73a8347", "name": "Gorgonzola Betanchin", "role": "employee", "email": "correoprofesional@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-04-25 20:22:20.962638+00	2025-04-25 20:22:20.993596+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-04-25 20:08:23.746985+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-04-25 20:08:23.751322+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	authenticated	authenticated	a01198327@tec.mx	$2a$10$ueSBFtwb9q3qHGb/TJwm/eGMSm6w1n/FFpodX.nhj9AdZkO9vabIi	2025-04-25 20:16:55.202133+00	\N		\N		\N			\N	2025-04-25 20:16:55.209355+00	{"provider": "email", "providers": ["email"]}	{"sub": "5ad0bb87-f4fc-413c-adba-ef4b0b9402d1", "name": "Isaac Francisco Sánchez Veloquio", "role": "employee", "email": "a01198327@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 20:16:55.172692+00	2025-04-25 20:16:55.214365+00	\N	\N			\N		0	\N		\N	f	\N	f
 \.
 
 
@@ -797,6 +806,8 @@ COPY "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_pas
 
 COPY "auth"."identities" ("provider_id", "user_id", "identity_data", "provider", "last_sign_in_at", "created_at", "updated_at", "id") FROM stdin;
 5f096705-11c3-49b1-b42c-d7bd17a75439	5f096705-11c3-49b1-b42c-d7bd17a75439	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": false, "phone_verified": false}	email	2025-04-25 18:07:22.16918+00	2025-04-25 18:07:22.169228+00	2025-04-25 18:07:22.169228+00	e316eb14-bcf8-4de2-a77c-7d13a0b7bab4
+5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	{"sub": "5ad0bb87-f4fc-413c-adba-ef4b0b9402d1", "name": "Isaac Francisco Sánchez Veloquio", "role": "employee", "email": "a01198327@tec.mx", "email_verified": false, "phone_verified": false}	email	2025-04-25 20:16:55.191896+00	2025-04-25 20:16:55.191961+00	2025-04-25 20:16:55.191961+00	9d5480e7-0bce-4e58-8231-618a2148f0d6
+900fdfaf-7517-4876-8d20-b83da73a8347	900fdfaf-7517-4876-8d20-b83da73a8347	{"sub": "900fdfaf-7517-4876-8d20-b83da73a8347", "name": "Gorgonzola Betanchin", "role": "employee", "email": "correoprofesional@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-04-25 20:22:20.971912+00	2025-04-25 20:22:20.971964+00	2025-04-25 20:22:20.971964+00	1cf6e664-dd41-4cb1-9b72-2c954a6b8fad
 \.
 
 
@@ -816,12 +827,17 @@ COPY "auth"."sessions" ("id", "user_id", "created_at", "updated_at", "factor_id"
 6eee426d-fbb8-4322-b0ef-7a40cd52c017	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 18:07:22.178609+00	2025-04-25 18:07:22.178609+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	187.190.181.239	\N
 627c22d8-08d2-4fd7-bc2f-a5dcdd416a27	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:29:39.091433+00	2025-04-25 19:29:39.091433+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.168	\N
 3b7f385e-3ed3-47a9-ad6f-2dc3e0ea85d7	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:56:44.03379+00	2025-04-25 19:56:44.03379+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.168	\N
+cfe7f047-0152-474c-8da4-317fe7a0b677	900fdfaf-7517-4876-8d20-b83da73a8347	2025-04-25 20:22:20.988459+00	2025-04-25 20:22:20.988459+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.200	\N
 ee0ceb79-6cae-4ef3-8f6f-c24dfc96938f	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 18:23:20.016461+00	2025-04-25 19:21:24.839798+00	\N	aal1	\N	2025-04-25 19:21:24.839726	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.200	\N
 2ede6deb-62a5-46fd-b83d-89547e9bc5c9	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:31:21.905508+00	2025-04-25 19:31:21.905508+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.168	\N
+65484af8-2f31-4df2-a6b1-8480b6025a55	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 20:05:01.047269+00	2025-04-25 20:05:01.047269+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.200	\N
+2a05bc23-f35e-4bb9-84b2-894c657c913d	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 20:05:06.544213+00	2025-04-25 20:05:06.544213+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.168	\N
 2c768cde-8e18-4c0d-bb4a-7e9fa86f5934	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:14:25.033173+00	2025-04-25 19:14:25.033173+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.168	\N
 470db46c-d244-477b-a2e2-5280a65bd97d	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:36:20.640836+00	2025-04-25 19:36:20.640836+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.200	\N
+e0b72ebb-5bd3-44d3-ab14-3a215da6198c	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 20:08:23.747064+00	2025-04-25 20:08:23.747064+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 OPR/118.0.0.0 (Edition ASUS)	131.178.102.148	\N
 18be7444-dded-4a9a-af28-fed268d39843	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:21:25.951654+00	2025-04-25 19:21:25.951654+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 OPR/118.0.0.0 (Edition ASUS)	131.178.102.148	\N
 023e54dc-62c4-41e0-824a-f22f70e6d636	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 19:46:05.305895+00	2025-04-25 19:46:05.305895+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.200	\N
+a40ac2a6-43da-4932-86be-10fb55db1f33	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	2025-04-25 20:16:55.209433+00	2025-04-25 20:16:55.209433+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.168	\N
 \.
 
 
@@ -835,10 +851,15 @@ COPY "auth"."mfa_amr_claims" ("session_id", "created_at", "updated_at", "authent
 627c22d8-08d2-4fd7-bc2f-a5dcdd416a27	2025-04-25 19:29:39.097012+00	2025-04-25 19:29:39.097012+00	password	5df82297-74ec-47a3-986e-2233d001327c
 470db46c-d244-477b-a2e2-5280a65bd97d	2025-04-25 19:36:20.646519+00	2025-04-25 19:36:20.646519+00	password	fef6d408-9449-4a88-a683-5d37bc93b917
 3b7f385e-3ed3-47a9-ad6f-2dc3e0ea85d7	2025-04-25 19:56:44.040717+00	2025-04-25 19:56:44.040717+00	password	a196b740-ab70-4ebd-a08c-e9337e3b976f
+e0b72ebb-5bd3-44d3-ab14-3a215da6198c	2025-04-25 20:08:23.751993+00	2025-04-25 20:08:23.751993+00	password	38dbaff6-3366-4331-8c92-7aecc2fdcf2f
+cfe7f047-0152-474c-8da4-317fe7a0b677	2025-04-25 20:22:20.994158+00	2025-04-25 20:22:20.994158+00	password	0b583f62-0197-4213-8a07-e3e85884f6e7
 ee0ceb79-6cae-4ef3-8f6f-c24dfc96938f	2025-04-25 18:23:20.022595+00	2025-04-25 18:23:20.022595+00	password	190fb0d3-405d-457a-9b7c-cc3a2998845b
 18be7444-dded-4a9a-af28-fed268d39843	2025-04-25 19:21:25.956748+00	2025-04-25 19:21:25.956748+00	password	4561ed2f-e4b9-4df4-a4ee-25832ef39d9b
 2ede6deb-62a5-46fd-b83d-89547e9bc5c9	2025-04-25 19:31:21.910413+00	2025-04-25 19:31:21.910413+00	password	f2a3a571-3680-4d6a-80a7-fe2a9cb09136
 023e54dc-62c4-41e0-824a-f22f70e6d636	2025-04-25 19:46:05.312123+00	2025-04-25 19:46:05.312123+00	password	b53c65fb-f09f-4892-81f8-cf0fc192f0e4
+65484af8-2f31-4df2-a6b1-8480b6025a55	2025-04-25 20:05:01.05171+00	2025-04-25 20:05:01.05171+00	password	cb56036f-45af-4b80-8ccb-d1300f385043
+2a05bc23-f35e-4bb9-84b2-894c657c913d	2025-04-25 20:05:06.546346+00	2025-04-25 20:05:06.546346+00	password	b8a77d4f-5268-4b34-bd0a-9415ad2cc4cd
+a40ac2a6-43da-4932-86be-10fb55db1f33	2025-04-25 20:16:55.214786+00	2025-04-25 20:16:55.214786+00	password	dbc57612-c596-4595-9c8b-7cfff996f752
 \.
 
 
@@ -876,10 +897,15 @@ COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked"
 00000000-0000-0000-0000-000000000000	381	oqHVG30OnYS5bLf4guqeaQ	5f096705-11c3-49b1-b42c-d7bd17a75439	t	2025-04-25 18:23:20.019917+00	2025-04-25 19:21:24.831356+00	\N	ee0ceb79-6cae-4ef3-8f6f-c24dfc96938f
 00000000-0000-0000-0000-000000000000	389	ZQhvDk9GROfjI6tUILPoow	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:56:44.035559+00	2025-04-25 19:56:44.035559+00	\N	3b7f385e-3ed3-47a9-ad6f-2dc3e0ea85d7
 00000000-0000-0000-0000-000000000000	382	_AjdKXzHROeH7GcTrlVMxA	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:14:25.040383+00	2025-04-25 19:14:25.040383+00	\N	2c768cde-8e18-4c0d-bb4a-7e9fa86f5934
+00000000-0000-0000-0000-000000000000	390	6My22p_lkNXgM4hfRRyU7A	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 20:05:01.048907+00	2025-04-25 20:05:01.048907+00	\N	65484af8-2f31-4df2-a6b1-8480b6025a55
+00000000-0000-0000-0000-000000000000	391	k2lKSqetnr6tRAlQbyldTA	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 20:05:06.545031+00	2025-04-25 20:05:06.545031+00	\N	2a05bc23-f35e-4bb9-84b2-894c657c913d
 00000000-0000-0000-0000-000000000000	383	aHJarg8iUldcoR92gWUhWA	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:21:24.835747+00	2025-04-25 19:21:24.835747+00	oqHVG30OnYS5bLf4guqeaQ	ee0ceb79-6cae-4ef3-8f6f-c24dfc96938f
 00000000-0000-0000-0000-000000000000	384	Y0dNVt_wS5tbacHunDZEzw	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:21:25.954078+00	2025-04-25 19:21:25.954078+00	\N	18be7444-dded-4a9a-af28-fed268d39843
+00000000-0000-0000-0000-000000000000	392	ZCF8hQY5_A_PxQruL6ZQFQ	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 20:08:23.74877+00	2025-04-25 20:08:23.74877+00	\N	e0b72ebb-5bd3-44d3-ab14-3a215da6198c
 00000000-0000-0000-0000-000000000000	385	H0eqqz4bMEcQ-N08qXDIXQ	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:29:39.094521+00	2025-04-25 19:29:39.094521+00	\N	627c22d8-08d2-4fd7-bc2f-a5dcdd416a27
+00000000-0000-0000-0000-000000000000	393	43Nscxcb8ogfgnjrO2XjQg	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	f	2025-04-25 20:16:55.212049+00	2025-04-25 20:16:55.212049+00	\N	a40ac2a6-43da-4932-86be-10fb55db1f33
 00000000-0000-0000-0000-000000000000	386	NZyqrcLUB1bBAabnRnygAg	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:31:21.907841+00	2025-04-25 19:31:21.907841+00	\N	2ede6deb-62a5-46fd-b83d-89547e9bc5c9
+00000000-0000-0000-0000-000000000000	394	lcPa9BfTYSkXLfB9L2UBjA	900fdfaf-7517-4876-8d20-b83da73a8347	f	2025-04-25 20:22:20.990707+00	2025-04-25 20:22:20.990707+00	\N	cfe7f047-0152-474c-8da4-317fe7a0b677
 00000000-0000-0000-0000-000000000000	387	ampM2lvZ1zifq02hXYSgxQ	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-04-25 19:36:20.643318+00	2025-04-25 19:36:20.643318+00	\N	470db46c-d244-477b-a2e2-5280a65bd97d
 \.
 
@@ -939,9 +965,9 @@ COPY "public"."Administrador" ("id") FROM stdin;
 
 COPY "public"."Departamento" ("ID_Departamento", "Nombre", "Descripcion") FROM stdin;
 e4661077-c41c-4f4b-ad46-c5a29baf229a	IA	Inteligencia Artificial
-d85d9ef9-0288-4462-bb3b-13c1d86cdf68	UX/UI	Diseño
-cf57cc7b-7d64-473a-b31e-97fc5736d380	HR	Recursos Humanos
 dd6c79f7-80fd-48b3-97f6-119551d3d2c3	TI	Tecnologias de la informacion
+cf57cc7b-7d64-473a-b31e-97fc5736d380	HR	Recursos Humanos
+d85d9ef9-0288-4462-bb3b-13c1d86cdf68	UX/UI	Diseño
 \.
 
 
@@ -950,7 +976,9 @@ dd6c79f7-80fd-48b3-97f6-119551d3d2c3	TI	Tecnologias de la informacion
 --
 
 COPY "public"."Empleado" ("ID_Empleado", "Nombre", "Rol", "ID_Departamento", "Nivel", "Cargabilidad", "FechaContratacion", "FechaUltNivel", "ID_PeopleLead", "Biografia") FROM stdin;
-5f096705-11c3-49b1-b42c-d7bd17a75439	Sergio Ricardo Tellez Loaiza	Admin	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	12	0%	2025-04-25	2025-04-25	\N	Estudiante de ITC en el tecnologico de Monterrey
+5f096705-11c3-49b1-b42c-d7bd17a75439	Sergio Ricardo Tellez Loaiza	Admin	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	12	0%	2025-04-25	2025-04-25	66d20503-e75f-43d9-9572-54fa189dfb95	Estudiante de ITC en el tecnologico de Monterrey
+5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Isaac Francisco Sánchez Veloquio	Developer	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	5	0%	2023-03-10	2023-03-10	66d20503-e75f-43d9-9572-54fa189dfb95	\N
+900fdfaf-7517-4876-8d20-b83da73a8347	Jorge Betanzo	Developer	d85d9ef9-0288-4462-bb3b-13c1d86cdf68	10	0%	2025-04-25	2025-04-25	\N	ITC 6° Semestre
 \.
 
 
@@ -959,7 +987,9 @@ COPY "public"."Empleado" ("ID_Empleado", "Nombre", "Rol", "ID_Departamento", "Ni
 --
 
 COPY "public"."Capability_Lead" ("ID_CapabilityLead", "ID_Departamento", "ID_Empleado") FROM stdin;
-d12c4151-1b84-4db0-8de2-c14bc7dffd13	\N	5f096705-11c3-49b1-b42c-d7bd17a75439
+d12c4151-1b84-4db0-8de2-c14bc7dffd13	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	5f096705-11c3-49b1-b42c-d7bd17a75439
+544d651e-e128-4450-bc92-3be631a52790	cf57cc7b-7d64-473a-b31e-97fc5736d380	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1
+95d8e5dc-85a0-415b-a0ac-4944fa577b31	d85d9ef9-0288-4462-bb3b-13c1d86cdf68	900fdfaf-7517-4876-8d20-b83da73a8347
 \.
 
 
@@ -968,6 +998,8 @@ d12c4151-1b84-4db0-8de2-c14bc7dffd13	\N	5f096705-11c3-49b1-b42c-d7bd17a75439
 --
 
 COPY "public"."Certificados" ("ID_Certificado", "Nombre", "Fecha_caducidad", "Documento", "ID_Empleado", "Verificacion", "Descripcion") FROM stdin;
+ac897777-7a53-4d79-937c-13cac2435872	Bases de Datos Intermedio	2026-04-30	https://nuyfnqiodjynfkubkqpn.supabase.co/storage/v1/object/public/documentos/5f096705-11c3-49b1-b42c-d7bd17a75439/CertificadoDB.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	\N	
+a8475023-2151-4836-add0-f708a1e67f3c	Introducción a JavaScript	2026-05-14	https://nuyfnqiodjynfkubkqpn.supabase.co/storage/v1/object/public/documentos/5f096705-11c3-49b1-b42c-d7bd17a75439/CertificadoJS.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	t	
 \.
 
 
@@ -977,6 +1009,8 @@ COPY "public"."Certificados" ("ID_Certificado", "Nombre", "Fecha_caducidad", "Do
 
 COPY "public"."Contacto" ("PK_Contacto", "Email", "Num_Telefono", "ID_empleado", "Estado", "Pais") FROM stdin;
 5fc4d1a4-5ff2-49cd-99fc-32739838dc5b	A01741300@tec.mx	6672640278	5f096705-11c3-49b1-b42c-d7bd17a75439	Sinaloa	Mexico
+42cd3f7d-f5d6-4ec0-8f45-dea51996909f	a01198327@tec.mx	\N	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	\N	\N
+122ae824-f15d-4b41-81c5-7cc4c79cdf6a	correoProfesional@gmail.com	81892983740	900fdfaf-7517-4876-8d20-b83da73a8347	Monterrey	Mexico
 \.
 
 
@@ -1048,6 +1082,10 @@ COPY "public"."Empleado_Habilidades" ("ID_Empleado", "ID_Habilidad", "Estado") F
 5f096705-11c3-49b1-b42c-d7bd17a75439	c704d03a-5862-4b22-9594-ebb55fbff921	\N
 5f096705-11c3-49b1-b42c-d7bd17a75439	4bf3924e-4ef8-4436-88bb-1ffcd61750e3	\N
 5f096705-11c3-49b1-b42c-d7bd17a75439	499d3aba-855f-4473-92ef-11cd41854768	\N
+900fdfaf-7517-4876-8d20-b83da73a8347	c6d9e2bc-3bd4-4ec9-888a-20fc12df9c91	\N
+900fdfaf-7517-4876-8d20-b83da73a8347	260f88aa-a48f-4c1f-acdf-8d9c9f133366	\N
+900fdfaf-7517-4876-8d20-b83da73a8347	4bf3924e-4ef8-4436-88bb-1ffcd61750e3	\N
+900fdfaf-7517-4876-8d20-b83da73a8347	e12a980c-8c80-4e81-9fca-0b58cad7121c	\N
 \.
 
 
@@ -1066,6 +1104,7 @@ d74b87b9-e2f1-4630-9111-d7bc8eeda82a	App parque local	\N	app movil para un parqu
 --
 
 COPY "public"."Empleado_Proyectos" ("ID_Empleado", "ID_Proyecto", "isApproved", "id") FROM stdin;
+5f096705-11c3-49b1-b42c-d7bd17a75439	dd8b61fa-b013-46b1-ac31-9b13bd142bec	f	91fad065-aed8-4b30-af09-bf7fd262aa3f
 \.
 
 
@@ -1092,6 +1131,7 @@ COPY "public"."FeedBack" ("ID_FeedBack", "ID_People_lead", "ID_Empleado", "Descr
 
 COPY "public"."Intereses" ("ID_Interes", "Descripcion", "ID_Empleado") FROM stdin;
 e72b5d3f-0a9f-4bdb-9966-baac308c8daf	Inteligencia artificial	5f096705-11c3-49b1-b42c-d7bd17a75439
+8a53e425-2d31-4341-87d7-64f878b142af	Interfaz grafica	900fdfaf-7517-4876-8d20-b83da73a8347
 \.
 
 
@@ -1180,6 +1220,8 @@ b46d1174-88bc-4fa8-b47a-dd5af162ff24	documentos	ff98b050-236d-4a28-8aea-567f03b9
 f57e689f-2084-4862-917c-893a401d0afc	profile-pictures	66297fcd-b66d-4deb-ad5b-f24ba1dfd26a/perfil	7478c90f-4de7-494d-ae79-fc28756dc4ab	2025-04-25 15:17:43.678033+00	2025-04-25 15:17:43.678033+00	2025-04-25 15:17:43.678033+00	{"eTag": "\\"529b591a5f03bed30437fb66e0cd24b5\\"", "size": 35891, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-04-25T15:17:44.000Z", "contentLength": 35891, "httpStatusCode": 200}	0dab4358-8dcd-4811-87e4-83b1949a16ca	7478c90f-4de7-494d-ae79-fc28756dc4ab	{}
 54c97470-5fa6-4e1a-bf68-e93af5e5af52	profile-pictures	7478c90f-4de7-494d-ae79-fc28756dc4ab/perfil	7478c90f-4de7-494d-ae79-fc28756dc4ab	2025-04-25 15:34:41.433792+00	2025-04-25 15:34:41.433792+00	2025-04-25 15:34:41.433792+00	{"eTag": "\\"6d1f5b17c8ab601783daa9faeec96492\\"", "size": 76359, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-04-25T15:34:42.000Z", "contentLength": 76359, "httpStatusCode": 200}	fa6bff61-35d7-4f33-adb6-655d178e4896	7478c90f-4de7-494d-ae79-fc28756dc4ab	{}
 95b16f4d-a301-4d6b-93d5-bee504d16bb5	profile-pictures	5f096705-11c3-49b1-b42c-d7bd17a75439/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 18:25:15.951954+00	2025-04-25 18:25:15.951954+00	2025-04-25 18:25:15.951954+00	{"eTag": "\\"cd04f4b73b8abdf6507e869728bfe353\\"", "size": 114973, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-04-25T18:25:16.000Z", "contentLength": 114973, "httpStatusCode": 200}	d5be9d0a-3869-4aec-85c2-b80e32a94772	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+b8fead1e-5a48-4ded-9193-d460412f90dd	documentos	5f096705-11c3-49b1-b42c-d7bd17a75439/CertificadoJS.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 20:11:35.711571+00	2025-04-25 20:11:35.711571+00	2025-04-25 20:11:35.711571+00	{"eTag": "\\"9aae1d346f791ebf503fdd6e3ea73f93\\"", "size": 1216724, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-04-25T20:11:36.000Z", "contentLength": 1216724, "httpStatusCode": 200}	2a152c5a-605f-468a-affc-78656507a205	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+7249ff66-a542-41e9-850b-f7a3f9157665	documentos	5f096705-11c3-49b1-b42c-d7bd17a75439/CertificadoDB.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 20:14:06.973149+00	2025-04-25 20:14:06.973149+00	2025-04-25 20:14:06.973149+00	{"eTag": "\\"7e567b0769e88d216d259235267c8754\\"", "size": 102000, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-04-25T20:14:07.000Z", "contentLength": 102000, "httpStatusCode": 200}	ba9c775d-ef23-4c36-a54d-a9052ea7224a	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 \.
 
 
@@ -1211,7 +1253,7 @@ COPY "vault"."secrets" ("id", "name", "description", "secret", "key_id", "nonce"
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 389, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 394, true);
 
 
 --
