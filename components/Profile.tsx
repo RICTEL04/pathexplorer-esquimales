@@ -243,7 +243,7 @@ const Profile: React.FC<ProfileProps> = ({
 
       {/* Sección de softSkills */}
       <SkillSection
-        title="Soft Skills"
+        title="Habilidades Blandas"
         items={SoftSkills}
         type='soft'
         color="blue"
@@ -254,7 +254,7 @@ const Profile: React.FC<ProfileProps> = ({
       
       {/* Sección de hardSkills */}
       <SkillSection
-        title="Technical Skills"
+        title="Habilidades Técnicas"
         items={HardSkills}
         type='hard'
         color="green"
