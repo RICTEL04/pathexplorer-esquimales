@@ -703,6 +703,20 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 
 
 
+ALTER TABLE "public"."Administrador" ENABLE ROW LEVEL SECURITY;
+
+
+CREATE POLICY "Allow modify for admin users on Administrador" ON "public"."Administrador" TO "authenticated" USING ((("auth"."jwt"() ->> 'role'::"text") = 'admin'::"text"));
+
+
+
+CREATE POLICY "Allow select for authenticated users on Empleado" ON "public"."Empleado" FOR SELECT TO "authenticated" USING (true);
+
+
+
+ALTER TABLE "public"."Empleado" ENABLE ROW LEVEL SECURITY;
+
+
 
 
 ALTER PUBLICATION "supabase_realtime" OWNER TO "postgres";
