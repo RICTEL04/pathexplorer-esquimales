@@ -339,7 +339,7 @@ ALTER TABLE "public"."Proyectos" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Puesto_proyecto" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "created_at" "date" NOT NULL,
     "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"(),
     "ID_Proyecto" "uuid" DEFAULT "gen_random_uuid"(),
     "Puesto" character varying
