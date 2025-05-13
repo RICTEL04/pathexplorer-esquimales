@@ -66,26 +66,95 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
-CREATE OR REPLACE FUNCTION "public"."insert_into_empleado"() RETURNS "trigger"
+CREATE OR REPLACE FUNCTION "public"."delete_empleado"("p_id_empleado" "uuid") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
-    -- Insert into Empleado if the user has an email and does not already exist
-    IF NEW.email IS NOT NULL THEN
-        INSERT INTO public."Empleado" ("ID_Empleado", "Nombre")
-        SELECT NEW.id, NEW.email
-        WHERE NOT EXISTS (
-            SELECT 1 
-            FROM public."Empleado" e 
-            WHERE e."ID_Empleado" = NEW.id
-        );
-    END IF;
-    RETURN NEW;
+    DELETE FROM public."Empleado"
+    WHERE "ID_Empleado" = p_id_empleado;
 END;
 $$;
 
 
-ALTER FUNCTION "public"."insert_into_empleado"() OWNER TO "postgres";
+ALTER FUNCTION "public"."delete_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."insert_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    INSERT INTO public."Empleado" (
+        "ID_Empleado",
+        "Nombre",
+        "Rol",
+        "ID_Departamento",
+        "Nivel",
+        "Cargabilidad",
+        "FechaContratacion",
+        "FechaUltNivel",
+        "Biografia"
+    ) VALUES (
+        p_id_empleado,
+        p_nombre,
+        p_rol,
+        p_id_departamento,
+        p_nivel,
+        p_cargabilidad,
+        p_fecha_contratacion,
+        p_fecha_ult_nivel,
+        p_biografia
+    );
+END;
+$$;
+
+
+ALTER FUNCTION "public"."insert_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."select_empleado"("p_id_empleado" "uuid") RETURNS TABLE("ID_Empleado" "uuid", "Nombre" "text", "Rol" "text", "ID_Departamento" "uuid", "Nivel" "text", "Cargabilidad" "text", "FechaContratacion" "date", "FechaUltNivel" "date", "Biografia" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        "ID_Empleado",
+        "Nombre",
+        "Rol",
+        "ID_Departamento",
+        "Nivel",
+        "Cargabilidad",
+        "FechaContratacion",
+        "FechaUltNivel",
+        "Biografia"
+    FROM public."Empleado"
+    WHERE "ID_Empleado" = p_id_empleado;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."select_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."update_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    UPDATE public."Empleado"
+    SET 
+        "Nombre" = p_nombre,
+        "Rol" = p_rol,
+        "ID_Departamento" = p_id_departamento,
+        "Nivel" = p_nivel,
+        "Cargabilidad" = p_cargabilidad,
+        "FechaContratacion" = p_fecha_contratacion,
+        "FechaUltNivel" = p_fecha_ult_nivel,
+        "Biografia" = p_biografia
+    WHERE "ID_Empleado" = p_id_empleado;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."update_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") OWNER TO "postgres";
 
 SET default_tablespace = '';
 
