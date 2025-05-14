@@ -11,6 +11,7 @@ interface CoursesCardsProps {
     certifications: certification[];
 }
 
+
 export default function CoursesCards({ courses, certifications, employee }: CoursesCardsProps) {
 
     return (
@@ -30,8 +31,8 @@ export default function CoursesCards({ courses, certifications, employee }: Cour
                         <UserIcon className="w-10 h-10 text-gray-500" />
                     </div>
                     {/* User Name and Position */}
-                    <h3 className="text-lg font-bold text-gray-800">{employee.employee?.Nombre}</h3>
-                    <p className="text-sm text-gray-600 mb-4">{employee.employee?.Rol}</p>
+                    <h3 className="text-lg font-bold text-gray-800">{employee.Nombre}</h3>
+                    <p className="text-sm text-gray-600 mb-4">{employee.Rol}</p>
                     {/* Employee Summary */}
                     <div className="flex flex-col w-full">
                         <div className="flex flex-row gap-2 w-full mb-4">

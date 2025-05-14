@@ -1,22 +1,126 @@
 "use client";
 import Sidebar from "@/components/sidebar";
-import { Home, Briefcase, Award, TrendingUp, User, Target } from "lucide-react"; // Import the Target icon for Objetivos
-
-const routes = [
-  { href: "/employee", label: "Inicio", Icon: Home }, // Home route for Employee Dashboard
-  { href: "/employee/proyectos", label: "Proyectos", Icon: Briefcase }, // Projects route with Briefcase icon
-  { href: "/employee/certificaciones", label: "Certificaciones", Icon: Award }, // Certifications route
-  { href: "/employee/path-de-carrera", label: "Path de Carrera", Icon: TrendingUp }, // Career Path route with TrendingUp icon
-  { href: "/employee/objetivos", label: "Objetivos", Icon: Target }, // Objectives route with Target icon
-  { href: "/employee/perfil", label: "Perfil", Icon: User }, // Profile route with User icon¨
-  { href: "/employee/validarCursos", label: "Validar Cursos", Icon: User }, // Validate Courses route with User icon
-];
+import { Home, Briefcase, Award, TrendingUp, User, Target, Users, Folder, MessageCircle, BrainCircuit, BringToFront, Album, Diamond} from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from "react";
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
+  const [routes, setRoutes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [roles, setRoles] = useState({
+    peopleLead: false,
+    capabilityLead: false,
+    deliveryLead: false,
+    talentLead: false
+  });
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error || !session?.user) {
+        console.error("No session found or error fetching session:", error);
+        setLoading(false);
+        return;
+      }
+
+      const userId = session.user.id;
+
+      // Realizar todas las consultas en paralelo para mejor rendimiento
+      const [
+        { data: peopleLeadData },
+        { data: capabilityLeadData },
+        { data: deliveryLeadData },
+        { data: talentLeadData }
+      ] = await Promise.all([
+        supabase.from('People_lead').select('*').eq('ID_Empleado', userId).single(),
+        supabase.from('Capability_Lead').select('*').eq('ID_Empleado', userId).single(),
+        supabase.from('Delivery_Lead').select('*').eq('ID_Empleado', userId).single(),
+        supabase.from('Talent_Lead').select('*').eq('ID_Empleado', userId).single()
+      ]);
+
+      // Determinar los roles
+      const userRoles = {
+        peopleLead: !!peopleLeadData,
+        capabilityLead: !!capabilityLeadData,
+        deliveryLead: !!deliveryLeadData,
+        talentLead: !!talentLeadData,
+      };
+      
+      setRoles(userRoles);
+
+      // Rutas base que todos los usuarios tienen
+      const baseRoutes = [
+        { href: "/employee", label: "Inicio", Icon: Home },
+        { href: "/employee/proyectos", label: "Proyectos", Icon: Briefcase },
+        { href: "/employee/certificaciones", label: "Certificaciones", Icon: Award },
+        { href: "/employee/path-de-carrera", label: "Path de Carrera", Icon: TrendingUp },
+        { href: "/employee/objetivos", label: "Objetivos", Icon: Target },
+      ];
+
+      // Rutas específicas por rol
+      const roleSpecificRoutes = [];
+
+      if (userRoles.capabilityLead) {
+        roleSpecificRoutes.push({
+          href: "/employee/capability-lead",
+          label: "Capability lead",
+          Icon: BrainCircuit,
+          subRoutes: [
+            { href: "/employee/capability-lead/proyectos", label: "Proyectos capability", Icon: Folder },
+            { href: "/employee/capability-lead/perfiles-de-empleados", label: "Perfiles de Capability", Icon: Users },
+            { href: "/employee/capability-lead/talent-discussions", label: "Talent Discussions", Icon: MessageCircle },
+          ]
+        });
+      }
+
+      if (userRoles.deliveryLead) {
+        roleSpecificRoutes.push({
+          href: "/employee/delivery-lead",
+          label: "Delivery lead",
+          Icon: BringToFront,
+          subRoutes: [
+            { href: "/employee/delivery-lead/proyectos", label: "Proyectos", Icon: Folder },
+            { href: "/employee/delivery-lead/equipos", label: "Empleados equipos", Icon: Users },
+          ]
+        });
+      }
+
+      if (userRoles.peopleLead) {
+        roleSpecificRoutes.push({
+          href: "/employee/people-lead",
+          label: "People lead",
+          Icon: Album,
+          subRoutes: [
+            { href: "/employee/people-lead/validarCursos", label: "Validar certificados", Icon: Folder },
+            { href: "/employee/people-lead/talent-discussions", label: "Talent Discussions", Icon: MessageCircle },
+          ]
+        });
+      }
+
+      if (userRoles.talentLead) {
+        roleSpecificRoutes.push({
+          href: "/employee/talent-lead",
+          label: "Talent lead",
+          Icon: Diamond
+        });
+      }
+
+      // Combinar rutas base con las específicas por rol
+      setRoutes([...baseRoutes, ...roleSpecificRoutes]);
+      setLoading(false);
+    };
+
+    fetchSession();
+  }, []);
+
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-screen">Cargando...</div>;
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar routes={routes} />
-      <main className="flex-1 p-6">{children}</main>
+      <main className="flex-1 p-6 overflow-auto">{children}</main>
     </div>
   );
 }
