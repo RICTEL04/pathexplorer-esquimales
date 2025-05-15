@@ -363,10 +363,10 @@ CREATE TABLE IF NOT EXISTS "public"."Metas" (
     "Descripcion" character varying,
     "Fecha_limite" "date",
     "ID_Empleado" "uuid" NOT NULL,
-    "ID_Revisor" "uuid" NOT NULL,
     "Registrada" boolean,
     "Estado" character varying,
-    "Self_Reflection" character varying
+    "Self_Reflection" character varying,
+    "Fecha_Inicio" "date"
 );
 
 
@@ -422,7 +422,7 @@ CREATE TABLE IF NOT EXISTS "public"."Revisor_Meta" (
     "ID_Revisor" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_EmpleadoRevisor" "uuid",
     "ID_meta" "uuid",
-    "ID_empleado" "uuid",
+    "ID_Empleado" "uuid",
     "Retroalimentacion" character varying
 );
 
@@ -714,11 +714,6 @@ ALTER TABLE ONLY "public"."Metas"
 
 
 
-ALTER TABLE ONLY "public"."Metas"
-    ADD CONSTRAINT "Metas_ID_Revisor_fkey" FOREIGN KEY ("ID_Revisor") REFERENCES "public"."People_lead"("ID");
-
-
-
 ALTER TABLE ONLY "public"."People_lead"
     ADD CONSTRAINT "People_lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
@@ -760,7 +755,7 @@ ALTER TABLE ONLY "public"."Revisor_Meta"
 
 
 ALTER TABLE ONLY "public"."Revisor_Meta"
-    ADD CONSTRAINT "Revisor_Meta_ID_empleado_fkey" FOREIGN KEY ("ID_empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+    ADD CONSTRAINT "Revisor_Meta_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
@@ -802,9 +797,6 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
-
-
-ALTER TABLE "public"."Revisor_Meta" ENABLE ROW LEVEL SECURITY;
 
 
 
@@ -1107,6 +1099,11 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puesto_proyecto" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puesto_proyecto" TO "anon";
+
+
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Revisor_Meta" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Revisor_Meta" TO "anon";
 
 
 
