@@ -75,7 +75,7 @@ export default function PerfilesDeEmpleadosPage() {
   ];
 
   const mapEmployeeData = (employee: Empleado) => ({
-    id: Number(employee.ID_Empleado),
+    id: employee.ID_Empleado, // Keep as string instead of converting to number
     name: employee.Nombre,
     position: employee.Rol,
     email: "", 
