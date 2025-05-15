@@ -1,9 +1,23 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend
+} from "recharts";
 import { Star } from "lucide-react";
 
 const workData = [
@@ -38,22 +52,28 @@ function StarRating({ rating }: { rating: number }) {
 
 export default function EmployeeDashboard() {
   return (
-    <div className="min-h-screen bg-[#f9fafb] p-8">
-      <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+    <div className="min-h-screen bg-[#f9fafb] p-8 font-sans text-gray-800 dark:bg-zinc-900 dark:text-gray-200">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Dashboard de Empleado</h1>
+        <p className="text-muted-foreground">Resumen general de actividades y desempeño</p>
+      </div>
+
+      <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
 
         {/* Perfil */}
-        <Card className="col-span-full shadow-md rounded-sm">
+        <Card className="col-span-full shadow-lg rounded-2xl transition-shadow hover:shadow-xl border border-gray-200 bg-white dark:bg-zinc-800">
           <CardContent className="flex items-center justify-between p-6">
             <div>
               <h2 className="text-2xl font-semibold">Jorge Betanzo</h2>
               <p className="text-muted-foreground mt-1">Desarrollador Backend - Nivel 8</p>
             </div>
-            <Badge className="text-lg px-4 py-2" variant="default">Nivel 8</Badge>
+            <Badge className="text-sm bg-indigo-100 text-indigo-700 rounded-full px-4 py-1">Nivel 8</Badge>
           </CardContent>
         </Card>
 
         {/* Estado de Cursos */}
-        <Card className="shadow-md rounded-sm">
+        <Card className="shadow-lg rounded-2xl transition-shadow hover:shadow-xl border border-gray-200 bg-white dark:bg-zinc-800">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold mb-4">Estado de Cursos</h3>
             <ResponsiveContainer width="100%" height={250}>
@@ -65,7 +85,7 @@ export default function EmployeeDashboard() {
                   cx="50%"
                   cy="50%"
                   outerRadius={80}
-                  label
+                  label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
                 >
                   {courseData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -79,7 +99,7 @@ export default function EmployeeDashboard() {
         </Card>
 
         {/* Progreso en Cursos */}
-        <Card className="shadow-md rounded-sm">
+        <Card className="shadow-lg rounded-2xl transition-shadow hover:shadow-xl border border-gray-200 bg-white dark:bg-zinc-800">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold mb-4">Progreso en Cursos</h3>
             <div className="space-y-4">
@@ -96,7 +116,7 @@ export default function EmployeeDashboard() {
         </Card>
 
         {/* Historial de Roles */}
-        <Card className="shadow-md rounded-sm">
+        <Card className="shadow-lg rounded-2xl transition-shadow hover:shadow-xl border border-gray-200 bg-white dark:bg-zinc-800">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold mb-4">Historial de Roles</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
@@ -109,7 +129,7 @@ export default function EmployeeDashboard() {
         </Card>
 
         {/* Evaluaciones */}
-        <Card className="shadow-md rounded-sm">
+        <Card className="shadow-lg rounded-2xl transition-shadow hover:shadow-xl border border-gray-200 bg-white dark:bg-zinc-800">
           <CardContent className="pt-4 px-6 pb-6">
             <h3 className="text-lg font-semibold mb-2">Evaluaciones Recientes</h3>
             <ul className="space-y-4">
@@ -135,9 +155,8 @@ export default function EmployeeDashboard() {
           </CardContent>
         </Card>
 
-
         {/* Gráfica de Trabajo */}
-        <Card className="col-span-full shadow-md rounded-sm">
+        <Card className="col-span-full shadow-lg rounded-2xl transition-shadow hover:shadow-xl border border-gray-200 bg-white dark:bg-zinc-800">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold mb-4">Tareas Completadas por Año</h3>
             <ResponsiveContainer width="100%" height={300}>
@@ -152,6 +171,11 @@ export default function EmployeeDashboard() {
         </Card>
 
       </div>
+
+      {/* Footer */}
+      <footer className="mt-10 text-sm text-muted-foreground text-center">
+        Última actualización: Mayo 2025
+      </footer>
     </div>
   );
 }
