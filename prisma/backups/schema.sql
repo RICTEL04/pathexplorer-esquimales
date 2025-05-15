@@ -396,10 +396,11 @@ CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
     "Nombre" "text" NOT NULL,
     "ID_Cliente" "uuid",
     "Descripcion" "text",
-    "Status" "text",
+    "Status" "text" DEFAULT 'active'::"text" NOT NULL,
     "ID_DeliveryLead" "uuid",
     "fecha_inicio" "date",
-    "fecha_fin" "date"
+    "fecha_fin" "date",
+    CONSTRAINT "Proyectos_Status_check" CHECK (("Status" = ANY (ARRAY['active'::"text", 'inactive'::"text", 'pending'::"text"])))
 );
 
 
