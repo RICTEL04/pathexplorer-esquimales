@@ -7,10 +7,17 @@ interface MetaModalProps {
   isOpen: boolean;
   onClose: () => void;
   employeeID: string;
-  onMetaAdded: () => void; // Función para actualizar la lista de metas después de agregar
+  onMetaAdded: () => void;
+  metaToEdit?: Meta | null; // Nueva prop para la meta a editar
 }
 
-export default function AddMetaModal({ isOpen, onClose, employeeID, onMetaAdded }: MetaModalProps) {
+export default function AddMetaModal({ 
+  isOpen, 
+  onClose, 
+  employeeID, 
+  onMetaAdded,
+  metaToEdit // Recibimos la meta a editar (opcional)
+}: MetaModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,9 +26,13 @@ export default function AddMetaModal({ isOpen, onClose, employeeID, onMetaAdded 
   const handleSubmit = async (newMeta: Meta) => {
     try {
       setLoading(true);
-      await insertMeta(newMeta);
-      onMetaAdded(); // Actualizar la lista de metas
-      onClose(); // Cerrar el modal
+      // Usamos upsertMeta que maneja tanto insert como update
+      await insertMeta({
+        ...newMeta,
+        ID_meta: metaToEdit?.ID_meta ?? null // Pasamos el ID si estamos editando
+      });
+      onMetaAdded();
+      onClose();
     } catch (err) {
       console.error("Error al guardar la meta:", err);
       setError("No se pudo guardar la meta. Por favor intenta de nuevo.");
@@ -31,10 +42,9 @@ export default function AddMetaModal({ isOpen, onClose, employeeID, onMetaAdded 
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-3xl bg-white rounded-lg shadow-xl overflow-hidden">
-        <div className="relative">
-          {/* Botón para cerrar */}
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-3xl h-full bg-white rounded-lg shadow-xl overflow-hidden">
+        <div className="relative h-full overflow-y-auto p-6">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
@@ -45,7 +55,6 @@ export default function AddMetaModal({ isOpen, onClose, employeeID, onMetaAdded 
             </svg>
           </button>
           
-          {/* Mensaje de carga */}
           {loading && (
             <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-10">
               <div className="flex items-center space-x-2">
@@ -58,7 +67,6 @@ export default function AddMetaModal({ isOpen, onClose, employeeID, onMetaAdded 
             </div>
           )}
           
-          {/* Mensaje de error */}
           {error && (
             <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
               <div className="flex">
@@ -74,11 +82,11 @@ export default function AddMetaModal({ isOpen, onClose, employeeID, onMetaAdded 
             </div>
           )}
           
-          {/* Formulario */}
           <AddMetaForm
             employeeID={employeeID}
             onSubmit={handleSubmit}
             onCancel={onClose}
+            metaToEdit={metaToEdit} // Pasamos la meta a editar al formulario
           />
         </div>
       </div>

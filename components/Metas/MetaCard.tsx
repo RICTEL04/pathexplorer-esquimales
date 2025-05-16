@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {Meta, Revisor_Meta}from "@/lib/metas-empleados/metasDefinitions";
 
-export default function MetaCard({ meta, onEdit }: { meta: Meta; onEdit?: () => void }) {
+export default function MetaCard({ meta, onEdit }: { meta: Meta; onEdit?: (meta: Meta) => void }) {
   const [showDetails, setShowDetails] = useState(false);
 
   const formatDate = (date: Date | null) => {
@@ -51,7 +51,7 @@ export default function MetaCard({ meta, onEdit }: { meta: Meta; onEdit?: () => 
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
-                    onEdit();
+                    onEdit(meta);
                   }}
                   className="p-1 text-gray-500 hover:text-blue-500 transition-colors"
                   aria-label="Editar meta"
@@ -118,7 +118,7 @@ export default function MetaCard({ meta, onEdit }: { meta: Meta; onEdit?: () => 
 
       {/* Modal de detalles */}
       {showDetails && (
-        <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/80 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div 
             className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
@@ -206,7 +206,7 @@ export default function MetaCard({ meta, onEdit }: { meta: Meta; onEdit?: () => 
                   <button
                     onClick={() => {
                       setShowDetails(false);
-                      onEdit();
+                      onEdit(meta);
                     }}
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
                   >

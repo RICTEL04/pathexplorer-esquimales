@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Meta from "@/lib/metas-empleados/metasDefinitions";
 import MetaCard from './MetaCard';
 
-export default function MetaCards({ metas, tituloTipo }: { metas: Meta[], tituloTipo: string }) {
+export default function MetaCards({ metas, tituloTipo, onEdit }: { metas: Meta[], tituloTipo: string, onEdit?: (meta: Meta) => void }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const maxVisibleDots = 7;
 
@@ -102,7 +102,10 @@ export default function MetaCards({ metas, tituloTipo }: { metas: Meta[], titulo
         <div className="flex transition-transform duration-300 ease-in-out">
           {visibleMetas.map((meta) => (
             <div key={meta.ID_meta} className="w-full flex-shrink-0">
-              <MetaCard meta={meta} />
+              <MetaCard 
+                meta={meta} 
+                onEdit={onEdit ? () => onEdit(meta) : undefined} 
+              />
             </div>
           ))}
         </div>

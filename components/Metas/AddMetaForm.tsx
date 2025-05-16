@@ -6,24 +6,30 @@ interface AddMetaFormProps {
   employeeID: string;
   onSubmit: (meta: Meta) => Promise<void>;
   onCancel: () => void;
+  metaToEdit?: Meta | null; // Nueva prop para la meta a editar
 }
 
-export default function AddMetaForm({ employeeID, onSubmit, onCancel }: AddMetaFormProps) {
+export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit }: AddMetaFormProps) {
   const tipoMetaOptions = ['capability', 'proyecto', 'colaborador/empleado', 'curso/certificacion', 'Otro'];
   const plazoOptions = ['Corto', 'Mediano', 'Largo'];
   
-  const [formData, setFormData] = useState<Omit<Meta, 'ID_meta' | 'Revisores'> & { selectedRevisores: string[] }>({
-    Nombre: '',
-    Tipo_Meta: tipoMetaOptions[0],
-    Plazo: plazoOptions[0],
-    Descripcion: '',
-    Fecha_Inicio: new Date(),
-    Fecha_limite: new Date(),
+  // Estado inicial basado en si estamos editando o creando nueva
+  const [formData, setFormData] = useState<Omit<Meta, 'ID_meta' | 'Revisores'> & { 
+    revisor1: string;
+    revisor2: string;
+  }>({
+    Nombre: metaToEdit?.Nombre || '',
+    Tipo_Meta: metaToEdit?.Tipo_Meta || tipoMetaOptions[0],
+    Plazo: metaToEdit?.Plazo || plazoOptions[0],
+    Descripcion: metaToEdit?.Descripcion || '',
+    Fecha_Inicio: metaToEdit?.Fecha_Inicio ? new Date(metaToEdit.Fecha_Inicio) : new Date(),
+    Fecha_limite: metaToEdit?.Fecha_limite ? new Date(metaToEdit.Fecha_limite) : new Date(),
     ID_Empleado: employeeID,
-    Registrada: false,
-    Estado: 'Pendiente',
-    Self_Reflection: null,
-    selectedRevisores: []
+    Registrada: metaToEdit?.Registrada || false,
+    Estado: metaToEdit?.Estado || 'Pendiente',
+    Self_Reflection: metaToEdit?.Self_Reflection || null,
+    revisor1: metaToEdit?.Revisores?.[0]?.ID_EmpleadoRevisor || '',
+    revisor2: metaToEdit?.Revisores?.[1]?.ID_EmpleadoRevisor || ''
   });
 
   const [revisores, setRevisores] = useState<Empleado[]>([]);
@@ -65,33 +71,48 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel }: AddMetaF
   };
 
   const handleRevisorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
-    setFormData({
-      ...formData,
-      selectedRevisores: selectedOptions
-    });
+    const { name, value } = e.target;
+    
+    // Si estamos quitando el primer revisor, también quitamos el segundo
+    if (name === 'revisor1' && value === '' && formData.revisor2 !== '') {
+      setFormData({
+        ...formData,
+        revisor1: '',
+        revisor2: ''
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
-      // Crear los objetos Revisor_Meta basados en los IDs seleccionados
-      const selectedRevisoresObjects: Revisor_Meta[] = formData.selectedRevisores.map(revisorId => {
+      const selectedRevisorIds = [formData.revisor1, formData.revisor2].filter(id => id !== '');
+      
+      if (selectedRevisorIds.length === 0) {
+        setError('Debes seleccionar al menos un revisor');
+        return;
+      }
+      
+      const selectedRevisoresObjects: Revisor_Meta[] = selectedRevisorIds.map(revisorId => {
         const revisor = revisores.find(r => r.ID_Empleado === revisorId);
         return {
-          ID_Revisor: '', // Se generará automáticamente en la BD
+          ID_Revisor: '', // Se generará/actualizará automáticamente
           ID_EmpleadoRevisor: revisorId,
-          ID_meta: '', // Se asignará después de crear la meta
+          ID_meta: metaToEdit?.ID_meta || '', // Usamos el ID existente si estamos editando
           ID_Empleado: employeeID,
           Retroalimentacion: null,
           Nombre: revisor?.Nombre || 'Sin nombre'
         };
       });
       
-      // Crear el objeto Meta completo para enviar
       const newMeta: Meta = {
-        ID_meta: '', // Se generará automáticamente en la BD
+        ID_meta: metaToEdit?.ID_meta || '', // Pasamos el ID si estamos editando
         Nombre: formData.Nombre,
         Tipo_Meta: formData.Tipo_Meta,
         Plazo: formData.Plazo,
@@ -107,7 +128,7 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel }: AddMetaF
       
       await onSubmit(newMeta);
     } catch (err) {
-      setError('Error al crear la meta');
+      setError('Error al guardar la meta');
       console.error(err);
     }
   };
@@ -118,7 +139,7 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel }: AddMetaF
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
+    <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto ">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Agregar Nueva Meta</h2>
       
       {error && (
@@ -234,34 +255,67 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel }: AddMetaF
           </div>
         </div>
         
-        {/* Revisores - Multi-select dropdown */}
-        <div>
-          <label htmlFor="revisores" className="block text-sm font-medium text-gray-700 mb-1">
-            Revisores
-          </label>
-          <select
-            id="revisores"
-            name="revisores"
-            multiple
-            value={formData.selectedRevisores}
-            onChange={handleRevisorChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-32"
-          >
-            {loading ? (
-              <option disabled>Cargando revisores...</option>
-            ) : (
-              revisores
-                .filter(revisor => revisor.ID_Empleado !== employeeID) // Filtrar al empleado actual
-                .map((revisor) => (
-                  <option key={revisor.ID_Empleado} value={revisor.ID_Empleado}>
-                    {revisor.Nombre}
-                  </option>
-                ))
-            )}
-          </select>
-          <p className="text-xs text-gray-500 mt-1">
-            Mantén presionada la tecla Ctrl (o Cmd en Mac) para seleccionar múltiples revisores.
-          </p>
+        {/* Revisores - Two single-select dropdowns */}
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="revisor1" className="block text-sm font-medium text-gray-700 mb-1">
+              Revisor Principal *
+            </label>
+            <select
+              id="revisor1"
+              name="revisor1"
+              value={formData.revisor1}
+              onChange={handleRevisorChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Seleccionar revisor principal</option>
+              {loading ? (
+                <option disabled>Cargando revisores...</option>
+              ) : (
+                revisores
+                  .filter(revisor => 
+                    revisor.ID_Empleado !== employeeID && // Filtrar al empleado actual
+                    revisor.ID_Empleado !== formData.revisor2 // Filtrar revisor ya seleccionado en la opción 2
+                  )
+                  .map((revisor) => (
+                    <option key={revisor.ID_Empleado} value={revisor.ID_Empleado}>
+                      {revisor.Nombre}
+                    </option>
+                  ))
+              )}
+            </select>
+          </div>
+          
+          <div>
+            <label htmlFor="revisor2" className="block text-sm font-medium text-gray-700 mb-1">
+              Revisor Secundario (Opcional)
+            </label>
+            <select
+              id="revisor2"
+              name="revisor2"
+              value={formData.revisor2}
+              onChange={handleRevisorChange}
+              disabled={!formData.revisor1} // Deshabilitar si no hay revisor principal
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-500"
+            >
+              <option value="">Sin revisor secundario</option>
+              {loading ? (
+                <option disabled>Cargando revisores...</option>
+              ) : (
+                revisores
+                  .filter(revisor => 
+                    revisor.ID_Empleado !== employeeID && // Filtrar al empleado actual
+                    revisor.ID_Empleado !== formData.revisor1 // Filtrar revisor ya seleccionado en la opción 1
+                  )
+                  .map((revisor) => (
+                    <option key={revisor.ID_Empleado} value={revisor.ID_Empleado}>
+                      {revisor.Nombre}
+                    </option>
+                  ))
+              )}
+            </select>
+          </div>
         </div>
         
         {/* Estado - Oculto, se establece automáticamente como "Pendiente" */}

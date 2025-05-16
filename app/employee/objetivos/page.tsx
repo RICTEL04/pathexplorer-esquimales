@@ -9,6 +9,7 @@ import { getEmployeeFullData } from '@/lib/employeeService';
 
 export default function ObjetivosPage() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [metaToEdit, setMetaToEdit] = useState<Meta | null>(null);
   const [loading, setLoading] = useState(true);
   const [metas, setMetas] = useState<Meta[]>([]);
   const [employee, setEmployee] = useState<EmployeeFullData>();
@@ -25,6 +26,12 @@ export default function ObjetivosPage() {
     certificacion: [],
     otro: []
   });
+
+  // Función para manejar la edición
+  const handleEditMeta = (meta: Meta) => {
+    setMetaToEdit(meta);
+    setMostrarFormulario(true);
+  };
 
   const handleSuccess = async () => {
     // Recargar las metas después de crear una nueva
@@ -106,6 +113,7 @@ export default function ObjetivosPage() {
             <MetaCards 
               metas={metasFiltradas.capability}
               tituloTipo="Capability"
+              onEdit={handleEditMeta}
             />
           </div>
 
@@ -115,6 +123,7 @@ export default function ObjetivosPage() {
             <MetaCards 
               metas={metasFiltradas.proyecto} 
               tituloTipo="Proyectos"
+              onEdit={handleEditMeta}
             />
           </div>
 
@@ -124,6 +133,7 @@ export default function ObjetivosPage() {
             <MetaCards 
               metas={metasFiltradas.colaborador} 
               tituloTipo="Colaborador/Empleado"
+              onEdit={handleEditMeta}
             />
           </div>
 
@@ -133,6 +143,7 @@ export default function ObjetivosPage() {
             <MetaCards 
               metas={metasFiltradas.certificacion} 
               tituloTipo="Cursos/Certificaciones"
+              onEdit={handleEditMeta}
             />
           </div>
 
@@ -142,6 +153,7 @@ export default function ObjetivosPage() {
             <MetaCards 
               metas={metasFiltradas.otro} 
               tituloTipo="Otros"
+              onEdit={handleEditMeta}
             />
           </div>
         </div>
@@ -165,12 +177,15 @@ export default function ObjetivosPage() {
         <AddMetaModal
           isOpen={mostrarFormulario}
           employeeID={employee?.ID_Empleado ?? ""}
-          onClose={() => setMostrarFormulario(false)}
+          onClose={() => {
+            setMostrarFormulario(false);
+            setMetaToEdit(null); // Limpiar la meta a editar al cerrar
+          }}
           onMetaAdded={handleSuccess}
+          metaToEdit={metaToEdit} // Pasar la meta a editar
         />
       )}
-
-
+  
     </div>
 
   );

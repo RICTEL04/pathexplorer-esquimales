@@ -15,7 +15,7 @@ export interface Revisor_Meta {
 }
 
 export interface Meta {
-  ID_meta: string;
+  ID_meta: string | null;
   Nombre: string;
   Tipo_Meta: string;
   Plazo: string;
