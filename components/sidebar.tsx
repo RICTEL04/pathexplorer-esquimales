@@ -65,7 +65,7 @@ export default function Sidebar({ routes }: SidebarProps) {
         <div>
           <div className="flex items-center justify-between mb-4">
             <button
-              className="p-2 rounded-md bg-violet-800 text-white"
+              className="p-2 rounded-md bg-purple-600 text-white"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             >
               <Menu className="w-5 h-5" />
