@@ -1,17 +1,26 @@
 "use client";
+import { useState, useEffect } from "react";
 import MetaCards from "@/components/Metas/MetaCards";
 import Meta from "@/lib/metas-empleados/metasDefinitions";
-import { useState, useEffect } from "react";
-import { fetchSession, fetchMetas, updateMeta, insertMeta } from "@/lib/metas-empleados/apiCallsMetas";
+import { fetchSession, fetchMetas, fetchMetasAsRevisor } from "@/lib/metas-empleados/apiCallsMetas";
 import AddMetaModal from '@/components/Metas/AddMetaModal';
 import { EmployeeFullData } from "@/lib/employeeService";
 import { getEmployeeFullData } from '@/lib/employeeService';
+import DeleteMetaModal from "@/components/Metas/DeleteMetaModal";
+import RevisorMetaCards from "@/components/Metas/RevisorMetaCards";
 
 export default function ObjetivosPage() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+
+
   const [metaToEdit, setMetaToEdit] = useState<Meta | null>(null);
+  const [mostrarDelete, setMostrarDelete] = useState(false);
+  const [metaToDelete, setMetaToDelete] = useState<Meta | null>(null);
+
+
   const [loading, setLoading] = useState(true);
   const [metas, setMetas] = useState<Meta[]>([]);
+  const [metasRevisor, setMetasRevisor] = useState<Meta[]>([]);
   const [employee, setEmployee] = useState<EmployeeFullData>();
   const [metasFiltradas, setMetasFiltradas] = useState<{
     capability: Meta[];
@@ -27,14 +36,17 @@ export default function ObjetivosPage() {
     otro: []
   });
 
-  // Función para manejar la edición
+  const handleDeleteMeta = (meta: Meta) => {
+    setMetaToDelete(meta);
+    setMostrarDelete(true);
+  }
+
   const handleEditMeta = (meta: Meta) => {
     setMetaToEdit(meta);
     setMostrarFormulario(true);
   };
 
   const handleSuccess = async () => {
-    // Recargar las metas después de crear una nueva
     const session = await fetchSession(setLoading);
     if (session) {
       const metasActualizadas = await fetchMetas(session.user.id, setLoading);
@@ -42,6 +54,18 @@ export default function ObjetivosPage() {
         setMetas(metasActualizadas);
         categorizarMetas(metasActualizadas);
       }
+    }
+  };
+  
+  const handleSuccessRevision = async () => {
+    const session = await fetchSession(setLoading);
+    if (session) {
+      const metasRevisorActualizadas = await fetchMetasAsRevisor(session.user.id, setLoading);
+
+      if(metasRevisorActualizadas) {
+        setMetasRevisor(metasRevisorActualizadas);
+      }
+
     }
   };
 
@@ -62,6 +86,10 @@ export default function ObjetivosPage() {
             setEmployee(employeeData);
           }
 
+          const metasRevisorData = await fetchMetasAsRevisor(session.user.id, setLoading);
+          if (metasRevisorData) {
+            setMetasRevisor(metasRevisorData);
+          }
         }
       } catch (error) {
         console.error("Error:", error);
@@ -75,10 +103,10 @@ export default function ObjetivosPage() {
   const categorizarMetas = (metas: Meta[]) => {
     const categorias = {
       capability: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('capability')),
-      proyecto: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('proyecto') ),
-      colaborador: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('colaborador/empleado') ),
-      certificacion: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('curso/certificacion') ),
-      otro: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('otro') ),
+      proyecto: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('proyecto')),
+      colaborador: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('colaborador/empleado')),
+      certificacion: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('curso/certificacion')),
+      otro: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('otro')),
     };
     setMetasFiltradas(categorias);
   };
@@ -92,101 +120,146 @@ export default function ObjetivosPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen max-h-screen overflow-hidden p-4 gap-4">
-      <h1 className="text-gray-800 text-2xl font-bold mb-4">Objetivos</h1>
-      <p className="text-gray-600">Aquí puedes gestionar tus objetivos.</p>
-
-      <button 
-        onClick={() => setMostrarFormulario(true)}
-        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-      >
-        Agregar Meta
-      </button>
-
-      {/* Sección superior (Categorías de Metas) */}
-      <div className="flex-[3] bg-yellow-200 rounded-lg shadow-md overflow-y-auto p-4">
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Capability */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center  ">Capability</h2>
-            <MetaCards 
-              metas={metasFiltradas.capability}
-              tituloTipo="Capability"
-              onEdit={handleEditMeta}
-            />
-          </div>
-
-          {/* Proyectos */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">Proyectos</h2>
-            <MetaCards 
-              metas={metasFiltradas.proyecto} 
-              tituloTipo="Proyectos"
-              onEdit={handleEditMeta}
-            />
-          </div>
-
-          {/* Colaborador/Empleado */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">Colaborador/Empleado</h2>
-            <MetaCards 
-              metas={metasFiltradas.colaborador} 
-              tituloTipo="Colaborador/Empleado"
-              onEdit={handleEditMeta}
-            />
-          </div>
-
-          {/* Cursos/Certificaciones */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">Cursos/Certificaciones</h2>
-            <MetaCards 
-              metas={metasFiltradas.certificacion} 
-              tituloTipo="Cursos/Certificaciones"
-              onEdit={handleEditMeta}
-            />
-          </div>
-
-          {/* Otros */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center ">Otros</h2>
-            <MetaCards 
-              metas={metasFiltradas.otro} 
-              tituloTipo="Otros"
-              onEdit={handleEditMeta}
-            />
-          </div>
-        </div>
-
-
-        
+    <div className="container mx-auto px-4 py-6">
+      <div className="mb-6">
+        <h1 className="text-gray-800 text-2xl font-bold mb-2">Objetivos</h1>
+        <p className="text-gray-600">Aquí puedes gestionar tus objetivos.</p>
       </div>
 
-      {/* Sección inferior (azul) */}
-      <div className="flex-[2] bg-blue-200 rounded-lg shadow-md overflow-x-auto">
-        <div className="flex space-x-4 p-4 min-w-max">
-          {Array.from({ length: 20 }).map((_, index) => (
-            <div key={index} className="flex-shrink-0 w-64 h-full p-4 bg-blue-100 rounded-lg">
-              Card {index + 1}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Sección principal de metas */}
+        <div className="w-full lg:w-3/4 flex flex-col gap-6">
+          <div className="flex justify-between items-center">
+            <button 
+              onClick={() => setMostrarFormulario(true)}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+            >
+              Agregar Meta
+            </button>
+          </div>
+
+          {/* Categorías de Metas */}
+          <div className="bg-purple-500 rounded-lg shadow-md p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {/* Capability */}
+              <div className="bg-white rounded-lg shadow p-3">
+                <h2 className="text-sm font-semibold text-gray-800 mb-2 text-center">Capability</h2>
+                <div className="overflow-y-auto max-h-64">
+                  <MetaCards 
+                    metas={metasFiltradas.capability}
+                    tituloTipo="Capability"
+                    onEdit={handleEditMeta}
+                    onDelete={handleDeleteMeta}
+                  />
+                </div>
+              </div>
+
+              {/* Proyectos */}
+              <div className="bg-white rounded-lg shadow p-3">
+                <h2 className="text-sm font-semibold text-gray-800 mb-2 text-center">Proyectos</h2>
+                <div className="overflow-y-auto max-h-64">
+                  <MetaCards 
+                    metas={metasFiltradas.proyecto} 
+                    tituloTipo="Proyectos"
+                    onEdit={handleEditMeta}
+                    onDelete={handleDeleteMeta}
+                  />
+                </div>
+              </div>
+
+              {/* Colaborador/Empleado */}
+              <div className="bg-white rounded-lg shadow p-3">
+                <h2 className="text-sm font-semibold text-gray-800 mb-2 text-center">Colaborador</h2>
+                <div className="overflow-y-auto max-h-64">
+                  <MetaCards 
+                    metas={metasFiltradas.colaborador} 
+                    tituloTipo="Colaborador/Empleado"
+                    onEdit={handleEditMeta}
+                    onDelete={handleDeleteMeta}
+                  />
+                </div>
+              </div>
+
+              {/* Cursos/Certificaciones */}
+              <div className="bg-white rounded-lg shadow p-3">
+                <h2 className="text-sm font-semibold text-gray-800 mb-2 text-center">Certificaciones</h2>
+                <div className="overflow-y-auto max-h-64">
+                  <MetaCards 
+                    metas={metasFiltradas.certificacion} 
+                    tituloTipo="Cursos/Certificaciones"
+                    onEdit={handleEditMeta}
+                    onDelete={handleDeleteMeta}
+                  />
+                </div>
+              </div>
+
+              {/* Otros */}
+              <div className="bg-white rounded-lg shadow p-3">
+                <h2 className="text-sm font-semibold text-gray-800 mb-2 text-center">Otros</h2>
+                <div className="overflow-y-auto max-h-64">
+                  <MetaCards 
+                    metas={metasFiltradas.otro} 
+                    tituloTipo="Otros"
+                    onEdit={handleEditMeta}
+                    onDelete={handleDeleteMeta}
+                  />
+                </div>
+              </div>
             </div>
-          ))}
+          </div>
+
+          {/* Sección de tarjetas horizontales */}
+          <div className="bg-blue-50 rounded-lg shadow-md p-4">
+            <h2 className="text-sm font-semibold text-gray-800 mb-4">Historial de metas</h2>
+            <div className="overflow-x-auto">
+              <div className="flex space-x-4 pb-2 min-w-max">
+                {Array.from({ length: 20 }).map((_, index) => (
+                  <div key={index} className="flex-shrink-0 w-64 p-4 bg-white rounded-lg shadow">
+                    <h3 className="font-medium">Card {index + 1}</h3>
+                    <p className="text-sm text-gray-600">Información adicional</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sección lateral - Metas como Revisor */}
+        <div className="w-full lg:w-1/4 bg-purple-200 rounded-lg shadow-md p-4">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">Metas como Revisor</h2>
+          <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
+            <RevisorMetaCards
+              metas={metasRevisor}
+              onMetaRevisor={handleSuccessRevision}
+              employeeID={employee?.ID_Empleado ?? ""}
+            />
+          </div>
         </div>
       </div>
 
+      {/* Modales */}
       {mostrarFormulario && (
         <AddMetaModal
           isOpen={mostrarFormulario}
           employeeID={employee?.ID_Empleado ?? ""}
           onClose={() => {
             setMostrarFormulario(false);
-            setMetaToEdit(null); // Limpiar la meta a editar al cerrar
+            setMetaToEdit(null);
           }}
           onMetaAdded={handleSuccess}
-          metaToEdit={metaToEdit} // Pasar la meta a editar
+          metaToEdit={metaToEdit}
         />
       )}
-  
-    </div>
 
+      {mostrarDelete && (
+        <DeleteMetaModal
+          isOpen={mostrarDelete}
+          onClose={() => {setMostrarDelete(false); setMetaToDelete(null);}}
+          employeeID={employee?.ID_Empleado ?? ""}
+          onMetaDeleted={handleSuccess}
+          metaToDelete={metaToDelete}
+        />
+      )}
+    </div>
   );
 }

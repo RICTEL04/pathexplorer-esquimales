@@ -27,6 +27,8 @@ export interface Meta {
   Estado: string;
   Self_Reflection?: string | null;
   Revisores: Revisor_Meta[]; // Lista de revisores asociados
+  NombreEmpleado?: string; // Nombre del empleado (de la tabla Empleados)
 }
+
 
 export default Meta;

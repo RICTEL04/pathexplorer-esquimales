@@ -140,7 +140,7 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto ">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Agregar Nueva Meta</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">{ metaToEdit ? "EditarMeta" : "AgregarMeta" }</h2>
       
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">

@@ -2,9 +2,9 @@ import { useState } from 'react';
 import Meta from "@/lib/metas-empleados/metasDefinitions";
 import MetaCard from './MetaCard';
 
-export default function MetaCards({ metas, tituloTipo, onEdit }: { metas: Meta[], tituloTipo: string, onEdit?: (meta: Meta) => void }) {
+export default function MetaCards({ metas, tituloTipo, onEdit, onDelete }: { metas: Meta[], tituloTipo: string, onEdit?: (meta: Meta) => void, onDelete?: (meta: Meta) => void }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const maxVisibleDots = 7;
+  const maxVisibleDots = 5;
 
   const nextCard = () => {
     setCurrentIndex((prevIndex) => 
@@ -26,7 +26,7 @@ export default function MetaCards({ metas, tituloTipo, onEdit }: { metas: Meta[]
         <button
           key={index}
           onClick={() => setCurrentIndex(index)}
-          className={`w-3 h-3 rounded-full ${index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'}`}
+          className={`w-2 h-2 rounded-full ${index === currentIndex ? 'bg-purple-500' : 'bg-gray-300'}`}
           aria-label={`Ir a meta ${index + 1}`}
         />
       ));
@@ -51,12 +51,12 @@ export default function MetaCards({ metas, tituloTipo, onEdit }: { metas: Meta[]
         <button
           key={0}
           onClick={() => setCurrentIndex(0)}
-          className={`w-3 h-3 rounded-full ${0 === currentIndex ? 'bg-blue-500' : 'bg-gray-300'}`}
+          className={`w-2 h-2 rounded-full ${0 === currentIndex ? 'bg-purple-500' : 'bg-gray-300'}`}
           aria-label="Ir a meta 1"
         />
       );
       if (start > 1) {
-        dots.push(<span key="start-ellipsis" className="px-1">...</span>);
+        dots.push(<span key="start-ellipsis" className="px-1 text-xs">...</span>);
       }
     }
 
@@ -65,7 +65,7 @@ export default function MetaCards({ metas, tituloTipo, onEdit }: { metas: Meta[]
         <button
           key={i}
           onClick={() => setCurrentIndex(i)}
-          className={`w-3 h-3 rounded-full ${i === currentIndex ? 'bg-blue-500' : 'bg-gray-300'}`}
+          className={`w-2 h-2 rounded-full ${i === currentIndex ? 'bg-purple-500' : 'bg-gray-300'}`}
           aria-label={`Ir a meta ${i + 1}`}
         />
       );
@@ -73,13 +73,13 @@ export default function MetaCards({ metas, tituloTipo, onEdit }: { metas: Meta[]
 
     if (end < metas.length - 1) {
       if (end < metas.length - 2) {
-        dots.push(<span key="end-ellipsis" className="px-1">...</span>);
+        dots.push(<span key="end-ellipsis" className="px-1 text-xs">...</span>);
       }
       dots.push(
         <button
           key={metas.length - 1}
           onClick={() => setCurrentIndex(metas.length - 1)}
-          className={`w-3 h-3 rounded-full ${metas.length - 1 === currentIndex ? 'bg-blue-500' : 'bg-gray-300'}`}
+          className={`w-2 h-2 rounded-full ${metas.length - 1 === currentIndex ? 'bg-purple-500' : 'bg-gray-300'}`}
           aria-label={`Ir a meta ${metas.length}`}
         />
       );
@@ -90,21 +90,22 @@ export default function MetaCards({ metas, tituloTipo, onEdit }: { metas: Meta[]
 
   if (metas.length === 0) {
     return (
-      <div className="w-full min-w-[280px] max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 cursor-pointer h-64 flex flex-col items-center justify-center">
-        <p className="text-gray-600 text-center px-4">No hay metas de {tituloTipo.toLowerCase()}</p>
-        <p className="text-sm text-gray-500 mt-2 text-center px-4">Crea una nueva meta para comenzar</p>
+      <div className="w-full bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 cursor-pointer h-48 flex flex-col items-center justify-center">
+        <p className="text-gray-600 text-center px-4 text-sm">No hay metas de {tituloTipo.toLowerCase()}</p>
+        <p className="text-xs text-gray-500 mt-2 text-center px-4">Crea una nueva meta para comenzar</p>
       </div>
     );
   }
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
-      <div className="overflow-hidden">
-        <div className="flex transition-transform duration-300 ease-in-out">
+    <div className="relative w-full h-full">
+      <div className="overflow-hidden h-full">
+        <div className="flex transition-transform duration-300 ease-in-out h-full">
           {visibleMetas.map((meta) => (
-            <div key={meta.ID_meta} className="w-full flex-shrink-0">
+            <div key={meta.ID_meta} className="w-full flex-shrink-0 h-full">
               <MetaCard 
                 meta={meta} 
                 onEdit={onEdit ? () => onEdit(meta) : undefined} 
+                onDelete={onDelete ? () => onDelete(meta) : undefined}
               />
             </div>
           ))}
@@ -115,19 +116,20 @@ export default function MetaCards({ metas, tituloTipo, onEdit }: { metas: Meta[]
         <>
           <button 
             onClick={prevCard}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-gray-100 z-10 border border-gray-200"
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-purple/10 p-1 rounded-full shadow-md hover:bg-purple-300 z-10 border border-gray-200"
             aria-label="Meta anterior"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
+
           <button 
             onClick={nextCard}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-gray-100 z-10 border border-gray-200"
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-purple/10 p-1 rounded-full shadow-md hover:bg-purple-300 z-10 border border-gray-200"
             aria-label="Meta siguiente"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
@@ -135,7 +137,7 @@ export default function MetaCards({ metas, tituloTipo, onEdit }: { metas: Meta[]
       )}
 
       {metas.length > 1 && (
-        <div className="flex justify-center mt-4 space-x-2 items-center">
+        <div className="flex justify-center mt-1 space-x-1 items-center">
           {renderDotIndicators()}
         </div>
       )}

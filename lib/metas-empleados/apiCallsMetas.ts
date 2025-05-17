@@ -191,6 +191,35 @@ export async function fetchRevisores() {
   }
 }
 
+export async function deleteMeta(metaId: string): Promise<void> {
+  try {
+    // 1. Primero eliminamos los revisores asociados a la meta
+    const { error: deleteRevisoresError } = await supabase
+      .from('Revisor_Meta')
+      .delete()
+      .eq('ID_meta', metaId);
+
+    if (deleteRevisoresError) {
+      throw deleteRevisoresError;
+    }
+
+    // 2. Luego eliminamos la meta principal
+    const { error: deleteMetaError } = await supabase
+      .from('Metas')
+      .delete()
+      .eq('ID_meta', metaId);
+
+    if (deleteMetaError) {
+      throw deleteMetaError;
+    }
+
+    console.log(`Meta ${metaId} y sus revisores eliminados correctamente`);
+  } catch (error) {
+    console.error('Error al eliminar la meta:', error);
+    throw new Error('No se pudo eliminar la meta');
+  }
+}
+
 export default {
   fetchSession,
   fetchMetas,
@@ -199,3 +228,198 @@ export default {
   fetchRevisores
 };
 
+// Función para obtener todas las metas donde un empleado es revisor
+export async function fetchMetasAsRevisor(revisorID: string, setLoading: (loading: boolean) => void) {
+  try {
+    // Consulta para obtener todas las metas donde el empleado es revisor
+    const { data, error } = await supabase
+      .from("Revisor_Meta")
+      .select(`
+        *,
+        Metas:Metas(
+          ID_meta,
+          Nombre,
+          Tipo_Meta,
+          Plazo,
+          Descripcion,
+          Fecha_Inicio,
+          Fecha_limite,
+          ID_Empleado,
+          Registrada,
+          Estado,
+          Self_Reflection
+        ),
+        EmpleadoDueno:Empleado!Revisor_Meta_ID_Empleado_fkey(
+          Nombre
+        )
+      `)
+      .eq("ID_EmpleadoRevisor", revisorID);
+
+    if (error) throw error;
+    
+    if (!data || data.length === 0) {
+      return [];
+    }
+
+    // Filtrar las metas según los criterios especificados
+    const metasFiltradas = data.filter(item => {
+      // Si la meta está completada o cancelada Y no hay retroalimentación, excluirla
+      if (
+        (item.Metas.Estado === "Completada" || item.Metas.Estado === "Cancelada") && 
+        item.Retroalimentacion !== null
+      ) {
+        return false;
+      }
+      return true;
+    });
+
+    // Obtener IDs de las metas filtradas
+    const metaIds = metasFiltradas.map(item => item.ID_meta).filter(id => id !== null);
+    
+    if (metaIds.length === 0) {
+      return [];
+    }
+
+    // Obtener todos los revisores para las metas encontradas
+    const { data: revisoresData, error: revisoresError } = await supabase
+      .from("Revisor_Meta")
+      .select(`
+        *,
+        Revisor:Empleado!Revisor_Meta_ID_EmpleadoRevisor_fkey(
+          Nombre
+        )
+      `)
+      .in("ID_meta", metaIds);
+
+    if (revisoresError) throw revisoresError;
+
+    // Agrupar revisores por ID_meta
+    const revisoresPorMeta: Record<string, Revisor_Meta[]> = {};
+    
+    revisoresData?.forEach(r => {
+      if (!revisoresPorMeta[r.ID_meta]) {
+        revisoresPorMeta[r.ID_meta] = [];
+      }
+      
+      revisoresPorMeta[r.ID_meta].push({
+        ID_Revisor: r.ID_Revisor,
+        ID_EmpleadoRevisor: r.ID_EmpleadoRevisor,
+        ID_meta: r.ID_meta,
+        ID_Empleado: r.ID_Empleado,
+        Retroalimentacion: r.Retroalimentacion,
+        Nombre: r.Revisor?.Nombre || 'Sin nombre'
+      });
+    });
+
+    // Transformar los datos al formato Meta[]
+    const metasComoRevisor: Meta[] = metasFiltradas.map(item => {
+      const metaData = item.Metas;
+      
+      return {
+        ID_meta: metaData.ID_meta,
+        Nombre: metaData.Nombre,
+        Tipo_Meta: metaData.Tipo_Meta,
+        Plazo: metaData.Plazo,
+        Descripcion: metaData.Descripcion,
+        Fecha_Inicio: metaData.Fecha_Inicio,
+        Fecha_limite: metaData.Fecha_limite,
+        ID_Empleado: metaData.ID_Empleado,
+        Registrada: metaData.Registrada,
+        Estado: metaData.Estado,
+        Self_Reflection: metaData.Self_Reflection,
+        Revisores: revisoresPorMeta[item.ID_meta] || [],
+        NombreEmpleado: item.EmpleadoDueno?.Nombre || 'Sin nombre'
+      };
+    });
+
+    console.log("Metas como revisor filtradas:", metasComoRevisor);
+    return metasComoRevisor;
+  } catch (error) {
+    console.error("Error fetching metas as revisor:", error);
+    throw error;
+  } finally {
+    setLoading(false);
+  }
+}
+
+export async function updateMetaRegistrada(metaID: string, registrada: boolean) {
+  try {
+    const { data, error } = await supabase
+      .from("Metas")
+      .update({ Registrada: registrada })
+      .eq("ID_meta", metaID)
+      .select();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error updating meta registration status:", error);
+    throw error;
+  }
+}
+
+/**
+ * Actualiza el estado de una meta
+ * @param metaID ID de la meta a actualizar
+ * @param estado Nuevo estado de la meta
+ */
+export async function updateMetaEstado(metaID: string, estado: string) {
+  try {
+    const { data, error } = await supabase
+      .from("Metas")
+      .update({ Estado: estado })
+      .eq("ID_meta", metaID)
+      .select();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error updating meta status:", error);
+    throw error;
+  }
+}
+
+export async function updateMetaRevision(
+  meta: Meta,
+  estado: string,
+  revisorID?: string,
+  retroalimentacion?: string
+) {
+  try {
+    // 1. Actualizar el estado de la meta
+    const { data: metaData, error: metaError } = await supabase
+      .from("Metas")
+      .update({ Estado: estado })
+      .eq("ID_meta", meta.ID_meta)
+      .select();
+
+    if (metaError) {
+      throw metaError;
+    }
+    
+    // 2. Actualizar la retroalimentación del revisor específico
+    const { data: revisorData, error: revisorError } = await supabase
+      .from("Revisor_Meta")
+      .update({ Retroalimentacion: retroalimentacion })
+      .eq("ID_meta", meta.ID_meta)
+      .eq("ID_EmpleadoRevisor", revisorID)
+      .select();
+      
+    if (revisorError) {
+      throw revisorError;
+    }
+    
+    // Verificar si se actualizó correctamente el revisor
+    if (!revisorData || revisorData.length === 0) {
+      throw new Error("No se encontró el registro del revisor para actualizar");
+    }
+    
+    return {
+      meta: metaData?.[0],
+      revisor: revisorData[0]
+    };
+  } catch (error) {
+    console.error("Error updating meta revision:", error);
+    throw error;
+  }
+}
