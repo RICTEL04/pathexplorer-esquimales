@@ -307,7 +307,8 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado_Proyectos" (
     "ID_Empleado" "uuid" NOT NULL,
     "ID_Proyecto" "uuid" NOT NULL,
     "isApproved" boolean DEFAULT false,
-    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "isReviewed" boolean DEFAULT false NOT NULL
 );
 
 
@@ -400,6 +401,7 @@ CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
     "ID_DeliveryLead" "uuid",
     "fecha_inicio" "date",
     "fecha_fin" "date",
+    "isReviewed" boolean DEFAULT false NOT NULL,
     CONSTRAINT "Proyectos_Status_check" CHECK (("Status" = ANY (ARRAY['active'::"text", 'inactive'::"text", 'pending'::"text", 'done'::"text"])))
 );
 
@@ -766,7 +768,7 @@ ALTER TABLE ONLY "public"."Revisor_Meta"
 
 
 ALTER TABLE ONLY "public"."Roles"
-    ADD CONSTRAINT "Roles_Proyecto_id_fkey" FOREIGN KEY ("Proyecto_id") REFERENCES "public"."Proyectos"("ID_Proyecto");
+    ADD CONSTRAINT "Roles_Proyecto_id_fkey" FOREIGN KEY ("Proyecto_id") REFERENCES "public"."Proyectos"("ID_Proyecto") ON DELETE CASCADE;
 
 
 
