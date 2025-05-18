@@ -8,6 +8,7 @@ export async function getEmpleados() {
       Nombre,
       Rol,
       Nivel,
+      FechaContratacion,
       Certificados (
         ID_Certificado,
         Nombre,
@@ -16,7 +17,19 @@ export async function getEmpleados() {
         Verificacion,
         Descripcion
       ),
-      Departamento:ID_Departamento (
+      Puesto_proyecto (
+        id,
+        created_at,
+        Puesto,
+        Proyectos (
+          ID_Proyecto,
+          fecha_inicio,
+          fecha_fin,
+          Nombre,
+          Descripcion
+        )
+      ),
+      Departamento (
         Nombre,
         Descripcion
       )
@@ -27,6 +40,10 @@ export async function getEmpleados() {
   return data?.map((empleado) => ({
     ...empleado,
     Departamento: empleado.Departamento || { Nombre: "Sin departamento", Descripcion: "" }, // Manejar departamentos nulos
+    Puesto_proyecto: empleado.Puesto_proyecto?.map((puesto) => ({
+      ...puesto,
+      Proyectos: puesto.Proyectos || [], // Manejar proyectos nulos
+    })) || [], // Manejar puesto_proyecto nulo
   })) || [];
 }
 
@@ -50,10 +67,3 @@ export async function handlePeopleLeadActions(employeeId: string) {
     return { success: false, error };
   }
 }
-
-
-
-
-
-
-
