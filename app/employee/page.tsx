@@ -7,7 +7,6 @@ import { getEmpleados } from "@/lib/empleadoService";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 import { Star } from "lucide-react";
 
-// Componentes personalizados
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return <div className={`bg-white shadow-md rounded-md ${className}`}>{children}</div>;
 }
@@ -73,7 +72,6 @@ export default function EmployeeDashboard() {
   useEffect(() => {
     const fetchUserAndData = async () => {
       try {
-        // Obtener la sesión del usuario logueado
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
         if (sessionError) throw sessionError;
 
@@ -98,11 +96,17 @@ export default function EmployeeDashboard() {
     return <div>Cargando datos...</div>;
   }
 
-  // Datos dinámicos
-  const workData = selectedEmpleado.Certificados.map((cert, index) => ({
-    year: `${new Date().getFullYear() - 4 + index}`,
-    tasks: cert.Verificacion ? 100 : 50,
-  }));
+  const workData = Object.entries(
+    selectedEmpleado.Puesto_proyecto.flatMap((puesto) => puesto.Proyectos || [])
+      .filter((proyecto) => proyecto.fecha_fin) // Filtrar proyectos con fecha de fin
+      .reduce((acc: Record<string, number>, proyecto) => {
+        const year = new Date(proyecto.fecha_fin).getFullYear(); // Obtener el año de la fecha de fin
+        acc[year] = (acc[year] || 0) + 1; // Incrementar el contador para el año
+        return acc;
+      }, {})
+  )
+    .map(([year, count]) => ({ year, tasks: count })) // Convertir a formato de gráfico
+    .sort((a, b) => Number(a.year) - Number(b.year)); // Ordenar por año
 
   const courseData = [
     { name: "Activos", value: selectedEmpleado.Certificados.filter((c) => c.Verificacion).length, color: "#4ade80" },
