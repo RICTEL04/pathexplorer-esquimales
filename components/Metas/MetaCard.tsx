@@ -3,6 +3,8 @@ import {Meta, Revisor_Meta}from "@/lib/metas-empleados/metasDefinitions";
 
 export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdit?: (meta: Meta) => void, onDelete?: (meta: Meta) => void }) {
   const [showDetails, setShowDetails] = useState(false);
+  const showDelete = meta.Estado != "Completada" && meta.Estado != "Cancelada";
+  const showEdit = meta.Self_Reflection == null;
 
   const formatDate = (date: Date | null) => {
     if (!date) return 'Fecha no disponible';
@@ -45,7 +47,7 @@ export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdi
               <span className={`text-xs px-2 py-0.5 rounded-full ${getEstadoStyles(meta.Estado ?? "sin estado")} whitespace-nowrap`}>
                 {meta.Estado}
               </span>
-              {onEdit && (meta.Registrada == false) && (
+              {onEdit && (showEdit) && (
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
@@ -60,7 +62,7 @@ export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdi
                 </button>
               )}
 
-              {onDelete && (meta.Estado != "Completada") && (
+              {onDelete && (showDelete) && (
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
@@ -166,19 +168,31 @@ export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdi
                   </div>
                 </div>
 
-                {/* Revisores en el modal */}
+                {/* Sección de Revisores mejorada */}
                 {meta.Revisores && meta.Revisores.length > 0 && (
                   <div className="pt-4 border-t border-gray-200">
                     <h3 className="font-medium text-gray-700">Revisores:</h3>
-                    <ul className="mt-2 space-y-1">
+                    <ul className="mt-2 space-y-4">
                       {meta.Revisores.map((revisor, index) => (
                         <li key={index} className="text-gray-600">
-                          {revisor.Nombre}
+                          <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+                            <span className="font-medium min-w-[120px]">{revisor.Nombre}:</span>
+                            {revisor.Retroalimentacion ? (
+                              <div className="flex-1 bg-gray-50 p-3 rounded-lg">
+                                <p className="whitespace-pre-wrap break-words">
+                                  {revisor.Retroalimentacion}
+                                </p>
+                              </div>
+                            ) : (
+                              <span className="text-gray-400 italic">Sin retroalimentación</span>
+                            )}
+                          </div>
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
+
 
                 {meta.Self_Reflection && (
                   <div className="pt-4 border-t border-gray-200">
@@ -195,7 +209,7 @@ export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdi
                 >
                   Cerrar
                 </button>
-                {onEdit && (
+                {onEdit && showEdit && (
                   <button
                     onClick={() => {
                       setShowDetails(false);
@@ -207,7 +221,7 @@ export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdi
                   </button>
                 )}
 
-                {onDelete && (
+                {onDelete && showDelete && (
                   <button
                     onClick={() => {
                       setShowDetails(false);

@@ -8,20 +8,19 @@ import { EmployeeFullData } from "@/lib/employeeService";
 import { getEmployeeFullData } from '@/lib/employeeService';
 import DeleteMetaModal from "@/components/Metas/DeleteMetaModal";
 import RevisorMetaCards from "@/components/Metas/RevisorMetaCards";
+import FilteredMetaCards from "@/components/Metas/FilteredMetaCards";
 
 export default function ObjetivosPage() {
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
-
+  const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
 
   const [metaToEdit, setMetaToEdit] = useState<Meta | null>(null);
-  const [mostrarDelete, setMostrarDelete] = useState(false);
+  const [mostrarDelete, setMostrarDelete] = useState<boolean>(false);
   const [metaToDelete, setMetaToDelete] = useState<Meta | null>(null);
 
-
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [metas, setMetas] = useState<Meta[]>([]);
   const [metasRevisor, setMetasRevisor] = useState<Meta[]>([]);
-  const [employee, setEmployee] = useState<EmployeeFullData>();
+  const [employee, setEmployee] = useState<EmployeeFullData | undefined>();
   const [metasFiltradas, setMetasFiltradas] = useState<{
     capability: Meta[];
     proyecto: Meta[];
@@ -36,17 +35,17 @@ export default function ObjetivosPage() {
     otro: []
   });
 
-  const handleDeleteMeta = (meta: Meta) => {
+  const handleDeleteMeta = (meta: Meta): void => {
     setMetaToDelete(meta);
     setMostrarDelete(true);
   }
 
-  const handleEditMeta = (meta: Meta) => {
+  const handleEditMeta = (meta: Meta): void => {
     setMetaToEdit(meta);
     setMostrarFormulario(true);
   };
 
-  const handleSuccess = async () => {
+  const handleSuccess = async (): Promise<void> => {
     const session = await fetchSession(setLoading);
     if (session) {
       const metasActualizadas = await fetchMetas(session.user.id, setLoading);
@@ -57,20 +56,18 @@ export default function ObjetivosPage() {
     }
   };
   
-  const handleSuccessRevision = async () => {
+  const handleSuccessRevision = async (): Promise<void> => {
     const session = await fetchSession(setLoading);
     if (session) {
       const metasRevisorActualizadas = await fetchMetasAsRevisor(session.user.id, setLoading);
-
       if(metasRevisorActualizadas) {
         setMetasRevisor(metasRevisorActualizadas);
       }
-
     }
   };
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadData = async (): Promise<void> => {
       try {
         setLoading(true);
         const session = await fetchSession(setLoading);
@@ -100,7 +97,7 @@ export default function ObjetivosPage() {
     loadData();
   }, []);
 
-  const categorizarMetas = (metas: Meta[]) => {
+  const categorizarMetas = (metas: Meta[]): void => {
     const categorias = {
       capability: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('capability')),
       proyecto: metas.filter(meta => meta.Tipo_Meta.toLowerCase().includes('proyecto')),
@@ -208,20 +205,12 @@ export default function ObjetivosPage() {
             </div>
           </div>
 
-          {/* Sección de tarjetas horizontales */}
-          <div className="bg-blue-50 rounded-lg shadow-md p-4">
-            <h2 className="text-sm font-semibold text-gray-800 mb-4">Historial de metas</h2>
-            <div className="overflow-x-auto">
-              <div className="flex space-x-4 pb-2 min-w-max">
-                {Array.from({ length: 20 }).map((_, index) => (
-                  <div key={index} className="flex-shrink-0 w-64 p-4 bg-white rounded-lg shadow">
-                    <h3 className="font-medium">Card {index + 1}</h3>
-                    <p className="text-sm text-gray-600">Información adicional</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Sección de filtros de metas - Reemplaza al historial de metas */}
+          <FilteredMetaCards 
+            metas={metas}
+            onEdit={handleEditMeta}
+            onDelete={handleDeleteMeta}
+          />
         </div>
 
         {/* Sección lateral - Metas como Revisor */}

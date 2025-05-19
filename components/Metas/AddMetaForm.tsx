@@ -6,14 +6,13 @@ interface AddMetaFormProps {
   employeeID: string;
   onSubmit: (meta: Meta) => Promise<void>;
   onCancel: () => void;
-  metaToEdit?: Meta | null; // Nueva prop para la meta a editar
+  metaToEdit?: Meta | null;
 }
 
 export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit }: AddMetaFormProps) {
   const tipoMetaOptions = ['capability', 'proyecto', 'colaborador/empleado', 'curso/certificacion', 'Otro'];
   const plazoOptions = ['Corto', 'Mediano', 'Largo'];
   
-  // Estado inicial basado en si estamos editando o creando nueva
   const [formData, setFormData] = useState<Omit<Meta, 'ID_meta' | 'Revisores'> & { 
     revisor1: string;
     revisor2: string;
@@ -36,8 +35,11 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const showSelfReflection = metaToEdit && 
+                          (metaToEdit.Estado === 'Completada' || metaToEdit.Estado === 'Cancelada') && 
+                          metaToEdit.Self_Reflection === null;
+
   useEffect(() => {
-    // Cargar la lista de revisores disponibles
     async function loadRevisores() {
       try {
         setLoading(true);
@@ -73,7 +75,6 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
   const handleRevisorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     
-    // Si estamos quitando el primer revisor, también quitamos el segundo
     if (name === 'revisor1' && value === '' && formData.revisor2 !== '') {
       setFormData({
         ...formData,
@@ -94,7 +95,7 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
     try {
       const selectedRevisorIds = [formData.revisor1, formData.revisor2].filter(id => id !== '');
       
-      if (selectedRevisorIds.length === 0) {
+      if (selectedRevisorIds.length === 0 && !showSelfReflection) {
         setError('Debes seleccionar al menos un revisor');
         return;
       }
@@ -102,9 +103,9 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
       const selectedRevisoresObjects: Revisor_Meta[] = selectedRevisorIds.map(revisorId => {
         const revisor = revisores.find(r => r.ID_Empleado === revisorId);
         return {
-          ID_Revisor: '', // Se generará/actualizará automáticamente
+          ID_Revisor: '',
           ID_EmpleadoRevisor: revisorId,
-          ID_meta: metaToEdit?.ID_meta || '', // Usamos el ID existente si estamos editando
+          ID_meta: metaToEdit?.ID_meta || '',
           ID_Empleado: employeeID,
           Retroalimentacion: null,
           Nombre: revisor?.Nombre || 'Sin nombre'
@@ -112,7 +113,7 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
       });
       
       const newMeta: Meta = {
-        ID_meta: metaToEdit?.ID_meta || '', // Pasamos el ID si estamos editando
+        ID_meta: metaToEdit?.ID_meta || '',
         Nombre: formData.Nombre,
         Tipo_Meta: formData.Tipo_Meta,
         Plazo: formData.Plazo,
@@ -133,14 +134,15 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
     }
   };
 
-  // Formateo de fechas para el input type="date"
   const formatDateForInput = (date: Date) => {
     return date.toISOString().split('T')[0];
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto ">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">{ metaToEdit ? "EditarMeta" : "AgregarMeta" }</h2>
+    <div className="bg-white rounded-lg shadow-lg p-4 md:p-6 max-w-2xl mx-auto">
+      <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6">
+        {metaToEdit ? (showSelfReflection ? "Agregar Reflexión" : "Editar Meta") : "Agregar Meta"}
+      </h2>
       
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -148,181 +150,200 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
         </div>
       )}
       
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Nombre de la Meta */}
-        <div>
-          <label htmlFor="Nombre" className="block text-sm font-medium text-gray-700 mb-1">
-            Nombre de la Meta *
-          </label>
-          <input
-            type="text"
-            id="Nombre"
-            name="Nombre"
-            value={formData.Nombre}
-            onChange={handleInputChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        
-        {/* Tipo de Meta - Dropdown */}
-        <div>
-          <label htmlFor="Tipo_Meta" className="block text-sm font-medium text-gray-700 mb-1">
-            Tipo de Meta *
-          </label>
-          <select
-            id="Tipo_Meta"
-            name="Tipo_Meta"
-            value={formData.Tipo_Meta}
-            onChange={handleInputChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {tipoMetaOptions.map((tipo) => (
-              <option key={tipo} value={tipo}>
-                {tipo}
-              </option>
-            ))}
-          </select>
-        </div>
-        
-        {/* Plazo - Dropdown */}
-        <div>
-          <label htmlFor="Plazo" className="block text-sm font-medium text-gray-700 mb-1">
-            Plazo *
-          </label>
-          <select
-            id="Plazo"
-            name="Plazo"
-            value={formData.Plazo}
-            onChange={handleInputChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {plazoOptions.map((plazo) => (
-              <option key={plazo} value={plazo}>
-                {plazo}
-              </option>
-            ))}
-          </select>
-        </div>
-        
-        {/* Descripción */}
-        <div>
-          <label htmlFor="Descripcion" className="block text-sm font-medium text-gray-700 mb-1">
-            Descripción *
-          </label>
-          <textarea
-            id="Descripcion"
-            name="Descripcion"
-            value={formData.Descripcion}
-            onChange={handleInputChange}
-            required
-            rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        
-        {/* Fechas - Inicio y Límite */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="Fecha_Inicio" className="block text-sm font-medium text-gray-700 mb-1">
-              Fecha de Inicio *
-            </label>
-            <input
-              type="date"
-              id="Fecha_Inicio"
-              name="Fecha_Inicio"
-              value={formatDateForInput(formData.Fecha_Inicio)}
-              onChange={handleDateChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+        {showSelfReflection ? (
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-medium text-gray-700 mb-2">Meta: {metaToEdit?.Nombre}</h3>
+              <p className="text-sm text-gray-600 mb-4">{metaToEdit?.Descripcion}</p>
+            </div>
+            
+            <div>
+              <label htmlFor="Self_Reflection" className="block text-sm font-medium text-gray-700 mb-1">
+                Auto-Reflexión *
+              </label>
+              <textarea
+                id="Self_Reflection"
+                name="Self_Reflection"
+                value={formData.Self_Reflection || ''}
+                onChange={handleInputChange}
+                required
+                rows={6}
+                placeholder="Comparte tu reflexión sobre esta meta completada o cancelada..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
-          <div>
-            <label htmlFor="Fecha_limite" className="block text-sm font-medium text-gray-700 mb-1">
-              Fecha Límite *
-            </label>
-            <input
-              type="date"
-              id="Fecha_limite"
-              name="Fecha_limite"
-              value={formatDateForInput(formData.Fecha_limite)}
-              onChange={handleDateChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        </div>
-        
-        {/* Revisores - Two single-select dropdowns */}
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="revisor1" className="block text-sm font-medium text-gray-700 mb-1">
-              Revisor Principal *
-            </label>
-            <select
-              id="revisor1"
-              name="revisor1"
-              value={formData.revisor1}
-              onChange={handleRevisorChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Seleccionar revisor principal</option>
-              {loading ? (
-                <option disabled>Cargando revisores...</option>
-              ) : (
-                revisores
-                  .filter(revisor => 
-                    revisor.ID_Empleado !== employeeID && // Filtrar al empleado actual
-                    revisor.ID_Empleado !== formData.revisor2 // Filtrar revisor ya seleccionado en la opción 2
-                  )
-                  .map((revisor) => (
-                    <option key={revisor.ID_Empleado} value={revisor.ID_Empleado}>
-                      {revisor.Nombre}
+        ) : (
+          <div className="space-y-4 md:space-y-6">
+            <div>
+              <label htmlFor="Nombre" className="block text-sm font-medium text-gray-700 mb-1">
+                Nombre de la Meta *
+              </label>
+              <input
+                type="text"
+                id="Nombre"
+                name="Nombre"
+                value={formData.Nombre}
+                onChange={handleInputChange}
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="Tipo_Meta" className="block text-sm font-medium text-gray-700 mb-1">
+                  Tipo de Meta *
+                </label>
+                <select
+                  id="Tipo_Meta"
+                  name="Tipo_Meta"
+                  value={formData.Tipo_Meta}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {tipoMetaOptions.map((tipo) => (
+                    <option key={tipo} value={tipo}>
+                      {tipo}
                     </option>
-                  ))
-              )}
-            </select>
-          </div>
-          
-          <div>
-            <label htmlFor="revisor2" className="block text-sm font-medium text-gray-700 mb-1">
-              Revisor Secundario (Opcional)
-            </label>
-            <select
-              id="revisor2"
-              name="revisor2"
-              value={formData.revisor2}
-              onChange={handleRevisorChange}
-              disabled={!formData.revisor1} // Deshabilitar si no hay revisor principal
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-500"
-            >
-              <option value="">Sin revisor secundario</option>
-              {loading ? (
-                <option disabled>Cargando revisores...</option>
-              ) : (
-                revisores
-                  .filter(revisor => 
-                    revisor.ID_Empleado !== employeeID && // Filtrar al empleado actual
-                    revisor.ID_Empleado !== formData.revisor1 // Filtrar revisor ya seleccionado en la opción 1
-                  )
-                  .map((revisor) => (
-                    <option key={revisor.ID_Empleado} value={revisor.ID_Empleado}>
-                      {revisor.Nombre}
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label htmlFor="Plazo" className="block text-sm font-medium text-gray-700 mb-1">
+                  Plazo *
+                </label>
+                <select
+                  id="Plazo"
+                  name="Plazo"
+                  value={formData.Plazo}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {plazoOptions.map((plazo) => (
+                    <option key={plazo} value={plazo}>
+                      {plazo}
                     </option>
-                  ))
-              )}
-            </select>
+                  ))}
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label htmlFor="Descripcion" className="block text-sm font-medium text-gray-700 mb-1">
+                Descripción *
+              </label>
+              <textarea
+                id="Descripcion"
+                name="Descripcion"
+                value={formData.Descripcion}
+                onChange={handleInputChange}
+                required
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="Fecha_Inicio" className="block text-sm font-medium text-gray-700 mb-1">
+                  Fecha de Inicio *
+                </label>
+                <input
+                  type="date"
+                  id="Fecha_Inicio"
+                  name="Fecha_Inicio"
+                  value={formatDateForInput(formData.Fecha_Inicio)}
+                  onChange={handleDateChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="Fecha_limite" className="block text-sm font-medium text-gray-700 mb-1">
+                  Fecha Límite *
+                </label>
+                <input
+                  type="date"
+                  id="Fecha_limite"
+                  name="Fecha_limite"
+                  value={formatDateForInput(formData.Fecha_limite)}
+                  onChange={handleDateChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="revisor1" className="block text-sm font-medium text-gray-700 mb-1">
+                  Revisor Principal *
+                </label>
+                <select
+                  id="revisor1"
+                  name="revisor1"
+                  value={formData.revisor1}
+                  onChange={handleRevisorChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Seleccionar revisor principal</option>
+                  {loading ? (
+                    <option disabled>Cargando revisores...</option>
+                  ) : (
+                    revisores
+                      .filter(revisor => 
+                        revisor.ID_Empleado !== employeeID &&
+                        revisor.ID_Empleado !== formData.revisor2
+                      )
+                      .map((revisor) => (
+                        <option key={revisor.ID_Empleado} value={revisor.ID_Empleado}>
+                          {revisor.Nombre}
+                        </option>
+                      ))
+                  )}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="revisor2" className="block text-sm font-medium text-gray-700 mb-1">
+                  Revisor Secundario (Opcional)
+                </label>
+                <select
+                  id="revisor2"
+                  name="revisor2"
+                  value={formData.revisor2}
+                  onChange={handleRevisorChange}
+                  disabled={!formData.revisor1}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-500"
+                >
+                  <option value="">Sin revisor secundario</option>
+                  {loading ? (
+                    <option disabled>Cargando revisores...</option>
+                  ) : (
+                    revisores
+                      .filter(revisor => 
+                        revisor.ID_Empleado !== employeeID &&
+                        revisor.ID_Empleado !== formData.revisor1
+                      )
+                      .map((revisor) => (
+                        <option key={revisor.ID_Empleado} value={revisor.ID_Empleado}>
+                          {revisor.Nombre}
+                        </option>
+                      ))
+                  )}
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
-        
-        {/* Estado - Oculto, se establece automáticamente como "Pendiente" */}
-        <input type="hidden" name="Estado" value={formData.Estado} />
-        
-        {/* Botones */}
-        <div className="flex justify-end space-x-3 pt-4">
+        )}
+
+        <div className="flex flex-col-reverse sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4">
           <button
             type="button"
             onClick={onCancel}
@@ -334,7 +355,7 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
             type="submit"
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
           >
-            Guardar Meta
+            {showSelfReflection ? "Guardar Reflexión" : "Guardar Meta"}
           </button>
         </div>
       </form>
