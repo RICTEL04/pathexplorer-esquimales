@@ -693,7 +693,7 @@ ALTER TABLE ONLY "public"."Empleado_Proyectos"
 
 
 ALTER TABLE ONLY "public"."Empleado_Proyectos"
-    ADD CONSTRAINT "Empleado_Proyectos_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
+    ADD CONSTRAINT "Empleado_Proyectos_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto") ON DELETE CASCADE;
 
 
 
@@ -748,7 +748,7 @@ ALTER TABLE ONLY "public"."Puesto_proyecto"
 
 
 ALTER TABLE ONLY "public"."Puesto_proyecto"
-    ADD CONSTRAINT "Puesto_proyecto_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
+    ADD CONSTRAINT "Puesto_proyecto_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto") ON DELETE CASCADE;
 
 
 
