@@ -4,23 +4,23 @@ import MetaCards from "@/components/Metas/MetaCards";
 import Meta from "@/lib/metas-empleados/metasDefinitions";
 import { fetchSession, fetchMetas, fetchMetasAsRevisor } from "@/lib/metas-empleados/apiCallsMetas";
 import AddMetaModal from '@/components/Metas/AddMetaModal';
-import { EmployeeFullData } from "@/lib/employeeService";
-import { getEmployeeFullData } from '@/lib/employeeService';
 import DeleteMetaModal from "@/components/Metas/DeleteMetaModal";
 import RevisorMetaCards from "@/components/Metas/RevisorMetaCards";
 import FilteredMetaCards from "@/components/Metas/FilteredMetaCards";
 
 export default function ObjetivosPage() {
   const [mostrarFormulario, setMostrarFormulario] = useState<boolean>(false);
-
   const [metaToEdit, setMetaToEdit] = useState<Meta | null>(null);
+
+  const [session, setSession] = useState<any>(null);
+
   const [mostrarDelete, setMostrarDelete] = useState<boolean>(false);
   const [metaToDelete, setMetaToDelete] = useState<Meta | null>(null);
-
   const [loading, setLoading] = useState<boolean>(true);
   const [metas, setMetas] = useState<Meta[]>([]);
   const [metasRevisor, setMetasRevisor] = useState<Meta[]>([]);
-  const [employee, setEmployee] = useState<EmployeeFullData | undefined>();
+
+
   const [metasFiltradas, setMetasFiltradas] = useState<{
     capability: Meta[];
     proyecto: Meta[];
@@ -46,23 +46,39 @@ export default function ObjetivosPage() {
   };
 
   const handleSuccess = async (): Promise<void> => {
-    const session = await fetchSession(setLoading);
-    if (session) {
-      const metasActualizadas = await fetchMetas(session.user.id, setLoading);
-      if (metasActualizadas) {
-        setMetas(metasActualizadas);
-        categorizarMetas(metasActualizadas);
+    if (!session) return;
+    
+    try {
+      const session2 = await fetchSession(setLoading);
+      setSession(session2);
+      
+      if (session2?.user?.id) {
+        const metasActualizadas = await fetchMetas(session2.user.id, setLoading);
+        if (metasActualizadas) {
+          setMetas(metasActualizadas);
+          categorizarMetas(metasActualizadas);
+        }
       }
+    } catch (error) {
+      console.error("Error updating metas:", error);
     }
   };
   
   const handleSuccessRevision = async (): Promise<void> => {
-    const session = await fetchSession(setLoading);
-    if (session) {
-      const metasRevisorActualizadas = await fetchMetasAsRevisor(session.user.id, setLoading);
-      if(metasRevisorActualizadas) {
-        setMetasRevisor(metasRevisorActualizadas);
+    if (!session) return;
+    
+    try {
+      const session2 = await fetchSession(setLoading);
+      setSession(session2);
+      
+      if (session2?.user?.id) {
+        const metasRevisorActualizadas = await fetchMetasAsRevisor(session2.user.id, setLoading);
+        if(metasRevisorActualizadas) {
+          setMetasRevisor(metasRevisorActualizadas);
+        }
       }
+    } catch (error) {
+      console.error("Error updating reviewer metas:", error);
     }
   };
 
@@ -70,30 +86,28 @@ export default function ObjetivosPage() {
     const loadData = async (): Promise<void> => {
       try {
         setLoading(true);
-        const session = await fetchSession(setLoading);
-
-        if (session) {
-          const metasData = await fetchMetas(session.user.id, setLoading);
+        const session2 = await fetchSession(setLoading);
+        setSession(session2);
+        
+        if (session2?.user?.id) {
+          const metasData = await fetchMetas(session2.user.id, setLoading);
           if (metasData) {
             setMetas(metasData);
             categorizarMetas(metasData);
           }
-          const employeeData = await getEmployeeFullData(session.user.id);
-          if (employeeData) {
-            setEmployee(employeeData);
-          }
 
-          const metasRevisorData = await fetchMetasAsRevisor(session.user.id, setLoading);
+          const metasRevisorData = await fetchMetasAsRevisor(session2.user.id, setLoading);
           if (metasRevisorData) {
             setMetasRevisor(metasRevisorData);
           }
         }
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error loading data:", error);
       } finally {
         setLoading(false);
       }
     };
+    
     loadData();
   }, []);
 
@@ -116,27 +130,37 @@ export default function ObjetivosPage() {
     );
   }
 
+  // If no session after loading is complete, show login message
+  if (!session || !session.user) {
+    return (
+      <div className="flex justify-center items-center h-screen flex-col">
+        <p className="text-red-500 font-bold">No se ha podido cargar la sesión de usuario</p>
+        <p className="mt-2">Por favor, intente recargar la página o iniciar sesión nuevamente.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="mb-6">
         <h1 className="text-gray-800 text-2xl font-bold mb-2">Objetivos</h1>
         <p className="text-gray-600">Aquí puedes gestionar tus objetivos.</p>
+        <div className="flex justify-between items-center">
+          <button 
+            onClick={() => setMostrarFormulario(true)}
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+          >
+            Agregar Meta
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Sección principal de metas */}
         <div className="w-full lg:w-3/4 flex flex-col gap-6">
-          <div className="flex justify-between items-center">
-            <button 
-              onClick={() => setMostrarFormulario(true)}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-            >
-              Agregar Meta
-            </button>
-          </div>
 
           {/* Categorías de Metas */}
-          <div className="bg-purple-500 rounded-lg shadow-md p-4">
+          <div className="bg-purple-400 rounded-lg shadow-md p-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {/* Capability */}
               <div className="bg-white rounded-lg shadow p-3">
@@ -214,23 +238,23 @@ export default function ObjetivosPage() {
         </div>
 
         {/* Sección lateral - Metas como Revisor */}
-        <div className="w-full lg:w-1/4 bg-purple-200 rounded-lg shadow-md p-4">
+        <div className="w-full lg:w-1/4 bg-purple-400 rounded-lg shadow-md p-4">
           <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">Metas como Revisor</h2>
-          <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
+          <div className="overflow-y-auto max-h-[calc(120vh)]">
             <RevisorMetaCards
               metas={metasRevisor}
               onMetaRevisor={handleSuccessRevision}
-              employeeID={employee?.ID_Empleado ?? ""}
+              employeeID={session.user.id}
             />
           </div>
         </div>
       </div>
 
       {/* Modales */}
-      {mostrarFormulario && (
+      {mostrarFormulario && session && (
         <AddMetaModal
           isOpen={mostrarFormulario}
-          employeeID={employee?.ID_Empleado ?? ""}
+          employeeID={session.user.id}
           onClose={() => {
             setMostrarFormulario(false);
             setMetaToEdit(null);
@@ -240,11 +264,11 @@ export default function ObjetivosPage() {
         />
       )}
 
-      {mostrarDelete && (
+      {mostrarDelete && session && (
         <DeleteMetaModal
           isOpen={mostrarDelete}
           onClose={() => {setMostrarDelete(false); setMetaToDelete(null);}}
-          employeeID={employee?.ID_Empleado ?? ""}
+          employeeID={session.user.id}
           onMetaDeleted={handleSuccess}
           metaToDelete={metaToDelete}
         />

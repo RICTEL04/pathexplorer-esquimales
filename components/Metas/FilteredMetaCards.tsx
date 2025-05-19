@@ -127,12 +127,12 @@ export default function FilteredMetaCards({
   };
 
   return (
-    <div className="bg-blue-50 rounded-lg shadow-md p-4">
+    <div className="bg-gray-100 rounded-lg shadow-md p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Filtros de Metas</h2>
         <button 
           onClick={resetearFiltros}
-          className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition"
+          className="px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600 transition"
         >
           Resetear Filtros
         </button>
@@ -150,7 +150,7 @@ export default function FilteredMetaCards({
                 onClick={() => toggleFilter('tipos', tipo)}
                 className={`px-3 py-1 text-xs rounded-full transition-colors ${
                   filters.tipos.includes(tipo)
-                    ? 'bg-blue-500 text-white'
+                    ? 'bg-purple-500 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
@@ -170,7 +170,7 @@ export default function FilteredMetaCards({
                 onClick={() => toggleFilter('plazos', plazo)}
                 className={`px-3 py-1 text-xs rounded-full transition-colors ${
                   filters.plazos.includes(plazo)
-                    ? 'bg-blue-500 text-white'
+                    ? 'bg-purple-500 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
@@ -191,7 +191,7 @@ export default function FilteredMetaCards({
                   onClick={() => toggleFilter('estados', estado)}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
                     filters.estados.includes(estado)
-                      ? 'bg-blue-500 text-white'
+                      ? 'bg-purple-500 text-white'
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
@@ -210,7 +210,7 @@ export default function FilteredMetaCards({
               onClick={() => toggleFilter('registrada', true)}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
                 filters.registrada === true
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-purple-500 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -220,7 +220,7 @@ export default function FilteredMetaCards({
               onClick={() => toggleFilter('registrada', false)}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
                 filters.registrada === false
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-purple-500 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -237,7 +237,7 @@ export default function FilteredMetaCards({
               onClick={() => cambiarOrdenamiento('reciente')}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
                 filters.ordenamiento === 'reciente'
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-purple-500 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -247,7 +247,7 @@ export default function FilteredMetaCards({
               onClick={() => cambiarOrdenamiento('antigua')}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
                 filters.ordenamiento === 'antigua'
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-purple-500 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -257,7 +257,7 @@ export default function FilteredMetaCards({
               onClick={() => cambiarOrdenamiento('limite')}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
                 filters.ordenamiento === 'limite'
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-purple-500 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -272,24 +272,25 @@ export default function FilteredMetaCards({
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-sm font-medium text-gray-700">Resultados: {filteredMetas.length} metas</h3>
         </div>
-        
-        {filteredMetas.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filteredMetas.map((meta, index) => (
-              <div key={index} className="h-48">
-                <MetaCard
-                  meta={meta}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 text-gray-500">
-            No se encontraron metas con los filtros seleccionados
-          </div>
-        )}
+        <div className="w-full overflow-y-auto max-h-96">   
+          {filteredMetas.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {filteredMetas.map((meta, index) => (
+                <div key={index} className="h-48">
+                  <MetaCard
+                    meta={meta}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No se encontraron metas con los filtros seleccionados
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
