@@ -46,7 +46,7 @@ export default function NewProjectPage() {
       alert("Error al agregar roles");
       return;
     }
-    router.push("../"); // Go back to project list
+    router.push("../proyectos"); // Go back to project list
   };
 
   return (
@@ -59,7 +59,7 @@ export default function NewProjectPage() {
             type="text"
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600"
             required
           />
         </div>
@@ -68,7 +68,7 @@ export default function NewProjectPage() {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600"
             required
           />
         </div>
@@ -79,7 +79,7 @@ export default function NewProjectPage() {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="p-2 border rounded"
+              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600"
               required
             />
           </div>
@@ -89,7 +89,7 @@ export default function NewProjectPage() {
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="p-2 border rounded"
+              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600"
               required
             />
           </div>
@@ -103,7 +103,7 @@ export default function NewProjectPage() {
                 placeholder="Rol"
                 value={role.role}
                 onChange={(e) => handleRoleChange(idx, "role", e.target.value)}
-                className="p-2 border rounded flex-1"
+                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600"
                 required
               />
               <input
@@ -111,7 +111,7 @@ export default function NewProjectPage() {
                 min={1}
                 value={role.quantity}
                 onChange={(e) => handleRoleChange(idx, "quantity", Number(e.target.value))}
-                className="p-2 border rounded w-20"
+                className="w-20 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600"
                 required
               />
               <button type="button" onClick={() => removeRole(idx)} className="text-red-500">Eliminar</button>
