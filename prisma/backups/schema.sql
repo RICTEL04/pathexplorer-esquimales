@@ -433,6 +433,16 @@ CREATE TABLE IF NOT EXISTS "public"."Revisor_Meta" (
 ALTER TABLE "public"."Revisor_Meta" OWNER TO "postgres";
 
 
+CREATE TABLE IF NOT EXISTS "public"."Revisor_Proyecto" (
+    "ID_Revisor" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_DeliveryLead" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"()
+);
+
+
+ALTER TABLE "public"."Revisor_Proyecto" OWNER TO "postgres";
+
+
 CREATE TABLE IF NOT EXISTS "public"."Roles" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "role_name" "text" DEFAULT 'name'::"text" NOT NULL,
@@ -602,6 +612,11 @@ ALTER TABLE ONLY "public"."Revisor_Meta"
 
 
 
+ALTER TABLE ONLY "public"."Revisor_Proyecto"
+    ADD CONSTRAINT "Revisor_Proyecto_pkey" PRIMARY KEY ("ID_Revisor");
+
+
+
 ALTER TABLE ONLY "public"."Roles"
     ADD CONSTRAINT "Roles_pkey" PRIMARY KEY ("id");
 
@@ -767,6 +782,16 @@ ALTER TABLE ONLY "public"."Revisor_Meta"
 
 
 
+ALTER TABLE ONLY "public"."Revisor_Proyecto"
+    ADD CONSTRAINT "Revisor_Proyecto_ID_DeliveryLead_fkey" FOREIGN KEY ("ID_DeliveryLead") REFERENCES "public"."Delivery_Lead"("ID_DeliveryLead") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."Revisor_Proyecto"
+    ADD CONSTRAINT "Revisor_Proyecto_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
 ALTER TABLE ONLY "public"."Roles"
     ADD CONSTRAINT "Roles_Proyecto_id_fkey" FOREIGN KEY ("Proyecto_id") REFERENCES "public"."Proyectos"("ID_Proyecto") ON DELETE CASCADE;
 
@@ -800,6 +825,9 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
+
+
+ALTER TABLE "public"."Revisor_Proyecto" ENABLE ROW LEVEL SECURITY;
 
 
 
