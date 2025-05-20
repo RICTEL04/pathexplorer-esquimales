@@ -12,15 +12,17 @@ export interface Employee {
 }
 
 export interface ProjectJson {
-  ID_Proyecto?: string;
+  ID_Proyecto: string;
   Nombre: string;
   Descripcion: string;
-  fecha_inicio: string;
-  fecha_fin: string;
+  fecha_inicio?: string;
+  fecha_fin?: string;
   Status: string;
   ID_DeliveryLead: string;
-  isReviewed: boolean;
-  roles: {
+  ID_Cliente?: string;
+  isReviewed?: boolean;
+  cargabilidad?: number;
+  roles?: {
     puesto: string;
     cantidad: number;
   }[];
@@ -33,4 +35,5 @@ export interface Review {
     Calificacion: number;
     Fortalezas: string;
     Areas_Mejora: string;
+    esAutoevaluacion?: boolean;
 }

@@ -8,24 +8,19 @@ import { fetchEmpleadoFromUid } from "@/lib/fetchEmpleadoFromUid";
 import { aplicarEmpleadoProyecto } from "@/lib/aplicarEmpleadoProyecto";
 import { getEmpleadoProyectos } from "@/lib/getEmpleadoProyectos";
 import { removeEmpleadoProyecto } from "@/lib/removeEmpleadoProyecto"; // Import the function
+import { getEmpleadosSinAutoevaluacion } from "@/lib/autoevaluacion-empleado/apiCalls";
+import SelfReviewModal from "@/components/Autoevaluacion/SelfReviewModal";
+import { ProjectJson } from "@/lib/delivery-lead-proyectos/definitions";
 
-
-interface Project {
-  id: string;
-  nombre: string;
-  descripcion: string;
-  status: string;
-  habilidad?: string;
-  cliente: string;
-  cargabilidad?: number;
-}
 
 export default function ProyectosPage() {
-  const [proyectosSugeridos, setProyectosSugeridos] = useState<Project[]>([]);
-  const [proyectosActuales, setProyectosActuales] = useState<Project[]>([]);
-  const [proyectosPostulados, setProyectosPostulados] = useState<Project[]>([]);
+  const [proyectosSugeridos, setProyectosSugeridos] = useState<ProjectJson[]>([]);
+  const [proyectosActuales, setProyectosActuales] = useState<ProjectJson[]>([]);
+  const [proyectosPostulados, setProyectosPostulados] = useState<ProjectJson[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [empleadoNombre, setEmpleadoNombre] = useState<string | null>(null);
+  const [selfReviewModalOpen, setSelfReviewModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ProjectJson | null>(null);
 
   // Fetch the logged-in user's ID
   useEffect(() => {
@@ -55,13 +50,14 @@ export default function ProyectosPage() {
       try {
         const proyectos = await getProyectos();
 
-        const mappedProyectos: Project[] = proyectos.map((proyecto: any) => ({
-          id: proyecto.ID_Proyecto,
-          nombre: proyecto.Nombre,
-          descripcion: proyecto.Descripcion,
-          status: proyecto.Status,
-          cliente: proyecto.ID_Cliente,
+        const mappedProyectos: ProjectJson[] = proyectos.map((proyecto: any) => ({
+          ID_Proyecto: proyecto.ID_Proyecto,
+          Nombre: proyecto.Nombre,
+          Descripcion: proyecto.Descripcion,
+          Status: proyecto.Status,
+          ID_Cliente: proyecto.ID_Proyecto_Cliente,
           cargabilidad: Math.floor(Math.random() * 100),
+          ID_DeliveryLead: proyecto.ID_DeliveryLead,
         }));
 
         setProyectosSugeridos(mappedProyectos);
@@ -79,22 +75,33 @@ export default function ProyectosPage() {
       if (!userId) return;
 
       try {
-        // Get the project IDs for the current employee
-        const projectIds = await getEmpleadoProyectos(userId);
-
         // Filter the suggested projects to match the current project IDs
-        const currentProjects = proyectosSugeridos.filter((proyecto) =>
-          projectIds.includes(proyecto.id)
-        );
+        const currentProjectsResult = await getEmpleadosSinAutoevaluacion(userId);
 
-        setProyectosActuales(currentProjects);
+        if (Array.isArray(currentProjectsResult)) {
+          const mappedProyectos: ProjectJson[] = currentProjectsResult.map((proyecto: any) => ({
+            ID_Proyecto: proyecto.ID_Proyecto,
+            Nombre: proyecto.Nombre,
+            Descripcion: proyecto.Descripcion,
+            Status: proyecto.Status,
+            ID_Cliente: proyecto.ID_Proyecto_Cliente,
+            cargabilidad: Math.floor(Math.random() * 100),
+            ID_DeliveryLead: proyecto.ID_DeliveryLead,
+          }));
+
+          setProyectosActuales(mappedProyectos);
+        } else {
+          setProyectosActuales([]);
+          console.error("getEmpleadosSinAutoevaluacion did not return an array:", currentProjectsResult);
+        }
+
       } catch (error) {
         console.error("Error fetching current projects:", error);
       }
     };
 
     fetchCurrentProjects();
-  }, [userId, proyectosSugeridos]);
+  }, [userId]);
 
   // Handle "Aplicar" button click
   const handleAplicar = async (proyectoId: string) => {
@@ -125,7 +132,7 @@ export default function ProyectosPage() {
       alert("Proyecto eliminado exitosamente.");
       // Update the current projects list
       setProyectosActuales((prev) =>
-        prev.filter((proyecto) => proyecto.id !== proyectoId)
+        prev.filter((proyecto) => proyecto.ID_Proyecto !== proyectoId)
       );
     } else {
       alert("Hubo un error al eliminar el proyecto.");
@@ -134,7 +141,14 @@ export default function ProyectosPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-
+      {/* Review Modal */}
+      {selfReviewModalOpen && selectedProject && userId && (
+        <SelfReviewModal
+          onClose={() => setSelfReviewModalOpen(false)}
+          selectedProject={selectedProject}
+          employee={userId}
+        />
+      )}
       {/* Main content */}
       <div className="p-4 md:p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -145,21 +159,24 @@ export default function ProyectosPage() {
               {proyectosSugeridos.length === 0 ? (
                 <p className="text-gray-600">No hay proyectos sugeridos por ahora.</p>
               ) : (
-                proyectosSugeridos.map((proyecto) => (
-                  <div key={proyecto.id} className="bg-white rounded-lg border border-gray-200 p-4 relative">
+                proyectosSugeridos.map((proyecto, idx) => (
+                  <div
+                    key={proyecto.ID_Proyecto ? `sugerido-${proyecto.ID_Proyecto}` : `sugerido-idx-${idx}`}
+                    className="bg-white rounded-lg border border-gray-200 p-4 relative"
+                  >
                     <div className="flex justify-between">
                       <div>
-                        <h3 className="text-black font-bold">{proyecto.nombre}</h3>
-                        <p className="text-gray-600 text-sm">{proyecto.status}</p>
-                        <p className="text-gray-600 mt-2">{proyecto.descripcion}</p>
+                        <h3 className="text-black font-bold">{proyecto.Nombre}</h3>
+                        <p className="text-gray-600 text-sm">{proyecto.Status}</p>
+                        <p className="text-gray-600 mt-2">{proyecto.Descripcion}</p>
                       </div>
                       <div className="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-xs">{proyecto.cliente}</span>
+                        <span className="text-white font-bold text-xs">{proyecto.ID_Cliente}</span>
                       </div>
                     </div>
                     <div className="mt-4 flex justify-end">
                       <button
-                        onClick={() => handleAplicar(proyecto.id)}
+                        onClick={() => handleAplicar(proyecto.ID_Proyecto)}
                         className="bg-purple-600 hover:bg-purple-800 text-white px-4 py-1 rounded flex items-center gap-1 transition-all"
                       >
                         Aplicar <ArrowRight className="w-4 h-4" />
@@ -178,25 +195,39 @@ export default function ProyectosPage() {
               {proyectosActuales.length === 0 ? (
                 <p className="text-gray-600">No hay proyectos actuales por ahora.</p>
               ) : (
-                proyectosActuales.map((proyecto) => (
-                  <div key={proyecto.id} className="mb-4 border-b pb-4 last:border-0 last:pb-0">
+                proyectosActuales.map((proyecto, idx) => (
+                  <div
+                    key={proyecto.ID_Proyecto ? `actual-${proyecto.ID_Proyecto}` : `actual-idx-${idx}`}
+                    className="mb-4 border-b pb-4 last:border-0 last:pb-0"
+                  >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center">
-                        <span className="text-white text-xs">{proyecto.cliente}</span>
+                        <span className="text-white text-xs">{proyecto.ID_Cliente}</span>
                       </div>
                       <div>
-                        <p className="text-black font-medium">{proyecto.nombre}</p>
-                        <p className="text-gray-600">{proyecto.descripcion}</p>
+                        <p className="text-black font-medium">{proyecto.Nombre}</p>
+                        <p className="text-gray-600">{proyecto.Descripcion}</p>
                       </div>
                     </div>
-                    <div className="mt-2 flex justify-end">
-                      <button
-                        onClick={() => handleRemove(proyecto.id)} // Call handleRemove with proyecto.id
-                        className="bg-red-600 hover:bg-red-800 text-white px-4 py-1 rounded flex items-center gap-1 transition-all"
-                      >
-                        Eliminar
-                      </button>
-                    </div>
+                    {proyecto.Status === "active" ? (
+                      <div className="mt-2 flex justify-end">
+                        <button
+                          onClick={() => handleRemove(proyecto.ID_Proyecto)} // Call handleRemove with proyecto.ID_Proyecto
+                          className="bg-red-600 hover:bg-red-800 text-white px-4 py-1 rounded flex items-center gap-1 transition-all"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    ) : proyecto.Status === "done" ? (
+                      <div>
+                        <button
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-all"
+                          onClick={() => { setSelectedProject(proyecto); setSelfReviewModalOpen(true); console.log("Selected project:", proyecto); console.log("Selected ID:", userId); }}
+                        >
+                          Revisar
+                        </button>
+                      </div>
+                    ) : null}
                   </div>
                 ))
               )}

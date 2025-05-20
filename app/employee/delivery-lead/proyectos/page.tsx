@@ -63,6 +63,7 @@ export default function ProyectosPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const projectData: ProjectJson = {
+      ID_Proyecto: '',
       Nombre: projectName,
       Descripcion: description,
       fecha_inicio: startDate,
@@ -78,7 +79,7 @@ export default function ProyectosPage() {
 
     try {
       const proyecto = await insertProject(projectData);
-      const rolesData = projectData.roles.map((role) => ({
+      const rolesData = (projectData.roles ?? []).map((role) => ({
         role_name: role.puesto,
         Proyecto_id: proyecto.ID_Proyecto,
       }));
