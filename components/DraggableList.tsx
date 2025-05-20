@@ -39,7 +39,7 @@ export default function DraggableList({
 
   return (
     <ul
-      className={`w-full max-w-3xl mx-auto mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 min-h-[80px] transition-colors ${
+      className={`w-full mx-auto mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 min-h-[80px] transition-colors ${
         isOver ? "bg-purple-100" : ""
       }`}
       onDragOver={e => {

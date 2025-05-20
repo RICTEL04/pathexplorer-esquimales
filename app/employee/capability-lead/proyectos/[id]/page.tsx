@@ -336,36 +336,36 @@ export default function ProjectDetailsPage() {
         </ul>
       </div>
 
-
-      <div className="mb-8">
-        <span className="font-semibold text-lg">Empleados en este proyecto:</span>
-        <DraggableList
-          employees={assignedEmployees}
-          onDragStart={canDragAndDrop ? handleDragStart : () => {}}
-          onDrop={canDragAndDrop ? handleDropAssigned : () => {}}
-          onDragOver={canDragAndDrop ? () => setIsOverAssigned(true) : () => {}}
-          isOver={isOverAssigned && canDragAndDrop}
-          draggableEnabled={canDragAndDrop}
-        />
-        {assignedEmployees.length === 0 && (
-          <p className="text-gray-600 mt-2">No hay empleados asignados a este proyecto.</p>
-        )}
+      <div className="flex gap-8 mb-8 items-start">
+        <div className="flex-1">
+          <span className="font-semibold text-lg block mb-2">Empleados en este proyecto:</span>
+          <DraggableList
+            employees={assignedEmployees}
+            onDragStart={canDragAndDrop ? handleDragStart : () => {}}
+            onDrop={canDragAndDrop ? handleDropAssigned : () => {}}
+            onDragOver={canDragAndDrop ? () => setIsOverAssigned(true) : () => {}}
+            isOver={isOverAssigned && canDragAndDrop}
+            draggableEnabled={canDragAndDrop}
+          />
+          {assignedEmployees.length === 0 && (
+            <p className="text-gray-600 mt-2">No hay empleados asignados a este proyecto.</p>
+          )}
+        </div>
+        <div className="flex-1">
+          <span className="font-semibold text-lg block mb-2">Todos los empleados:</span>
+          <DraggableList
+            employees={availableEmployees}
+            onDragStart={canDragAndDrop ? handleDragStart : () => {}}
+            onDrop={canDragAndDrop ? handleDropAvailable : () => {}}
+            onDragOver={canDragAndDrop ? () => setIsOverAvailable(true) : () => {}}
+            isOver={isOverAvailable && canDragAndDrop}
+            draggableEnabled={canDragAndDrop}
+          />
+          {availableEmployees.length === 0 && (
+            <p className="text-gray-600 mt-2">No hay empleados registrados.</p>
+          )}
+        </div>
       </div>
-      <div className="mb-8">
-        <span className="font-semibold text-lg">Todos los empleados:</span>
-        <DraggableList
-          employees={availableEmployees}
-          onDragStart={canDragAndDrop ? handleDragStart : () => {}}
-          onDrop={canDragAndDrop ? handleDropAvailable : () => {}}   // <-- FIXED HERE
-          onDragOver={canDragAndDrop ? () => setIsOverAvailable(true) : () => {}} // <-- FIXED HERE
-          isOver={isOverAvailable && canDragAndDrop}
-          draggableEnabled={canDragAndDrop}
-        />
-        {availableEmployees.length === 0 && (
-          <p className="text-gray-600 mt-2">No hay empleados registrados.</p>
-        )}
-      </div>
-      {/* Aquí puedes agregar la lógica para asignar empleados */}
     </div>
   );
 }
