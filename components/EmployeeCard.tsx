@@ -48,7 +48,6 @@ export default function EmployeeCard({ employee }: { employee: Employee }) {
           {employee.isProjectLead ? "Management" : "Non-Management"}
         </span>
       </div>
-      <p className="text-gray-700 text-base font-medium">ID: {employee.id}</p>
       <p className="text-gray-700 text-base font-medium">Fecha de ingreso: {employee.companyEntryDate}</p>
       <p className="text-gray-700 text-base font-medium">Tiempo en nivel: {employee.timeOnLevel}</p>
       <p className="text-gray-700 text-base font-medium">
