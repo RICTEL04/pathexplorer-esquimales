@@ -66,6 +66,30 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+CREATE OR REPLACE FUNCTION "public"."check_and_update_reviewed_trigger"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    all_reviewed boolean;
+BEGIN
+    SELECT COUNT(*) = 0 INTO all_reviewed
+    FROM public."Empleado_Proyectos"
+    WHERE "ID_Proyecto" = NEW."ID_Proyecto" AND "isReviewed" = false;
+
+    IF all_reviewed THEN
+        UPDATE public."Proyectos"
+        SET "isReviewed" = true
+        WHERE "ID_Proyecto" = NEW."ID_Proyecto";
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."check_and_update_reviewed_trigger"() OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."delete_empleado"("p_id_empleado" "uuid") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
@@ -135,6 +159,29 @@ $$;
 ALTER FUNCTION "public"."select_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "Descripcion" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT p."ID_Proyecto", p."Nombre", p."Descripcion"
+    FROM public."Proyectos" p
+    JOIN public."Empleado_Proyectos" ep ON p."ID_Proyecto" = ep."ID_Proyecto"
+    WHERE ep."ID_Empleado" = p_id_empleado
+    AND NOT EXISTS (
+        SELECT 1
+        FROM public."Evaluacion_Proyecto" ep2
+        WHERE ep2."ID_Empleado" = p_id_empleado
+        AND ep2."ID_Proyecto" = p."ID_Proyecto"
+        AND ep2."esAutoevaluacion" = true
+    );
+END;
+$$;
+
+
+ALTER FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."update_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
@@ -155,6 +202,22 @@ $$;
 
 
 ALTER FUNCTION "public"."update_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."update_is_reviewed"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    UPDATE public."Empleado_Proyectos"
+    SET "isReviewed" = true
+    WHERE "ID_Empleado" = NEW."ID_Empleado" AND "ID_Proyecto" = NEW."ID_Proyecto";
+    
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."update_is_reviewed"() OWNER TO "postgres";
 
 SET default_tablespace = '';
 
@@ -319,6 +382,22 @@ COMMENT ON COLUMN "public"."Empleado_Proyectos"."isApproved" IS 'determines weth
 
 
 
+CREATE TABLE IF NOT EXISTS "public"."Evaluacion_Proyecto" (
+    "ID_Evaluacion" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_DeliveryLead" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_Proyecto" "uuid",
+    "Calificacion" smallint NOT NULL,
+    "Fortalezas" "text" NOT NULL,
+    "Areas_Mejora" "text" NOT NULL,
+    "esAutoevaluacion" boolean DEFAULT false NOT NULL,
+    CONSTRAINT "Revisor_Proyecto_Calificacion_check" CHECK (("Calificacion" <= 5))
+);
+
+
+ALTER TABLE "public"."Evaluacion_Proyecto" OWNER TO "postgres";
+
+
 CREATE TABLE IF NOT EXISTS "public"."FeedBack" (
     "ID_FeedBack" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "ID_People_lead" "uuid" NOT NULL,
@@ -340,6 +419,29 @@ CREATE TABLE IF NOT EXISTS "public"."Habilidades" (
 
 
 ALTER TABLE "public"."Habilidades" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."Historial" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"(),
+    "Nombre" "text",
+    "Descripcion" "text",
+    "Fecha_inicio" "date",
+    "Fecha_final" "date"
+);
+
+
+ALTER TABLE "public"."Historial" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."Historial_Habilidades" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_Habilidad" "uuid" DEFAULT "gen_random_uuid"()
+);
+
+
+ALTER TABLE "public"."Historial_Habilidades" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Intereses" (
@@ -431,16 +533,6 @@ CREATE TABLE IF NOT EXISTS "public"."Revisor_Meta" (
 
 
 ALTER TABLE "public"."Revisor_Meta" OWNER TO "postgres";
-
-
-CREATE TABLE IF NOT EXISTS "public"."Revisor_Proyecto" (
-    "ID_Revisor" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "ID_DeliveryLead" "uuid" DEFAULT "gen_random_uuid"(),
-    "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"()
-);
-
-
-ALTER TABLE "public"."Revisor_Proyecto" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Roles" (
@@ -572,6 +664,16 @@ ALTER TABLE ONLY "public"."Habilidades"
 
 
 
+ALTER TABLE ONLY "public"."Historial_Habilidades"
+    ADD CONSTRAINT "Historial_Habilidades_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."Historial"
+    ADD CONSTRAINT "Historial_pkey" PRIMARY KEY ("id");
+
+
+
 ALTER TABLE ONLY "public"."Intereses"
     ADD CONSTRAINT "Intereses_pkey" PRIMARY KEY ("ID_Interes");
 
@@ -612,8 +714,8 @@ ALTER TABLE ONLY "public"."Revisor_Meta"
 
 
 
-ALTER TABLE ONLY "public"."Revisor_Proyecto"
-    ADD CONSTRAINT "Revisor_Proyecto_pkey" PRIMARY KEY ("ID_Revisor");
+ALTER TABLE ONLY "public"."Evaluacion_Proyecto"
+    ADD CONSTRAINT "Revisor_Proyecto_pkey" PRIMARY KEY ("ID_Evaluacion");
 
 
 
@@ -639,6 +741,14 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 
 ALTER TABLE ONLY "public"."Empleado_Proyectos"
     ADD CONSTRAINT "unique_empleado_proyecto" UNIQUE ("ID_Empleado", "ID_Proyecto");
+
+
+
+CREATE OR REPLACE TRIGGER "after_insert_evaluacion" AFTER INSERT ON "public"."Evaluacion_Proyecto" FOR EACH ROW EXECUTE FUNCTION "public"."update_is_reviewed"();
+
+
+
+CREATE OR REPLACE TRIGGER "update_proyecto_review_status" AFTER UPDATE ON "public"."Empleado_Proyectos" FOR EACH ROW EXECUTE FUNCTION "public"."check_and_update_reviewed_trigger"();
 
 
 
@@ -722,6 +832,16 @@ ALTER TABLE ONLY "public"."FeedBack"
 
 
 
+ALTER TABLE ONLY "public"."Historial_Habilidades"
+    ADD CONSTRAINT "Historial_Habilidades_ID_Habilidad_fkey" FOREIGN KEY ("ID_Habilidad") REFERENCES "public"."Habilidades"("ID_Habilidad");
+
+
+
+ALTER TABLE ONLY "public"."Historial"
+    ADD CONSTRAINT "Historial_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+
+
+
 ALTER TABLE ONLY "public"."Intereses"
     ADD CONSTRAINT "Intereses_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
@@ -782,13 +902,18 @@ ALTER TABLE ONLY "public"."Revisor_Meta"
 
 
 
-ALTER TABLE ONLY "public"."Revisor_Proyecto"
+ALTER TABLE ONLY "public"."Evaluacion_Proyecto"
     ADD CONSTRAINT "Revisor_Proyecto_ID_DeliveryLead_fkey" FOREIGN KEY ("ID_DeliveryLead") REFERENCES "public"."Delivery_Lead"("ID_DeliveryLead") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 
-ALTER TABLE ONLY "public"."Revisor_Proyecto"
+ALTER TABLE ONLY "public"."Evaluacion_Proyecto"
     ADD CONSTRAINT "Revisor_Proyecto_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."Evaluacion_Proyecto"
+    ADD CONSTRAINT "Revisor_Proyecto_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
 
 
 
@@ -825,9 +950,6 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
-
-
-ALTER TABLE "public"."Revisor_Proyecto" ENABLE ROW LEVEL SECURITY;
 
 
 
@@ -1093,6 +1215,11 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Proyectos" TO "ano
 
 
 
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "authenticated";
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "anon";
+
+
+
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "anon";
 
@@ -1100,6 +1227,16 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Habilidades" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Habilidades" TO "anon";
+
+
+
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Historial" TO "authenticated";
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Historial" TO "anon";
+
+
+
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Historial_Habilidades" TO "authenticated";
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Historial_Habilidades" TO "anon";
 
 
 
