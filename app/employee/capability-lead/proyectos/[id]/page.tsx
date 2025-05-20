@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { Pencil, Trash2 } from "lucide-react";
 import EmployeeCard from "@/components/EmployeeCard";
 import { getCapabilityLead } from "@/lib/capabilityLead";
+import DraggableList from "@/components/DraggableList";
 
 
 export default function ProjectDetailsPage() {
@@ -17,6 +18,10 @@ export default function ProjectDetailsPage() {
   const [editValues, setEditValues] = useState<any>({});
   const [employees, setEmployees] = useState<any[]>([]);
   const [allEmployees, setAllEmployees] = useState<any[]>([]);
+
+  const [draggedEmployee, setDraggedEmployee] = useState<any | null>(null);
+  const [isOverAssigned, setIsOverAssigned] = useState(false);
+  const [isOverAvailable, setIsOverAvailable] = useState(false);
   
 
   useEffect(() => {
@@ -161,6 +166,75 @@ export default function ProjectDetailsPage() {
   // Get IDs of assigned employees to avoid duplicates
   const assignedIds = new Set(employees.map((item: any) => item.Empleado?.ID_Empleado));
 
+  const assignedEmployees = employees.map(mapEmployeeData);
+  const availableEmployees = allEmployees
+    .filter((emp: any) => !assignedIds.has(emp.ID_Empleado))
+    .map(mapAllEmployeeData);
+
+  // Drag handlers
+  const handleDragStart = (employee: any) => setDraggedEmployee(employee);
+
+
+    const handleDropAssigned = () => {
+    if (
+      draggedEmployee &&
+      availableEmployees.find((e) => e.id === draggedEmployee.id)
+    ) {
+      // Move from available to assigned
+      setEmployees((prev: any[]) => [
+        ...prev,
+        {
+          Empleado: {
+            ID_Empleado: draggedEmployee.id,
+            Nombre: draggedEmployee.name,
+            Rol: draggedEmployee.position,
+            Nivel: draggedEmployee.level,
+            FechaContratacion: draggedEmployee.companyEntryDate,
+            FechaUltNivel: draggedEmployee.timeOnLevel,
+          },
+          Puesto: draggedEmployee.project,
+          created_at: draggedEmployee.activeProjectStartDate,
+        },
+      ]);
+      setAllEmployees((prev: any[]) =>
+        prev.filter((e: any) => e.ID_Empleado !== draggedEmployee.id)
+      );
+    }
+    setDraggedEmployee(null);
+    setIsOverAssigned(false);
+  };
+
+  const handleDropAvailable = () => {
+    if (
+      draggedEmployee &&
+      assignedEmployees.find((e) => e.id === draggedEmployee.id)
+    ) {
+      // Move from assigned to available
+      setAllEmployees((prev: any[]) => [
+        ...prev,
+        {
+          ID_Empleado: draggedEmployee.id,
+          Nombre: draggedEmployee.name,
+          Rol: draggedEmployee.position,
+          Nivel: draggedEmployee.level,
+          FechaContratacion: draggedEmployee.companyEntryDate,
+          FechaUltNivel: draggedEmployee.timeOnLevel,
+          Puesto_proyecto: null,
+        },
+      ]);
+      setEmployees((prev: any[]) =>
+        prev.filter(
+          (e: any) => e.Empleado?.ID_Empleado !== draggedEmployee.id
+        )
+      );
+    }
+    setDraggedEmployee(null);
+    setIsOverAvailable(false);
+  };
+
+  const canDragAndDrop = editing;
+
+
   return (
     <div className="p-8 w-full max-w-none mx-0">
       <button onClick={() => router.back()} className="mb-4 text-blue-600">&larr; Volver</button>
@@ -198,7 +272,7 @@ export default function ProjectDetailsPage() {
                 className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition flex items-center gap-2"
               >
                 <Pencil className="w-4 h-4" />
-                Editar
+                Editar  
               </button>
               <button
                 onClick={handleDelete}
@@ -262,31 +336,33 @@ export default function ProjectDetailsPage() {
         </ul>
       </div>
 
-      <div className="mb-8">
-        <span className="font-semibold text-lg">Empleados en este proyecto:</span>
-        {employees.length === 0 ? (
-          <p className="text-gray-600 mt-2">No hay empleados asignados a este proyecto.</p>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 mt-4">
-            {employees.map((item: any) => (
-              <EmployeeCard key={item.Empleado?.ID_Empleado} employee={mapEmployeeData(item)} />
-            ))}
-          </div>
-        )}
-      </div>
 
       <div className="mb-8">
+        <span className="font-semibold text-lg">Empleados en este proyecto:</span>
+        <DraggableList
+          employees={assignedEmployees}
+          onDragStart={canDragAndDrop ? handleDragStart : () => {}}
+          onDrop={canDragAndDrop ? handleDropAssigned : () => {}}
+          onDragOver={canDragAndDrop ? () => setIsOverAssigned(true) : () => {}}
+          isOver={isOverAssigned && canDragAndDrop}
+          draggableEnabled={canDragAndDrop}
+        />
+        {assignedEmployees.length === 0 && (
+          <p className="text-gray-600 mt-2">No hay empleados asignados a este proyecto.</p>
+        )}
+      </div>
+      <div className="mb-8">
         <span className="font-semibold text-lg">Todos los empleados:</span>
-        {allEmployees.length === 0 ? (
+        <DraggableList
+          employees={availableEmployees}
+          onDragStart={canDragAndDrop ? handleDragStart : () => {}}
+          onDrop={canDragAndDrop ? handleDropAvailable : () => {}}   // <-- FIXED HERE
+          onDragOver={canDragAndDrop ? () => setIsOverAvailable(true) : () => {}} // <-- FIXED HERE
+          isOver={isOverAvailable && canDragAndDrop}
+          draggableEnabled={canDragAndDrop}
+        />
+        {availableEmployees.length === 0 && (
           <p className="text-gray-600 mt-2">No hay empleados registrados.</p>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 mt-4">
-            {allEmployees
-              .filter((emp: any) => !assignedIds.has(emp.ID_Empleado))
-              .map((emp: any) => (
-                <EmployeeCard key={emp.ID_Empleado} employee={mapAllEmployeeData(emp)} />
-              ))}
-          </div>
         )}
       </div>
       {/* Aquí puedes agregar la lógica para asignar empleados */}
