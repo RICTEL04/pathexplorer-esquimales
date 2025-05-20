@@ -159,12 +159,12 @@ $$;
 ALTER FUNCTION "public"."select_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "Descripcion" "text")
+CREATE OR REPLACE FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "ID_Cliente" "uuid", "Descripcion" "text", "Status" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isReviewed" boolean)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
     RETURN QUERY
-    SELECT p."ID_Proyecto", p."Nombre", p."Descripcion"
+    SELECT p.*
     FROM public."Proyectos" p
     JOIN public."Empleado_Proyectos" ep ON p."ID_Proyecto" = ep."ID_Proyecto"
     WHERE ep."ID_Empleado" = p_id_empleado
