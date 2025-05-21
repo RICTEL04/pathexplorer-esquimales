@@ -57,7 +57,7 @@ export default function ProyectosPage() {
       }
     };
     loadProjects();
-  }, []);
+  }, [showNewProjectModal]);
 
   // Handler to create a new project
   const handleSubmit = async (e: React.FormEvent) => {
@@ -159,7 +159,7 @@ export default function ProyectosPage() {
     <div className="container mx-auto p-4">
       <button
         onClick={() => setShowNewProjectModal(true)}
-        className="flex items-center gap-2 px-6 py-3 bg-violet-800 hover:bg-red-700 transition-all duration-300 text-white font-bold rounded-lg"
+        className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 transition-all duration-300 text-white font-bold rounded-lg"
       >
         <Plus className="w-5 h-5" />
         <span>Nuevo Proyecto</span>
@@ -174,7 +174,7 @@ export default function ProyectosPage() {
           setDescription={setDescription}
           startDate={startDate}
           setStartDate={setStartDate}
-          endDate={endDate}
+          endDate={setEndDate}
           setEndDate={setEndDate}
           roles={roles}
           setRoles={setRoles}
@@ -208,45 +208,55 @@ export default function ProyectosPage() {
           <p className="text-gray-600">No hay proyectos disponibles.</p>
         ) : (
           projects.map((project) => (
-            <div key={project.ID_Proyecto} className="bg-white rounded-lg border border-gray-200 p-4 mb-4 flex items-center justify-between">
-              <div>
+            <div
+              key={project.ID_Proyecto}
+              className="bg-white rounded-lg border border-gray-200 p-4 mb-4 flex items-center justify-between"
+            >
+              <div className="w-1/3 flex flex-col gap-1">
                 <h3 className="text-black font-bold">{project.Nombre}</h3>
                 <p className="text-gray-600 text-sm">{project.Descripcion}</p>
-                <p className="text-gray-600 mt-2">Fecha de Inicio: {project.fecha_inicio}</p>
-                <p className="text-gray-600 mt-2">Fecha de Fin: {project.fecha_fin}</p>
               </div>
-              {project.Status === 'active' ? (
-                <div className="flex gap-2">
-                  <button
-                    className="px-4 py-2 bg-violet-800 hover:bg-red-700 text-white rounded transition-all"
-                    onClick={() => openEditModal(project)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-all"
-                    onClick={() => openConfirmModal(project.ID_Proyecto)}
-                  >
-                    Marcar como hecho
-                  </button>
-                </div>
-              ) : project.Status === 'done' && project.isReviewed ? (
-                <div>
-                  <span className="inline-block mt-2 px-3 py-1 bg-green-200 text-green-800 rounded text-lg font-medium">
-                    Hecho
+              <div className="flex w-1/3 gap-4 mt-1">
+                <p className="text-gray-600 text-s">Inicio: {project.fecha_inicio}</p>
+                <p className="text-gray-600 text-s">Fin: {project.fecha_fin}</p>
+              </div>
+              <div className="ml-6 flex items-center gap-2 w-1/3">
+                {project.Status === 'active' ? (
+                  <>
+                    <button
+                      className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded transition-all"
+                      onClick={() => openEditModal(project)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-all"
+                      onClick={() => openConfirmModal(project.ID_Proyecto)}
+                    >
+                      Marcar como hecho
+                    </button>
+                  </>
+                ) : project.Status === 'done' && project.isReviewed ? (
+                  <span className="inline-block px-3 py-1 bg-green-200 text-green-800 rounded text-lg font-medium">
+                    Proyecto Concluido
                   </span>
-                </div>
-
-              ) : project.Status === "done" && !project.isReviewed ? (
-                <div>
-                  <button
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-all"
-                    onClick={() => { openReviewModal(project) }}
-                  >
-                    Revisar
-                  </button>
-                </div>
-              ) : null}
+                ) : project.Status === "done" && !project.isReviewed ? (
+                  <>
+                    <button
+                      className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded transition-all"
+                      onClick={() => openEditModal(project)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-all"
+                      onClick={() => { openReviewModal(project) }}
+                    >
+                      Revisar
+                    </button>
+                  </>
+                ) : null}
+              </div>
             </div>
           ))
         )}

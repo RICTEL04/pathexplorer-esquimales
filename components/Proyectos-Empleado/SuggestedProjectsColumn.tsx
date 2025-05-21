@@ -50,6 +50,7 @@ export default function SuggestedProjectsColumn({
         } else {
             alert("Hubo un error al aplicar al proyecto.");
         }
+        window.location.reload();
     };
     return (
         <div className="lg:col-span-2">

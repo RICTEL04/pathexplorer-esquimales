@@ -25,9 +25,9 @@ export default function NewProjectModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-8 max-w-2xl w-full mx-4 rounded-lg shadow-xl">
-        <h2 className="text-2xl font-bold mb-6 text-red-600">Nuevo Proyecto</h2>
-        <form className="space-y-4" onSubmit={onSubmit}>
+      <div className="bg-white p-8 max-w-2xl w-full mx-4 rounded-lg shadow-xl max-h-[80vh] flex flex-col">
+        <h2 className="text-2xl font-bold mb-6">Nuevo Proyecto</h2>
+        <form className="space-y-4 overflow-y-auto flex-1" onSubmit={onSubmit}>
           <div>
             <label className="block text-gray-700 mb-2">Nombre del Proyecto</label>
             <input
@@ -110,7 +110,7 @@ export default function NewProjectModal({
             </button>
             <button
               type="submit"
-              className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded transition-all duration-300"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded transition-all duration-300"
             >
               Crear Proyecto
             </button>

@@ -30,7 +30,7 @@ export default function ReviewModal({
       }
     };
     fetchEmpleados();
-  }, [selectedProject, submitDisabled]);
+  }, [selectedProject, selectedEmpleado]);
 
     useEffect(() => {
         if (rating > 0 && strengths.trim() !== "" && improvement.trim() !== "") {
