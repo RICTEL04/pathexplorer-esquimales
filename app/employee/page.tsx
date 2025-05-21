@@ -123,9 +123,8 @@ export default function EmployeeDashboard() {
       Departamento: {
         Nombre: any;
         Descripcion: any;
-        ID_Departamento: any;
-      } [];
-    } [];
+      }[];
+    }[];
   }
   
 
@@ -203,12 +202,17 @@ export default function EmployeeDashboard() {
     { name: "Pendientes", value: selectedEmpleado.Certificados.filter((c) => c.Verificacion === null).length, color: "#f87171" },
   ];
 
+    console.log(empleados[2]?.ID_Departamento);
+
+    const capabilityLead = empleados[2]?.Capability_Lead?.[0];
+    console.log(capabilityLead?.ID_Departamento);
+    
+
   const empleadosAsignados = empleados.filter((empleado) => {
     // Verificar si el empleado logueado tiene un ID_Departamento válido
-                const departamentoLogueado = selectedEmpleado?.Capability_Lead 
+                const departamentoLogueado = selectedEmpleado?.Capability_Lead
                   ? selectedEmpleado.Capability_Lead.ID_Departamento 
                   : "No disponible";
-        console.log("Departamento logueado:", selectedEmpleado?.Capability_Lead?.ID_Departamento ?? "No disponible");
 
     // Comparar el ID_Departamento del empleado con el del empleado logueado
     return empleado.ID_Departamento === departamentoLogueado;

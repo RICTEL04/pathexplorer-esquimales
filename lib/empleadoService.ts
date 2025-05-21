@@ -36,8 +36,8 @@ export async function getEmpleados() {
           ID_CapabilityLead,
           Departamento (
             Nombre,
-            Descripcion,
-            ID_Departamento
+            Descripcion
+            
           )
         )
     `);
