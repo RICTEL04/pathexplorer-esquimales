@@ -240,7 +240,7 @@ export default function ObjetivosPage() {
         {/* Sección lateral - Metas como Revisor */}
         <div className="w-full lg:w-1/4 bg-purple-400 rounded-lg shadow-md p-4">
           <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">Metas como Revisor</h2>
-          <div className="overflow-y-auto max-h-[calc(120vh)]">
+          <div className="overflow-y-auto max-h-[calc(70vh)]">
             <RevisorMetaCards
               metas={metasRevisor}
               onMetaRevisor={handleSuccessRevision}

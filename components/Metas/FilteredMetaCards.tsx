@@ -14,6 +14,7 @@ type FiltersType = {
   estados: string[];
   registrada: boolean | null;
   ordenamiento: 'reciente' | 'antigua' | 'limite';
+  searchText: string; 
 };
 
 export default function FilteredMetaCards({ 
@@ -27,8 +28,10 @@ export default function FilteredMetaCards({
     plazos: [],
     estados: [],
     registrada: null,
-    ordenamiento: 'reciente'
+    ordenamiento: 'reciente',
+    searchText: '' // Inicializado como string vacío
   });
+  const [activeFilterSection, setActiveFilterSection] = useState<string | null>('tipos');
 
   // Extraer valores únicos para los filtros
   const tiposUnicos = [...new Set(metas.map(meta => meta.Tipo_Meta))];
@@ -38,6 +41,14 @@ export default function FilteredMetaCards({
   // Función para aplicar los filtros
   useEffect(() => {
     let metasFiltradas = [...metas];
+    
+    // Filtrar por texto de búsqueda
+    if (filters.searchText.trim() !== '') {
+      const searchTerm = filters.searchText.toLowerCase().trim();
+      metasFiltradas = metasFiltradas.filter(meta => 
+        (meta.Nombre?.toLowerCase().includes(searchTerm))
+      );
+    }
     
     // Filtrar por tipo de meta
     if (filters.tipos.length > 0) {
@@ -95,6 +106,9 @@ export default function FilteredMetaCards({
       } else if (tipo === 'ordenamiento') {
         // Para ordenamiento, simplemente actualizar el valor
         return { ...prevFilters, ordenamiento: valor };
+      } else if (tipo === 'searchText') {
+        // Para el texto de búsqueda, actualizar el valor
+        return { ...prevFilters, searchText: valor };
       } else {
         // Para arrays (tipos, plazos, estados)
         const array = prevFilters[tipo as 'tipos' | 'plazos' | 'estados'];
@@ -105,6 +119,14 @@ export default function FilteredMetaCards({
         }
       }
     });
+  };
+
+  // Manejar el cambio en el campo de búsqueda
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      searchText: e.target.value
+    }));
   };
 
   // Cambiar el ordenamiento
@@ -122,8 +144,26 @@ export default function FilteredMetaCards({
       plazos: [],
       estados: [],
       registrada: null,
-      ordenamiento: 'reciente'
+      ordenamiento: 'reciente',
+      searchText: ''
     });
+    setActiveFilterSection(null);
+  };
+
+  // Contar filtros activos por sección
+  const contarFiltrosActivos = (seccion: string) => {
+    switch(seccion) {
+      case 'tipos':
+        return filters.tipos.length;
+      case 'plazos':
+        return filters.plazos.length;
+      case 'estados':
+        return filters.estados.length;
+      case 'registrada':
+        return filters.registrada !== null ? 1 : 0;
+      default:
+        return 0;
+    }
   };
 
   return (
@@ -138,101 +178,99 @@ export default function FilteredMetaCards({
         </button>
       </div>
       
-      {/* Barra de filtros */}
-      <div className="flex flex-col space-y-4 mb-6">
-        {/* Filtro por tipo */}
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Tipo de Meta:</h3>
-          <div className="flex flex-wrap gap-2">
-            {tiposUnicos.map((tipo, index) => (
-              <button
-                key={index}
-                onClick={() => toggleFilter('tipos', tipo)}
-                className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                  filters.tipos.includes(tipo)
-                    ? 'bg-purple-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                {tipo}
-              </button>
-            ))}
-          </div>
-        </div>
-        
-        {/* Filtro por plazo */}
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Plazo:</h3>
-          <div className="flex flex-wrap gap-2">
-            {plazosUnicos.map((plazo, index) => (
-              <button
-                key={index}
-                onClick={() => toggleFilter('plazos', plazo)}
-                className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                  filters.plazos.includes(plazo)
-                    ? 'bg-purple-500 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                {plazo}
-              </button>
-            ))}
-          </div>
-        </div>
-        
-        {/* Filtro por estado */}
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Estado:</h3>
-          <div className="flex flex-wrap gap-2">
-            {estadosUnicos.map((estado, index) => (
-              estado && (
-                <button
-                  key={index}
-                  onClick={() => toggleFilter('estados', estado)}
-                  className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                    filters.estados.includes(estado)
-                      ? 'bg-purple-500 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  {estado}
-                </button>
-              )
-            ))}
-          </div>
-        </div>
-        
-        {/* Filtro por registrada */}
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Registrada:</h3>
-          <div className="flex gap-2">
-            <button
-              onClick={() => toggleFilter('registrada', true)}
-              className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                filters.registrada === true
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+      {/* Barra de búsqueda de texto */}
+      <div className="mb-4">
+        <div className="relative">
+          <input
+            type="text"
+            value={filters.searchText}
+            onChange={handleSearchChange}
+            placeholder="Buscar por texto..."
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          />
+          {filters.searchText && (
+            <button 
+              onClick={() => setFilters(prev => ({ ...prev, searchText: '' }))}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
-              Sí
+              ×
             </button>
-            <button
-              onClick={() => toggleFilter('registrada', false)}
-              className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                filters.registrada === false
-                  ? 'bg-purple-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              No
-            </button>
-          </div>
+          )}
         </div>
-        
-        {/* Ordenamiento */}
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-2">Ordenar por:</h3>
-          <div className="flex gap-2">
+      </div>
+      
+      {/* Barra de filtros horizontal */}
+      <div className="mb-6">
+        {/* Selector de tipo de filtro */}
+        <div className="flex flex-wrap gap-2 mb-3">
+          <button
+            onClick={() => setActiveFilterSection(activeFilterSection === 'tipos' ? null : 'tipos')}
+            className={`px-3 py-1 text-sm rounded-md transition-colors flex items-center
+              ${activeFilterSection === 'tipos' 
+                ? 'bg-purple-500 text-white' 
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`
+            }
+          >
+            Tipo
+            {contarFiltrosActivos('tipos') > 0 && (
+              <span className="ml-1 bg-white text-purple-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {contarFiltrosActivos('tipos')}
+              </span>
+            )}
+          </button>
+          
+          <button
+            onClick={() => setActiveFilterSection(activeFilterSection === 'plazos' ? null : 'plazos')}
+            className={`px-3 py-1 text-sm rounded-md transition-colors flex items-center
+              ${activeFilterSection === 'plazos' 
+                ? 'bg-purple-500 text-white' 
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`
+            }
+          >
+            Plazo
+            {contarFiltrosActivos('plazos') > 0 && (
+              <span className="ml-1 bg-white text-purple-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {contarFiltrosActivos('plazos')}
+              </span>
+            )}
+          </button>
+          
+          <button
+            onClick={() => setActiveFilterSection(activeFilterSection === 'estados' ? null : 'estados')}
+            className={`px-3 py-1 text-sm rounded-md transition-colors flex items-center
+              ${activeFilterSection === 'estados' 
+                ? 'bg-purple-500 text-white' 
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`
+            }
+          >
+            Estado
+            {contarFiltrosActivos('estados') > 0 && (
+              <span className="ml-1 bg-white text-purple-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {contarFiltrosActivos('estados')}
+              </span>
+            )}
+          </button>
+          
+          <button
+            onClick={() => setActiveFilterSection(activeFilterSection === 'registrada' ? null : 'registrada')}
+            className={`px-3 py-1 text-sm rounded-md transition-colors flex items-center
+              ${activeFilterSection === 'registrada' 
+                ? 'bg-purple-500 text-white' 
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`
+            }
+          >
+            Registrada
+            {contarFiltrosActivos('registrada') > 0 && (
+              <span className="ml-1 bg-white text-purple-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {contarFiltrosActivos('registrada')}
+              </span>
+            )}
+          </button>
+          
+          <div className="border-l border-gray-300 ml-1 mr-1"></div>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-700">Ordenar:</span>
             <button
               onClick={() => cambiarOrdenamiento('reciente')}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
@@ -241,7 +279,7 @@ export default function FilteredMetaCards({
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Más reciente
+              Reciente
             </button>
             <button
               onClick={() => cambiarOrdenamiento('antigua')}
@@ -251,7 +289,7 @@ export default function FilteredMetaCards({
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Más antigua
+              Antigua
             </button>
             <button
               onClick={() => cambiarOrdenamiento('limite')}
@@ -261,10 +299,108 @@ export default function FilteredMetaCards({
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Fecha límite
+              Límite
             </button>
           </div>
         </div>
+        
+        {/* Opciones de filtro según selección */}
+        {activeFilterSection && (
+          <div className="bg-white p-3 rounded-md shadow-sm border border-gray-200 mb-3">
+            {activeFilterSection === 'tipos' && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Tipo de Meta:</h3>
+                <div className="flex flex-wrap gap-2">
+                  {tiposUnicos.map((tipo, index) => (
+                    <button
+                      key={index}
+                      onClick={() => toggleFilter('tipos', tipo)}
+                      className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                        filters.tipos.includes(tipo)
+                          ? 'bg-purple-500 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                    >
+                      {tipo}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {activeFilterSection === 'plazos' && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Plazo:</h3>
+                <div className="flex flex-wrap gap-2">
+                  {plazosUnicos.map((plazo, index) => (
+                    <button
+                      key={index}
+                      onClick={() => toggleFilter('plazos', plazo)}
+                      className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                        filters.plazos.includes(plazo)
+                          ? 'bg-purple-500 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                    >
+                      {plazo}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {activeFilterSection === 'estados' && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Estado:</h3>
+                <div className="flex flex-wrap gap-2">
+                  {estadosUnicos.map((estado, index) => (
+                    estado && (
+                      <button
+                        key={index}
+                        onClick={() => toggleFilter('estados', estado)}
+                        className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                          filters.estados.includes(estado)
+                            ? 'bg-purple-500 text-white'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }`}
+                      >
+                        {estado}
+                      </button>
+                    )
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {activeFilterSection === 'registrada' && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Registrada:</h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => toggleFilter('registrada', true)}
+                    className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                      filters.registrada === true
+                        ? 'bg-purple-500 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    Sí
+                  </button>
+                  <button
+                    onClick={() => toggleFilter('registrada', false)}
+                    className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                      filters.registrada === false
+                        ? 'bg-purple-500 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
       
       {/* Resultados filtrados */}
