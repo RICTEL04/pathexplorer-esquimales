@@ -41,9 +41,42 @@ export async function getEmpleados() {
           )
         )
     `);
-
+    
+    interface CapabilityLead {
+      ID_Empleado: any;
+      ID_Departamento: any;
+      ID_CapabilityLead: any;
+      Departamento: {
+        Nombre: any;
+        Descripcion: any;
+      }[];
+    }
+    
+    interface Empleado {
+      ID_Empleado: any;
+      Nombre: any;
+      Rol: any;
+      Nivel: any;
+      FechaContratacion: any;
+      ID_Departamento: any;
+      Certificados: any[];
+      Puesto_proyecto: any[];
+      Capability_Lead: CapabilityLead[]; // Especificar que es un array
+    }
     
   if (error) throw error;
+
+   
+    data.forEach((empleado) => {
+    // Acceder al primer elemento de Capability_Lead para obtener ID_Departamento
+    const idDepartamentoCapabilityLead = empleado.Capability_Lead?.[0]?.ID_Departamento;
+  
+    if (idDepartamentoCapabilityLead) {
+      console.log(`ID_Departamento del Capability Lead: ${idDepartamentoCapabilityLead}`);
+    } else {
+      console.log('Este empleado no tiene un Capability Lead asociado.');
+    }
+  });
 
   // Devolver los datos tal como los proporciona Supabase
   return data || [];

@@ -9,7 +9,7 @@ import { Star } from "lucide-react";
 import UserIcon from "@heroicons/react/24/solid/UserIcon";
 import { Tooltip as TooltipComponent } from "@/components/ui/tooltip";
 import {TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip"
-import {getCapability} from "@/lib/capabilityServices";
+
 
 
 // Componentes reutilizables
@@ -124,10 +124,20 @@ export default function EmployeeDashboard() {
         Nombre: any;
         Descripcion: any;
       }[];
+    } [];
+  }
+
+  interface CapabilityLead {
+    ID_Empleado: any;
+    ID_Departamento: any;
+    ID_CapabilityLead: any;
+    Departamento: {
+      Nombre: any;
+      Descripcion: any;
     }[];
   }
   
-
+  const [capabilityLead1, setCapabilityLead] = useState<CapabilityLead | null>(null);
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [selectedEmpleado, setSelectedEmpleado] = useState<Empleado | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -165,6 +175,7 @@ export default function EmployeeDashboard() {
 
         const empleadoLogueado = empleadosMapped.find((empleado: any) => empleado.ID_Empleado === userId);
 
+        
         setEmpleados(empleadosMapped);
         setSelectedEmpleado(empleadoLogueado ?? null);
       } catch (error) {
@@ -180,7 +191,7 @@ export default function EmployeeDashboard() {
   if (!selectedEmpleado) {
     return <div>Cargando datos...</div>;
   }
-
+  
 
 
   // Datos para la gráfica de proyectos por año
@@ -211,6 +222,7 @@ export default function EmployeeDashboard() {
   const empleadosAsignados = empleados.filter((empleado) => {
     // Verificar si el empleado logueado tiene un ID_Departamento válido
                 const departamentoLogueado = selectedEmpleado?.Capability_Lead
+                  // @ts-ignore: 
                   ? selectedEmpleado.Capability_Lead.ID_Departamento 
                   : "No disponible";
 
