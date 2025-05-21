@@ -11,7 +11,6 @@ import { Tooltip as TooltipComponent } from "@/components/ui/tooltip";
 import {TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip"
 
 
-
 // Componentes reutilizables
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return <div className={`bg-white shadow-md rounded-md ${className}`}>{children}</div>;
@@ -101,7 +100,7 @@ export default function EmployeeDashboard() {
       Nombre: any;
       Fecha_caducidad: any;
       Documento: any;
-      Verificacion: boolean | null;
+      Verificacion: any;
       Descripcion: any;
     }[];
     Puesto_proyecto: {
@@ -126,18 +125,8 @@ export default function EmployeeDashboard() {
       }[];
     } [];
   }
-
-  interface CapabilityLead {
-    ID_Empleado: any;
-    ID_Departamento: any;
-    ID_CapabilityLead: any;
-    Departamento: {
-      Nombre: any;
-      Descripcion: any;
-    }[];
-  }
   
-  const [capabilityLead1, setCapabilityLead] = useState<CapabilityLead | null>(null);
+
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [selectedEmpleado, setSelectedEmpleado] = useState<Empleado | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -193,7 +182,6 @@ export default function EmployeeDashboard() {
   }
   
 
-
   // Datos para la gráfica de proyectos por año
   const workData = Object.entries(
     selectedEmpleado.Puesto_proyecto.flatMap((puesto) => puesto.Proyectos || [])
@@ -213,23 +201,18 @@ export default function EmployeeDashboard() {
     { name: "Pendientes", value: selectedEmpleado.Certificados.filter((c) => c.Verificacion === null).length, color: "#f87171" },
   ];
 
-    console.log(empleados[2]?.ID_Departamento);
-
-    const capabilityLead = empleados[2]?.Capability_Lead?.[0];
-    console.log(capabilityLead?.ID_Departamento);
-    
 
   const empleadosAsignados = empleados.filter((empleado) => {
     // Verificar si el empleado logueado tiene un ID_Departamento válido
                 const departamentoLogueado = selectedEmpleado?.Capability_Lead
-                  // @ts-ignore: 
+                  
+                  // @ts-ignore:
                   ? selectedEmpleado.Capability_Lead.ID_Departamento 
                   : "No disponible";
 
     // Comparar el ID_Departamento del empleado con el del empleado logueado
     return empleado.ID_Departamento === departamentoLogueado;
   });
-  
   
 
   const empleadosSinProyectos = empleados.filter(

@@ -67,16 +67,18 @@ export async function getEmpleados() {
   if (error) throw error;
 
    
-    data.forEach((empleado) => {
-    // Acceder al primer elemento de Capability_Lead para obtener ID_Departamento
+  data.forEach((empleado) => {
     const idDepartamentoCapabilityLead = empleado.Capability_Lead?.[0]?.ID_Departamento;
   
     if (idDepartamentoCapabilityLead) {
       console.log(`ID_Departamento del Capability Lead: ${idDepartamentoCapabilityLead}`);
     } else {
       console.log('Este empleado no tiene un Capability Lead asociado.');
-    }
+    }   
   });
+
+  
+  
 
   // Devolver los datos tal como los proporciona Supabase
   return data || [];
