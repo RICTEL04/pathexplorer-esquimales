@@ -1,7 +1,7 @@
 "use client";
 import { getCapabilityLead } from "@/lib/capabilityLead";
 import { useEffect, useState } from "react";
-import EmployeeCard from "./EmployeeCard";
+import EmployeeCard from "@/components/EmployeeCard";
 
 interface Proyectos {
   ID_Proyecto: string;
