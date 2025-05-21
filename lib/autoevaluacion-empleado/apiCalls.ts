@@ -26,3 +26,17 @@ export async function selectEmpleado(empleadoID: string) {
   }
   return data;
 }
+
+export async function selectProyectosPostulados(empleadoID: string) {
+  const { data, error } = await supabase
+    .from("Empleado_Proyectos")
+    .select("*")
+    .eq("ID_Empleado", empleadoID)
+    .eq("isApproved", false);
+
+  if (error) {
+    console.error("Error fetching projects:", error);
+  }
+  console.log("Proyectos postulados:", data);
+  return data;
+}

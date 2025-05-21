@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { fetchEmployeesByProject, insertReview } from "@/lib/delivery-lead-proyectos/apiCalls";
+import { insertReview } from "@/lib/delivery-lead-proyectos/apiCalls";
 import { Employee, ProjectJson } from "@/lib/delivery-lead-proyectos/definitions";
-import { selectEmpleado } from "@/lib/autoevaluacion-empleado/apiCalls";
 
 export default function SelfReviewModal({
   onClose,
@@ -10,34 +9,13 @@ export default function SelfReviewModal({
 }: {
   onClose: () => void;
   selectedProject: ProjectJson;
-  employee: string;
+  employee: Employee;
 }) {
   const [rating, setRating] = useState<number>(0);
   const [strengths, setStrengths] = useState<string>("");
   const [improvement, setImprovement] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
-  const [empleado, setEmpleado] = useState<Employee | null>(null);
-
-  useEffect(() => {
-    const fetchEmpleado = async () => {
-      console.log("selectedProject", selectedProject);
-      if (selectedProject?.ID_Proyecto) {
-        try {
-          const data = await selectEmpleado(employee);
-          console.log("data", data);
-          if (data) {
-            console.log("Empleado data:", data);
-            setEmpleado(data);
-            console.log("Empleado ID:", empleado?.ID_Empleado);
-          }
-        } catch (error) {
-          console.error("Error fetching employees:", error);
-        }
-      }
-    };
-    fetchEmpleado();
-  }, [employee]);
 
   useEffect(() => {
     if (rating > 0 && strengths.trim() !== "" && improvement.trim() !== "") {
@@ -64,12 +42,12 @@ export default function SelfReviewModal({
       return;
     }
     setError("");
-    if (!empleado || !empleado.ID_Empleado) {
-      setError("Empleado no seleccionado.");
+    if (!employee || !employee.ID_Empleado) {
+      setError("employee no seleccionado.");
       return;
     }
     insertReview({
-      ID_Empleado: empleado.ID_Empleado,
+      ID_Empleado: employee.ID_Empleado,
       ID_Proyecto: selectedProject.ID_Proyecto,
       ID_DeliveryLead: selectedProject.ID_DeliveryLead,
       Calificacion: rating,
@@ -82,12 +60,12 @@ export default function SelfReviewModal({
 
   if (!selectedProject) return null;
 
-  // Show loading if empleado is not loaded
-  if (!empleado) {
+  // Show loading if employee is not loaded
+  if (!employee) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white p-8 rounded shadow text-center">
-          <span className="text-gray-700">Cargando información del empleado...</span>
+          <span className="text-gray-700">Cargando información del employee...</span>
         </div>
       </div>
     );
@@ -98,7 +76,7 @@ export default function SelfReviewModal({
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">
-            Evaluar Empleado
+            Evaluar employee
           </h2>
           <button
             onClick={handleBack}
@@ -110,9 +88,9 @@ export default function SelfReviewModal({
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <h3 className="text-xl font-semibold mb-2">{empleado.Nombre}</h3>
-            <p className="text-gray-700 mb-1">Rol: {empleado.Rol}</p>
-            <p className="text-gray-500 text-sm mb-4">ID: {empleado.ID_Empleado}</p>
+            <h3 className="text-xl font-semibold mb-2">{employee.Nombre}</h3>
+            <p className="text-gray-700 mb-1">Rol: {employee.Rol}</p>
+            <p className="text-gray-500 text-sm mb-4">ID: {employee.ID_Empleado}</p>
           </div>
           <div className="mb-6">
             <label className="block mb-2 font-medium">Calificación:</label>
