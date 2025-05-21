@@ -1,4 +1,3 @@
-import EmployeeCard from "@/app/employee/capability-lead/perfiles-de-empleados/EmployeeCard";
 import { supabase } from "../supabase";
 import { DeliveryLead, Review } from "./definitions";
 import { Employee } from "./definitions";
