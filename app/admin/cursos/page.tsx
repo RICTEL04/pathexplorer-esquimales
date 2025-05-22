@@ -23,6 +23,8 @@ const CursosPage: React.FC = () => {
   const [habilidades, setHabilidades] = useState<Habilidad[]>([]);
   const [selectedHabilidades, setSelectedHabilidades] = useState<Habilidad[]>([]);
   const [showCreateCursoForm, setShowCreateCursoForm] = useState(false);
+  const [showEditCursoForm, setShowEditCursoForm] = useState(false); // Controla si se muestra el formulario de edición
+  const [cursoToEdit, setCursoToEdit] = useState<Curso | null>(null); // Almacena el curso que se está editando
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [cursoData, setCursoData] = useState({
@@ -96,6 +98,49 @@ const CursosPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error al crear el curso:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEditCurso = (curso: Curso) => {
+    setCursoToEdit({
+      ...curso,
+      Descripcion: curso.Descripcion || "", // Asegúrate de que la descripción no sea `undefined`
+    });
+    setShowEditCursoForm(true);
+  };
+
+  const handleUpdateCurso = async () => {
+    if (!cursoToEdit) return;
+
+    setIsLoading(true);
+    try {
+      const { ID_Curso, Nombre, Descripcion, link, Fecha_fin_curso } = cursoToEdit;
+
+      const { error } = await supabase
+        .from("Cursos")
+        .update({
+          Nombre,
+          Descripcion,
+          link,
+          Fecha_fin_curso,
+        })
+        .eq("ID_Curso", ID_Curso);
+
+      if (error) {
+        throw error;
+      }
+
+      // Actualizar la lista de cursos
+      const updatedCursos = await getCursos();
+      setCursos(updatedCursos);
+
+      // Cerrar el formulario de edición
+      setShowEditCursoForm(false);
+      setCursoToEdit(null);
+    } catch (error) {
+      console.error("Error al actualizar el curso:", error);
     } finally {
       setIsLoading(false);
     }
@@ -188,7 +233,7 @@ const CursosPage: React.FC = () => {
                       </svg>
                       Finaliza: {new Date(curso.Fecha_fin_curso).toLocaleDateString()}
                     </div>
-                    <div className="mt-4">
+                    <div className="mt-4 flex justify-between items-center">
                       <a
                         href={curso.link}
                         target="_blank"
@@ -200,6 +245,12 @@ const CursosPage: React.FC = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                       </a>
+                      <button
+                        onClick={() => handleEditCurso(curso)}
+                        className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        Editar
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -354,6 +405,98 @@ const CursosPage: React.FC = () => {
                         Creando...
                       </>
                     ) : 'Crear Curso'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para editar curso */}
+      {showEditCursoForm && cursoToEdit && (
+        <div className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-gray-800">Editar Curso</h2>
+                <button
+                  onClick={() => {
+                    setShowEditCursoForm(false);
+                    setCursoToEdit(null);
+                  }}
+                  className="text-gray-400 hover:text-gray-500"
+                >
+                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <form onSubmit={(e) => { e.preventDefault(); handleUpdateCurso(); }} className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                    Nombre del Curso <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={cursoToEdit.Nombre}
+                    onChange={(e) => setCursoToEdit({ ...cursoToEdit, Nombre: e.target.value })}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                    Descripción <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    rows={3}
+                    value={cursoToEdit.Descripcion}
+                    onChange={(e) => setCursoToEdit({ ...cursoToEdit, Descripcion: e.target.value })}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="link" className="block text-sm font-medium text-gray-700 mb-1">
+                    Enlace al curso <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="url"
+                    id="link"
+                    name="link"
+                    value={cursoToEdit.link}
+                    onChange={(e) => setCursoToEdit({ ...cursoToEdit, link: e.target.value })}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    required
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowEditCursoForm(false);
+                      setCursoToEdit(null);
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    disabled={isLoading}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Actualizando..." : "Actualizar Curso"}
                   </button>
                 </div>
               </form>

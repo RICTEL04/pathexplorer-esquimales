@@ -18,21 +18,24 @@ export default function CoursesCard({
                 <h3 className="text-lg font-bold text-gray-800">{course.Nombre}</h3>
                 <div className="flex flex-row gap-4 mt-2">
                     <div>
-                        <p className="text-sm text-gray-600">Fecha Fin: {course.Fecha_fin_curso}</p>
                         <p className="text-sm text-gray-600">
-                            Descripción: {course ? course.Descripcion : "No description available"}
+                            Fecha Fin: {course.Fecha_fin_curso || "No disponible"}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                            Descripción: {course.Descripcion || "No description available"}
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-2">
-                        {course.skills.map((skill) => (
+                        {(course.skills || []).map((skill) => (
                             <span
                                 key={skill.ID_Habilidad}
-                                className={`text-sm font-medium px-3 py-1 rounded-full ${skill.Tipo === "hard"
-                                    ? "bg-blue-100 text-blue-700"
-                                    : skill.Tipo === "soft"
+                                className={`text-sm font-medium px-3 py-1 rounded-full ${
+                                    skill.Tipo === "hard"
+                                        ? "bg-blue-100 text-blue-700"
+                                        : skill.Tipo === "soft"
                                         ? "bg-green-100 text-green-700"
                                         : "bg-gray-100 text-gray-700"
-                                    }`}
+                                }`}
                             >
                                 {skill.Descripcion}
                             </span>
@@ -43,7 +46,9 @@ export default function CoursesCard({
             <button
                 className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex-shrink-0"
                 onClick={() => {
-                    window.open(course.link, "_blank");
+                    if (course.link) {
+                        window.open(course.link, "_blank");
+                    }
                 }}
             >
                 Ir a Curso
