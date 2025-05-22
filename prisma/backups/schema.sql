@@ -428,10 +428,9 @@ CREATE TABLE IF NOT EXISTS "public"."Historial" (
     "NombreEmpresa" "text",
     "Fecha_inicio" "date",
     "Fecha_final" "date",
-    "TipoEmpleo" "text",
-    "Workmode" "text",
     "Descripcion" "text",
-    "Currentjob" boolean
+    "Currentjob" boolean,
+    "created_at" timestamp with time zone DEFAULT "now"()
 );
 
 
@@ -440,7 +439,8 @@ ALTER TABLE "public"."Historial" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Historial_Habilidades" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "ID_Habilidad" "uuid" DEFAULT "gen_random_uuid"()
+    "ID_Habilidad" "uuid" DEFAULT "gen_random_uuid"(),
+    "nivel" "text"
 );
 
 
