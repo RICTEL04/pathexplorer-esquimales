@@ -182,6 +182,29 @@ $$;
 ALTER FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."select_proyectos_terminados_empleado"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "ID_Cliente" "uuid", "Descripcion" "text", "Status" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isReviewed" boolean)
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT p.*
+    FROM public."Proyectos" p
+    JOIN public."Empleado_Proyectos" ep ON p."ID_Proyecto" = ep."ID_Proyecto"
+    WHERE ep."ID_Empleado" = p_id_empleado
+    AND NOT EXISTS (
+        SELECT 1
+        FROM public."Evaluacion_Proyecto" ep2
+        WHERE ep2."ID_Empleado" = p_id_empleado
+        AND ep2."ID_Proyecto" = p."ID_Proyecto"
+        AND ep2."esAutoevaluacion" = false
+    );
+END;
+$$;
+
+
+ALTER FUNCTION "public"."select_proyectos_terminados_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."update_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
