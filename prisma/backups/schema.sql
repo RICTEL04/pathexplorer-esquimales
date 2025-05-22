@@ -429,7 +429,8 @@ CREATE TABLE IF NOT EXISTS "public"."Historial" (
     "Fecha_inicio" "date",
     "Fecha_final" "date",
     "Descripcion" "text",
-    "Currentjob" boolean
+    "Currentjob" boolean,
+    "created_at" timestamp with time zone DEFAULT "now"()
 );
 
 
