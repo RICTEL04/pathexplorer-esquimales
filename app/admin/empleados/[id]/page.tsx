@@ -8,11 +8,12 @@ import { useParams } from 'next/navigation'; // Cambiado a next/navigation
 
 const UserProfilePage = () => {
   const params = useParams(); // Usar useParams en lugar de useRouter
-  const id = params.id as string; // Obtener el ID de los parámetros
-
-  if (!id) {
-    return <div>ID no encontrado en la URL</div>;
+  // Handle the case where params is null
+  if (!params || !params.id) {
+    return <div className="min-h-screen flex items-center justify-center">ID no encontrado en la URL</div>;
   }
+
+  const id = params.id as string;
 
 
   // Resto de tu lógica usando id...

@@ -7,12 +7,14 @@ import { useEmployeeProfile } from '@/lib/hooks/useEmployeeProfile';
 import { useParams } from 'next/navigation'; // Cambiado a next/navigation
 
 const UserProfilePage = () => {
-  const params = useParams(); // Usar useParams en lugar de useRouter
-  const id = params.id as string; // Obtener el ID de los parámetros
-
-  if (!id) {
+  const params = useParams();
+  
+  // Add null check for params
+  if (!params || !params.id) {
     return <div>ID no encontrado en la URL</div>;
   }
+
+  const id = params.id as string;
 
 
   // Resto de tu lógica usando id...
