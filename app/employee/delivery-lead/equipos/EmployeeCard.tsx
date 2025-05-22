@@ -1,7 +1,7 @@
 "use client";
 
 interface Employee {
-  id: number;
+  id: string;
   name: string;
   position: string;
   email: string;

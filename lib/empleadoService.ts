@@ -8,6 +8,8 @@ export async function getEmpleados() {
       Nombre,
       Rol,
       Nivel,
+      FechaContratacion,
+      ID_Departamento,
       Certificados (
         ID_Certificado,
         Nombre,
@@ -16,44 +18,70 @@ export async function getEmpleados() {
         Verificacion,
         Descripcion
       ),
-      Departamento:ID_Departamento (
-        Nombre,
-        Descripcion
-      )
+      Puesto_proyecto (
+        id,
+        created_at,
+        Puesto,
+        Proyectos (
+          ID_Proyecto,
+          fecha_inicio,
+          fecha_fin,
+          Nombre,
+          Descripcion
+        )
+      ),
+        Capability_Lead (
+          ID_Empleado,
+          ID_Departamento,
+          ID_CapabilityLead,
+          Departamento (
+            Nombre,
+            Descripcion
+            
+          )
+        )
     `);
-
+    
+    interface CapabilityLead {
+      ID_Empleado: any;
+      ID_Departamento: any;
+      ID_CapabilityLead: any;
+      Departamento: {
+        Nombre: any;
+        Descripcion: any;
+      }[];
+    }
+    
+    interface Empleado {
+      ID_Empleado: any;
+      Nombre: any;
+      Rol: any;
+      Nivel: any;
+      FechaContratacion: any;
+      ID_Departamento: any;
+      Certificados: any[];
+      Puesto_proyecto: any[];
+      Capability_Lead: CapabilityLead[]; // Especificar que es un array
+    }
+    
   if (error) throw error;
 
-  return data?.map((empleado) => ({
-    ...empleado,
-    Departamento: empleado.Departamento || { Nombre: "Sin departamento", Descripcion: "" }, // Manejar departamentos nulos
-  })) || [];
+   
+  data.forEach((empleado) => {
+    const idDepartamentoCapabilityLead = empleado.Capability_Lead?.[0]?.ID_Departamento;
+  
+    if (idDepartamentoCapabilityLead) {
+      console.log(`ID_Departamento del Capability Lead: ${idDepartamentoCapabilityLead}`);
+    } else {
+      console.log('Este empleado no tiene un Capability Lead asociado.');
+    }   
+  });
+
+  
+  
+
+  // Devolver los datos tal como los proporciona Supabase
+  return data || [];
 }
-
-export async function handlePeopleLeadActions(employeeId: string) {
-  try {
-    const { error } = await supabase
-      .from('People_lead')
-      .insert({
-        ID_Empleado: employeeId, // ID del empleado que será el People Lead
-      });
-
-    if (error) {
-      console.error('Error al agregar el People Lead:', error);
-      throw error;
-    }
-
-    console.log('People Lead agregado exitosamente');
-    return { success: true };
-  } catch (error) {
-    console.error('Error en handlePeopleLeadActions:', error);
-    return { success: false, error };
-  }
-}
-
-
-
-
-
 
 

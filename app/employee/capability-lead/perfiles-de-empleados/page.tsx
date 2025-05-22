@@ -1,7 +1,7 @@
 "use client";
 import { getCapabilityLead } from "@/lib/capabilityLead";
 import { useEffect, useState } from "react";
-import EmployeeCard from "./EmployeeCard";
+import EmployeeCard from "@/components/EmployeeCard";
 
 interface Proyectos {
   ID_Proyecto: string;
@@ -75,7 +75,7 @@ export default function PerfilesDeEmpleadosPage() {
   ];
 
   const mapEmployeeData = (employee: Empleado) => ({
-    id: Number(employee.ID_Empleado),
+    id: employee.ID_Empleado, // Keep as string instead of converting to number
     name: employee.Nombre,
     position: employee.Rol,
     email: "", 
