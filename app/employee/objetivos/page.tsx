@@ -143,8 +143,8 @@ export default function ObjetivosPage() {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="mb-6">
-        <h1 className="text-gray-800 text-2xl font-bold mb-2">Objetivos</h1>
-        <p className="text-gray-600">Aquí puedes gestionar tus objetivos.</p>
+        <h1 className="text-gray-800 text-2xl font-bold mb-2">Metas</h1>
+        <p className="text-gray-600">Aquí puedes gestionar tus metas.</p>
         <div className="flex justify-between items-center">
           <button 
             onClick={() => setMostrarFormulario(true)}
@@ -160,7 +160,7 @@ export default function ObjetivosPage() {
         <div className="w-full lg:w-3/4 flex flex-col gap-6">
 
           {/* Categorías de Metas */}
-          <div className="bg-purple-400 rounded-lg shadow-md p-4">
+          <div className="bg-purple-600 rounded-lg shadow-md p-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {/* Capability */}
               <div className="bg-white rounded-lg shadow p-3">

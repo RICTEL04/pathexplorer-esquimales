@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { fetchRevisores } from '@/lib/metas-empleados/apiCallsMetas';
 import { Meta, Revisor_Meta, Empleado } from '@/lib/metas-empleados/metasDefinitions';
 
@@ -9,9 +9,186 @@ interface AddMetaFormProps {
   metaToEdit?: Meta | null;
 }
 
+interface SearchableSelectProps {
+  id: string;
+  name: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: Empleado[];
+  placeholder: string;
+  disabled?: boolean;
+  required?: boolean;
+  loading?: boolean;
+}
+
+function SearchableSelect({ 
+  id, 
+  name, 
+  value, 
+  onChange, 
+  options, 
+  placeholder, 
+  disabled = false, 
+  required = false,
+  loading = false 
+}: SearchableSelectProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [displayValue, setDisplayValue] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Set display value based on selected value
+  useEffect(() => {
+    if (value) {
+      const selectedOption = options.find(option => option.ID_Empleado === value);
+      setDisplayValue(selectedOption?.Nombre || '');
+    } else {
+      setDisplayValue('');
+    }
+  }, [value, options]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setSearchTerm('');
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Filter options based on search term
+  const filteredOptions = options.filter(option =>
+    option.Nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setDisplayValue(e.target.value);
+    if (!isOpen) {
+      setIsOpen(true);
+    }
+  };
+
+  const handleOptionSelect = (option: Empleado) => {
+    onChange(option.ID_Empleado);
+    setDisplayValue(option.Nombre);
+    setSearchTerm('');
+    setIsOpen(false);
+  };
+
+  const handleInputFocus = () => {
+    setIsOpen(true);
+    setSearchTerm(displayValue);
+    setDisplayValue('');
+  };
+
+  const handleInputBlur = () => {
+    // Small delay to allow option selection
+    setTimeout(() => {
+      if (value) {
+        const selectedOption = options.find(option => option.ID_Empleado === value);
+        setDisplayValue(selectedOption?.Nombre || '');
+      } else {
+        setDisplayValue('');
+      }
+      setSearchTerm('');
+    }, 150);
+  };
+
+  const handleClear = () => {
+    onChange('');
+    setDisplayValue('');
+    setSearchTerm('');
+    setIsOpen(false);
+    inputRef.current?.focus();
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <div className="relative">
+        <input
+          ref={inputRef}
+          type="text"
+          id={id}
+          name={name}
+          value={isOpen ? searchTerm : displayValue}
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+          placeholder={placeholder}
+          disabled={disabled}
+          required={required}
+          className="w-full px-3 py-2 pr-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-500"
+          autoComplete="off"
+        />
+        
+        {/* Clear button */}
+        {value && !disabled && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          >
+            ✕
+          </button>
+        )}
+        
+        {/* Dropdown arrow */}
+        <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
+          {!value && (
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          )}
+        </div>
+      </div>
+
+      {/* Dropdown */}
+      {isOpen && !disabled && (
+        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
+          {loading ? (
+            <div className="px-3 py-2 text-gray-500">Cargando revisores...</div>
+          ) : filteredOptions.length > 0 ? (
+            <>
+              {/* Clear option */}
+              <div
+                className="px-3 py-2 cursor-pointer hover:bg-gray-100 text-gray-500 border-b border-gray-200"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => handleClear()}
+              >
+                {placeholder}
+              </div>
+              
+              {/* Filtered options */}
+              {filteredOptions.map((option) => (
+                <div
+                  key={option.ID_Empleado}
+                  className="px-3 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-700"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => handleOptionSelect(option)}
+                >
+                  {option.Nombre}
+                </div>
+              ))}
+            </>
+          ) : (
+            <div className="px-3 py-2 text-gray-500">No se encontraron revisores</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit }: AddMetaFormProps) {
   const tipoMetaOptions = ['capability', 'proyecto', 'colaborador/empleado', 'curso/certificacion', 'Otro'];
   const plazoOptions = ['Corto', 'Mediano', 'Largo'];
+  const estadoOptions = ['En Progreso', 'Completada', 'Cancelada'];
   
   const [formData, setFormData] = useState<Omit<Meta, 'ID_meta' | 'Revisores'> & { 
     revisor1: string;
@@ -25,7 +202,7 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
     Fecha_limite: metaToEdit?.Fecha_limite ? new Date(metaToEdit.Fecha_limite) : new Date(),
     ID_Empleado: employeeID,
     Registrada: metaToEdit?.Registrada || false,
-    Estado: metaToEdit?.Estado || 'Pendiente',
+    Estado: metaToEdit?.Estado || 'En Progreso',
     Self_Reflection: metaToEdit?.Self_Reflection || null,
     revisor1: metaToEdit?.Revisores?.[0]?.ID_EmpleadoRevisor || '',
     revisor2: metaToEdit?.Revisores?.[1]?.ID_EmpleadoRevisor || ''
@@ -72,9 +249,7 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
     });
   };
 
-  const handleRevisorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    
+  const handleRevisorChange = (name: string, value: string) => {
     if (name === 'revisor1' && value === '' && formData.revisor2 !== '') {
       setFormData({
         ...formData,
@@ -136,6 +311,14 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
 
   const formatDateForInput = (date: Date) => {
     return date.toISOString().split('T')[0];
+  };
+
+  // Get available revisores for each selector
+  const getAvailableRevisores = (excluding: string[]) => {
+    return revisores.filter(revisor => 
+      revisor.ID_Empleado !== employeeID && 
+      !excluding.includes(revisor.ID_Empleado)
+    );
   };
 
   return (
@@ -211,7 +394,31 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
                   ))}
                 </select>
               </div>
-              
+
+              {/* Solo mostrar campo de Estado cuando se está editando una meta */}
+              {metaToEdit && (
+                <div>
+                  <label htmlFor="Estado" className="block text-sm font-medium text-gray-700 mb-1">
+                    Estado *
+                  </label>
+                  <select
+                    id="Estado"
+                    name="Estado"
+                    value={formData.Estado}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {estadoOptions.map((estado) => (
+                      <option key={estado} value={estado}>
+                        {estado}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* 
               <div>
                 <label htmlFor="Plazo" className="block text-sm font-medium text-gray-700 mb-1">
                   Plazo *
@@ -231,6 +438,8 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
                   ))}
                 </select>
               </div>
+              */}
+
             </div>
             
             <div>
@@ -284,60 +493,32 @@ export default function AddMetaForm({ employeeID, onSubmit, onCancel, metaToEdit
                 <label htmlFor="revisor1" className="block text-sm font-medium text-gray-700 mb-1">
                   Revisor Principal *
                 </label>
-                <select
+                <SearchableSelect
                   id="revisor1"
                   name="revisor1"
                   value={formData.revisor1}
-                  onChange={handleRevisorChange}
+                  onChange={(value) => handleRevisorChange('revisor1', value)}
+                  options={getAvailableRevisores([formData.revisor2])}
+                  placeholder="Seleccionar revisor principal"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Seleccionar revisor principal</option>
-                  {loading ? (
-                    <option disabled>Cargando revisores...</option>
-                  ) : (
-                    revisores
-                      .filter(revisor => 
-                        revisor.ID_Empleado !== employeeID &&
-                        revisor.ID_Empleado !== formData.revisor2
-                      )
-                      .map((revisor) => (
-                        <option key={revisor.ID_Empleado} value={revisor.ID_Empleado}>
-                          {revisor.Nombre}
-                        </option>
-                      ))
-                  )}
-                </select>
+                  loading={loading}
+                />
               </div>
 
               <div>
                 <label htmlFor="revisor2" className="block text-sm font-medium text-gray-700 mb-1">
                   Revisor Secundario (Opcional)
                 </label>
-                <select
+                <SearchableSelect
                   id="revisor2"
                   name="revisor2"
                   value={formData.revisor2}
-                  onChange={handleRevisorChange}
+                  onChange={(value) => handleRevisorChange('revisor2', value)}
+                  options={getAvailableRevisores([formData.revisor1])}
+                  placeholder="Sin revisor secundario"
                   disabled={!formData.revisor1}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-500"
-                >
-                  <option value="">Sin revisor secundario</option>
-                  {loading ? (
-                    <option disabled>Cargando revisores...</option>
-                  ) : (
-                    revisores
-                      .filter(revisor => 
-                        revisor.ID_Empleado !== employeeID &&
-                        revisor.ID_Empleado !== formData.revisor1
-                      )
-                      .map((revisor) => (
-                        <option key={revisor.ID_Empleado} value={revisor.ID_Empleado}>
-                          {revisor.Nombre}
-                        </option>
-                      ))
-                  )}
-                </select>
+                  loading={loading}
+                />
               </div>
             </div>
           </div>

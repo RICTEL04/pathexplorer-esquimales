@@ -13,7 +13,7 @@ type FiltersType = {
   plazos: string[];
   estados: string[];
   registrada: boolean | null;
-  ordenamiento: 'reciente' | 'antigua' | 'limite';
+  ordenamiento: 'fecha_inicio_r' | 'fecha_inicio_a' | 'fecha_limite_r'| 'fecha_limite_a';
   searchText: string; 
 };
 
@@ -28,7 +28,7 @@ export default function FilteredMetaCards({
     plazos: [],
     estados: [],
     registrada: null,
-    ordenamiento: 'reciente',
+    ordenamiento: 'fecha_inicio_r', // Cambiado a 'fecha_inicio' para mayor claridad
     searchText: '' // Inicializado como string vacío
   });
   const [activeFilterSection, setActiveFilterSection] = useState<string | null>('tipos');
@@ -80,11 +80,13 @@ export default function FilteredMetaCards({
     
     // Ordenar las metas
     metasFiltradas.sort((a, b) => {
-      if (filters.ordenamiento === 'reciente') {
+      if (filters.ordenamiento === 'fecha_inicio_r') {
         return new Date(b.Fecha_Inicio || 0).getTime() - new Date(a.Fecha_Inicio || 0).getTime();
-      } else if (filters.ordenamiento === 'antigua') {
+      } else if (filters.ordenamiento === 'fecha_inicio_a') {
         return new Date(a.Fecha_Inicio || 0).getTime() - new Date(b.Fecha_Inicio || 0).getTime();
-      } else if (filters.ordenamiento === 'limite') {
+      } else if (filters.ordenamiento === 'fecha_limite_r') {
+        return new Date(b.Fecha_limite || 0).getTime() - new Date(a.Fecha_limite || 0).getTime();
+      }else if (filters.ordenamiento === 'fecha_limite_a') {
         return new Date(a.Fecha_limite || 0).getTime() - new Date(b.Fecha_limite || 0).getTime();
       }
       return 0;
@@ -130,7 +132,7 @@ export default function FilteredMetaCards({
   };
 
   // Cambiar el ordenamiento
-  const cambiarOrdenamiento = (orden: 'reciente' | 'antigua' | 'limite'): void => {
+  const cambiarOrdenamiento = (orden: 'fecha_inicio_r' | 'fecha_inicio_a' | 'fecha_limite_r' | 'fecha_limite_a'): void => {
     setFilters(prevFilters => ({
       ...prevFilters,
       ordenamiento: orden
@@ -144,7 +146,7 @@ export default function FilteredMetaCards({
       plazos: [],
       estados: [],
       registrada: null,
-      ordenamiento: 'reciente',
+      ordenamiento: 'fecha_inicio_r',
       searchText: ''
     });
     setActiveFilterSection(null);
@@ -219,6 +221,7 @@ export default function FilteredMetaCards({
             )}
           </button>
           
+          {/* 
           <button
             onClick={() => setActiveFilterSection(activeFilterSection === 'plazos' ? null : 'plazos')}
             className={`px-3 py-1 text-sm rounded-md transition-colors flex items-center
@@ -233,7 +236,9 @@ export default function FilteredMetaCards({
                 {contarFiltrosActivos('plazos')}
               </span>
             )}
-          </button>
+          </button> 
+          */}
+
           
           <button
             onClick={() => setActiveFilterSection(activeFilterSection === 'estados' ? null : 'estados')}
@@ -250,6 +255,7 @@ export default function FilteredMetaCards({
               </span>
             )}
           </button>
+          {/* 
           
           <button
             onClick={() => setActiveFilterSection(activeFilterSection === 'registrada' ? null : 'registrada')}
@@ -267,40 +273,55 @@ export default function FilteredMetaCards({
             )}
           </button>
           
+          */}
+
+          
           <div className="border-l border-gray-300 ml-1 mr-1"></div>
           
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700">Ordenar:</span>
             <button
-              onClick={() => cambiarOrdenamiento('reciente')}
+              onClick={() => cambiarOrdenamiento('fecha_inicio_r')}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                filters.ordenamiento === 'reciente'
+                filters.ordenamiento === 'fecha_inicio_r'
                   ? 'bg-purple-500 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Reciente
+              Fecha Inicio Reciente
             </button>
             <button
-              onClick={() => cambiarOrdenamiento('antigua')}
+              onClick={() => cambiarOrdenamiento('fecha_inicio_a')}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                filters.ordenamiento === 'antigua'
+                filters.ordenamiento === 'fecha_inicio_a'
                   ? 'bg-purple-500 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Antigua
+              Fecha Inicio Antigua
             </button>
             <button
-              onClick={() => cambiarOrdenamiento('limite')}
+              onClick={() => cambiarOrdenamiento('fecha_limite_r')}
               className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                filters.ordenamiento === 'limite'
+                filters.ordenamiento === 'fecha_limite_r'
                   ? 'bg-purple-500 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Límite
+              Fecha Limite Reciente
             </button>
+
+                        <button
+              onClick={() => cambiarOrdenamiento('fecha_limite_a')}
+              className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                filters.ordenamiento === 'fecha_limite_a'
+                  ? 'bg-purple-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Fecha Limite Antigua
+            </button>
+
           </div>
         </div>
         

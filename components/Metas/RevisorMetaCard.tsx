@@ -89,30 +89,28 @@ export default function RevisorMetaCard({ meta, onMetaRevisor, employeeID }: {
               <span className="font-medium text-gray-700 mr-1">Tipo:</span>
               <span className="text-gray-600">{meta.Tipo_Meta}</span>
             </div>
+
+            {/* 
             <div className="flex flex-col xs:flex-row xs:items-center">
               <span className="font-medium text-gray-700 mr-1">Plazo:</span>
               <span className="text-gray-600">{meta.Plazo}</span>
             </div>
+            */}
+
+
             <div className="flex flex-col xs:flex-row xs:items-center">
               <span className="font-medium text-gray-700 mr-1">Límite:</span>
               <span className="text-gray-600">{formatDate(meta.Fecha_limite)}</span>
             </div>
           </div>
           
-          <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center mt-1 gap-2">
+            {/* 
+            
             <span className={`text-xs ${meta.Registrada ? 'text-green-600' : 'text-red-600'}`}>
               {meta.Registrada ? '✅ Registrada' : '❌ Sin registrar'}
             </span>
-            <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowDetails(true);
-              }}
-              className="text-xs text-indigo-600 hover:text-indigo-800"
-            >
-              Ver detalles
-            </button>
-          </div>
+            */}
+
         </div>
       </div>
 
@@ -127,7 +125,7 @@ export default function RevisorMetaCard({ meta, onMetaRevisor, employeeID }: {
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-800 break-words">{meta.Nombre}</h2>
-                  <p className="text-sm text-indigo-600">Meta de: {meta.NombreEmpleado}</p>
+                  <p className="text-sm text-black-600">Meta de: {meta.NombreEmpleado}</p>
                 </div>
                 <button 
                   onClick={() => setShowDetails(false)}
@@ -143,9 +141,12 @@ export default function RevisorMetaCard({ meta, onMetaRevisor, employeeID }: {
                 <span className={`text-sm px-3 py-1 rounded-full ${getEstadoStyles(meta.Estado ?? "sin estado")}`}>
                   {meta.Estado}
                 </span>
+                {/*
                 <span className={`text-sm px-3 py-1 rounded-full ${meta.Registrada ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                   {meta.Registrada ? 'Registrada' : 'Sin registrar'}
                 </span>
+                */}
+
               </div>
 
               <div className="space-y-4">
@@ -159,10 +160,16 @@ export default function RevisorMetaCard({ meta, onMetaRevisor, employeeID }: {
                     <h3 className="font-medium text-gray-700">Tipo:</h3>
                     <p className="text-gray-600 mt-1">{meta.Tipo_Meta}</p>
                   </div>
+
+                  {/*
+                  
                   <div>
                     <h3 className="font-medium text-gray-700">Plazo:</h3>
                     <p className="text-gray-600 mt-1">{meta.Plazo}</p>
                   </div>
+                  */}
+
+
                   <div>
                     <h3 className="font-medium text-gray-700">Fecha de inicio:</h3>
                     <p className="text-gray-600 mt-1">{formatDate(meta.Fecha_Inicio ?? null)}</p>
@@ -206,34 +213,15 @@ export default function RevisorMetaCard({ meta, onMetaRevisor, employeeID }: {
                 >
                   Cerrar
                 </button>
-                
-                {!meta.Registrada && onMetaRevisor && (
-                  <button
-                    onClick={() => {
-                      const updatedMeta = JSON.parse(JSON.stringify(meta)) as Meta;
-                      updatedMeta.Registrada = true;
-                      updatedMeta.Estado = "En progreso";
-                      insertMeta(updatedMeta)
-                        .then(() => {
-                          setShowDetails(false);
-                          if (onMetaRevisor) onMetaRevisor();
-                        })
-                        .catch(error => console.error("Error al registrar meta:", error));
-                    }}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition w-full sm:w-auto"
-                  >
-                    Registrar Meta
-                  </button>
-                )}
-                
-                {meta.Registrada && onMetaRevisor && (
+                                
+                {(meta.Estado === "Completada" || meta.Estado === "Cancelada") && onMetaRevisor && (
                   <button
                     onClick={() => {
                       setMostrarFormRetroalimentacion(true);
                     }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition w-full sm:w-auto"
+                    className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition w-full sm:w-auto"
                   >
-                  {(!thisRevisor?.Retroalimentacion && (meta.Estado == "Completada" || meta.Estado == "Cancelada")) ? 'Agregar Retroalimentación' : 'Marcar como Completada'}
+                    Agregar Retroalimentación
                   </button>
                 )}
               </div>

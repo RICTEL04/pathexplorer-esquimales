@@ -18,10 +18,10 @@ export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdi
   const getEstadoStyles = (estado: string | null) => {
     switch(estado) {
       case 'Completada': return 'bg-green-100 text-green-800';
-      case 'En progreso': return 'bg-blue-100 text-blue-800';
+      case 'En Progreso': return 'bg-blue-100 text-blue-800';
       case 'Pendiente': return 'bg-yellow-100 text-yellow-800';
       case 'Atrasada': return 'bg-red-100 text-red-800';
-      case 'Cancelada': return 'bg-gray-100 text-gray-800';
+      case 'Cancelada': return 'bg-red-100 text-gray-800';
       case null: return 'bg-gray-100 text-gray-800';
       default: return 'bg-gray-100 text-gray-800';
     }
@@ -88,10 +88,14 @@ export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdi
               <span className="font-medium text-gray-700">Tipo:</span>
               <span className="ml-1 text-gray-600 truncate">{meta.Tipo_Meta}</span>
             </div>
-            <div className="truncate">
+
+            {/* 
+             <div className="truncate">
               <span className="font-medium text-gray-700">Plazo:</span>
               <span className="ml-1 text-gray-600 truncate">{meta.Plazo}</span>
             </div>
+            */}
+
             <div className="truncate">
               <span className="font-medium text-gray-700">Límite:</span>
               <span className="ml-1 text-gray-600 truncate">{formatDate(meta.Fecha_limite ?? null)}</span>
@@ -148,10 +152,12 @@ export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdi
                     <h3 className="font-medium text-gray-700">Tipo:</h3>
                     <p className="text-gray-600 mt-1">{meta.Tipo_Meta}</p>
                   </div>
+                  {/* 
                   <div>
                     <h3 className="font-medium text-gray-700">Plazo:</h3>
                     <p className="text-gray-600 mt-1">{meta.Plazo}</p>
                   </div>
+                  */}
                   <div>
                     <h3 className="font-medium text-gray-700">Fecha de inicio:</h3>
                     <p className="text-gray-600 mt-1">{formatDate(meta.Fecha_Inicio ?? null)}</p>
@@ -160,12 +166,15 @@ export default function MetaCard({ meta, onEdit, onDelete }: { meta: Meta; onEdi
                     <h3 className="font-medium text-gray-700">Fecha límite:</h3>
                     <p className="text-gray-600 mt-1">{formatDate(meta.Fecha_limite ?? null)}</p>
                   </div>
+                  {/* 
                   <div>
                     <h3 className="font-medium text-gray-700">Registrada:</h3>
                     <p className="text-gray-600 mt-1">
                       {meta.Registrada ? '✅ Sí' : '❌ No'}
                     </p>
                   </div>
+                  */}
+
                 </div>
 
                 {/* Sección de Revisores mejorada */}
