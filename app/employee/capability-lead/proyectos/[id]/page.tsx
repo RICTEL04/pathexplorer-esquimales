@@ -4,20 +4,21 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Pencil, Trash2 } from "lucide-react";
-import EmployeeCard from "@/components/EmployeeCard";
 import { getCapabilityLead } from "@/lib/capabilityLead";
 import DraggableList from "@/components/DraggableList";
-
+import type { Project, Role, Employee, MappedEmployee } from "./types";
+import { mapEmployeeData, mapAllEmployeeData } from "./mappers";
 
 export default function ProjectDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
-  const [project, setProject] = useState<any>(null);
-  const [roles, setRoles] = useState<any[]>([]);
   const [editing, setEditing] = useState(false);
   const [editValues, setEditValues] = useState<any>({});
-  const [employees, setEmployees] = useState<any[]>([]);
-  const [allEmployees, setAllEmployees] = useState<any[]>([]);
+
+  const [project, setProject] = useState<Project | null>(null);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [allEmployees, setAllEmployees] = useState<Employee[]>([]);
 
   const [draggedEmployee, setDraggedEmployee] = useState<any | null>(null);
   const [isOverAssigned, setIsOverAssigned] = useState(false);
@@ -44,24 +45,34 @@ export default function ProjectDetailsPage() {
       if (!error) setRoles(data);
     };
     const fetchEmployees = async () => {
-      const { data, error } = await supabase
+      const { data: assigned, error } = await supabase
         .from("Empleado_Proyectos")
-        .select(`
-          Empleado:Empleado_id(
-            ID_Empleado,
-            Nombre,
-            Rol,
-            Nivel,
-            FechaContratacion,
-            FechaUltNivel
-          ),
-          Puesto,
-          created_at
-        `)
-        .eq("Proyecto_id", id);
+        .select("ID_Empleado")
+        .eq("ID_Proyecto", id);
 
-      if (!error && data) setEmployees(data);
-      else setEmployees([]);
+      if (!error && assigned) {
+        // Extract just the IDs
+        const ids = assigned.map((item: any) => item.Empleado_id);
+
+        if (ids.length === 0) {
+          setEmployees([]);
+          return;
+        }
+
+        // Now fetch the employee details for those IDs
+        const { data: employeesData, error: empError } = await supabase
+          .from("Empleado")
+          .select("*")
+          .in("ID_Empleado", ids);
+
+        if (!empError && employeesData) {
+          setEmployees(employeesData);
+        } else {
+          setEmployees([]);
+        }
+      } else {
+        setEmployees([]);
+      }
     };
     const fetchAllEmployees = async () => {
       try {
@@ -87,43 +98,6 @@ export default function ProjectDetailsPage() {
     fetchEmployees();
     fetchAllEmployees();
   }, [id]);
-
-  // Helper to map data to EmployeeCard props for assigned employees
-  const mapEmployeeData = (item: any) => ({
-    id: item.Empleado?.ID_Empleado || "",
-    name: item.Empleado?.Nombre || "",
-    position: item.Empleado?.Rol || "",
-    email: "",
-    level: item.Empleado?.Nivel ? Number(item.Empleado.Nivel) : 0,
-    project: item.Puesto || "Sin puesto",
-    companyEntryDate: item.Empleado?.FechaContratacion || "",
-    timeOnLevel: item.Empleado?.FechaUltNivel || "",
-    activeProject: project?.Nombre || "",
-    activeProjectStartDate: item.created_at || "",
-    projectRole: item.Empleado?.Rol || "",
-    isProjectLead: false,
-    certificates: [],
-    courses: [],
-  });
-
-  // Helper para mapear los datos al formato de EmployeeCard
-  const mapAllEmployeeData = (employee: any) => ({
-    id: employee.ID_Empleado,
-    name: employee.Nombre,
-    position: employee.Rol,
-    email: "",
-    level: employee.Nivel ? Number(employee.Nivel) : 0,
-    project: employee.Puesto_proyecto?.Puesto || "Sin puesto",
-    companyEntryDate: employee.FechaContratacion || "",
-    timeOnLevel: employee.FechaUltNivel || "",
-    activeProject: employee.Puesto_proyecto?.Proyectos?.[0]?.Nombre || "Sin proyecto",
-    activeProjectStartDate: employee.Puesto_proyecto?.created_at || "",
-    projectRole: employee.Rol,
-    isProjectLead: false,
-    certificates: [],
-    courses: [],
-  });
-
   if (!project) return <div className="p-8">Cargando...</div>;
 
   const handleDelete = async () => {
@@ -166,9 +140,9 @@ export default function ProjectDetailsPage() {
   // Get IDs of assigned employees to avoid duplicates
   const assignedIds = new Set(employees.map((item: any) => item.Empleado?.ID_Empleado));
 
-  const assignedEmployees = employees.map(mapEmployeeData);
-  const availableEmployees = allEmployees
-    .filter((emp: any) => !assignedIds.has(emp.ID_Empleado))
+  const assignedEmployees: MappedEmployee[] = employees.map(e => mapEmployeeData(e, project));
+  const availableEmployees: MappedEmployee[] = allEmployees
+    .filter(emp => !assignedIds.has(emp.ID_Empleado))
     .map(mapAllEmployeeData);
 
   // Drag handlers
