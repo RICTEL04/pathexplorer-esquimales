@@ -6,7 +6,7 @@ import RecommendedCoursesCards from "@/components/Cursos/RecommendedCoursesCards
 import { fetchData, fetchSession } from "@/lib/certificados-empleados/apiCalls";
 import { fetchCoursesData } from "@/lib/cursos-empleado/apiCalls";
 import { course } from "@/lib/cursos-empleado/definitions";
-import { EmployeeFullData } from "@/lib/employeeService";
+import { EmployeeFullData, Interes, Habilidad} from "@/lib/employeeService";
 import { getEmployeeFullData } from "@/lib/employeeService";
 import certification from "@/lib/certificados-empleados/definitions";
 
@@ -32,7 +32,13 @@ export default function PathDeCarreraPage() {
   };
 
   // Función para llamar a la API del servidor y generar el path de carrera
-  const generateCareerPath = async (metas: string[], habilidades: string[], intereses: string[], todosLosCursos: string[], cursosCompletados: string[]) => {
+  const generateCareerPath = async (
+    metas: string[],
+    habilidades: Habilidad[],
+    intereses: Interes[],
+    todosLosCursos: { id: any; nombre: any; descripcion: any; link: any; fechaFin: any }[],
+    cursosCompletados: { id: any; nombre: any; descripcion: any; link: any; fechaFin: any }[]
+  ) => {
     try {
       const response = await fetch("/api/generateCareerPath", {
         method: "POST",
@@ -41,11 +47,11 @@ export default function PathDeCarreraPage() {
         },
         body: JSON.stringify({ metas, habilidades, intereses, todosLosCursos, cursosCompletados }),
       });
-
+  
       if (!response.ok) {
         throw new Error("Error al generar el path de carrera");
       }
-
+  
       const careerPathData = await response.json();
       return careerPathData;
     } catch (error) {
@@ -83,7 +89,6 @@ export default function PathDeCarreraPage() {
           // **Filtrar y estructurar la información**
           const metas = [
             "Trabajar en proyectos innovadores",
-            ...(employeeData?.intereses || []),
           ];
 
           const habilidades = [
@@ -93,23 +98,27 @@ export default function PathDeCarreraPage() {
 
           const intereses = employeeData?.intereses || [];
 
-          const todosLosCursos = coursesData.map((curso: any) => ({
-            id: curso.ID_Curso,
-            nombre: curso.Nombre,
-            descripcion: curso.Descripcion,
-            link: curso.link,
-            fechaFin: curso.Fecha_fin_curso,
-          }));
+          const todosLosCursos = coursesData
+            ? coursesData.map((curso: any) => ({
+                id: curso.ID_Curso,
+                nombre: curso.Nombre,
+                descripcion: curso.Descripcion,
+                link: curso.link,
+                fechaFin: curso.Fecha_fin_curso,
+              }))
+            : [];
 
           const cursosCompletados = coursesData
-            .filter((curso: any) => curso.Fecha_fin_curso !== null)
-            .map((curso: any) => ({
-              id: curso.ID_Curso,
-              nombre: curso.Nombre,
-              descripcion: curso.Descripcion,
-              link: curso.link,
-              fechaFin: curso.Fecha_fin_curso,
-            }));
+            ? coursesData
+                .filter((curso: any) => curso.Fecha_fin_curso !== null)
+                .map((curso: any) => ({
+                  id: curso.ID_Curso,
+                  nombre: curso.Nombre,
+                  descripcion: curso.Descripcion,
+                  link: curso.link,
+                  fechaFin: curso.Fecha_fin_curso,
+                }))
+            : [];
 
           console.log("Metas:", metas);
           console.log("Habilidades:", habilidades);

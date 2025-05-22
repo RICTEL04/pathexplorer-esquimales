@@ -99,12 +99,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Filtrar los cursos generados por el modelo para asegurarse de que existan en todosLosCursos
     const todosLosCursosMap = new Map(todosLosCursos.map((curso: any) => [curso.nombre, curso]));
-    careerPath.sortedCourses = careerPath.sortedCourses
-      .filter((curso: any) => todosLosCursosMap.has(curso.nombre))
-      .map((curso: any) => ({
-        ...todosLosCursosMap.get(curso.nombre),
-        relevancia: curso.relevancia, // Mantener la relevancia generada por el modelo
-      }));
+    if (careerPath && careerPath.sortedCourses) {
+      careerPath.sortedCourses = careerPath.sortedCourses
+        .filter((curso: any) => todosLosCursosMap.has(curso.nombre))
+        .map((curso: any) => {
+          const original: any = todosLosCursosMap.get(curso.nombre) || {};
+          return {
+            id: original.id || "",
+            nombre: original.nombre || curso.nombre || "",
+            descripcion: original.descripcion ?? null,
+            link: original.link ?? null,
+            relevancia: typeof curso.relevancia === "number" ? curso.relevancia : 0,
+          };
+        });
+    }
 
     res.status(200).json(careerPath);
   } catch (error) {

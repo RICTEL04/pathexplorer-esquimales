@@ -44,7 +44,7 @@ export default function Sidebar({ routes }: SidebarProps) {
   const isActive = (href: string, subRoutes?: Route[]) => {
     if (pathname === href) return true;
     if (subRoutes) {
-      return subRoutes.some(route => pathname.startsWith(route.href));
+      return subRoutes.some(route => pathname && pathname.startsWith(route.href));
     }
     return false;
   };

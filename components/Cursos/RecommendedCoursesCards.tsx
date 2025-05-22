@@ -22,9 +22,9 @@ const RecommendedCoursesCards: React.FC<RecommendedCoursesCardsProps> = ({ cours
           course={{
             ID_Curso: course.id,
             Nombre: course.nombre,
-            Descripcion: course.descripcion,
-            link: course.link,
-            Fecha_fin_curso: null, // Proveer un valor predeterminado si no existe
+            Descripcion: course.descripcion ?? "",
+            link: course.link ?? "",
+            Fecha_fin_curso: "", // Proveer un valor predeterminado si no existe
             skills: [], // Proveer un array vacío para evitar errores
           }}
         />
