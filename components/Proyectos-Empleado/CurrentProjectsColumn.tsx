@@ -1,5 +1,6 @@
 import { getEmpleadosSinAutoevaluacion, selectProyectosPostulados } from "@/lib/autoevaluacion-empleado/apiCalls";
 import { Employee, ProjectJson } from "@/lib/delivery-lead-proyectos/definitions";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function CurrentProjectsColumn({
@@ -54,12 +55,12 @@ export default function CurrentProjectsColumn({
     return (
         <div className="lg:col-span-1">
             <div className="h-[80vh] mt-12 flex flex-col gap-y-2 min-h-0">
-                <button
+                <Link
                     className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded transition-all"
-                    onClick={() => { }}
+                    href={`/employee/proyectos/historial`}
                 >
                     Historial
-                </button>
+                </Link>
                 <div className="bg-white rounded-lg p-4 flex-1 flex flex-col min-h-0">
                     <h3 className="text-black font-bold mb-2 h-fit">Proyectos actuales</h3>
                     <div className="space-y-2 overflow-y-auto no-scrollbar flex-1 min-h-0">
