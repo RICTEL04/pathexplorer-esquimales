@@ -1,210 +1,564 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+"use client"
+import { useState, useEffect } from 'react';
+import {supabase}  from '@/lib/supabase';
 
-interface Habilidad {
+
+type Habilidad = {
   ID_Habilidad: string;
-  Tipo: string;
-  Descripcion: string;
-}
+  Nombre: string;
+  ID_Categoria: string;
+};
 
-const HabilidadesPage: React.FC = () => {
+type Categoria = {
+  id: string;
+  Nombre_categoria: string;
+};
+
+export default function SkillsManager() {
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [habilidades, setHabilidades] = useState<Habilidad[]>([]);
-  const [showCreateHabilidadForm, setShowCreateHabilidadForm] = useState(false);
-  const [habilidadData, setHabilidadData] = useState({
-    tipo: "soft", // Valor predeterminado
-    descripcion: "",
-  });
+  const [nuevaCategoriaNombre, setNuevaCategoriaNombre] = useState('');
+  
+  // Estados para los modales
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showAddHabilidadModal, setShowAddHabilidadModal] = useState(false);
+  const [showAddCategoriaModal, setShowAddCategoriaModal] = useState(false);
+  const [currentCategoriaId, setCurrentCategoriaId] = useState('');
+  const [nuevaHabilidadNombre, setNuevaHabilidadNombre] = useState('');
+  
+  const [itemToDelete, setItemToDelete] = useState<{
+    type: 'categoria' | 'habilidad';
+    id: string;
+    name: string;
+  } | null>(null);
 
-  // Filtrar habilidades por tipo
-  const softSkills = habilidades.filter(habilidad => habilidad.Tipo === "soft");
-  const hardSkills = habilidades.filter(habilidad => habilidad.Tipo === "hard");
+   // Estados para la búsqueda
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<{
+    categorias: Categoria[];
+    habilidades: Habilidad[];
+  }>({ categorias: [], habilidades: [] });
+  const [isSearching, setIsSearching] = useState(false);
 
-  // Función para cargar las habilidades desde la base de datos
+  // Cargar datos iniciales
   useEffect(() => {
-    const fetchHabilidades = async () => {
-      try {
-        const { data, error } = await supabase.from("Habilidades").select("ID_Habilidad, Tipo, Descripcion");
-        if (error) throw error;
-
-        console.log("Habilidades obtenidas:", data);
-        setHabilidades(data || []);
-      } catch (error) {
-        console.error("Error al obtener las habilidades:", error);
-      }
-    };
-
+    fetchCategorias();
     fetchHabilidades();
   }, []);
 
-  // Manejar cambios en el formulario de creación de habilidad
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setHabilidadData({
-      ...habilidadData,
-      [name]: value,
+  // Efecto para manejar la búsqueda
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    const term = searchTerm.toLowerCase().trim();
+
+    const filteredCategorias = categorias.filter(cat =>
+      cat.Nombre_categoria.toLowerCase().includes(term)
+    );
+
+    const filteredHabilidades = habilidades.filter(h =>
+      h.Nombre.toLowerCase().includes(term)
+    );
+
+    // Obtener todas las habilidades de las categorías encontradas
+    const habilidadesDeCategoriasEncontradas = habilidades.filter(h =>
+      filteredCategorias.some(c => c.id === h.ID_Categoria)
+    );
+
+    const todasHabilidadesUnicas = [...new Map(
+      [...filteredHabilidades, ...habilidadesDeCategoriasEncontradas]
+        .map(h => [h.ID_Habilidad, h])
+    ).values()];
+
+    setSearchResults({
+      categorias: filteredCategorias,
+      habilidades: todasHabilidadesUnicas
     });
-  };
+  }, [searchTerm, categorias, habilidades]);
 
-  // Manejar el envío del formulario de creación de habilidad
-  const handleCreateHabilidad = async () => {
-    try {
-      const { error } = await supabase.from("Habilidades").insert([
-        {
-          Tipo: habilidadData.tipo,
-          Descripcion: habilidadData.descripcion,
-        },
-      ]);
-
-      if (error) throw error;
-
-      console.log("Habilidad creada con éxito");
-
-      setHabilidadData({ tipo: "soft", descripcion: "" });
-      setShowCreateHabilidadForm(false);
-
-      const { data } = await supabase.from("Habilidades").select("ID_Habilidad, Tipo, Descripcion");
-      setHabilidades(data || []);
-    } catch (error) {
-      console.error("Error al crear la habilidad:", error);
+  const fetchCategorias = async () => {
+    const { data, error } = await supabase
+      .from('Categorias_habilidades')
+      .select('*');
+    
+    if (!error && data) {
+      setCategorias(data);
     }
   };
 
+  const fetchHabilidades = async () => {
+    const { data, error } = await supabase
+      .from('Habilidades')
+      .select('*');
+    
+    if (!error && data) {
+      setHabilidades(data);
+    }
+  };
+
+  const agregarCategoria = async () => {
+    if (nuevaCategoriaNombre.trim() === '') return;
+    
+    const nuevaCategoria = {
+      Nombre_categoria: nuevaCategoriaNombre.trim(),
+    };
+    
+    const { data, error } = await supabase
+      .from('Categorias_habilidades')
+      .insert(nuevaCategoria)
+      .select();
+    
+    if (!error && data) {
+      setCategorias([...categorias, data[0]]);
+      setNuevaCategoriaNombre('');
+      setShowAddCategoriaModal(false);
+    }
+  };
+
+  const abrirAgregarHabilidadModal = (categoriaId: string) => {
+    setCurrentCategoriaId(categoriaId);
+    setShowAddHabilidadModal(true);
+    setNuevaHabilidadNombre('');
+  };
+
+  const agregarHabilidad = async () => {
+    if (nuevaHabilidadNombre.trim() === '') return;
+    
+    const nuevaHabilidad = {
+      Nombre: nuevaHabilidadNombre.trim(),
+      ID_Categoria: currentCategoriaId,
+    };
+    
+    const { data, error } = await supabase
+      .from('Habilidades')
+      .insert(nuevaHabilidad)
+      .select();
+    
+    if (!error && data) {
+      setHabilidades([...habilidades, data[0]]);
+      setShowAddHabilidadModal(false);
+    }
+  };
+
+  const confirmarEliminacion = (type: 'categoria' | 'habilidad', id: string, name: string) => {
+    setItemToDelete({ type, id, name });
+    setShowConfirmModal(true);
+  };
+
+  const eliminarCategoria = async (id: string) => {
+  try {
+    // 1. Obtener todas las habilidades de esta categoría (solo necesitamos los IDs)
+    const { data: habilidadesData, error: errorHabilidades } = await supabase
+      .from('Habilidades')
+      .select('ID_Habilidad')
+      .eq('ID_Categoria', id);
+
+    if (errorHabilidades) throw errorHabilidades;
+
+    const habilidadesIds = habilidadesData?.map(h => h.ID_Habilidad) || [];
+
+    // 2. Eliminar referencias en Historial_Habilidades
+    if (habilidadesIds.length > 0) {
+      const { error: errorHistorial } = await supabase
+        .from('Historial_Habilidades')
+        .delete()
+        .in('ID_Habilidad', habilidadesIds);
+
+      if (errorHistorial) throw errorHistorial;
+    }
+
+    // 3. Eliminar las habilidades de la categoría
+    const { error: errorDeleteHabilidades } = await supabase
+      .from('Habilidades')
+      .delete()
+      .eq('ID_Categoria', id);
+
+    if (errorDeleteHabilidades) throw errorDeleteHabilidades;
+
+    // 4. Finalmente eliminar la categoría
+    const { error: errorDeleteCategoria } = await supabase
+      .from('Categorias_habilidades')
+      .delete()
+      .eq('id', id);
+
+    if (errorDeleteCategoria) throw errorDeleteCategoria;
+
+    // Actualizar el estado local
+    setCategorias(categorias.filter(cat => cat.id !== id));
+    setHabilidades(habilidades.filter(h => h.ID_Categoria !== id));
+    
+    return true;
+  } catch (error) {
+    console.error('Error al eliminar categoría:', error);
+    return false;
+  }
+};
+
+  const eliminarHabilidad = async (id: string) => {
+    const { error: errorRelacion } = await supabase
+    .from('Historial_Habilidades')
+    .delete()
+    .eq('ID_Habilidad', id);
+
+  if (errorRelacion) {
+    console.error('Error al eliminar relaciones:', errorRelacion.message);
+    return;
+  }
+
+    const { error } = await supabase
+      .from('Habilidades')
+      .delete()
+      .eq('ID_Habilidad', id);
+    
+    if (!error) {
+      setHabilidades(habilidades.filter(h => h.ID_Habilidad !== id));
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!itemToDelete) return;
+
+    if (itemToDelete.type === 'categoria') {
+      await eliminarCategoria(itemToDelete.id);
+    } else {
+      await eliminarHabilidad(itemToDelete.id);
+    }
+
+    setShowConfirmModal(false);
+    setItemToDelete(null);
+  };
+
+  const cancelarEliminacion = () => {
+    setShowConfirmModal(false);
+    setItemToDelete(null);
+  };
+
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Gestión de Habilidades</h1>
+    <div className="max-w-4xl mx-auto p-6 relative">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">Gestión de Habilidades</h1>
+        </div>
         <button
-          onClick={() => setShowCreateHabilidadForm(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          onClick={() => setShowAddCategoriaModal(true)}
+          className="bg-violet-800 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
         >
-          Crear Nueva Habilidad
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
+          </svg>
+          Nueva Categoria
         </button>
       </div>
 
-      {/* Contenedor de dos columnas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Columna de Soft Skills */}
-        <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
-          <div className="flex items-center mb-4">
-            <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-            <h2 className="text-xl font-semibold text-blue-800">Habilidades Blandas</h2>
-            <span className="ml-auto bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-              {softSkills.length} habilidades
-            </span>
-          </div>
-          
-          {softSkills.length === 0 ? (
-            <p className="text-blue-600 italic">No hay habilidades blandas registradas</p>
-          ) : (
-            <div className="space-y-3">
-              {softSkills.map((habilidad) => (
-                <div
-                  key={habilidad.ID_Habilidad}
-                  className="bg-white rounded-lg border border-blue-200 p-3 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <h3 className="font-medium text-blue-700">{habilidad.Descripcion}</h3>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Columna de Hard Skills */}
-        <div className="bg-violet-50 rounded-lg p-4 border border-violet-100">
-          <div className="flex items-center mb-4">
-            <div className="w-3 h-3 bg-violet-500 rounded-full mr-2"></div>
-            <h2 className="text-xl font-semibold text-violet-800">Habilidades Tecnicas</h2>
-            <span className="ml-auto bg-violet-100 text-violet-800 text-xs px-2 py-1 rounded-full">
-              {hardSkills.length} habilidades
-            </span>
-          </div>
-          
-          {hardSkills.length === 0 ? (
-            <p className="text-violet-600 italic">No hay hard skills registradas</p>
-          ) : (
-            <div className="space-y-3">
-              {hardSkills.map((habilidad) => (
-                <div
-                  key={habilidad.ID_Habilidad}
-                  className="bg-white rounded-lg border border-violet-200 p-3 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <h3 className="font-medium text-violet-700">{habilidad.Descripcion}</h3>
-                </div>
-              ))}
-            </div>
+      {/* Barra de búsqueda */}
+      <div className="mb-6">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Buscar categorías o habilidades..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pl-10"
+          />
+          <svg
+            className="absolute left-3 top-3 h-5 w-5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            ></path>
+          </svg>
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
           )}
         </div>
       </div>
-
-      {/* Modal para crear una nueva habilidad */}
-      {showCreateHabilidadForm && (
-        <div className="fixed inset-0 bg-gray-800/50 bg-opacity-10 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Crear Nueva Habilidad</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleCreateHabilidad();
-              }}
-              className="space-y-4"
-            >
-              <div>
-                <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700">
-                  Nombre de la Habilidad
-                </label>
-                <textarea
-                  id="descripcion"
-                  name="descripcion"
-                  value={habilidadData.descripcion}
-                  onChange={handleChange}
-                  className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  required
-                  rows={3}
-                />
-              </div>
-              <div>
-                <label htmlFor="tipo" className="block text-sm font-medium text-gray-700">
-                  Tipo de Habilidad
-                </label>
-                <div className="mt-1 flex rounded-md shadow-sm">
-                  <button
-                    type="button"
-                    onClick={() => setHabilidadData({...habilidadData, tipo: "soft"})}
-                    className={`px-4 py-2 rounded-l-md border ${habilidadData.tipo === "soft" ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-700 border-gray-300'}`}
-                  >
-                    Blanda
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setHabilidadData({...habilidadData, tipo: "hard"})}
-                    className={`px-4 py-2 rounded-r-md border ${habilidadData.tipo === "hard" ? 'bg-violet-500 text-white border-violet-500' : 'bg-white text-gray-700 border-gray-300'}`}
-                  >
-                    Tecnica
-                  </button>
+      {/* Resultados de búsqueda - MODIFICADO */}
+      {isSearching && (
+        <div className="mb-8 bg-white rounded-lg shadow p-4">
+          <h2 className="text-xl font-semibold mb-4">Resultados de búsqueda para "{searchTerm}"</h2>
+          
+          {searchResults.categorias.length === 0 && searchResults.habilidades.length === 0 ? (
+            <p className="text-gray-500">No se encontraron resultados</p>
+          ) : (
+            <>
+              {/* Categorías encontradas */}
+              {searchResults.categorias.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-medium mb-2">Categorías encontradas ({searchResults.categorias.length})</h3>
+                  <div className="space-y-4">
+                    {searchResults.categorias.map(categoria => {
+                      const habilidadesDeCategoria = habilidades.filter(h => h.ID_Categoria === categoria.id);
+                      return (
+                        <div key={categoria.id} className="border rounded-lg overflow-hidden">
+                          <div className="flex justify-between items-center p-3 bg-gray-50 border-b">
+                            <h4 className="font-medium">{categoria.Nombre_categoria}</h4>
+                            <button
+                              onClick={() => confirmarEliminacion('categoria', categoria.id, categoria.Nombre_categoria)}
+                              className="px-2 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
+                            >
+                              Eliminar categoría
+                            </button>
+                          </div>
+                          
+                          <div className="p-3">
+                            {habilidadesDeCategoria.length === 0 ? (
+                              <p className="text-gray-500 text-sm">No hay habilidades en esta categoría</p>
+                            ) : (
+                              <>
+                                <p className="text-sm text-gray-600 mb-2">Habilidades en esta categoría:</p>
+                                <ul className="space-y-2">
+                                  {habilidadesDeCategoria.map(habilidad => (
+                                    <li key={habilidad.ID_Habilidad} className="flex justify-between items-center p-2 hover:bg-gray-50 rounded">
+                                      <span>{habilidad.Nombre}</span>
+                                      <button
+                                        onClick={() => confirmarEliminacion('habilidad', habilidad.ID_Habilidad, habilidad.Nombre)}
+                                        className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
+                                      >
+                                        Eliminar
+                                      </button>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              
+              {/* Habilidades encontradas (que no pertenecen a categorías encontradas) */}
+              {searchResults.habilidades.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-medium mb-2">
+                    Habilidades encontradas ({searchResults.habilidades.length})
+                  </h3>
+                  <ul className="space-y-2">
+                    {searchResults.habilidades.map(habilidad => {
+                      // Solo mostrar habilidades cuyas categorías no aparecieron en los resultados
+                      if (searchResults.categorias.some(c => c.id === habilidad.ID_Categoria)) {
+                        return null;
+                      }
+                      return (
+                        <li key={habilidad.ID_Habilidad} className="p-2 hover:bg-gray-50 rounded flex justify-between items-center">
+                          <div>
+                            <span>{habilidad.Nombre}</span>
+                            <span className="text-xs text-gray-500 ml-2">
+                              ({categorias.find(c => c.id === habilidad.ID_Categoria)?.Nombre_categoria})
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => confirmarEliminacion('habilidad', habilidad.ID_Habilidad, habilidad.Nombre)}
+                            className="px-2 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
+                          >
+                            Eliminar
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+      {/* Lista de categorías y habilidades (solo se muestra cuando no hay búsqueda) */}
+      {!isSearching && (
+        <div className="space-y-6">
+          {categorias.length === 0 ? (
+            <p className="text-center text-gray-500 py-8">No hay categorías creadas aún</p>
+          ) : (
+            categorias.map(categoria => (
+              <div key={categoria.id} className="border rounded-lg overflow-hidden">
+                <div className="flex justify-between items-center p-4 bg-gray-100 border-b">
+                  <h3 className="text-lg font-medium">{categoria.Nombre_categoria}</h3>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => abrirAgregarHabilidadModal(categoria.id)}
+                      className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                    >
+                      + Habilidad
+                    </button>
+                    <button
+                      onClick={() => confirmarEliminacion('categoria', categoria.id, categoria.Nombre_categoria)}
+                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="p-4">
+                  {habilidades.filter(h => h.ID_Categoria === categoria.id).length === 0 ? (
+                    <p className="text-gray-500">No hay habilidades en esta categoría</p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {habilidades
+                        .filter(h => h.ID_Categoria === categoria.id)
+                        .map(habilidad => (
+                          <li key={habilidad.ID_Habilidad} className="flex justify-between items-center p-2 hover:bg-gray-50">
+                            <span>{habilidad.Nombre}</span>
+                            <button
+                              onClick={() => confirmarEliminacion('habilidad', habilidad.ID_Habilidad, habilidad.Nombre)}
+                              className="px-2 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
+                            >
+                              Eliminar
+                            </button>
+                          </li>
+                        ))}
+                    </ul>
+                  )}
                 </div>
               </div>
-              <div className="flex justify-end gap-4 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateHabilidadForm(false)}
-                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition-colors"
-                >
-                  Crear Habilidad
-                </button>
-              </div>
-            </form>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* Modal para agregar categorías */}
+      {showAddCategoriaModal && (
+        <div className="fixed inset-0 bg-gray-700/40 bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-semibold mb-4">Agregar Nueva Categoría</h3>
+            <div className="mb-4">
+              <input
+                type="text"
+                value={nuevaCategoriaNombre}
+                onChange={(e) => setNuevaCategoriaNombre(e.target.value)}
+                placeholder="Nombre de la categoría"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onKeyDown={(e) => e.key === 'Enter' && agregarCategoria()}
+              />
+            </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowAddCategoriaModal(false);
+                  setNuevaCategoriaNombre('');
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={agregarCategoria}
+                disabled={!nuevaCategoriaNombre.trim()}
+                className={`px-4 py-2 rounded-lg transition-colors ${
+                  nuevaCategoriaNombre.trim()
+                    ? 'bg-purple-600 text-white hover:bg-purple-700'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para agregar habilidades */}
+      {showAddHabilidadModal && (
+        <div className="fixed inset-0 bg-gray-700/40 bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-semibold mb-4">
+              Agregar habilidad a: {categorias.find(c => c.id === currentCategoriaId)?.Nombre_categoria}
+            </h3>
+            <div className="mb-4">
+              <input
+                type="text"
+                value={nuevaHabilidadNombre}
+                onChange={(e) => setNuevaHabilidadNombre(e.target.value)}
+                placeholder="Nombre de la habilidad"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onKeyDown={(e) => e.key === 'Enter' && agregarHabilidad()}
+              />
+            </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowAddHabilidadModal(false)}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={agregarHabilidad}
+                disabled={!nuevaHabilidadNombre.trim()}
+                className={`px-4 py-2 rounded-lg transition-colors ${
+                  nuevaHabilidadNombre.trim()
+                    ? 'bg-purple-600 text-white hover:bg-purple-700'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de confirmación para eliminar */}
+      {showConfirmModal && itemToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-semibold mb-4">Confirmar eliminación</h3>
+            <p className="mb-6">
+              ¿Estás seguro que deseas eliminar {itemToDelete.type === 'categoria' ? 'la categoría' : 'la habilidad'}{' '}
+              <span className="font-bold">"{itemToDelete.name}"</span>?
+              {itemToDelete.type === 'categoria' && (
+                <span className="block mt-2 text-red-500">
+                  ¡Esto también eliminará todas las habilidades asociadas a esta categoría!
+                </span>
+              )}
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={cancelarEliminacion}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Eliminar
+              </button>
+            </div>
           </div>
         </div>
       )}
     </div>
   );
-};
-
-export default HabilidadesPage;
+}

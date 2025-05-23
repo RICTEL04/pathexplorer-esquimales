@@ -2,12 +2,14 @@
 import React from 'react';
 import CardTable from '../components/Table';
 import InterestSection from './InterestSection';
-import SkillSection from './SkillSection';
 import AddressSection from './AddressSection';
 import StringEditor from './StringEditor';
 import AvatarSection from './AvatarSection';
+import ExperienceSection from './Experience';
 import { Habilidad as Hability, Direccion as Direction, Certificado as Certification, updateEmployeeAvatarURL } from '@/lib/employeeService';
 import { FiMail, FiPhone, FiMapPin, FiUser, FiAward, FiCode, FiHeart, FiBook, FiCheckCircle, FiCircle } from 'react-icons/fi';
+import EmployeeSkills from './SkillSection';
+import EmployeeSkillsHard from './SkillHard';
 
 
 interface Project {
@@ -18,6 +20,20 @@ interface Project {
   status: string;
   cargability: string;
   endDate: string;
+}
+
+interface Experience {
+  id: string;
+  position: string;
+  company: string;
+  employmentType: string;
+  startDate: string;
+  endDate: string;
+  currentJob: boolean;
+  location: string;
+  workMode: string;
+  description: string;
+  skills: string[];
 }
 
 
@@ -48,6 +64,19 @@ interface ProfileProps {
   SoftSkills?: Hability[];
   HardSkills?: Hability[];
   interests?: string[];
+  //Experiencia
+  experiences?: Experience[];
+  isModalOpen?: boolean;
+  newExperience?: Omit<Experience, 'id'>;
+  newSkill?: string;
+  onAddExperience?: () => void;
+  onModalToggle?: (isOpen: boolean) => void;
+  onExperienceChange?: (exp: Omit<Experience, 'id'>) => void;
+  onSkillChange?: (skill: string) => void;
+  onAddSkill?: () => void;
+  onRemoveSkill?: (skill: string) => void;
+  onRemoveExperience?: (id: string) => void;
+  //
   onPhoneChange?: (newAddress: string) => Promise <void>;
   onBiographyChange?:(newBiography: string) => Promise <void>;
   onAddressChange?: (newAddress: Direction) => Promise <void>;
@@ -55,7 +84,6 @@ interface ProfileProps {
   onHardSkillsChange?: (newSkills: Hability[]) => void;
   onInterestsChange?: (newInterests: string[]) => void;
   onUpdateAvatarURL?: (Imagen : File) => Promise <void>;
-
 }
 
 const Profile: React.FC<ProfileProps> = ({
@@ -70,9 +98,7 @@ const Profile: React.FC<ProfileProps> = ({
   phone,
   direction,
   avatarUrl ,
-  projects = [],
   certifications = [],
-  goals = [],
   SoftSkills = [],
   HardSkills = [],
   interests = [],
@@ -97,7 +123,6 @@ const Profile: React.FC<ProfileProps> = ({
     { key: 'Nombre', label: 'Nombre' },
     { key: 'Fecha_caducidad', label: 'Fecha Límite' },
     { key: 'Verificacion', label: 'Verificado' },
-    { key: 'Descripcion', label: 'Descripcion' },
   ];
 
   const renderEmptyMessage = (sectionName: string) => (
@@ -133,6 +158,8 @@ const Profile: React.FC<ProfileProps> = ({
       <p className="text-gray-400 italic break-words">No hay información de dirección</p>
     );
   };
+
+  const categoryId = '6a8ab048-2033-4a16-a9fa-e2006952af4e';
 
   return (
     <div className={`${className}`}>
@@ -240,27 +267,16 @@ const Profile: React.FC<ProfileProps> = ({
           </div>
         </div>
       </div>
-
-      {/* Sección de softSkills */}
-      <SkillSection
-        title="Habilidades Blandas"
-        items={SoftSkills}
-        type='soft'
-        color="blue"
-        editable={!!onSoftSkillsChange}
-        onItemsChange={onSoftSkillsChange}
-      />
-
+      {/* Sección de HardSkills */}
+      <div className="container mx-auto p-4">
+      <EmployeeSkillsHard employeeId={id ?? ''} categoryId={categoryId} />
+    </div>
       
-      {/* Sección de hardSkills */}
-      <SkillSection
-        title="Habilidades Técnicas"
-        items={HardSkills}
-        type='hard'
-        color="green"
-        editable={!!onHardSkillsChange}
-        onItemsChange={onHardSkillsChange}
-      />
+
+      {/* Sección de SoftSkills */}
+      <div className="container mx-auto p-4">
+      <EmployeeSkills employeeId={id ?? ''} categoryId={categoryId} />
+    </div>
 
       {/* Sección de intereses */}
       <InterestSection
@@ -271,14 +287,6 @@ const Profile: React.FC<ProfileProps> = ({
         onItemsChange={onInterestsChange}
       />
 
-      {/* Sección de proyectos */}
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold text-gray-800 mb-3">Proyectos</h3>
-        {projects.length > 0 ? (
-          <CardTable columns={projectColumns} data={projects} />
-        ) : renderEmptyMessage("proyectos")}
-      </div>
-
       {/* Sección de certificados */}
       <div className="mt-8">
         <h3 className="text-lg font-semibold text-gray-800 mb-3">Certificados</h3>
@@ -287,28 +295,9 @@ const Profile: React.FC<ProfileProps> = ({
         ) : renderEmptyMessage("certificados")}
       </div>
 
-      {/* Sección de metas */}
+      {/* Sección de historial profesional */}
       <div className="mt-8">
-        <h3 className="text-lg font-semibold text-gray-800 mb-3">Metas</h3>
-        {goals.length > 0 ? (
-          <div className="space-y-4">
-            {goals.map((goal) => (
-              <div key={goal.id} className="p-4 bg-gray-50 rounded-lg">
-                <div className="flex justify-between items-center">
-                  <h4 className="font-medium text-gray-800 ">
-                    {goal.name || "Meta sin nombre"}
-                  </h4>
-                  <span className="text-sm text-gray-500">
-                    {goal.startDate || "Fecha no especificada"} - {goal.endDate || "Fecha no especificada"}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm text-gray-600">
-                  {goal.description || "No hay descripción disponible"}
-                </p>
-              </div>
-            ))}
-          </div>
-        ) : renderEmptyMessage("metas")}
+        <ExperienceSection userId={id ?? ''}/>
       </div>
     </div>
   );

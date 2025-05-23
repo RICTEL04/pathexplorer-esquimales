@@ -1,6 +1,7 @@
 "use client";
 import Sidebar from "@/components/sidebar";
-import { BookOpen, Users, Home, Ratio, Boxes, Album } from "lucide-react"; // Import Home icon
+import { BookOpen, Users, Home, Ratio, Boxes, Album } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 
 const routes = [
   { href: "/admin", label: "Inicio", Icon: Home }, // Root route
@@ -12,10 +13,30 @@ const routes = [
 ];
 
 export default function CapabilityLeadLayout({ children }: { children: React.ReactNode }) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Sidebar routes={routes} />
-      <main className="flex-1 p-6">{children}</main>
+      {/* Hover detection area - only visible when sidebar is closed */}
+      {!isSidebarOpen && (
+        <div 
+          onMouseEnter={() => setIsSidebarOpen(true)}
+          className="fixed inset-y-0 left-0 z-30 w-16 h-full bg-transparent"
+        />
+      )}
+      
+      <Sidebar 
+        routes={routes} 
+        isSidebarOpen={isSidebarOpen} 
+        setIsSidebarOpen={setIsSidebarOpen} 
+      />
+      
+      <main 
+        className={`flex-1 p-6 overflow-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-16'}`}
+        onClick={() => setIsSidebarOpen(false)}
+      >
+        {children}
+      </main>
     </div>
   );
 }

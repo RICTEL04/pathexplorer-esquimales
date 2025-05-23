@@ -10,6 +10,22 @@ export interface ProyectoEmpleado {
   status: string;
 }
 
+interface SkillWithLevel {
+  name: string;
+  level: 'beginner' | 'intermediate' | 'expert';
+}
+
+export interface Experience {
+  id: string;
+  position: string;
+  company: string;
+  startDate: string;
+  endDate: string | null;
+  currentJob: boolean;
+  description: string;
+  skills: SkillWithLevel[];
+}
+
 export interface PuestoProyecto {
   ID_Proyecto: string;
   Puesto: string;
@@ -241,34 +257,45 @@ const fetchPeopleLead = async (peopleLeadId: string | null): Promise<PeopleLead 
 
 
 
-const fetchCapabilityLead = async (capabilityLeadId: string | null): Promise<CapabilityLead | null> => {
-  if (!capabilityLeadId) return null;
-  
+const fetchCapabilityLead = async (employeeId: string | null): Promise<CapabilityLead | null> => {
+  if (!employeeId) return null;
 
+  // Consulta original sin modificaciones
   const { data, error } = await supabase
-    .from('Capability_lead')
-    .select('ID_Empleado')
-    .eq('ID_CapabilityLead', capabilityLeadId)
-    .single();
-  
-  if (error || !data) return null;
-  
-  const { data: empleadoData, error: empleadoError } = await supabase
     .from('Empleado')
-    .select('ID_Empleado, Nombre')
-    .eq('ID_Empleado', data.ID_Empleado)
+    .select(`
+      ID_Empleado,
+      Nombre,
+      Departamento:Departamento!inner(Nombre_Departamento:Nombre),
+      Capability_Lead:Capability_Lead!inner(
+        ID_CapabilityLead:ID_CapabilityLead,
+        ID_Encargado:ID_Empleado,
+        Empleado:Empleado!inner(Nombre_Encargado:Nombre)
+      )
+    `)
+    .eq('ID_Empleado', employeeId)
     .single();
-  
-  if (empleadoError || !empleadoData) return null;
 
-  const url = await fetchAvatarURL(empleadoData.ID_Empleado);
+  if (error || !data || !data.Capability_Lead) return null;
+
+  // Extracción corregida con tipos seguros
+  const capabilityLead = Array.isArray(data.Capability_Lead) ? data.Capability_Lead[0] : data.Capability_Lead;
+  
+  // Manejo seguro del objeto anidado Empleado
+  let nombreEncargado = '';
+  if (capabilityLead?.Empleado) {
+    if (Array.isArray(capabilityLead.Empleado)) {
+      nombreEncargado = capabilityLead.Empleado[0]?.Nombre_Encargado || '';
+    } else {
+      nombreEncargado = (capabilityLead.Empleado as { Nombre_Encargado: string }).Nombre_Encargado || '';
+    }
+  }
 
   return {
-    id: capabilityLeadId,
-    Nombre: empleadoData.Nombre || '',
-    AvatarUrl: url || null,
+    id: capabilityLead?.ID_CapabilityLead || '',
+    Nombre: nombreEncargado,
+    AvatarUrl: capabilityLead?.ID_Encargado ? await fetchAvatarURL(capabilityLead.ID_Encargado) : null
   };
-  
 };
 
 const fetchContacto = async (employeeID: string | null): Promise<Contacto | null> => {
@@ -499,7 +526,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       employee.Biografia,
       fetchAvatarURL(employeeId),
       fetchPeopleLead(employee.ID_PeopleLead),
-      fetchCapabilityLead(employee.ID_CapabilityLead),
+      fetchCapabilityLead(employee.ID_Empleado),
       fetchContacto(employeeId),
       fetchInformes(employeeId),
       getEmployeeSoftSkills(employeeId),  
