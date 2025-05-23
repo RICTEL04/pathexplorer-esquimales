@@ -39,11 +39,17 @@ export default function ProyectosPage() {
   return (
     <div className="h-full bg-gray-100">
       {/* Review Modal */}
-      {selfReviewModalOpen && selectedProject && empleado && (
+      {selfReviewModalOpen && selectedProject && empleado && empleado.ID_Empleado && (
         <SelfReviewModal
           onClose={() => setSelfReviewModalOpen(false)}
           selectedProject={selectedProject}
-          employee={empleado}
+          employee={{
+            ...empleado,
+            ID_Empleado: empleado.ID_Empleado ?? "",
+            Nombre: empleado.Nombre ?? "",
+            Rol: empleado.Rol ?? "",
+            isReviewed: (empleado as any).isReviewed ?? false, // Provide a default or actual value
+          }}
         />
       )}
       {/* Main content */}
@@ -56,7 +62,17 @@ export default function ProyectosPage() {
 
           {/* Right column - Current Projects */}
           <CurrentProjectsColumn
-            empleado={empleado}
+            empleado={
+              empleado
+                ? {
+                    ...empleado,
+                    ID_Empleado: empleado.ID_Empleado ?? "",
+                    Nombre: empleado.Nombre ?? "",
+                    Rol: empleado.Rol ?? "",
+                    isReviewed: (empleado as any).isReviewed ?? false, // Provide a default or actual value
+                  }
+                : null
+            }
             setSelfReviewModalOpen={setSelfReviewModalOpen}
             setSelectedProject={setSelectedProject}
           />

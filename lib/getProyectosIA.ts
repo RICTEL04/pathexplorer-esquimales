@@ -16,7 +16,7 @@ export interface Proyecto {
  */
 export async function getProyectos(): Promise<Proyecto[]> {
   const { data, error } = await supabase
-    .from<Proyecto>("Proyectos")
+    .from("Proyectos")
     .select("ID_Proyecto, Nombre, ID_Cliente, Descripcion, Status, ID_DeliveryLead, fecha_inicio, fecha_fin");
 
   if (error) {
@@ -35,7 +35,7 @@ export async function fetchProyectos(proyectoIds: string[]): Promise<Proyecto[]>
   if (proyectoIds.length === 0) return [];
 
   const { data, error } = await supabase
-    .from<Proyecto>("Proyectos")
+    .from("Proyectos")
     .select("ID_Proyecto, Nombre, ID_Cliente, Status")
     .in("ID_Proyecto", proyectoIds);
 
