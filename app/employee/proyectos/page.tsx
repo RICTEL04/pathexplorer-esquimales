@@ -8,7 +8,7 @@ import SelfReviewModal from "@/components/Autoevaluacion/SelfReviewModal";
 import { Employee, ProjectJson } from "@/lib/delivery-lead-proyectos/definitions";
 import SuggestedProjectsColumn from "@/components/Proyectos-Empleado/SuggestedProjectsColumn";
 import CurrentProjectsColumn from "@/components/Proyectos-Empleado/CurrentProjectsColumn";
-
+import { EmployeeFullData } from "@/lib/employeeService";
 
 export default function ProyectosPage() {
   const [empleado, setEmpleado] = useState<EmployeeFullData | null>(null);
