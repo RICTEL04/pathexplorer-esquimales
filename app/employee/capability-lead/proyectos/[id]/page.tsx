@@ -4,9 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Pencil, Trash2 } from "lucide-react";
-import DraggableList from "@/components/DraggableList";
-import type { Project, Role, Employee, MappedEmployee } from "./types";
-import { mapEmployeeData, mapAllEmployeeData } from "./mappers";
+import EmployeeCard from "@/components/EmployeeCard";
+import type { Role, Employee, MappedEmployee } from "./types";
 
 export default function ProjectDetailsPage() {
   const { id } = useParams();
@@ -14,7 +13,7 @@ export default function ProjectDetailsPage() {
   const [editing, setEditing] = useState(false);
   const [editValues, setEditValues] = useState<any>({});
 
-  const [project, setProject] = useState<Project | null>(null);
+  const [project, setProject] = useState<any | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [allEmployees, setAllEmployees] = useState<any[]>([]);
@@ -45,42 +44,64 @@ export default function ProjectDetailsPage() {
         .eq("Proyecto_id", id);
       if (!error) setRoles(data);
     };
-    
-    const fetchAllEmployees = async() => {
-      const { data, error } = await supabase
-        .from("Empleado")
-        .select("*");
-      if(!error) setAllEmployees(data);
 
-    }
 
     const fetchMatchingFromEmpleadoProyecto = async () => {
+      // 1. Get ALL assigned employee IDs from Empleado_Proyectos (no project filter)
+      const { data: allMatches, error: allMatchesError } = await supabase
+        .from("Empleado_Proyectos")
+        .select("ID_Empleado");
+
+      if (allMatchesError || !allMatches) {
+        setAllEmployees([]);
+        return;
+      }
+
+      // Get all assigned IDs (may have duplicates, so use Set for uniqueness)
+      const assignedIds = Array.from(new Set(allMatches.map((item: any) => item.ID_Empleado)));
+
+      // 2. Get all employees NOT in the assigned list
+      let allEmployees: any[] = [];
+      if (assignedIds.length > 0) {
+        const { data: empleadosNoAsignados, error: errorNoAsignados } = await supabase
+          .from("Empleado")
+          .select("*")
+          .not("ID_Empleado", "in", `(${assignedIds.map(id => `"${id}"`).join(",")})`);
+        allEmployees = !errorNoAsignados && empleadosNoAsignados ? empleadosNoAsignados : [];
+      } else {
+        // If no assigned, all employees are available
+        const { data: empleadosTodos, error: errorTodos } = await supabase
+          .from("Empleado")
+          .select("*");
+        allEmployees = !errorTodos && empleadosTodos ? empleadosTodos : [];
+      }
+      setAllEmployees(allEmployees);
+
+      // 3. (Optional) If you still want to fetch assigned employees for this project:
       const { data: matches, error } = await supabase
         .from("Empleado_Proyectos")
         .select("ID_Empleado")
         .eq("ID_Proyecto", id);
-      if (error) {
-        setMatchingEmployees([]);
+
+      if (error || !matches) {
+        setEmpleadosInProyecto([]);
         return;
       }
-      setMatchingEmployees(matches);
-      const ids = matches.map((item:any) => item.ID_Empleado);
 
-      const {data: empleados, error: empleadosError} = await supabase
-        .from("Empleado")
-        .select("*")
-        .in("ID_Empleado", ids);
-      
-        if (!empleadosError && empleados) {
-          setEmpleadosInProyecto(empleados);
-        } else {
-          setEmpleadosInProyecto([]);
-        }
+      const ids = matches.map((item: any) => item.ID_Empleado);
 
-    }
+      let empleadosInProyecto: any[] = [];
+      if (ids.length > 0) {
+        const { data: empleados, error: empleadosError } = await supabase
+          .from("Empleado")
+          .select("*")
+          .in("ID_Empleado", ids);
 
-    
-    fetchAllEmployees();
+        empleadosInProyecto = !empleadosError && empleados ? empleados : [];
+      }
+      setEmpleadosInProyecto(empleadosInProyecto);
+    };
+
     fetchProject();
     fetchRoles();
     fetchMatchingFromEmpleadoProyecto();
@@ -126,77 +147,15 @@ export default function ProjectDetailsPage() {
     }
   };
 
-  // Get IDs of assigned employees to avoid duplicates
-  const assignedIds = new Set(employees.map((item: any) => item.Empleado?.ID_Empleado));
-
-  const assignedEmployees: MappedEmployee[] = employees.map(e => mapEmployeeData(e, project));
-  const availableEmployees: MappedEmployee[] = allEmployees
-    .filter(emp => !assignedIds.has(emp.ID_Empleado))
-    .map(mapAllEmployeeData);
-
-  // Drag handlers
-  const handleDragStart = (employee: any) => setDraggedEmployee(employee);
-
-
-    const handleDropAssigned = () => {
-    if (
-      draggedEmployee &&
-      availableEmployees.find((e) => e.id === draggedEmployee.id)
-    ) {
-      // Move from available to assigned
-      setEmployees((prev: any[]) => [
-        ...prev,
-        {
-          Empleado: {
-            ID_Empleado: draggedEmployee.id,
-            Nombre: draggedEmployee.name,
-            Rol: draggedEmployee.position,
-            Nivel: draggedEmployee.level,
-            FechaContratacion: draggedEmployee.companyEntryDate,
-            FechaUltNivel: draggedEmployee.timeOnLevel,
-          },
-          Puesto: draggedEmployee.project,
-          created_at: draggedEmployee.activeProjectStartDate,
-        },
-      ]);
-      setAllEmployees((prev: any[]) =>
-        prev.filter((e: any) => e.ID_Empleado !== draggedEmployee.id)
-      );
-    }
-    setDraggedEmployee(null);
-    setIsOverAssigned(false);
+  const moveToAllEmployees = (employee: any) => {
+    setEmpleadosInProyecto(prev => prev.filter(e => e.ID_Empleado !== employee.ID_Empleado));
+    setAllEmployees(prev => [...prev, employee]);
   };
 
-  const handleDropAvailable = () => {
-    if (
-      draggedEmployee &&
-      assignedEmployees.find((e) => e.id === draggedEmployee.id)
-    ) {
-      // Move from assigned to available
-      setAllEmployees((prev: any[]) => [
-        ...prev,
-        {
-          ID_Empleado: draggedEmployee.id,
-          Nombre: draggedEmployee.name,
-          Rol: draggedEmployee.position,
-          Nivel: draggedEmployee.level,
-          FechaContratacion: draggedEmployee.companyEntryDate,
-          FechaUltNivel: draggedEmployee.timeOnLevel,
-          Puesto_proyecto: null,
-        },
-      ]);
-      setEmployees((prev: any[]) =>
-        prev.filter(
-          (e: any) => e.Empleado?.ID_Empleado !== draggedEmployee.id
-        )
-      );
-    }
-    setDraggedEmployee(null);
-    setIsOverAvailable(false);
+  const moveToProyecto = (employee: any) => {
+    setAllEmployees(prev => prev.filter(e => e.ID_Empleado !== employee.ID_Empleado));
+    setEmpleadosInProyecto(prev => [...prev, employee]);
   };
-
-  const canDragAndDrop = editing;
-
 
   return (
     <div className="p-8 w-full max-w-none mx-0">
@@ -299,41 +258,42 @@ export default function ProjectDetailsPage() {
         </ul>
       </div>
 
+      
+
       <div className="flex gap-8 mb-8 items-start">
         <div className="flex-1">
           <span className="font-semibold text-lg block mb-2">Empleados en este proyecto:</span>
-          <pre style={{ background: "#f5f5f5", padding: 8, borderRadius: 4, fontSize: 12 }}>
-            {JSON.stringify(matchingEmployees, null, 2 )}
-            {JSON.stringify(empleadosInProyecto, null, 2 )}
-          </pre>
-          <DraggableList
-            employees={assignedEmployees}
-            onDragStart={canDragAndDrop ? handleDragStart : () => {}}
-            onDrop={canDragAndDrop ? handleDropAssigned : () => {}}
-            onDragOver={canDragAndDrop ? () => setIsOverAssigned(true) : () => {}}
-            isOver={isOverAssigned && canDragAndDrop}
-            draggableEnabled={canDragAndDrop}
-          />
-          {assignedEmployees.length === 0 && (
-            <p className="text-gray-600 mt-2">No hay empleados asignados a este proyecto.</p>
-          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {empleadosInProyecto.length === 0 ? (
+              <p className="text-gray-600">No hay empleados asignados a este proyecto.</p>
+            ) : (
+              empleadosInProyecto.map((empleado: any) => (
+                <EmployeeCard
+                  key={empleado.ID_Empleado}
+                  employee={empleado}
+                  editing={editing}
+                  onSwitchList={() => moveToAllEmployees(empleado)}
+                />
+              ))
+            )}
+          </div>
         </div>
         <div className="flex-1">
           <span className="font-semibold text-lg block mb-2">Todos los empleados:</span>
-          <pre style={{ background: "#f5f5f5", padding: 8, borderRadius: 4, fontSize: 12 }}>
-            {JSON.stringify(allEmployees, null, 2 )}
-          </pre>
-          <DraggableList
-            employees={allEmployees}
-            onDragStart={canDragAndDrop ? handleDragStart : () => {}}
-            onDrop={canDragAndDrop ? handleDropAvailable : () => {}}
-            onDragOver={canDragAndDrop ? () => setIsOverAvailable(true) : () => {}}
-            isOver={isOverAvailable && canDragAndDrop}
-            draggableEnabled={canDragAndDrop}
-          />
-          {availableEmployees.length === 0 && (
-            <p className="text-gray-600 mt-2">No hay empleados registrados.</p>
-          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {allEmployees.length === 0 ? (
+              <p className="text-gray-600">No hay empleados disponibles.</p>
+            ) : (
+              allEmployees.map((empleado: any) => (
+                <EmployeeCard
+                  key={empleado.ID_Empleado}
+                  employee={empleado}
+                  editing={editing}
+                  onSwitchList={() => moveToProyecto(empleado)}
+                />
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -1,26 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import EmployeeCard from "./EmployeeCard";
 
-type Employee = {
-  id: string;
-  name: string;
-  position: string;
-  email: string;
-  level: number;
-  project: string;
-  companyEntryDate: string;
-  timeOnLevel: string;
-  activeProject: string;
-  activeProjectStartDate: string;
-  projectRole: string;
-  isProjectLead: boolean;
-  certificates: string[];
-  courses: string[];
-};
-
 interface DraggableListProps {
-  employees: Employee[];
-  onDragStart: (employee: Employee) => void;
+  employees: any[]; // Accepts raw employee objects
+  onDragStart: (employee: any) => void;
   onDrop: () => void;
   onDragOver: () => void;
   isOver: boolean;
@@ -50,20 +33,27 @@ export default function DraggableList({
     >
       {employees.map((employee) => (
         <li
-          key={employee.id}
+          key={employee.ID_Empleado}
           draggable={draggableEnabled}
           onDragStart={draggableEnabled ? () => onDragStart(employee) : undefined}
-          onMouseDown={() => setActiveId(employee.id)}
+          onMouseDown={() => setActiveId(employee.ID_Empleado)}
           onMouseUp={() => setActiveId(null)}
           onMouseLeave={() => setActiveId(null)}
           className={
             (draggableEnabled ? "cursor-move " : "") +
             "transition-transform duration-150 " +
-            (activeId === employee.id ? "scale-95" : "")
+            (activeId === employee.ID_Empleado ? "scale-95" : "")
           }
           style={{ userSelect: "none" }}
         >
+          {/* Pass the raw employee object to EmployeeCard, or render fields directly */}
           <EmployeeCard employee={employee} />
+          {/* Or, if you want to render directly here: */}
+          {/* <div>
+            <div><b>{employee.Nombre}</b></div>
+            <div>{employee.Rol}</div>
+            <div>Nivel: {employee.Nivel}</div>
+          </div> */}
         </li>
       ))}
     </ul>
