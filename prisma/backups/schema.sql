@@ -103,6 +103,44 @@ $$;
 ALTER FUNCTION "public"."delete_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_employee_skills_excluding_category"("employee_id" "uuid", "excluded_category_id" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre_habilidad" "text", "nivel" "text", "nombre_position" "text", "nombre_empresa" "text")
+    LANGUAGE "plpgsql" STABLE
+    AS $$
+BEGIN
+  RETURN QUERY
+  WITH habilidades_ordenadas AS (
+    SELECT 
+      h."ID_Habilidad",
+      h."Nombre",
+      hh."nivel",
+      hist."NombrePosition",
+      hist."NombreEmpresa",
+      ROW_NUMBER() OVER (
+        PARTITION BY h."ID_Habilidad"
+        ORDER BY 
+          CASE hh."nivel"
+            WHEN 'expert' THEN 3
+            WHEN 'intermediate' THEN 2
+            WHEN 'beginner' THEN 1
+            ELSE 0
+          END DESC
+      ) AS rn
+    FROM "Historial" hist
+    JOIN "Historial_Habilidades" hh ON hh."ID_Historial" = hist."id"
+    JOIN "Habilidades" h ON h."ID_Habilidad" = hh."ID_Habilidad"
+    WHERE hist."ID_Empleado" = employee_id
+      AND h."ID_Categoria" != excluded_category_id
+  )
+  SELECT id_habilidad, nombre, nivel, nombreposition, nombreempresa
+  FROM habilidades_ordenadas
+  WHERE rn = 1;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employee_skills_excluding_category"("employee_id" "uuid", "excluded_category_id" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_employee_skills_max_level"() RETURNS "void"
     LANGUAGE "plpgsql"
     AS $_$BEGIN
@@ -185,6 +223,49 @@ $$;
 
 
 ALTER FUNCTION "public"."get_employee_skills_max_level"("employee_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_employee_skills_max_level_by_category"("employee_id" "uuid", "category_id" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre_habilidad" "text", "nivel" "text", "nombre_position" "text", "nombre_empresa" "text")
+    LANGUAGE "plpgsql" STABLE
+    AS $$
+BEGIN
+  RETURN QUERY
+  WITH habilidades_ordenadas AS (
+    SELECT 
+      h."ID_Habilidad",
+      h."Nombre",
+      hh."nivel" as habilidad_nivel,  -- Alias único para la columna nivel
+      hist."NombrePosition",
+      hist."NombreEmpresa",
+      ROW_NUMBER() OVER (
+        PARTITION BY h."ID_Habilidad"
+        ORDER BY 
+          CASE hh."nivel"  -- Referencia explícita a la tabla Historial_Habilidades
+            WHEN 'expert' THEN 3
+            WHEN 'intermediate' THEN 2
+            WHEN 'beginner' THEN 1
+            ELSE 0
+          END DESC
+      ) AS rn
+    FROM "Historial" hist
+    JOIN "Historial_Habilidades" hh ON hh."ID_Historial" = hist."id"
+    JOIN "Habilidades" h ON h."ID_Habilidad" = hh."ID_Habilidad"
+    WHERE hist."ID_Empleado" = employee_id
+      AND h."ID_Categoria" = category_id
+  )
+  SELECT 
+    "ID_Habilidad" AS id_habilidad,
+    "Nombre" AS nombre_habilidad,
+    habilidad_nivel AS nivel,  -- Usando el alias definido
+    "NombrePosition" AS nombre_position,
+    "NombreEmpresa" AS nombre_empresa
+  FROM habilidades_ordenadas
+  WHERE rn = 1;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employee_skills_max_level_by_category"("employee_id" "uuid", "category_id" "uuid") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."insert_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") RETURNS "void"
