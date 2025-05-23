@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Pencil, Trash2 } from "lucide-react";
-import { getCapabilityLead } from "@/lib/capabilityLead";
 import DraggableList from "@/components/DraggableList";
 import type { Project, Role, Employee, MappedEmployee } from "./types";
 import { mapEmployeeData, mapAllEmployeeData } from "./mappers";
@@ -18,7 +17,7 @@ export default function ProjectDetailsPage() {
   const [project, setProject] = useState<Project | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [allEmployees, setAllEmployees] = useState<Employee[]>([]);
+  const [allEmployees, setAllEmployees] = useState<any[]>([]);
   const [matchingEmployees, setMatchingEmployees] = useState<any[]>([]);
   const [empleadosInProyecto, setEmpleadosInProyecto] = useState<any[]>([]);
 
@@ -46,24 +45,14 @@ export default function ProjectDetailsPage() {
         .eq("Proyecto_id", id);
       if (!error) setRoles(data);
     };
-    const fetchAllEmployees = async () => {
-      try {
-        const rawData = await getCapabilityLead();
-        // Mapea los datos igual que en perfiles-de-empleados
-        const data = rawData.map((item: any) => ({
-          ID_Empleado: item.ID_Empleado,
-          Nombre: item.Nombre,
-          Rol: item.Rol,
-          Nivel: item.Nivel,
-          FechaContratacion: item.FechaContratacion,
-          FechaUltNivel: item.FechaUltNivel,
-          Puesto_proyecto: item.Puesto_proyecto?.[0] || null,
-        }));
-        setAllEmployees(data);
-      } catch (err) {
-        setAllEmployees([]);
-      }
-    };
+    
+    const fetchAllEmployees = async() => {
+      const { data, error } = await supabase
+        .from("Empleado")
+        .select("*");
+      if(!error) setAllEmployees(data);
+
+    }
 
     const fetchMatchingFromEmpleadoProyecto = async () => {
       const { data: matches, error } = await supabase
@@ -91,10 +80,9 @@ export default function ProjectDetailsPage() {
     }
 
     
-
+    fetchAllEmployees();
     fetchProject();
     fetchRoles();
-    fetchAllEmployees();
     fetchMatchingFromEmpleadoProyecto();
   }, [id]);
   if (!project) return <div className="p-8">Cargando...</div>;
@@ -213,33 +201,6 @@ export default function ProjectDetailsPage() {
   return (
     <div className="p-8 w-full max-w-none mx-0">
       <button onClick={() => router.back()} className="mb-4 text-blue-600">&larr; Volver</button>
-      <div>
-        <ul>
-          {matchingEmployees.length === 0 ? (
-            <li>No hay coincidencias en Empleado_Proyectos.</li>
-          ) : (
-            matchingEmployees.map((item, idx) => (
-              <li key={item.ID_Empleado ?? idx}>
-                {JSON.stringify(item)}
-              </li>
-            ))
-          )}
-        </ul>
-        <br />
-        
-        <ul>
-          {empleadosInProyecto.length === 0 ? (
-            <li>No hay coincidencias Empleado</li>
-          ) : (
-            empleadosInProyecto.map((empleado, idx) => (
-              <li key={empleado.ID_Empleado ?? idx}>
-                {empleado.Nombre} ({empleado.ID_Empleado})
-              </li>
-            ))
-          )}
-        </ul>
-
-      </div>
       <div className="flex justify-between items-center mb-4">
         {editing ? (
           <input
@@ -363,7 +324,7 @@ export default function ProjectDetailsPage() {
             {JSON.stringify(allEmployees, null, 2 )}
           </pre>
           <DraggableList
-            employees={availableEmployees}
+            employees={allEmployees}
             onDragStart={canDragAndDrop ? handleDragStart : () => {}}
             onDrop={canDragAndDrop ? handleDropAvailable : () => {}}
             onDragOver={canDragAndDrop ? () => setIsOverAvailable(true) : () => {}}
