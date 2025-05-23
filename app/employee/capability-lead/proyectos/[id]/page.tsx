@@ -8,7 +8,6 @@ import { getCapabilityLead } from "@/lib/capabilityLead";
 import DraggableList from "@/components/DraggableList";
 import type { Project, Role, Employee, MappedEmployee } from "./types";
 import { mapEmployeeData, mapAllEmployeeData } from "./mappers";
-import { match } from "assert";
 
 export default function ProjectDetailsPage() {
   const { id } = useParams();
@@ -47,36 +46,6 @@ export default function ProjectDetailsPage() {
         .eq("Proyecto_id", id);
       if (!error) setRoles(data);
     };
-    const fetchEmployees = async () => {
-      const { data: assigned, error } = await supabase
-        .from("Empleado_Proyectos")
-        .select("ID_Empleado")
-        .eq("ID_Proyecto", id);
-
-      if (!error && assigned) {
-        // Extract just the IDs
-        const ids = assigned.map((item: any) => item.Empleado_id);
-
-        if (ids.length === 0) {
-          setEmployees([]);
-          return;
-        }
-
-        // Now fetch the employee details for those IDs
-        const { data: employeesData, error: empError } = await supabase
-          .from("Empleado")
-          .select("*")
-          .in("ID_Empleado", ids);
-
-        if (!empError && employeesData) {
-          setEmployees(employeesData);
-        } else {
-          setEmployees([]);
-        }
-      } else {
-        setEmployees([]);
-      }
-    };
     const fetchAllEmployees = async () => {
       try {
         const rawData = await getCapabilityLead();
@@ -96,19 +65,10 @@ export default function ProjectDetailsPage() {
       }
     };
 
-    
-
-    fetchProject();
-    fetchRoles();
-    fetchEmployees();
-    fetchAllEmployees();
-  }, [id]);
-  if (!project) return <div className="p-8">Cargando...</div>;
-
-  const fetchMatchingFromEmpleadoProyecto = async () => {
+    const fetchMatchingFromEmpleadoProyecto = async () => {
       const { data: matches, error } = await supabase
         .from("Empleado_Proyectos")
-        .select("*")
+        .select("ID_Empleado")
         .eq("ID_Proyecto", id);
       if (error) {
         setMatchingEmployees([]);
@@ -128,7 +88,18 @@ export default function ProjectDetailsPage() {
           setEmpleadosInProyecto([]);
         }
 
-  }
+    }
+
+    
+
+    fetchProject();
+    fetchRoles();
+    fetchAllEmployees();
+    fetchMatchingFromEmpleadoProyecto();
+  }, [id]);
+  if (!project) return <div className="p-8">Cargando...</div>;
+
+  
 
   const handleDelete = async () => {
     if (!confirm("¿Estás seguro de que deseas eliminar este proyecto?")) return;
@@ -243,12 +214,6 @@ export default function ProjectDetailsPage() {
     <div className="p-8 w-full max-w-none mx-0">
       <button onClick={() => router.back()} className="mb-4 text-blue-600">&larr; Volver</button>
       <div>
-        <button
-          onClick={fetchMatchingFromEmpleadoProyecto}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition mb-4"
-        >
-          Ver coincidencias en Empleado_Proyectos
-        </button>
         <ul>
           {matchingEmployees.length === 0 ? (
             <li>No hay coincidencias en Empleado_Proyectos.</li>
@@ -376,6 +341,10 @@ export default function ProjectDetailsPage() {
       <div className="flex gap-8 mb-8 items-start">
         <div className="flex-1">
           <span className="font-semibold text-lg block mb-2">Empleados en este proyecto:</span>
+          <pre style={{ background: "#f5f5f5", padding: 8, borderRadius: 4, fontSize: 12 }}>
+            {JSON.stringify(matchingEmployees, null, 2 )}
+            {JSON.stringify(empleadosInProyecto, null, 2 )}
+          </pre>
           <DraggableList
             employees={assignedEmployees}
             onDragStart={canDragAndDrop ? handleDragStart : () => {}}
@@ -390,6 +359,9 @@ export default function ProjectDetailsPage() {
         </div>
         <div className="flex-1">
           <span className="font-semibold text-lg block mb-2">Todos los empleados:</span>
+          <pre style={{ background: "#f5f5f5", padding: 8, borderRadius: 4, fontSize: 12 }}>
+            {JSON.stringify(allEmployees, null, 2 )}
+          </pre>
           <DraggableList
             employees={availableEmployees}
             onDragStart={canDragAndDrop ? handleDragStart : () => {}}
