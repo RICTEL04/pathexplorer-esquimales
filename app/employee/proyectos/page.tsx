@@ -11,7 +11,8 @@ import CurrentProjectsColumn from "@/components/Proyectos-Empleado/CurrentProjec
 
 
 export default function ProyectosPage() {
-  const [empleado, setEmpleado] = useState<Employee | null>(null);
+  const [empleado, setEmpleado] = useState<EmployeeFullData | null>(null);
+
   const [selfReviewModalOpen, setSelfReviewModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectJson | null>(null);
 
