@@ -103,6 +103,90 @@ $$;
 ALTER FUNCTION "public"."delete_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_employee_skills_max_level"() RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $_$BEGIN
+CREATE OR REPLACE FUNCTION get_employee_skills_max_level(employee_id uuid)
+RETURNS TABLE (
+  id_habilidad uuid,
+  nombre_habilidad text,
+  nivel text,
+  nombre_position text,
+  nombre_empresa text
+) AS $$
+BEGIN
+  RETURN QUERY
+  WITH habilidades_ordenadas AS (
+    SELECT 
+      h."ID_Habilidad",
+      h."Nombre",
+      hh."nivel",
+      hist."NombrePosition",
+      hist."NombreEmpresa",
+      ROW_NUMBER() OVER (
+        PARTITION BY h."ID_Habilidad"
+        ORDER BY 
+          CASE hh."nivel"
+            WHEN 'expert' THEN 3
+            WHEN 'intermediate' THEN 2
+            WHEN 'beginner' THEN 1
+            ELSE 0
+          END DESC
+      ) AS rn
+    FROM "Historial" hist
+    JOIN "Historial_Habilidades" hh ON hh."ID_Historial" = hist."id"
+    JOIN "Habilidades" h ON h."ID_Habilidad" = hh."ID_Habilidad"
+    WHERE hist."ID_Empleado" = employee_id
+  )
+  SELECT id_habilidad, nombre, nivel, nombreposition, nombreempresa
+  FROM habilidades_ordenadas
+  WHERE rn = 1;
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+END;$_$;
+
+
+ALTER FUNCTION "public"."get_employee_skills_max_level"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_employee_skills_max_level"("employee_id" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre_habilidad" "text", "nivel" "text", "nombre_position" "text", "nombre_empresa" "text")
+    LANGUAGE "plpgsql" STABLE
+    AS $$
+BEGIN
+  RETURN QUERY
+  WITH habilidades_ordenadas AS (
+    SELECT 
+      h."ID_Habilidad",
+      h."Nombre",
+      hh."nivel",
+      hist."NombrePosition",
+      hist."NombreEmpresa",
+      ROW_NUMBER() OVER (
+        PARTITION BY h."ID_Habilidad"
+        ORDER BY 
+          CASE hh."nivel"
+            WHEN 'expert' THEN 3
+            WHEN 'intermediate' THEN 2
+            WHEN 'beginner' THEN 1
+            ELSE 0
+          END DESC
+      ) AS rn
+    FROM "Historial" hist
+    JOIN "Historial_Habilidades" hh ON hh."ID_Historial" = hist."id"
+    JOIN "Habilidades" h ON h."ID_Habilidad" = hh."ID_Habilidad"
+    WHERE hist."ID_Empleado" = employee_id
+  )
+  SELECT id_habilidad, nombre, nivel, nombreposition, nombreempresa
+  FROM habilidades_ordenadas
+  WHERE rn = 1;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employee_skills_max_level"("employee_id" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."insert_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
@@ -182,6 +266,38 @@ $$;
 ALTER FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."select_proyectos_terminados_empleado"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "ID_Cliente" "uuid", "Descripcion" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isAutoevaluacion" boolean, "Fortalezas" "text", "Area_Mejora" "text", "Calificacion" smallint)
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        p."ID_Proyecto", 
+        p."Nombre", 
+        p."ID_Cliente", 
+        p."Descripcion", 
+        p."ID_DeliveryLead", 
+        p."fecha_inicio", 
+        p."fecha_fin",
+        evp."esAutoevaluacion",
+        evp."Fortalezas",
+        evp."Areas_Mejora",
+        evp."Calificacion"
+    FROM public."Proyectos" p
+    JOIN public."Empleado_Proyectos" ep ON p."ID_Proyecto" = ep."ID_Proyecto"
+    JOIN public."Evaluacion_Proyecto" evp ON p."ID_Proyecto" = evp."ID_Proyecto"
+    WHERE 
+    ep."ID_Empleado" = p_id_empleado AND
+    ep."isReviewed" = true AND
+    evp."ID_Empleado" = p_id_empleado AND
+    p."isReviewed" = true;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."select_proyectos_terminados_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."update_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
@@ -240,6 +356,15 @@ CREATE TABLE IF NOT EXISTS "public"."Capability_Lead" (
 
 
 ALTER TABLE "public"."Capability_Lead" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."Categorias_habilidades" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "Nombre_categoria" "text"
+);
+
+
+ALTER TABLE "public"."Categorias_habilidades" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Certificados" (
@@ -413,8 +538,8 @@ ALTER TABLE "public"."FeedBack" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Habilidades" (
     "ID_Habilidad" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "Tipo" character varying,
-    "Descripcion" character varying
+    "Nombre" character varying,
+    "ID_Categoria" "uuid"
 );
 
 
@@ -440,7 +565,8 @@ ALTER TABLE "public"."Historial" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Historial_Habilidades" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_Habilidad" "uuid" DEFAULT "gen_random_uuid"(),
-    "nivel" "text"
+    "nivel" "text",
+    "ID_Historial" "uuid"
 );
 
 
@@ -597,6 +723,11 @@ ALTER TABLE ONLY "public"."Capability_Lead"
 
 
 
+ALTER TABLE ONLY "public"."Categorias_habilidades"
+    ADD CONSTRAINT "Categorias_habilidades_pkey" PRIMARY KEY ("id");
+
+
+
 ALTER TABLE ONLY "public"."Certificados"
     ADD CONSTRAINT "Certificados_pkey" PRIMARY KEY ("ID_Certificado");
 
@@ -659,6 +790,11 @@ ALTER TABLE ONLY "public"."Empleado"
 
 ALTER TABLE ONLY "public"."FeedBack"
     ADD CONSTRAINT "FeedBack_pkey" PRIMARY KEY ("ID_FeedBack");
+
+
+
+ALTER TABLE ONLY "public"."Habilidades"
+    ADD CONSTRAINT "Habilidades_Nombre_key" UNIQUE ("Nombre");
 
 
 
@@ -835,8 +971,18 @@ ALTER TABLE ONLY "public"."FeedBack"
 
 
 
+ALTER TABLE ONLY "public"."Habilidades"
+    ADD CONSTRAINT "Habilidades_ID_Categoria_fkey" FOREIGN KEY ("ID_Categoria") REFERENCES "public"."Categorias_habilidades"("id");
+
+
+
 ALTER TABLE ONLY "public"."Historial_Habilidades"
     ADD CONSTRAINT "Historial_Habilidades_ID_Habilidad_fkey" FOREIGN KEY ("ID_Habilidad") REFERENCES "public"."Habilidades"("ID_Habilidad");
+
+
+
+ALTER TABLE ONLY "public"."Historial_Habilidades"
+    ADD CONSTRAINT "Historial_Habilidades_ID_Historial_fkey" FOREIGN KEY ("ID_Historial") REFERENCES "public"."Historial"("id");
 
 
 
@@ -1168,6 +1314,11 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Capability_Lead" TO "anon";
 
 
 
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Categorias_habilidades" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Categorias_habilidades" TO "anon";
+
+
+
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Certificados" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Certificados" TO "anon";
 
@@ -1218,8 +1369,8 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Proyectos" TO "ano
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "anon";
 
 
 
@@ -1233,13 +1384,13 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Habilidades" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Historial" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Historial" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Historial" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Historial" TO "anon";
 
 
 
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Historial_Habilidades" TO "authenticated";
-GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Historial_Habilidades" TO "anon";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Historial_Habilidades" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Historial_Habilidades" TO "anon";
 
 
 

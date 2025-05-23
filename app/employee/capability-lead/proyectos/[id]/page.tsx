@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -8,9 +7,8 @@ import EmployeeCard from "@/components/EmployeeCard";
 import { getCapabilityLead } from "@/lib/capabilityLead";
 import DraggableList from "@/components/DraggableList";
 
-
 export default function ProjectDetailsPage() {
-  const { id } = useParams();
+  const params = useParams();
   const router = useRouter();
   const [project, setProject] = useState<any>(null);
   const [roles, setRoles] = useState<any[]>([]);
@@ -22,9 +20,13 @@ export default function ProjectDetailsPage() {
   const [draggedEmployee, setDraggedEmployee] = useState<any | null>(null);
   const [isOverAssigned, setIsOverAssigned] = useState(false);
   const [isOverAvailable, setIsOverAvailable] = useState(false);
-  
+
+  // Safely get the id from params
+  const id = params?.id as string;
 
   useEffect(() => {
+    if (!id) return; // Don't fetch if no id
+
     const fetchProject = async () => {
       const { data, error } = await supabase
         .from("Proyectos")
@@ -36,6 +38,7 @@ export default function ProjectDetailsPage() {
         setEditValues(data);
       }
     };
+    
     const fetchRoles = async () => {
       const { data, error } = await supabase
         .from("Roles")
@@ -43,6 +46,7 @@ export default function ProjectDetailsPage() {
         .eq("Proyecto_id", id);
       if (!error) setRoles(data);
     };
+    
     const fetchEmployees = async () => {
       const { data, error } = await supabase
         .from("Empleado_Proyectos")
@@ -63,10 +67,10 @@ export default function ProjectDetailsPage() {
       if (!error && data) setEmployees(data);
       else setEmployees([]);
     };
+    
     const fetchAllEmployees = async () => {
       try {
         const rawData = await getCapabilityLead();
-        // Mapea los datos igual que en perfiles-de-empleados
         const data = rawData.map((item: any) => ({
           ID_Empleado: item.ID_Empleado,
           Nombre: item.Nombre,
@@ -88,6 +92,13 @@ export default function ProjectDetailsPage() {
     fetchAllEmployees();
   }, [id]);
 
+  if (!id) {
+    return <div className="p-8">ID no encontrado</div>;
+  }
+
+  if (!project) return <div className="p-8">Cargando...</div>;
+
+  // Rest of your component code remains the same...
   // Helper to map data to EmployeeCard props for assigned employees
   const mapEmployeeData = (item: any) => ({
     id: item.Empleado?.ID_Empleado || "",
@@ -123,8 +134,6 @@ export default function ProjectDetailsPage() {
     certificates: [],
     courses: [],
   });
-
-  if (!project) return <div className="p-8">Cargando...</div>;
 
   const handleDelete = async () => {
     if (!confirm("¿Estás seguro de que deseas eliminar este proyecto?")) return;
@@ -174,8 +183,7 @@ export default function ProjectDetailsPage() {
   // Drag handlers
   const handleDragStart = (employee: any) => setDraggedEmployee(employee);
 
-
-    const handleDropAssigned = () => {
+  const handleDropAssigned = () => {
     if (
       draggedEmployee &&
       availableEmployees.find((e) => e.id === draggedEmployee.id)
@@ -233,7 +241,6 @@ export default function ProjectDetailsPage() {
   };
 
   const canDragAndDrop = editing;
-
 
   return (
     <div className="p-8 w-full max-w-none mx-0">
@@ -336,7 +343,6 @@ export default function ProjectDetailsPage() {
         </ul>
       </div>
 
-
       <div className="mb-8">
         <span className="font-semibold text-lg">Empleados en este proyecto:</span>
         <DraggableList
@@ -356,8 +362,8 @@ export default function ProjectDetailsPage() {
         <DraggableList
           employees={availableEmployees}
           onDragStart={canDragAndDrop ? handleDragStart : () => {}}
-          onDrop={canDragAndDrop ? handleDropAvailable : () => {}}   // <-- FIXED HERE
-          onDragOver={canDragAndDrop ? () => setIsOverAvailable(true) : () => {}} // <-- FIXED HERE
+          onDrop={canDragAndDrop ? handleDropAvailable : () => {}}
+          onDragOver={canDragAndDrop ? () => setIsOverAvailable(true) : () => {}}
           isOver={isOverAvailable && canDragAndDrop}
           draggableEnabled={canDragAndDrop}
         />
@@ -365,7 +371,6 @@ export default function ProjectDetailsPage() {
           <p className="text-gray-600 mt-2">No hay empleados registrados.</p>
         )}
       </div>
-      {/* Aquí puedes agregar la lógica para asignar empleados */}
     </div>
   );
 }
