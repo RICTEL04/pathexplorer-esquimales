@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowLeftRight } from "lucide-react";
+
 interface RawEmployee {
   ID_Empleado: string;
   Nombre: string;
@@ -52,9 +54,10 @@ export default function EmployeeCard({
       {editing && onSwitchList && (
         <button
           onClick={onSwitchList}
-          className="mt-2 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-xs"
+          className="mt-2 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-xs flex items-center gap-8"
         >
-          Cambiar lista
+          <ArrowLeftRight className="w-4 h-4"/>
+          Mover
         </button>
       )}
 

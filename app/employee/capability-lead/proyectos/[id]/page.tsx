@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Pencil, Trash2 } from "lucide-react";
 import EmployeeCard from "@/components/EmployeeCard";
-import type { Role, Employee, MappedEmployee } from "./types";
+import type { Role } from "./types";
 
 export default function ProjectDetailsPage() {
   const { id } = useParams();
@@ -18,8 +18,8 @@ export default function ProjectDetailsPage() {
   const [allEmployees, setAllEmployees] = useState<any[]>([]);
   const [empleadosInProyecto, setEmpleadosInProyecto] = useState<any[]>([]);
 
-  useEffect(() => {
-    const fetchProject = async () => {
+  const [newRole, setNewRole] = useState("");
+  const fetchProject = async () => {
       const { data, error } = await supabase
         .from("Proyectos")
         .select("*")
@@ -95,6 +95,7 @@ export default function ProjectDetailsPage() {
       setEmpleadosInProyecto(empleadosInProyecto);
     };
 
+  useEffect(() => {
     fetchProject();
     fetchRoles();
     fetchMatchingFromEmpleadoProyecto();
@@ -139,6 +140,32 @@ export default function ProjectDetailsPage() {
       alert("Error al actualizar el proyecto");
     }
   };
+
+  const handleAddRole = async () => {
+    if(!newRole.trim()) return;
+    const {error, data} = await supabase
+      .from("Roles")
+      .insert([{role_name: newRole, Proyecto_id: id}]);
+    if (!error) {
+    setNewRole("");
+    fetchRoles();
+    } else {
+      alert("Error al agregar el rol");
+    }
+  }
+
+  const handleDeleteRole = async (roleId: string) => {
+    const {error} = await supabase
+      .from("Roles")
+      .delete()
+      .eq("id", roleId);
+    if(!error){
+      fetchRoles();
+    } else {
+      alert("Error al eliminar el rol");
+    }
+  } 
+
 
   const moveToAllEmployees = async (employee: any) => {
     // Remove from Empleado_Proyectos in DB
@@ -299,10 +326,38 @@ export default function ProjectDetailsPage() {
             <li>No hay roles registrados para este proyecto.</li>
           ) : (
             roles.map((role) => (
-              <li key={role.id}>{role.role_name}</li>
+              <li key={role.id} className="flex items-center gap-2">
+                <span>{role.role_name}</span>
+                {editing && (
+                  <button
+                    onClick={() => handleDeleteRole(role.id)}
+                    className="text-red-600 hover:underline text-xs"
+                    title="Eliminar rol"
+                  >
+                    Eliminar
+                  </button>
+                )}
+              </li>
             ))
           )}
         </ul>
+        {editing && (
+          <div className="flex gap-2 mt-2">
+            <input
+              type="text"
+              value={newRole}
+              onChange={e => setNewRole(e.target.value)}
+              placeholder="Nuevo rol"
+              className="border p-1 rounded"
+            />
+            <button
+              onClick={handleAddRole}
+              className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            >
+              Agregar rol
+            </button>
+          </div>
+        )}
       </div>
 
       
