@@ -300,6 +300,155 @@ $$;
 ALTER FUNCTION "public"."insert_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."obtener_habilidades_empleado_excluyendo_categoria"("p_id_empleado" "uuid", "p_id_categoria_excluir" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre" "text", "nivel" "text")
+    LANGUAGE "sql"
+    AS $$
+WITH niveles AS (
+  SELECT 'beginner' AS nivel, 1 AS nivel_orden
+  UNION ALL
+  SELECT 'intermediate', 2
+  UNION ALL
+  SELECT 'expert', 3
+),
+habilidades_empleado AS (
+  SELECT
+    hh."ID_Habilidad",
+    h."Nombre",
+    hh."nivel",
+    n.nivel_orden,
+    h."ID_Categoria"
+  FROM "Historial" hist
+  JOIN "Historial_Habilidades" hh ON hist."id" = hh."ID_Historial"
+  JOIN "Habilidades" h ON hh."ID_Habilidad" = h."ID_Habilidad"
+  JOIN niveles n ON hh."nivel" = n.nivel
+  WHERE hist."ID_Empleado" = p_id_empleado
+    AND h."ID_Categoria" <> p_id_categoria_excluir
+),
+habilidades_max AS (
+  SELECT
+    "ID_Habilidad",
+    "Nombre",
+    "nivel",
+    ROW_NUMBER() OVER (PARTITION BY "ID_Habilidad" ORDER BY nivel_orden DESC) AS rn
+  FROM habilidades_empleado
+)
+SELECT 
+  "ID_Habilidad" AS id_habilidad,
+  "Nombre" AS nombre,
+  "nivel" AS nivel
+FROM habilidades_max
+WHERE rn = 1;
+$$;
+
+
+ALTER FUNCTION "public"."obtener_habilidades_empleado_excluyendo_categoria"("p_id_empleado" "uuid", "p_id_categoria_excluir" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."obtener_habilidades_excluyendo_categoria"("p_id_empleado" "uuid", "p_id_categoria_a_excluir" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre_habilidad" "text", "nivel_habilidad" "text", "id_categoria" "uuid", "nombre_categoria" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    WITH HabilidadesNivel AS (
+        SELECT 
+            hh."ID_Habilidad",
+            hab."Nombre",
+            hh."nivel",
+            hab."ID_Categoria",
+            cat."Nombre" AS nombre_categoria,
+            CASE 
+                WHEN hh."nivel" = 'beginner' THEN 1
+                WHEN hh."nivel" = 'intermediate' THEN 2
+                WHEN hh."nivel" = 'expert' THEN 3
+                ELSE 0
+            END AS nivel_valor
+        FROM "public"."Historial_Habilidades" hh
+        JOIN "public"."Historial" h ON hh."ID_Historial" = h."id"
+        JOIN "public"."Habilidades" hab ON hh."ID_Habilidad" = hab."ID_Habilidad"
+        JOIN "public"."Categorias" cat ON hab."ID_Categoria" = cat."ID_Categoria"
+        WHERE h."ID_Empleado" = p_id_empleado
+    ),
+    HabilidadesMaxNivel AS (
+        SELECT 
+            "ID_Habilidad",
+            "Nombre",
+            "ID_Categoria",
+            nombre_categoria,
+            MAX(nivel_valor) AS max_nivel_valor
+        FROM HabilidadesNivel
+        GROUP BY "ID_Habilidad", "Nombre", "ID_Categoria", nombre_categoria
+    )
+    SELECT 
+        hm."ID_Habilidad",
+        hm."Nombre"::TEXT,
+        CASE 
+            WHEN hm.max_nivel_valor = 1 THEN 'beginner'
+            WHEN hm.max_nivel_valor = 2 THEN 'intermediate'
+            WHEN hm.max_nivel_valor = 3 THEN 'expert'
+            ELSE 'unknown'
+        END,
+        hm."ID_Categoria",
+        hm.nombre_categoria::TEXT
+    FROM HabilidadesMaxNivel hm
+    WHERE hm."ID_Categoria" != p_id_categoria_a_excluir
+    ORDER BY hm.max_nivel_valor DESC, hm."Nombre";
+END;
+$$;
+
+
+ALTER FUNCTION "public"."obtener_habilidades_excluyendo_categoria"("p_id_empleado" "uuid", "p_id_categoria_a_excluir" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."obtener_habilidades_por_categoria"("p_id_empleado" "uuid", "p_id_categoria" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre_habilidad" "text", "nivel_habilidad" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    WITH HabilidadesNivel AS (
+        SELECT 
+            hh."ID_Habilidad",
+            hab."Nombre",
+            hh."nivel",
+            hab."ID_Categoria",
+            CASE 
+                WHEN hh."nivel" = 'beginner' THEN 1
+                WHEN hh."nivel" = 'intermediate' THEN 2
+                WHEN hh."nivel" = 'expert' THEN 3
+                ELSE 0
+            END AS nivel_valor
+        FROM "public"."Historial_Habilidades" hh
+        JOIN "public"."Historial" h ON hh."ID_Historial" = h."id"
+        JOIN "public"."Habilidades" hab ON hh."ID_Habilidad" = hab."ID_Habilidad"
+        WHERE h."ID_Empleado" = p_id_empleado
+    ),
+    HabilidadesMaxNivel AS (
+        SELECT 
+            "ID_Habilidad",
+            "Nombre",
+            "ID_Categoria",
+            MAX(nivel_valor) AS max_nivel_valor
+        FROM HabilidadesNivel
+        GROUP BY "ID_Habilidad", "Nombre", "ID_Categoria"
+    )
+    SELECT 
+        hm."ID_Habilidad",
+        hm."Nombre"::TEXT,
+        CASE 
+            WHEN hm.max_nivel_valor = 1 THEN 'beginner'
+            WHEN hm.max_nivel_valor = 2 THEN 'intermediate'
+            WHEN hm.max_nivel_valor = 3 THEN 'expert'
+            ELSE 'unknown'
+        END
+    FROM HabilidadesMaxNivel hm
+    WHERE hm."ID_Categoria" = p_id_categoria
+    ORDER BY hm.max_nivel_valor DESC, hm."Nombre";
+END;
+$$;
+
+
+ALTER FUNCTION "public"."obtener_habilidades_por_categoria"("p_id_empleado" "uuid", "p_id_categoria" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."select_empleado"("p_id_empleado" "uuid") RETURNS TABLE("ID_Empleado" "uuid", "Nombre" "text", "Rol" "text", "ID_Departamento" "uuid", "Nivel" "text", "Cargabilidad" "text", "FechaContratacion" "date", "FechaUltNivel" "date", "Biografia" "text")
     LANGUAGE "plpgsql"
     AS $$
