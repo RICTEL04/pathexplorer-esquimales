@@ -11,6 +11,7 @@ interface RawEmployee {
   FechaUltNivel: string;
   ID_PeopleLead: string;
   Biografia: string | null;
+  cargabilidad_num: number;
 }
 
 export default function EmployeeCard({
@@ -42,7 +43,7 @@ export default function EmployeeCard({
           Nivel: {employee.Nivel}
         </span>
         <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-0.5 rounded-full">
-          Cargabilidad: {employee.Cargabilidad}
+          Cargabilidad: {employee.cargabilidad_num} %
         </span>
         <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-0.5 rounded-full">
           Ultimo ascenso: {employee.FechaUltNivel}

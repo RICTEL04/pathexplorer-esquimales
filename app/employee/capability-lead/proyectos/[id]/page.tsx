@@ -15,15 +15,8 @@ export default function ProjectDetailsPage() {
 
   const [project, setProject] = useState<any | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
-  const [employees, setEmployees] = useState<Employee[]>([]);
   const [allEmployees, setAllEmployees] = useState<any[]>([]);
-  const [matchingEmployees, setMatchingEmployees] = useState<any[]>([]);
   const [empleadosInProyecto, setEmpleadosInProyecto] = useState<any[]>([]);
-
-  const [draggedEmployee, setDraggedEmployee] = useState<any | null>(null);
-  const [isOverAssigned, setIsOverAssigned] = useState(false);
-  const [isOverAvailable, setIsOverAvailable] = useState(false);
-  
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -155,7 +148,26 @@ export default function ProjectDetailsPage() {
       .eq("ID_Empleado", employee.ID_Empleado)
       .eq("ID_Proyecto", id);
 
+    // Calculate new cargabilidad_num
+    const proyectoCargabilidad = project.cargabilidad_num || 0;
+    const empleadoCargabilidad = employee.cargabilidad_num || 0;
+    // Subtract, but don't go below 0
+    const newCargabilidadNum = Math.max(empleadoCargabilidad - proyectoCargabilidad, 0);
+    const newCargabilidadStr = `${newCargabilidadNum}%`;
+
+    // Update in DB
+    await supabase
+      .from("Empleado")
+      .update({
+        cargabilidad_num: newCargabilidadNum,
+        Cargabilidad: newCargabilidadStr,
+      })
+      .eq("ID_Empleado", employee.ID_Empleado);
+
     // Update UI state
+    employee.cargabilidad_num = newCargabilidadNum;
+    employee.Cargabilidad = newCargabilidadStr;
+
     setEmpleadosInProyecto(prev => prev.filter(e => e.ID_Empleado !== employee.ID_Empleado));
     setAllEmployees(prev => [...prev, employee]);
   };
@@ -166,13 +178,34 @@ export default function ProjectDetailsPage() {
       .from("Empleado_Proyectos")
       .insert([{ ID_Empleado: employee.ID_Empleado, ID_Proyecto: id }]);
 
-    // Update UI state
+    // Calculate new cargabilidad_num
+    const proyectoCargabilidad = project.cargabilidad_num || 0;
+    const empleadoCargabilidad = employee.cargabilidad_num || 0;
+    const newCargabilidadNum = empleadoCargabilidad + proyectoCargabilidad;
+
+    // Optionally, update the Cargabilidad string (e.g., "50%")
+    const newCargabilidadStr = `${Math.min(newCargabilidadNum, 100)}%`;
+
+    // Update in DB
+    await supabase
+      .from("Empleado")
+      .update({
+        cargabilidad_num: newCargabilidadNum,
+        Cargabilidad: newCargabilidadStr,
+      })
+      .eq("ID_Empleado", employee.ID_Empleado);
+
+    // Update in UI state
+    employee.cargabilidad_num = newCargabilidadNum;
+    employee.Cargabilidad = newCargabilidadStr;
+
     setAllEmployees(prev => prev.filter(e => e.ID_Empleado !== employee.ID_Empleado));
     setEmpleadosInProyecto(prev => [...prev, employee]);
   };
 
   return (
     <div className="p-8 w-full max-w-none mx-0">
+      <h1>{}</h1>
       <button onClick={() => router.back()} className="mb-4 text-blue-600">&larr; Volver</button>
       <div className="flex justify-between items-center mb-4">
         {editing ? (
