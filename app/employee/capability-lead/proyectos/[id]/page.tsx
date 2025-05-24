@@ -147,12 +147,26 @@ export default function ProjectDetailsPage() {
     }
   };
 
-  const moveToAllEmployees = (employee: any) => {
+  const moveToAllEmployees = async (employee: any) => {
+    // Remove from Empleado_Proyectos in DB
+    await supabase
+      .from("Empleado_Proyectos")
+      .delete()
+      .eq("ID_Empleado", employee.ID_Empleado)
+      .eq("ID_Proyecto", id);
+
+    // Update UI state
     setEmpleadosInProyecto(prev => prev.filter(e => e.ID_Empleado !== employee.ID_Empleado));
     setAllEmployees(prev => [...prev, employee]);
   };
 
-  const moveToProyecto = (employee: any) => {
+  const moveToProyecto = async (employee: any) => {
+    // Insert into Empleado_Proyectos in DB
+    await supabase
+      .from("Empleado_Proyectos")
+      .insert([{ ID_Empleado: employee.ID_Empleado, ID_Proyecto: id }]);
+
+    // Update UI state
     setAllEmployees(prev => prev.filter(e => e.ID_Empleado !== employee.ID_Empleado));
     setEmpleadosInProyecto(prev => [...prev, employee]);
   };
@@ -279,7 +293,7 @@ export default function ProjectDetailsPage() {
           </div>
         </div>
         <div className="flex-1">
-          <span className="font-semibold text-lg block mb-2">Todos los empleados:</span>
+          <span className="font-semibold text-lg block mb-2">Empleados disponibles:</span>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {allEmployees.length === 0 ? (
               <p className="text-gray-600">No hay empleados disponibles.</p>
