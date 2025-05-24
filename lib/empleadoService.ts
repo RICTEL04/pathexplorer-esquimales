@@ -1,6 +1,73 @@
 import { supabase } from './supabase';
 
-export async function getEmpleados() {
+export interface Proyecto {
+  ID_Proyecto: any;
+  fecha_inicio: any;
+  fecha_fin: any;
+  Nombre: any;
+  Descripcion: any;
+  Status?: any; // Optional, as it is only included in Delivery_Lead
+}
+
+export interface Certificado {
+  ID_Certificado: any;
+  Nombre: any;
+  Fecha_caducidad: any;
+  Documento: any;
+  Verificacion: any;
+  Descripcion: any;
+}
+
+export interface PuestoProyecto {
+  id: any;
+  created_at: any;
+  Puesto: any;
+  Proyectos: Proyecto[];
+}
+
+export interface CapabilityLead {
+  ID_Empleado: any;
+  ID_Departamento: any;
+  ID_CapabilityLead: any;
+  Departamento: {
+    Nombre: any;
+    Descripcion: any;
+  }[];
+}
+
+export interface DeliveryLead {
+  ID_DeliveryLead: any;
+  ID_Empleado: any;
+  Proyectos: Proyecto[];
+}
+
+export interface Metas {
+  ID_meta: any;
+  ID_Empleado: any;
+  Nombre: any;
+  Descripcion: any;
+  Tipo_Meta: any;
+  Plazo: any;
+  Fecha_limite: any;
+}
+
+export interface Empleado {
+  ID_Empleado: any;
+  Nombre: any;
+  Rol: any;
+  Nivel: any;
+  FechaContratacion: any;
+  ID_Departamento: any;
+  Certificados: Certificado[];
+  Puesto_proyecto: PuestoProyecto[];
+  Capability_Lead: CapabilityLead[]; // Adjusted to match the returned array structure
+  Delivery_Lead: DeliveryLead[]; // Adjusted to match the returned array structure
+  Metas: Metas[]; // Assuming Metas is defined elsewhere
+}
+
+
+
+export async function getEmpleados(): Promise<Empleado[]> {
   const { data, error } = await supabase
     .from('Empleado')
     .select(`
@@ -10,6 +77,15 @@ export async function getEmpleados() {
       Nivel,
       FechaContratacion,
       ID_Departamento,
+      Metas (
+        ID_meta,
+        ID_Empleado,
+        Nombre,
+        Descripcion,
+        Tipo_Meta,
+        Plazo,
+        Fecha_limite
+      ),
       Certificados (
         ID_Certificado,
         Nombre,
@@ -30,58 +106,32 @@ export async function getEmpleados() {
           Descripcion
         )
       ),
-        Capability_Lead (
-          ID_Empleado,
-          ID_Departamento,
-          ID_CapabilityLead,
-          Departamento (
-            Nombre,
-            Descripcion
-            
-          )
+      Capability_Lead (
+        ID_Empleado,
+        ID_Departamento,
+        ID_CapabilityLead,
+        Departamento (
+          Nombre,
+          Descripcion
         )
+      ),
+      Delivery_Lead (
+        ID_DeliveryLead,
+        ID_Empleado,
+        Proyectos (
+          ID_Proyecto,
+          Nombre,
+          Descripcion,
+          Status,
+          fecha_inicio,
+          fecha_fin
+        )
+      )
     `);
-    
-    interface CapabilityLead {
-      ID_Empleado: any;
-      ID_Departamento: any;
-      ID_CapabilityLead: any;
-      Departamento: {
-        Nombre: any;
-        Descripcion: any;
-      }[];
-    }
-    
-    interface Empleado {
-      ID_Empleado: any;
-      Nombre: any;
-      Rol: any;
-      Nivel: any;
-      FechaContratacion: any;
-      ID_Departamento: any;
-      Certificados: any[];
-      Puesto_proyecto: any[];
-      Capability_Lead: CapabilityLead[]; // Especificar que es un array
-    }
-    
+
   if (error) throw error;
 
-   
-  data.forEach((empleado) => {
-    const idDepartamentoCapabilityLead = empleado.Capability_Lead?.[0]?.ID_Departamento;
-  
-    if (idDepartamentoCapabilityLead) {
-      console.log(`ID_Departamento del Capability Lead: ${idDepartamentoCapabilityLead}`);
-    } else {
-      console.log('Este empleado no tiene un Capability Lead asociado.');
-    }   
-  });
+  console.log('Empleados:', data);
 
-  
-  
-
-  // Devolver los datos tal como los proporciona Supabase
-  return data || [];
+  return data as Empleado[];
 }
-
-
