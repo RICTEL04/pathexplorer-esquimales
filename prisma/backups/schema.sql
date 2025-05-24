@@ -696,7 +696,8 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "FechaContratacion" "date",
     "FechaUltNivel" "date",
     "ID_PeopleLead" "uuid",
-    "Biografia" character varying
+    "Biografia" character varying,
+    "cargabilidad_num" smallint DEFAULT '0'::smallint
 );
 
 
@@ -704,6 +705,10 @@ ALTER TABLE "public"."Empleado" OWNER TO "postgres";
 
 
 COMMENT ON COLUMN "public"."Empleado"."Biografia" IS 'Biografia del empleado(como la del face)';
+
+
+
+COMMENT ON COLUMN "public"."Empleado"."cargabilidad_num" IS 'cargabilidad en numero';
 
 
 
@@ -863,11 +868,16 @@ CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
     "fecha_inicio" "date",
     "fecha_fin" "date",
     "isReviewed" boolean DEFAULT false NOT NULL,
+    "cargabilidad_num" smallint DEFAULT '100'::smallint NOT NULL,
     CONSTRAINT "Proyectos_Status_check" CHECK (("Status" = ANY (ARRAY['active'::"text", 'inactive'::"text", 'pending'::"text", 'done'::"text"])))
 );
 
 
 ALTER TABLE "public"."Proyectos" OWNER TO "postgres";
+
+
+COMMENT ON COLUMN "public"."Proyectos"."cargabilidad_num" IS 'cargabilidad del proyecto en entero del 1 al 100, definida por el capability lead';
+
 
 
 CREATE TABLE IF NOT EXISTS "public"."Puesto_proyecto" (
