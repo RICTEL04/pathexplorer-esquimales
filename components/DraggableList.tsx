@@ -1,26 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import EmployeeCard from "./EmployeeCard";
 
-type Employee = {
-  id: string;
-  name: string;
-  position: string;
-  email: string;
-  level: number;
-  project: string;
-  companyEntryDate: string;
-  timeOnLevel: string;
-  activeProject: string;
-  activeProjectStartDate: string;
-  projectRole: string;
-  isProjectLead: boolean;
-  certificates: string[];
-  courses: string[];
-};
-
 interface DraggableListProps {
-  employees: Employee[];
-  onDragStart: (employee: Employee) => void;
+  employees: any[]; // Accepts raw employee objects
+  onDragStart: (employee: any) => void;
   onDrop: () => void;
   onDragOver: () => void;
   isOver: boolean;
@@ -39,7 +22,7 @@ export default function DraggableList({
 
   return (
     <ul
-      className={`w-full max-w-3xl mx-auto mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 min-h-[80px] transition-colors ${
+      className={`w-full mx-auto mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 min-h-[80px] transition-colors ${
         isOver ? "bg-purple-100" : ""
       }`}
       onDragOver={e => {
@@ -50,20 +33,27 @@ export default function DraggableList({
     >
       {employees.map((employee) => (
         <li
-          key={employee.id}
+          key={employee.ID_Empleado}
           draggable={draggableEnabled}
           onDragStart={draggableEnabled ? () => onDragStart(employee) : undefined}
-          onMouseDown={() => setActiveId(employee.id)}
+          onMouseDown={() => setActiveId(employee.ID_Empleado)}
           onMouseUp={() => setActiveId(null)}
           onMouseLeave={() => setActiveId(null)}
           className={
             (draggableEnabled ? "cursor-move " : "") +
             "transition-transform duration-150 " +
-            (activeId === employee.id ? "scale-95" : "")
+            (activeId === employee.ID_Empleado ? "scale-95" : "")
           }
           style={{ userSelect: "none" }}
         >
+          {/* Pass the raw employee object to EmployeeCard, or render fields directly */}
           <EmployeeCard employee={employee} />
+          {/* Or, if you want to render directly here: */}
+          {/* <div>
+            <div><b>{employee.Nombre}</b></div>
+            <div>{employee.Rol}</div>
+            <div>Nivel: {employee.Nivel}</div>
+          </div> */}
         </li>
       ))}
     </ul>
