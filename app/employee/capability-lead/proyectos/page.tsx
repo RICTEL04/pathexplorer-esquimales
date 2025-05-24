@@ -15,17 +15,37 @@ interface ProjectJson {
 
 export default function ProyectosPage() {
   const [projects, setProjects] = useState<ProjectJson[]>([]);
+  const [employeeCounts, setEmployeeCounts] = useState<{ [key: string]: number}>({});
   const router = useRouter();
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      const { data, error } = await supabase
+    const fetchProjectsAndCounts = async () => {
+      const { data: projectsData, error } = await supabase
         .from("Proyectos")
         .select("*")
         .order("ID_Proyecto", { ascending: false });
-      if (!error) setProjects(data);
+      if (!error && projectsData){
+        setProjects(projectsData);
+
+        //Fetch counts for all projects
+        const { data: countsData, error: countsError } = await supabase 
+          .from("Empleado_Proyectos")
+          .select("ID_Proyecto", { count: "exact", head: false });
+        
+        // Map for ID_Proyecto -> count
+        const countsMap: {[key: string]: number} = {};
+        if(!countsError && countsData){
+          countsData.forEach((row: any) => {
+            countsMap[row.ID_Proyecto] = (countsMap[row.ID_Proyecto] || 0) + 1;
+          });
+        }
+        setEmployeeCounts(countsMap);
+      } 
+        
     };
-    fetchProjects();
+
+
+    fetchProjectsAndCounts();
   }, []);
 
   return (
@@ -58,6 +78,9 @@ export default function ProyectosPage() {
               <p className="text-gray-600 text-sm">{project.Descripcion}</p>
               <p className="text-gray-600 mt-2">Fecha de Inicio: {project.fecha_inicio}</p>
               <p className="text-gray-600 mt-2">Fecha de Fin: {project.fecha_fin}</p>
+              <p className="text-purple-700 mt-2 font-semibold">
+                Empleados asignados: {employeeCounts[project.ID_Proyecto] || 0}
+              </p>
             </div>
           ))
         )}

@@ -1,33 +1,26 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Pencil, Trash2 } from "lucide-react";
 import EmployeeCard from "@/components/EmployeeCard";
-import { getCapabilityLead } from "@/lib/capabilityLead";
-import DraggableList from "@/components/DraggableList";
+import type { Role } from "./types";
 
 export default function ProjectDetailsPage() {
-  const params = useParams();
+  const params = useParams() as Record<string, string | string[]>;
+  const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const router = useRouter();
-  const [project, setProject] = useState<any>(null);
-  const [roles, setRoles] = useState<any[]>([]);
   const [editing, setEditing] = useState(false);
   const [editValues, setEditValues] = useState<any>({});
-  const [employees, setEmployees] = useState<any[]>([]);
+
+  const [project, setProject] = useState<any | null>(null);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [allEmployees, setAllEmployees] = useState<any[]>([]);
+  const [empleadosInProyecto, setEmpleadosInProyecto] = useState<any[]>([]);
 
-  const [draggedEmployee, setDraggedEmployee] = useState<any | null>(null);
-  const [isOverAssigned, setIsOverAssigned] = useState(false);
-  const [isOverAvailable, setIsOverAvailable] = useState(false);
-
-  // Safely get the id from params
-  const id = params?.id as string;
-
-  useEffect(() => {
-    if (!id) return; // Don't fetch if no id
-
-    const fetchProject = async () => {
+  const [newRole, setNewRole] = useState("");
+  const fetchProject = async () => {
       const { data, error } = await supabase
         .from("Proyectos")
         .select("*")
@@ -38,7 +31,6 @@ export default function ProjectDetailsPage() {
         setEditValues(data);
       }
     };
-    
     const fetchRoles = async () => {
       const { data, error } = await supabase
         .from("Roles")
@@ -46,94 +38,72 @@ export default function ProjectDetailsPage() {
         .eq("Proyecto_id", id);
       if (!error) setRoles(data);
     };
-    
-    const fetchEmployees = async () => {
-      const { data, error } = await supabase
+
+
+    const fetchMatchingFromEmpleadoProyecto = async () => {
+      // 1. Get ALL assigned employee IDs from Empleado_Proyectos (no project filter)
+      const { data: allMatches, error: allMatchesError } = await supabase
         .from("Empleado_Proyectos")
-        .select(`
-          Empleado:Empleado_id(
-            ID_Empleado,
-            Nombre,
-            Rol,
-            Nivel,
-            FechaContratacion,
-            FechaUltNivel
-          ),
-          Puesto,
-          created_at
-        `)
-        .eq("Proyecto_id", id);
+        .select("ID_Empleado");
 
-      if (!error && data) setEmployees(data);
-      else setEmployees([]);
-    };
-    
-    const fetchAllEmployees = async () => {
-      try {
-        const rawData = await getCapabilityLead();
-        const data = rawData.map((item: any) => ({
-          ID_Empleado: item.ID_Empleado,
-          Nombre: item.Nombre,
-          Rol: item.Rol,
-          Nivel: item.Nivel,
-          FechaContratacion: item.FechaContratacion,
-          FechaUltNivel: item.FechaUltNivel,
-          Puesto_proyecto: item.Puesto_proyecto?.[0] || null,
-        }));
-        setAllEmployees(data);
-      } catch (err) {
+      if (allMatchesError || !allMatches) {
         setAllEmployees([]);
+        return;
       }
+
+      // Get all assigned IDs (may have duplicates, so use Set for uniqueness)
+      const assignedIds = Array.from(new Set(allMatches.map((item: any) => item.ID_Empleado)));
+
+      // 2. Get all employees NOT in the assigned list
+      let allEmployees: any[] = [];
+      if (assignedIds.length > 0) {
+        const { data: empleadosNoAsignados, error: errorNoAsignados } = await supabase
+          .from("Empleado")
+          .select("*")
+          .not("ID_Empleado", "in", `(${assignedIds.map(id => `"${id}"`).join(",")})`);
+        allEmployees = !errorNoAsignados && empleadosNoAsignados ? empleadosNoAsignados : [];
+      } else {
+        // If no assigned, all employees are available
+        const { data: empleadosTodos, error: errorTodos } = await supabase
+          .from("Empleado")
+          .select("*");
+        allEmployees = !errorTodos && empleadosTodos ? empleadosTodos : [];
+      }
+      setAllEmployees(allEmployees);
+
+      // 3. (Optional) If you still want to fetch assigned employees for this project:
+      const { data: matches, error } = await supabase
+        .from("Empleado_Proyectos")
+        .select("ID_Empleado")
+        .eq("ID_Proyecto", id);
+
+      if (error || !matches) {
+        setEmpleadosInProyecto([]);
+        return;
+      }
+
+      const ids = matches.map((item: any) => item.ID_Empleado);
+
+      let empleadosInProyecto: any[] = [];
+      if (ids.length > 0) {
+        const { data: empleados, error: empleadosError } = await supabase
+          .from("Empleado")
+          .select("*")
+          .in("ID_Empleado", ids);
+
+        empleadosInProyecto = !empleadosError && empleados ? empleados : [];
+      }
+      setEmpleadosInProyecto(empleadosInProyecto);
     };
 
+  useEffect(() => {
     fetchProject();
     fetchRoles();
-    fetchEmployees();
-    fetchAllEmployees();
+    fetchMatchingFromEmpleadoProyecto();
   }, [id]);
-
-  if (!id) {
-    return <div className="p-8">ID no encontrado</div>;
-  }
-
   if (!project) return <div className="p-8">Cargando...</div>;
 
-  // Rest of your component code remains the same...
-  // Helper to map data to EmployeeCard props for assigned employees
-  const mapEmployeeData = (item: any) => ({
-    id: item.Empleado?.ID_Empleado || "",
-    name: item.Empleado?.Nombre || "",
-    position: item.Empleado?.Rol || "",
-    email: "",
-    level: item.Empleado?.Nivel ? Number(item.Empleado.Nivel) : 0,
-    project: item.Puesto || "Sin puesto",
-    companyEntryDate: item.Empleado?.FechaContratacion || "",
-    timeOnLevel: item.Empleado?.FechaUltNivel || "",
-    activeProject: project?.Nombre || "",
-    activeProjectStartDate: item.created_at || "",
-    projectRole: item.Empleado?.Rol || "",
-    isProjectLead: false,
-    certificates: [],
-    courses: [],
-  });
-
-  // Helper para mapear los datos al formato de EmployeeCard
-  const mapAllEmployeeData = (employee: any) => ({
-    id: employee.ID_Empleado,
-    name: employee.Nombre,
-    position: employee.Rol,
-    email: "",
-    level: employee.Nivel ? Number(employee.Nivel) : 0,
-    project: employee.Puesto_proyecto?.Puesto || "Sin puesto",
-    companyEntryDate: employee.FechaContratacion || "",
-    timeOnLevel: employee.FechaUltNivel || "",
-    activeProject: employee.Puesto_proyecto?.Proyectos?.[0]?.Nombre || "Sin proyecto",
-    activeProjectStartDate: employee.Puesto_proyecto?.created_at || "",
-    projectRole: employee.Rol,
-    isProjectLead: false,
-    certificates: [],
-    courses: [],
-  });
+  
 
   const handleDelete = async () => {
     if (!confirm("¿Estás seguro de que deseas eliminar este proyecto?")) return;
@@ -172,78 +142,98 @@ export default function ProjectDetailsPage() {
     }
   };
 
-  // Get IDs of assigned employees to avoid duplicates
-  const assignedIds = new Set(employees.map((item: any) => item.Empleado?.ID_Empleado));
-
-  const assignedEmployees = employees.map(mapEmployeeData);
-  const availableEmployees = allEmployees
-    .filter((emp: any) => !assignedIds.has(emp.ID_Empleado))
-    .map(mapAllEmployeeData);
-
-  // Drag handlers
-  const handleDragStart = (employee: any) => setDraggedEmployee(employee);
-
-  const handleDropAssigned = () => {
-    if (
-      draggedEmployee &&
-      availableEmployees.find((e) => e.id === draggedEmployee.id)
-    ) {
-      // Move from available to assigned
-      setEmployees((prev: any[]) => [
-        ...prev,
-        {
-          Empleado: {
-            ID_Empleado: draggedEmployee.id,
-            Nombre: draggedEmployee.name,
-            Rol: draggedEmployee.position,
-            Nivel: draggedEmployee.level,
-            FechaContratacion: draggedEmployee.companyEntryDate,
-            FechaUltNivel: draggedEmployee.timeOnLevel,
-          },
-          Puesto: draggedEmployee.project,
-          created_at: draggedEmployee.activeProjectStartDate,
-        },
-      ]);
-      setAllEmployees((prev: any[]) =>
-        prev.filter((e: any) => e.ID_Empleado !== draggedEmployee.id)
-      );
+  const handleAddRole = async () => {
+    if(!newRole.trim()) return;
+    const {error, data} = await supabase
+      .from("Roles")
+      .insert([{role_name: newRole, Proyecto_id: id}]);
+    if (!error) {
+    setNewRole("");
+    fetchRoles();
+    } else {
+      alert("Error al agregar el rol");
     }
-    setDraggedEmployee(null);
-    setIsOverAssigned(false);
+  }
+
+  const handleDeleteRole = async (roleId: string) => {
+    const {error} = await supabase
+      .from("Roles")
+      .delete()
+      .eq("id", roleId);
+    if(!error){
+      fetchRoles();
+    } else {
+      alert("Error al eliminar el rol");
+    }
+  } 
+
+
+  const moveToAllEmployees = async (employee: any) => {
+    // Remove from Empleado_Proyectos in DB
+    await supabase
+      .from("Empleado_Proyectos")
+      .delete()
+      .eq("ID_Empleado", employee.ID_Empleado)
+      .eq("ID_Proyecto", id);
+
+    // Calculate new cargabilidad_num
+    const proyectoCargabilidad = project.cargabilidad_num || 0;
+    const empleadoCargabilidad = employee.cargabilidad_num || 0;
+    // Subtract, but don't go below 0
+    const newCargabilidadNum = Math.max(empleadoCargabilidad - proyectoCargabilidad, 0);
+    const newCargabilidadStr = `${newCargabilidadNum}%`;
+
+    // Update in DB
+    await supabase
+      .from("Empleado")
+      .update({
+        cargabilidad_num: newCargabilidadNum,
+        Cargabilidad: newCargabilidadStr,
+      })
+      .eq("ID_Empleado", employee.ID_Empleado);
+
+    // Update UI state
+    employee.cargabilidad_num = newCargabilidadNum;
+    employee.Cargabilidad = newCargabilidadStr;
+
+    setEmpleadosInProyecto(prev => prev.filter(e => e.ID_Empleado !== employee.ID_Empleado));
+    setAllEmployees(prev => [...prev, employee]);
   };
 
-  const handleDropAvailable = () => {
-    if (
-      draggedEmployee &&
-      assignedEmployees.find((e) => e.id === draggedEmployee.id)
-    ) {
-      // Move from assigned to available
-      setAllEmployees((prev: any[]) => [
-        ...prev,
-        {
-          ID_Empleado: draggedEmployee.id,
-          Nombre: draggedEmployee.name,
-          Rol: draggedEmployee.position,
-          Nivel: draggedEmployee.level,
-          FechaContratacion: draggedEmployee.companyEntryDate,
-          FechaUltNivel: draggedEmployee.timeOnLevel,
-          Puesto_proyecto: null,
-        },
-      ]);
-      setEmployees((prev: any[]) =>
-        prev.filter(
-          (e: any) => e.Empleado?.ID_Empleado !== draggedEmployee.id
-        )
-      );
-    }
-    setDraggedEmployee(null);
-    setIsOverAvailable(false);
-  };
+  const moveToProyecto = async (employee: any) => {
+    // Insert into Empleado_Proyectos in DB
+    await supabase
+      .from("Empleado_Proyectos")
+      .insert([{ ID_Empleado: employee.ID_Empleado, ID_Proyecto: id }]);
 
-  const canDragAndDrop = editing;
+    // Calculate new cargabilidad_num
+    const proyectoCargabilidad = project.cargabilidad_num || 0;
+    const empleadoCargabilidad = employee.cargabilidad_num || 0;
+    const newCargabilidadNum = empleadoCargabilidad + proyectoCargabilidad;
+
+    // Optionally, update the Cargabilidad string (e.g., "50%")
+    const newCargabilidadStr = `${Math.min(newCargabilidadNum, 100)}%`;
+
+    // Update in DB
+    await supabase
+      .from("Empleado")
+      .update({
+        cargabilidad_num: newCargabilidadNum,
+        Cargabilidad: newCargabilidadStr,
+      })
+      .eq("ID_Empleado", employee.ID_Empleado);
+
+    // Update in UI state
+    employee.cargabilidad_num = newCargabilidadNum;
+    employee.Cargabilidad = newCargabilidadStr;
+
+    setAllEmployees(prev => prev.filter(e => e.ID_Empleado !== employee.ID_Empleado));
+    setEmpleadosInProyecto(prev => [...prev, employee]);
+  };
 
   return (
     <div className="p-8 w-full max-w-none mx-0">
+      <h1>{}</h1>
       <button onClick={() => router.back()} className="mb-4 text-blue-600">&larr; Volver</button>
       <div className="flex justify-between items-center mb-4">
         {editing ? (
@@ -337,39 +327,77 @@ export default function ProjectDetailsPage() {
             <li>No hay roles registrados para este proyecto.</li>
           ) : (
             roles.map((role) => (
-              <li key={role.id}>{role.role_name}</li>
+              <li key={role.id} className="flex items-center gap-2">
+                <span>{role.role_name}</span>
+                {editing && (
+                  <button
+                    onClick={() => handleDeleteRole(role.id)}
+                    className="text-red-600 hover:underline text-xs"
+                    title="Eliminar rol"
+                  >
+                    Eliminar
+                  </button>
+                )}
+              </li>
             ))
           )}
         </ul>
+        {editing && (
+          <div className="flex gap-2 mt-2">
+            <input
+              type="text"
+              value={newRole}
+              onChange={e => setNewRole(e.target.value)}
+              placeholder="Nuevo rol"
+              className="border p-1 rounded"
+            />
+            <button
+              onClick={handleAddRole}
+              className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            >
+              Agregar rol
+            </button>
+          </div>
+        )}
       </div>
 
-      <div className="mb-8">
-        <span className="font-semibold text-lg">Empleados en este proyecto:</span>
-        <DraggableList
-          employees={assignedEmployees}
-          onDragStart={canDragAndDrop ? handleDragStart : () => {}}
-          onDrop={canDragAndDrop ? handleDropAssigned : () => {}}
-          onDragOver={canDragAndDrop ? () => setIsOverAssigned(true) : () => {}}
-          isOver={isOverAssigned && canDragAndDrop}
-          draggableEnabled={canDragAndDrop}
-        />
-        {assignedEmployees.length === 0 && (
-          <p className="text-gray-600 mt-2">No hay empleados asignados a este proyecto.</p>
-        )}
-      </div>
-      <div className="mb-8">
-        <span className="font-semibold text-lg">Todos los empleados:</span>
-        <DraggableList
-          employees={availableEmployees}
-          onDragStart={canDragAndDrop ? handleDragStart : () => {}}
-          onDrop={canDragAndDrop ? handleDropAvailable : () => {}}
-          onDragOver={canDragAndDrop ? () => setIsOverAvailable(true) : () => {}}
-          isOver={isOverAvailable && canDragAndDrop}
-          draggableEnabled={canDragAndDrop}
-        />
-        {availableEmployees.length === 0 && (
-          <p className="text-gray-600 mt-2">No hay empleados registrados.</p>
-        )}
+      
+
+      <div className="flex gap-8 mb-8 items-start">
+        <div className="flex-1">
+          <span className="font-semibold text-lg block mb-2">Empleados en este proyecto:</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {empleadosInProyecto.length === 0 ? (
+              <p className="text-gray-600">No hay empleados asignados a este proyecto.</p>
+            ) : (
+              empleadosInProyecto.map((empleado: any) => (
+                <EmployeeCard
+                  key={empleado.ID_Empleado}
+                  employee={empleado}
+                  editing={editing}
+                  onSwitchList={() => moveToAllEmployees(empleado)}
+                />
+              ))
+            )}
+          </div>
+        </div>
+        <div className="flex-1">
+          <span className="font-semibold text-lg block mb-2">Empleados disponibles:</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {allEmployees.length === 0 ? (
+              <p className="text-gray-600">No hay empleados disponibles.</p>
+            ) : (
+              allEmployees.map((empleado: any) => (
+                <EmployeeCard
+                  key={empleado.ID_Empleado}
+                  employee={empleado}
+                  editing={editing}
+                  onSwitchList={() => moveToProyecto(empleado)}
+                />
+              ))
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

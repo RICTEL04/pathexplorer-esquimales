@@ -1,58 +1,65 @@
 "use client";
 
-interface Employee {
-  id: string;
-  name: string;
-  position: string;
-  email: string;
-  level: number;
-  project: string;
-  companyEntryDate: string;
-  timeOnLevel: string;
-  activeProject: string;
-  activeProjectStartDate: string;
-  projectRole: string;
-  isProjectLead: boolean;
-  certificates: string[];
-  courses: string[];
+import { ArrowLeftRight } from "lucide-react";
+
+interface RawEmployee {
+  ID_Empleado: string;
+  Nombre: string;
+  Rol: string;
+  ID_Departamento: string;
+  Nivel: string;
+  Cargabilidad: string;
+  FechaContratacion: string;
+  FechaUltNivel: string;
+  ID_PeopleLead: string;
+  Biografia: string | null;
+  cargabilidad_num: number;
 }
 
-export default function EmployeeCard({ employee }: { employee: Employee }) {
+export default function EmployeeCard({
+  employee,
+  onSwitchList,
+  editing = false,
+}: {
+  employee: RawEmployee;
+  onSwitchList?: () => void;
+  editing?: boolean;
+}) {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 border border-gray-200">
+    <div className="bg-white shadow-md rounded-lg p-3 border border-gray-200 w-full mx-auto text-xs flex flex-col h-full">
       {/* Profile Image and Name/Position */}
-      <div className="flex items-center mb-4">
+      <div className="flex items-center mb-3">
         <img
           src="/profile.avif"
-          alt={`Profile of ${employee.name}`}
-          className="w-16 h-16 rounded-full mr-4"
+          alt={`Profile of ${employee.Nombre}`}
+          className="w-10 h-10 rounded-full mr-2"
         />
         <div>
-          <h2 className="text-lg font-bold text-gray-800">{employee.name}</h2>
-          <p className="text-gray-600">{employee.position}</p>
+          <h2 className="font-bold text-gray-800 text-sm min-h-[2.2em] break-words line-clamp-2">{employee.Nombre}</h2>
+          <p className="text-gray-600 text-xs min-h-[2.2em] break-words line-clamp-2">{employee.Rol}</p>
         </div>
       </div>
-
-      {/* Light Purple Cards for Project and isProjectLead */}
-      <div className="flex flex-wrap gap-2 mt-4">
-      <span className="bg-purple-100 text-purple-700 text-sm font-medium px-3 py-1 rounded-full">
-          Nivel: {employee.level}
+      {/* Light Purple Cards for Project and Level */}
+      <div className="flex flex-wrap gap-1 mt-auto">
+        <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-0.5 rounded-full">
+          Nivel: {employee.Nivel}
         </span>
-        <span className="bg-purple-100 text-purple-700 text-sm font-medium px-3 py-1 rounded-full">
-          {employee.project}
+        <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-0.5 rounded-full">
+          Cargabilidad: {employee.cargabilidad_num} %
         </span>
-        <span className="bg-purple-100 text-purple-700 text-sm font-medium px-3 py-1 rounded-full">
-          {employee.projectRole}
-        </span>
-        <span className="bg-purple-100 text-purple-700 text-sm font-medium px-3 py-1 rounded-full">
-          {employee.isProjectLead ? "Management" : "Non-Management"}
+        <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-0.5 rounded-full">
+          Ultimo ascenso: {employee.FechaUltNivel}
         </span>
       </div>
-      <p className="text-gray-700 text-base font-medium">Fecha de ingreso: {employee.companyEntryDate}</p>
-      <p className="text-gray-700 text-base font-medium">Tiempo en nivel: {employee.timeOnLevel}</p>
-      <p className="text-gray-700 text-base font-medium">
-        Inicio del proyecto activo: {employee.activeProjectStartDate}
-      </p>
+      {editing && onSwitchList && (
+        <button
+          onClick={onSwitchList}
+          className="mt-2 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-xs flex items-center gap-8"
+        >
+          <ArrowLeftRight className="w-4 h-4"/>
+          Mover
+        </button>
+      )}
 
     </div>
   );
