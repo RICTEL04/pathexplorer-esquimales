@@ -5,7 +5,7 @@ import { User } from "@supabase/supabase-js"; // Import the User type from Supab
 import { supabase } from "@/lib/supabase";
 import { CapabilityLead, DeliveryLead, getEmpleados, Proyecto, Metas } from "@/lib/empleadoService";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
-import { Star } from "lucide-react";
+import { Star, ArrowBigUpDash, CalendarClock, Goal } from "lucide-react";
 import UserIcon from "@heroicons/react/24/solid/UserIcon";
 import { Tooltip as TooltipComponent } from "@/components/ui/tooltip";
 import { TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -600,15 +600,6 @@ export default function EmployeeDashboard() {
           </Card>
         )}
 
-        {roles.talentLead && (
-          <Card className="shadow-md rounded-sm">
-            <CardContent>
-              <h3 className="text-lg font-semibold mb-4">Información de Talent Lead</h3>
-              <p>Bla Bla Bla.</p>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Gráfica de estado de certificados */}
         <Card className="shadow-md rounded-sm">
           <CardContent>
@@ -635,33 +626,65 @@ export default function EmployeeDashboard() {
           </CardContent>
         </Card>
 
-        {/* Cursos Totales */}
-        <Card className="shadow-md rounded-sm">
-          <CardContent className="flex items-center space-x-4 p-6">
-            <div className="flex-shrink-0">
-              <Star className="w-12 h-12 text-gray-800" />
-            </div>
-            <div>
-              <h2 className="text-4xl font-bold text-gray-800">{selectedEmpleado.Certificados.length}</h2>
-              <p className="text-sm text-muted-foreground">Certificados totales</p>
-            </div>
-          </CardContent>
-        </Card>
+           <div className="grid grid-cols-2 gap-4">
+          {/* Primera tarjeta: Certificados totales */}
+          <Card className="shadow-md rounded-sm h-40">
+            <CardContent className="flex items-center space-x-4 p-6 h-full">
+              <div className="flex-shrink-0">
+                <Star className="w-8 h-8 text-gray-800" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-800">{selectedEmpleado.Certificados.length}</h2>
+                <p className="text-sm text-muted-foreground">Certificados totales</p>
+              </div>
+            </CardContent>
+          </Card>
+        
+          {/* Segunda tarjeta: Metas activas */}
+          <Card className="shadow-md rounded-sm">
+            <CardContent className="flex items-center space-x-4 p-6 h-full">
+              <div className="flex-shrink-0">
+                <Goal className="w-8 h-8 text-gray-800" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-800">
+                  {metasEmpleados.filter((meta) => meta.Plazo === "Activa").length}
+                </h2>
+                <p className="text-sm text-muted-foreground">Metas activas</p>
+              </div>
+            </CardContent>
+          </Card>
+        
+                    {/* Tercera tarjeta: Nivel del empleado */}
+          <Card className="shadow-md rounded-sm h-40">
+            <CardContent className="flex items-center justify-center space-x-4 p-6 h-full">
+              <div className="flex-shrink-0">
+                <ArrowBigUpDash className="w-8 h-8 text-gray-800" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-800">{selectedEmpleado.Nivel}</h2>
+                <p className="text-sm text-muted-foreground">Nivel del empleado</p>
+              </div>
+            </CardContent>
+          </Card>
+        
+          {/* Cuarta tarjeta: Tiempo de antigüedad */}
+          <Card className="shadow-md rounded-sm">
+            <CardContent className="flex items-center space-x-4 p-6 h-full">
+              <div className="flex-shrink-0">
+                <CalendarClock className="w-8 h-8 text-gray-800" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-800">
+                  {Math.floor((new Date().getTime() - new Date(selectedEmpleado.FechaContratacion).getTime()) / (1000 * 60 * 60 * 24 * 365))} años
+                </h2>
+                <p className="text-sm text-muted-foreground">Tiempo de antigüedad</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-        {/* Progreso en Cursos */}
-        <Card className="shadow-md rounded-sm">
-          <CardContent>
-            <h3 className="text-lg font-semibold mb-4">Progreso en Certificados</h3>
-            <div className="space-y-4">
-              {selectedEmpleado.Certificados.map((cert) => (
-                <div key={cert.ID_Certificado}>
-                  <p className="text-sm text-muted-foreground mb-1">{cert.Nombre}</p>
-                  <Progress value={cert.Verificacion ? 100 : 50} />
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+    
 
         {/* Gráfica de proyectos por año */}
         <Card className="col-span-full shadow-md rounded-sm">
