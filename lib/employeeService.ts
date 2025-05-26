@@ -10,6 +10,22 @@ export interface ProyectoEmpleado {
   status: string;
 }
 
+interface SkillWithLevel {
+  name: string;
+  level: 'beginner' | 'intermediate' | 'expert';
+}
+
+export interface Experience {
+  id: string;
+  position: string;
+  company: string;
+  startDate: string;
+  endDate: string | null;
+  currentJob: boolean;
+  description: string;
+  skills: SkillWithLevel[];
+}
+
 export interface PuestoProyecto {
   ID_Proyecto: string;
   Puesto: string;
@@ -62,6 +78,7 @@ export interface PeopleLead {
 export interface CapabilityLead {
   id: string;
   Nombre: string;
+  Nombre_Departamento: string;
   AvatarUrl: string | null;
 }
 
@@ -241,34 +258,49 @@ const fetchPeopleLead = async (peopleLeadId: string | null): Promise<PeopleLead 
 
 
 
-const fetchCapabilityLead = async (capabilityLeadId: string | null): Promise<CapabilityLead | null> => {
-  if (!capabilityLeadId) return null;
-  
+const fetchCapabilityLead = async (employeeId: string | null): Promise<CapabilityLead | null> => {
+  if (!employeeId) return null;
 
+  // Realizamos la consulta SQL adaptada
   const { data, error } = await supabase
-    .from('Capability_lead')
-    .select('ID_Empleado')
-    .eq('ID_CapabilityLead', capabilityLeadId)
-    .single();
-  
-  if (error || !data) return null;
-  
-  const { data: empleadoData, error: empleadoError } = await supabase
     .from('Empleado')
-    .select('ID_Empleado, Nombre')
-    .eq('ID_Empleado', data.ID_Empleado)
+    .select(`
+      Departamento:ID_Departamento!inner(
+        Nombre_Departamento:Nombre,
+        Capability_Lead:Capability_Lead!inner(
+          ID_Encargado:ID_Empleado,
+          Empleado:ID_Empleado!inner(
+            Nombre_Encargado:Nombre
+          )
+        )
+      )
+    `)
+    .eq('ID_Empleado', employeeId)
     .single();
-  
-  if (empleadoError || !empleadoData) return null;
 
-  const url = await fetchAvatarURL(empleadoData.ID_Empleado);
+  if (error || !data || !data.Departamento ) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
+
+  // Extraemos los datos de manera segura
+  const department = Array.isArray(data.Departamento) ? data.Departamento[0] : data.Departamento;
+  const capabilityLead = Array.isArray(department.Capability_Lead) 
+    ? department.Capability_Lead[0] 
+    : department.Capability_Lead;
+  
+  const leadEmployee = capabilityLead?.Empleado
+    ? (Array.isArray(capabilityLead.Empleado) ? capabilityLead.Empleado[0] : capabilityLead.Empleado)
+    : null;
+
+  if (!leadEmployee) return null;
 
   return {
-    id: capabilityLeadId,
-    Nombre: empleadoData.Nombre || '',
-    AvatarUrl: url || null,
+    id: capabilityLead.ID_Encargado,
+    Nombre: leadEmployee.Nombre_Encargado,
+    Nombre_Departamento: department.Nombre_Departamento,
+    AvatarUrl: await fetchAvatarURL(capabilityLead.ID_Encargado) || null
   };
-  
 };
 
 const fetchContacto = async (employeeID: string | null): Promise<Contacto | null> => {
@@ -499,7 +531,7 @@ export const getEmployeeFullData = async (employeeId: string): Promise<EmployeeF
       employee.Biografia,
       fetchAvatarURL(employeeId),
       fetchPeopleLead(employee.ID_PeopleLead),
-      fetchCapabilityLead(employee.ID_CapabilityLead),
+      fetchCapabilityLead(employeeId),
       fetchContacto(employeeId),
       fetchInformes(employeeId),
       getEmployeeSoftSkills(employeeId),  

@@ -2,7 +2,7 @@
 import Sidebar from "@/components/sidebar";
 import { Home, Briefcase, Award, TrendingUp, User, Target, Users, Folder, MessageCircle, BrainCircuit, BringToFront, Album, Diamond} from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const [routes, setRoutes] = useState<any[]>([]);
@@ -13,6 +13,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
     deliveryLead: false,
     talentLead: false
   });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -119,8 +120,23 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Sidebar routes={routes} />
-      <main className="flex-1 p-6 overflow-auto">{children}</main>
+      <div 
+        onMouseEnter={() => setIsSidebarOpen(true)}
+        className="fixed inset-y-0 left-0 z-40 w-16" // Área invisible para detectar hover
+      />
+      
+      <Sidebar 
+        routes={routes} 
+        isSidebarOpen={isSidebarOpen} 
+        setIsSidebarOpen={setIsSidebarOpen} 
+      />
+      
+      <main 
+        className={`flex-1 p-6 overflow-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-16'}`}
+        onClick={() => setIsSidebarOpen(false)}
+      >
+        {children}
+      </main>
     </div>
   );
 }
