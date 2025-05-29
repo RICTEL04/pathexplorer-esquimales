@@ -5,7 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Pencil, Trash2 } from "lucide-react";
 import EmployeeCard from "@/components/EmployeeCard";
-import type { Role } from "./types";
+
+export interface Role {
+  id: string;
+  role_name: string;
+  Proyecto_id: number;
+}
+
 
 export default function ProjectDetailsPage() {
   const params = useParams() as Record<string, string | string[]>;
