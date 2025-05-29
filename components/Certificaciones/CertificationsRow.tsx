@@ -48,7 +48,7 @@ function CertificationsRow({ certification, onSave }: CertificationCardProps) {
             <>
                 <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{certification.Nombre}</td>
                 <td className="px-6 py-4">{certification.Fecha_caducidad}</td>
-                <td className="px-6 py-4">{certification.Verificacion === true ? "Verificado" : certification.Verificacion === false ? "Rechazado" : "Procesando"}</td>
+                <td className="px-6 py-4">{certification.Verificacion === true ? "Aprobado" : certification.Verificacion === false ? "Rechazado" : "Pendiente"}</td>
                 <td className="px-6 py-4">
                     <button className="text-blue-500 hover:underline" onClick={() => handleEdit()}>Editar</button>
                 </td>
