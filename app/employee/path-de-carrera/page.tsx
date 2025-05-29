@@ -9,6 +9,8 @@ import { course } from "@/lib/cursos-empleado/definitions";
 import { EmployeeFullData, Interes, Habilidad} from "@/lib/employeeService";
 import { getEmployeeFullData } from "@/lib/employeeService";
 import certification from "@/lib/certificados-empleados/definitions";
+import { fetchMetas, getMetaData} from "@/lib/metas-empleados/apiCallsMetas";
+import { Meta } from "@/lib/metas-empleados/metasDefinitions";
 
 export default function PathDeCarreraPage() {
   const [loading, setLoading] = useState(true);
@@ -20,6 +22,7 @@ export default function PathDeCarreraPage() {
   const [activeSection, setActiveSection] = useState<"careerPath" | "employeeData">("careerPath"); // Estado para controlar la sección activa
   const [currentPage, setCurrentPage] = useState(1); // Estado para la paginación
   const itemsPerPage = 5; // Número de cursos por página
+  const [metas, setMetas] = useState<Meta[]>([]); // Estado para las metas
 
   // Función para cambiar de sección
   const handleSectionChange = (section: "careerPath" | "employeeData") => {
@@ -33,7 +36,7 @@ export default function PathDeCarreraPage() {
 
   // Función para llamar a la API del servidor y generar el path de carrera
   const generateCareerPath = async (
-    metas: string[],
+    metas: Meta[],
     habilidades: Habilidad[],
     intereses: Interes[],
     todosLosCursos: { id: any; nombre: any; descripcion: any; link: any; fechaFin: any }[],
@@ -82,13 +85,19 @@ export default function PathDeCarreraPage() {
             setEmployee(employeeData);
           }
 
+          const employeeMetas = await getMetaData(userId);
+          if (employeeMetas) {
+            setMetas(employeeMetas);
+          }
+
+
           console.log("Employee Data:", employeeData);
           console.log("Courses Data:", coursesData);
           console.log("Certifications Data:", certificationsData);
 
           // *Filtrar y estructurar la información*
           const metas = [
-            "Trabajar en proyectos innovadores",
+            ...(employeeMetas || []),
           ];
 
           const habilidades = [

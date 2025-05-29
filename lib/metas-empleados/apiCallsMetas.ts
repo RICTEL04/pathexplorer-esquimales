@@ -62,6 +62,50 @@ export async function fetchMetas(employeeID: string, setLoading: (loading: boole
   }
 }
 
+export async function getMetaData(employeeID: string) {
+  try {
+    // Consulta con JOIN para obtener metas y sus revisores con nombres
+    const { data, error } = await supabase
+      .from("Metas")
+      .select(`
+        *,
+        Revisores:Revisor_Meta(
+          *,
+          Revisor:Empleado!Revisor_Meta_ID_EmpleadoRevisor_fkey(Nombre)
+        )
+      `)
+      .eq("ID_Empleado", employeeID);
+
+    if (error) throw error;
+
+    // Transformar la estructura de datos con tipado correcto
+    const metasWithRevisores: Meta[] = data?.map(meta => {
+      
+      return {
+        ID_meta: meta.ID_meta,
+        Nombre: meta.Nombre,
+        Tipo_Meta: "",
+        Plazo: "",
+        Descripcion: meta.Descripcion,
+        Fecha_Inicio: meta.Fecha_Inicio,
+        Fecha_limite: meta.Fecha_limite,
+        ID_Empleado: "",
+        Registrada: true,
+        Estado: "",
+        Self_Reflection: "",
+        Revisores : []
+      };
+    }) || [];
+
+    console.log("Metas con revisores:", metasWithRevisores);
+    return metasWithRevisores;
+  } catch (error) {
+    console.error("Error fetching metas:", error);
+    throw error;
+  } finally {
+  }
+}
+
 export async function insertMeta(meta: Meta) {
   try {
     // 1. Upsert para la meta principal
