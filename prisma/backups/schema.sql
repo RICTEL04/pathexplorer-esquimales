@@ -103,6 +103,23 @@ $$;
 ALTER FUNCTION "public"."delete_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_available_delivery_leads"() RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "id_deliverylead" "uuid")
+    LANGUAGE "sql"
+    AS $$
+  SELECT 
+    e."ID_Empleado", 
+    e."Nombre" AS nombre_empleado, 
+    dl."ID_DeliveryLead"
+  FROM "Empleado" e
+  JOIN "Delivery_Lead" dl ON dl."ID_Empleado" = e."ID_Empleado"
+  LEFT JOIN "Proyectos" p ON p."ID_DeliveryLead" = dl."ID_DeliveryLead"
+  WHERE p."ID_Proyecto" IS NULL;
+$$;
+
+
+ALTER FUNCTION "public"."get_available_delivery_leads"() OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_employee_skills_excluding_category"("employee_id" "uuid", "excluded_category_id" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre_habilidad" "text", "nivel" "text", "nombre_position" "text", "nombre_empresa" "text")
     LANGUAGE "plpgsql" STABLE
     AS $$
@@ -266,6 +283,44 @@ $$;
 
 
 ALTER FUNCTION "public"."get_employee_skills_max_level_by_category"("employee_id" "uuid", "category_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_employees_by_level"("level_param" "text") RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "nivel" "text", "id_departamento" "uuid", "nombre_departamento" "text", "id_people_lead" "uuid", "nombre_people_lead" "text", "id_capability_lead" "uuid", "nombre_capability_lead" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        e."ID_Empleado",
+        e."Nombre"::text AS "Nombre_Empleado",
+        e."Nivel"::text,
+        e."ID_Departamento",
+        d."Nombre"::text AS "Nombre_Departamento",
+        pl."ID" AS "ID_People_Lead",
+        pl_emp."Nombre"::text AS "Nombre_People_Lead",
+        cl."ID_CapabilityLead" AS "ID_Capability_Lead",
+        cl_emp."Nombre"::text AS "Nombre_Capability_Lead"   
+    FROM 
+        "Empleado" e
+    JOIN 
+        "Departamento" d ON e."ID_Departamento" = d."ID_Departamento"
+    LEFT JOIN 
+        "People_lead" pl ON e."ID_PeopleLead" = pl."ID"
+    LEFT JOIN 
+        "Empleado" pl_emp ON pl."ID_Empleado" = pl_emp."ID_Empleado"
+    LEFT JOIN 
+        "Capability_Lead" cl ON d."ID_Departamento" = cl."ID_Departamento"
+    LEFT JOIN 
+        "Empleado" cl_emp ON cl."ID_Empleado" = cl_emp."ID_Empleado"
+    WHERE 
+        e."Nivel" = level_param  
+    ORDER BY 
+        e."Nombre";
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employees_by_level"("level_param" "text") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."insert_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") RETURNS "void"
@@ -473,7 +528,7 @@ $$;
 ALTER FUNCTION "public"."select_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "ID_Cliente" "uuid", "Descripcion" "text", "Status" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isReviewed" boolean)
+CREATE OR REPLACE FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "Descripcion" "text", "Status" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isReviewed" boolean)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -611,17 +666,6 @@ CREATE TABLE IF NOT EXISTS "public"."Certificados" (
 ALTER TABLE "public"."Certificados" OWNER TO "postgres";
 
 
-CREATE TABLE IF NOT EXISTS "public"."Cliente" (
-    "PK_Cliente" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "Nombre" character varying,
-    "RFC" character varying,
-    "ID_Contacto" "uuid" NOT NULL
-);
-
-
-ALTER TABLE "public"."Cliente" OWNER TO "postgres";
-
-
 CREATE TABLE IF NOT EXISTS "public"."Contacto" (
     "PK_Contacto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Email" character varying,
@@ -696,8 +740,7 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "FechaContratacion" "date",
     "FechaUltNivel" "date",
     "ID_PeopleLead" "uuid",
-    "Biografia" character varying,
-    "cargabilidad_num" smallint DEFAULT '0'::smallint
+    "Biografia" character varying
 );
 
 
@@ -705,10 +748,6 @@ ALTER TABLE "public"."Empleado" OWNER TO "postgres";
 
 
 COMMENT ON COLUMN "public"."Empleado"."Biografia" IS 'Biografia del empleado(como la del face)';
-
-
-
-COMMENT ON COLUMN "public"."Empleado"."cargabilidad_num" IS 'cargabilidad en numero';
 
 
 
@@ -851,7 +890,8 @@ ALTER TABLE "public"."People_lead" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."Proyecto_Habilidades" (
     "ID_Proyecto" "uuid" NOT NULL,
-    "ID_Habilidad" "uuid" NOT NULL
+    "ID_Habilidad" "uuid" NOT NULL,
+    "nivel" "text"
 );
 
 
@@ -861,7 +901,6 @@ ALTER TABLE "public"."Proyecto_Habilidades" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
     "ID_Proyecto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Nombre" "text" NOT NULL,
-    "ID_Cliente" "uuid",
     "Descripcion" "text",
     "Status" "text" DEFAULT 'active'::"text" NOT NULL,
     "ID_DeliveryLead" "uuid",
@@ -885,7 +924,8 @@ CREATE TABLE IF NOT EXISTS "public"."Puesto_proyecto" (
     "created_at" "date" NOT NULL,
     "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"(),
     "ID_Proyecto" "uuid" DEFAULT "gen_random_uuid"(),
-    "Puesto" character varying
+    "Puesto" character varying,
+    "cliente" "text"
 );
 
 
@@ -919,17 +959,93 @@ COMMENT ON TABLE "public"."Roles" IS 'roles para proyectos';
 
 
 
+CREATE TABLE IF NOT EXISTS "public"."TD_Capability_Lead" (
+    "ID_TD_Capability_Lead" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_TalentDiscussion" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_CapabilityLead" "uuid" DEFAULT "gen_random_uuid"()
+);
+
+
+ALTER TABLE "public"."TD_Capability_Lead" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."TD_Capability_Lead" IS 'Talent discussion del cpaability Lead';
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."TD_Employee" (
+    "ID_TD_Employee" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_TalentDiscussion" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"()
+);
+
+
+ALTER TABLE "public"."TD_Employee" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."TD_Employee" IS 'Empleados de la talent Discussion';
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."TD_Employee_Request" (
+    "ID_TD_Employee_Request" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_TalentDiscussion" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_TD_Employee" "uuid" DEFAULT "gen_random_uuid"(),
+    "Descripcion" character varying,
+    "Estado" character varying DEFAULT 'Pendiente'::character varying,
+    "Resultado" character varying
+);
+
+
+ALTER TABLE "public"."TD_Employee_Request" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."TD_Employee_Request" IS 'Request of the employee to the talent discussion';
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."TD_People_Lead" (
+    "ID_TD_People_Lead" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_TalentDiscussion" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_People_Lead" "uuid" DEFAULT "gen_random_uuid"()
+);
+
+
+ALTER TABLE "public"."TD_People_Lead" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."TD_People_Lead" IS 'PeopleLead del talent discussion';
+
+
+
 CREATE TABLE IF NOT EXISTS "public"."Talent_Discussion" (
     "ID_TalentDiscussion" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Discussion" character varying,
     "ID_TalentLead" "uuid" NOT NULL,
-    "ID_DeliveryLead" "uuid" NOT NULL,
-    "ID_CapabilityLead" "uuid" NOT NULL,
-    "ID_People_lead" "uuid" NOT NULL
+    "Nivel" character varying,
+    "Fecha_Inicio" "date",
+    "Fecha_Final" "date",
+    "Estado" character varying DEFAULT 'Pendiente'::character varying
 );
 
 
 ALTER TABLE "public"."Talent_Discussion" OWNER TO "postgres";
+
+
+COMMENT ON COLUMN "public"."Talent_Discussion"."Nivel" IS 'Nivel que se tiene planeado evaluar en la talent discussion';
+
+
+
+COMMENT ON COLUMN "public"."Talent_Discussion"."Fecha_Inicio" IS 'Fecha de inicio a evaluar';
+
+
+
+COMMENT ON COLUMN "public"."Talent_Discussion"."Fecha_Final" IS 'Fecha final del periodo a evaluar';
+
+
+
+COMMENT ON COLUMN "public"."Talent_Discussion"."Estado" IS 'Estado de la talent discussion: Pendiente, En Progreso, Finalizada';
+
 
 
 CREATE TABLE IF NOT EXISTS "public"."Talent_Lead" (
@@ -970,11 +1086,6 @@ ALTER TABLE ONLY "public"."Categorias_habilidades"
 
 ALTER TABLE ONLY "public"."Certificados"
     ADD CONSTRAINT "Certificados_pkey" PRIMARY KEY ("ID_Certificado");
-
-
-
-ALTER TABLE ONLY "public"."Cliente"
-    ADD CONSTRAINT "Cliente_pkey" PRIMARY KEY ("PK_Cliente");
 
 
 
@@ -1103,6 +1214,26 @@ ALTER TABLE ONLY "public"."Roles"
 
 
 
+ALTER TABLE ONLY "public"."TD_Capability_Lead"
+    ADD CONSTRAINT "TD_Capability_Lead_pkey" PRIMARY KEY ("ID_TD_Capability_Lead");
+
+
+
+ALTER TABLE ONLY "public"."TD_Employee_Request"
+    ADD CONSTRAINT "TD_Employee_Request_pkey" PRIMARY KEY ("ID_TD_Employee_Request");
+
+
+
+ALTER TABLE ONLY "public"."TD_Employee"
+    ADD CONSTRAINT "TD_Employee_pkey" PRIMARY KEY ("ID_TD_Employee");
+
+
+
+ALTER TABLE ONLY "public"."TD_People_Lead"
+    ADD CONSTRAINT "TD_People_Lead_pkey" PRIMARY KEY ("ID_TD_People_Lead");
+
+
+
 ALTER TABLE ONLY "public"."Talent_Discussion"
     ADD CONSTRAINT "Talent_Discussion_pkey" PRIMARY KEY ("ID_TalentDiscussion");
 
@@ -1143,11 +1274,6 @@ ALTER TABLE ONLY "public"."Capability_Lead"
 
 ALTER TABLE ONLY "public"."Certificados"
     ADD CONSTRAINT "Certificados_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."Cliente"
-    ADD CONSTRAINT "Cliente_ID_Contacto_fkey" FOREIGN KEY ("ID_Contacto") REFERENCES "public"."Contacto"("PK_Contacto");
 
 
 
@@ -1257,11 +1383,6 @@ ALTER TABLE ONLY "public"."Proyecto_Habilidades"
 
 
 ALTER TABLE ONLY "public"."Proyectos"
-    ADD CONSTRAINT "Proyectos_ID_Cliente_fkey" FOREIGN KEY ("ID_Cliente") REFERENCES "public"."Cliente"("PK_Cliente");
-
-
-
-ALTER TABLE ONLY "public"."Proyectos"
     ADD CONSTRAINT "Proyectos_ID_DeliveryLead_fkey" FOREIGN KEY ("ID_DeliveryLead") REFERENCES "public"."Delivery_Lead"("ID_DeliveryLead");
 
 
@@ -1311,18 +1432,43 @@ ALTER TABLE ONLY "public"."Roles"
 
 
 
-ALTER TABLE ONLY "public"."Talent_Discussion"
-    ADD CONSTRAINT "Talent_Discussion_ID_CapabilityLead_fkey" FOREIGN KEY ("ID_CapabilityLead") REFERENCES "public"."Capability_Lead"("ID_CapabilityLead");
+ALTER TABLE ONLY "public"."TD_Capability_Lead"
+    ADD CONSTRAINT "TD_Capability_Lead_ID_CapabilityLead_fkey" FOREIGN KEY ("ID_CapabilityLead") REFERENCES "public"."Capability_Lead"("ID_CapabilityLead");
 
 
 
-ALTER TABLE ONLY "public"."Talent_Discussion"
-    ADD CONSTRAINT "Talent_Discussion_ID_DeliveryLead_fkey" FOREIGN KEY ("ID_DeliveryLead") REFERENCES "public"."Delivery_Lead"("ID_DeliveryLead");
+ALTER TABLE ONLY "public"."TD_Capability_Lead"
+    ADD CONSTRAINT "TD_Capability_Lead_ID_TalentDiscussion_fkey" FOREIGN KEY ("ID_TalentDiscussion") REFERENCES "public"."Talent_Discussion"("ID_TalentDiscussion");
 
 
 
-ALTER TABLE ONLY "public"."Talent_Discussion"
-    ADD CONSTRAINT "Talent_Discussion_ID_People_lead_fkey" FOREIGN KEY ("ID_People_lead") REFERENCES "public"."People_lead"("ID");
+ALTER TABLE ONLY "public"."TD_Employee"
+    ADD CONSTRAINT "TD_Employee_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+
+
+
+ALTER TABLE ONLY "public"."TD_Employee"
+    ADD CONSTRAINT "TD_Employee_ID_TalentDiscussion_fkey" FOREIGN KEY ("ID_TalentDiscussion") REFERENCES "public"."Talent_Discussion"("ID_TalentDiscussion");
+
+
+
+ALTER TABLE ONLY "public"."TD_Employee_Request"
+    ADD CONSTRAINT "TD_Employee_Request_ID_TD_Employee_fkey" FOREIGN KEY ("ID_TD_Employee") REFERENCES "public"."TD_Employee"("ID_TD_Employee");
+
+
+
+ALTER TABLE ONLY "public"."TD_Employee_Request"
+    ADD CONSTRAINT "TD_Employee_Request_ID_TalentDiscussion_fkey" FOREIGN KEY ("ID_TalentDiscussion") REFERENCES "public"."Talent_Discussion"("ID_TalentDiscussion");
+
+
+
+ALTER TABLE ONLY "public"."TD_People_Lead"
+    ADD CONSTRAINT "TD_People_Lead_ID_People_Lead_fkey" FOREIGN KEY ("ID_People_Lead") REFERENCES "public"."People_lead"("ID");
+
+
+
+ALTER TABLE ONLY "public"."TD_People_Lead"
+    ADD CONSTRAINT "TD_People_Lead_ID_TalentDiscussion_fkey" FOREIGN KEY ("ID_TalentDiscussion") REFERENCES "public"."Talent_Discussion"("ID_TalentDiscussion");
 
 
 
@@ -1339,6 +1485,18 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
+
+
+ALTER TABLE "public"."TD_Capability_Lead" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."TD_Employee" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."TD_Employee_Request" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."TD_People_Lead" ENABLE ROW LEVEL SECURITY;
 
 
 
@@ -1572,11 +1730,6 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Certificados" TO "anon";
 
 
 
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Cliente" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Cliente" TO "anon";
-
-
-
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Contacto" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Contacto" TO "anon";
 
@@ -1679,6 +1832,26 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Revisor_Meta" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Roles" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Roles" TO "anon";
+
+
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."TD_Capability_Lead" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."TD_Capability_Lead" TO "anon";
+
+
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."TD_Employee" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."TD_Employee" TO "anon";
+
+
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."TD_Employee_Request" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."TD_Employee_Request" TO "anon";
+
+
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."TD_People_Lead" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."TD_People_Lead" TO "anon";
 
 
 
