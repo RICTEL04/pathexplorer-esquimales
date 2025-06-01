@@ -285,6 +285,79 @@ $$;
 ALTER FUNCTION "public"."get_employee_skills_max_level_by_category"("employee_id" "uuid", "category_id" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_employees_and_leads_by_level"("level_param" "text") RETURNS "json"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT json_build_object(
+        'employees', (
+            SELECT json_agg(json_build_object(
+                'ID_Empleado', e."ID_Empleado",
+                'Nombre', e."Nombre",
+                'Nivel', e."Nivel",
+                'ID_Departamento', e."ID_Departamento",
+                'Nombre_Departamento', d."Nombre",
+                'ID_People_Lead', e."ID_PeopleLead",
+                'People_Lead_Nombre', pl_emp."Nombre"
+            ))
+            FROM "Empleado" e
+            JOIN "Departamento" d ON e."ID_Departamento" = d."ID_Departamento"
+            LEFT JOIN "People_lead" pl ON e."ID_PeopleLead" = pl."ID"
+            LEFT JOIN "Empleado" pl_emp ON pl."ID_Empleado" = pl_emp."ID_Empleado"
+            WHERE e."Nivel" = level_param
+            ORDER BY e."Nombre"
+        ),
+        'people_leads', (
+            SELECT json_agg(json_build_object(
+                'ID_People_Lead', pl."ID",
+                'ID_Empleado', pl_emp."ID_Empleado",
+                'Nombre', pl_emp."Nombre",
+                'Cantidad_Empleados', (
+                    SELECT COUNT(*) 
+                    FROM "Empleado" emp 
+                    WHERE emp."ID_PeopleLead" = pl."ID" AND emp."Nivel" = level_param
+                )
+            ))
+            FROM "People_lead" pl
+            JOIN "Empleado" pl_emp ON pl."ID_Empleado" = pl_emp."ID_Empleado"
+            WHERE EXISTS (
+                SELECT 1 FROM "Empleado" e 
+                WHERE e."ID_PeopleLead" = pl."ID" AND e."Nivel" = level_param
+            )
+        ),
+        'capability_leads', (
+            SELECT json_agg(json_build_object(
+                'ID_Capability_Lead', cl."ID_CapabilityLead",
+                'ID_Empleado', cl_emp."ID_Empleado",
+                'Nombre', cl_emp."Nombre",
+                'Departamento', d."Nombre",
+                'Cantidad_Empleados', (
+                    SELECT COUNT(*) 
+                    FROM "Empleado" e 
+                    JOIN "Departamento" dept ON e."ID_Departamento" = dept."ID_Departamento"
+                    WHERE dept."ID_Departamento" = cl."ID_Departamento" AND e."Nivel" = level_param
+                )
+            ))
+            FROM "Capability_Lead" cl
+            JOIN "Empleado" cl_emp ON cl."ID_Empleado" = cl_emp."ID_Empleado"
+            JOIN "Departamento" d ON cl."ID_Departamento" = d."ID_Departamento"
+            WHERE EXISTS (
+                SELECT 1 FROM "Empleado" e 
+                WHERE e."ID_Departamento" = cl."ID_Departamento" AND e."Nivel" = level_param
+            )
+        )
+    ) INTO result;
+    
+    RETURN result;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employees_and_leads_by_level"("level_param" "text") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_employees_by_level"("level_param" "text") RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "nivel" "text", "id_departamento" "uuid", "nombre_departamento" "text", "id_people_lead" "uuid", "nombre_people_lead" "text", "id_capability_lead" "uuid", "nombre_capability_lead" "text")
     LANGUAGE "plpgsql"
     AS $$
@@ -1485,18 +1558,6 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 ALTER TABLE ONLY "public"."Talent_Lead"
     ADD CONSTRAINT "Talent_Lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
-
-
-ALTER TABLE "public"."TD_Capability_Lead" ENABLE ROW LEVEL SECURITY;
-
-
-ALTER TABLE "public"."TD_Employee" ENABLE ROW LEVEL SECURITY;
-
-
-ALTER TABLE "public"."TD_Employee_Request" ENABLE ROW LEVEL SECURITY;
-
-
-ALTER TABLE "public"."TD_People_Lead" ENABLE ROW LEVEL SECURITY;
 
 
 
