@@ -385,7 +385,7 @@ export default function EmployeeDashboard() {
               </div>
 
               {/* Contenedor desplazable */}
-              <div className="max-h-64 overflow-y-auto h-[150px]">
+              <div className="max-h-42 overflow-y-auto">
                 {empleadosSinProyectos.length > 0 ? (
                   <ul className="space-y-2">
                     {empleadosSinProyectos.map((empleado) => {
@@ -458,7 +458,7 @@ export default function EmployeeDashboard() {
               </div>
 
               {/* Contenedor desplazable */}
-              <div className="max-h-64 overflow-y-auto">
+              <div className="max-h-42 overflow-y-auto">
                 {empleadosConProyectos.length > 0 ? (
                   <ul className="space-y-2">
                     {empleadosConProyectos.map((empleado) => {
@@ -518,7 +518,7 @@ export default function EmployeeDashboard() {
             <CardContent>
 
               <h3 className="text-lg font-semibold mb-4">Empleados Asignados a Proyectos</h3>
-              <div className="space-y-2 h-[200px] overflow-y-auto">
+              <div className="space-y-2 h-[250px] overflow-y-auto flex flex-col">
                 {deliveryLead?.Proyectos.map((proyecto: Proyecto, index: number) => (
                   <div key={index} className="mb-6">
                     <h4 className="text-xl font-bold">{proyecto.Nombre}</h4>
@@ -561,11 +561,11 @@ export default function EmployeeDashboard() {
 
         {roles.deliveryLead && (deliveryLead?.Proyectos ?? []).length > 0 && (
           <Card className="shadow-md rounded-sm">
-            <CardContent>
+            <CardContent className = "flex flex-col h-full">
               <h3 className="text-lg font-semibold mb-4">Proyectos Asignados</h3>
 
 
-              <div className="mb-4">
+              <div className="mb-4 flex-grow">
                 <h4 className="text-xl font-bold">{deliveryLead?.Proyectos[currentProjectIndex]?.Nombre}</h4>
                 <p className="text-sm text-gray-600 mt-2">
                   {deliveryLead?.Proyectos[currentProjectIndex]?.Descripcion}
@@ -582,14 +582,15 @@ export default function EmployeeDashboard() {
               </div>
 
               {/* Menú para cambiar entre proyectos */}
-              <div className="flex justify-center space-x-4">
+              <div className="flex justify-center space-x-4 ">
                 {deliveryLead?.Proyectos.map((_: Proyecto, index: number) => (
                   <button
                     key={index}
                     className={`px-4 py-2 rounded-full ${index === currentProjectIndex
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200 text-gray-800"
-                      }`}
+                      ? "text-white"
+                      : "bg-gray-200 text-gray-800"
+                    }`}
+                    style={index === currentProjectIndex ? { backgroundColor: "#8b36db" } : {}}
                     onClick={() => setCurrentProjectIndex(index)}
                   >
                     Proyecto {index + 1}
@@ -695,7 +696,7 @@ export default function EmployeeDashboard() {
                 <XAxis dataKey="year" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="tasks" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="tasks" fill="#8b36db" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

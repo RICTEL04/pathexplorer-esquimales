@@ -57,44 +57,44 @@ export default function Sidebar({ routes, isSidebarOpen, setIsSidebarOpen }: Sid
 
   return (
     <div 
-      className={`fixed top-0 left-0 h-screen bg-white shadow-md p-4 flex flex-col justify-between z-40 transition-all duration-300 ${
+      className={`fixed top-1 left-0 h-screen bg-white shadow-md p-4 flex flex-col justify-between z-40 transition-all duration-300 ${
         isSidebarOpen ? "w-64" : "w-16"
       }`}
       onMouseEnter={() => setIsSidebarOpen(true)}
       onMouseLeave={() => setIsSidebarOpen(false)}
     >
       <div>
-        <div className="flex items-center justify-between mb-4">
+        <div className="mt-auto">
           <button
-            className="p-2 rounded-md bg-violet-800 text-white"
+            className="absolute top-18 left-4 p-2 rounded-md bg-violet-800 text-white"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
             <Menu className="w-5 h-5" />
           </button>
 
-          {isSidebarOpen && (
-            <div className="flex items-center gap-2">
-              <img
-                src="/imagenes/Accenture-logo.png"
-                alt="Accenture"
-                className="h-10 w-auto"
-              />
-            </div>
-          )}
-        </div>
+            {isSidebarOpen && (
+              <div className="flex items-center gap-2 -mt-10.5">
+                <img
+                  src="/imagenes/Accenture-logo.png"
+                  alt="Accenture"
+                  className="h-10 w-auto"
+                />
+              </div>
+            )}
+          </div>
 
-        <nav className="space-y-1">
-          {routes.map(({ href, label, Icon, subRoutes }) => (
-            <div key={label} className="flex flex-col">
-              <div className="flex items-center">
-                <Link
-                  href={href}
-                  className={`text-gray-800 flex-1 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 ${
-                    isActive(href, subRoutes) ? "bg-gray-300 font-bold" : ""
-                  }`}
-                >
-                  <Icon className="w-5 h-5" /> {isSidebarOpen && label}
-                </Link>
+          <nav className="space-y-1 mt-24">
+            {routes.map(({ href, label, Icon, subRoutes }) => (
+              <div key={label} className="flex flex-col">
+                <div className="flex items-center">
+                  <Link
+                    href={href}
+                    className={`text-gray-800 flex-1 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 ${
+                      isActive(href, subRoutes) ? "bg-gray-300 font-bold" : ""
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" /> {isSidebarOpen && label}
+                  </Link>
 
                 {isSidebarOpen && subRoutes && (
                   <button 
