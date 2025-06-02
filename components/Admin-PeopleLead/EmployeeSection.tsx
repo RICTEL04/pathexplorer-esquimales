@@ -26,7 +26,7 @@ export default function EmployeeSection({
       empleado.Nivel.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredEmpleados(filteredEmpleados);
-  }, [reloadAssigned]);
+  }, [reloadAssigned, searchTerm]);
 
   const handleSelectEmpleado = (id: string) => {
     setSelectedEmpleados((prev) =>
@@ -92,35 +92,30 @@ export default function EmployeeSection({
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          {/* Table header */}
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Seleccionar
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Nombre
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Rol
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Departamento
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Fecha Contratación
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Nivel
-                </th>
-              </tr>
-            </thead>
-          </table>
-          {/* Scrollable body */}
-          <div className="overflow-y-auto max-h-64">
+          <div className="overflow-auto max-h-64">
             <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50 sticky top-0 z-10">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Seleccionar
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Nombre
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Rol
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Departamento
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Fecha Contratación
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Nivel
+                  </th>
+                </tr>
+              </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredEmpleados.map((empleado) => (
                   <tr
@@ -169,7 +164,6 @@ export default function EmployeeSection({
               </tbody>
             </table>
           </div>
-        </div>
       )}
     </div>
   );
