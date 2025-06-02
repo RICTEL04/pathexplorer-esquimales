@@ -90,6 +90,49 @@ $$;
 ALTER FUNCTION "public"."check_and_update_reviewed_trigger"() OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."create_talent_discussion_with_people_leads"("p_discussion_text" "text", "p_nivel" "text", "p_id_talent_lead" "uuid", "p_fecha_inicio" "date", "p_fecha_final" "date", "p_people_lead_ids" "uuid"[]) RETURNS "uuid"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    v_new_td_id uuid;
+    v_lead_id uuid;
+BEGIN
+    -- 1. Crear la nueva Talent Discussion
+    INSERT INTO "Talent_Discussion" (
+        "Discussion",
+        "ID_TalentLead",
+        "Nivel",
+        "Fecha_Inicio",
+        "Fecha_Final",
+        "Estado"
+    ) VALUES (
+        p_discussion_text,
+        p_id_talent_lead,
+        p_nivel,
+        p_fecha_inicio,
+        p_fecha_final,
+        'Pendiente'
+    ) RETURNING "ID_TalentDiscussion" INTO v_new_td_id;
+    
+    -- 2. Agregar solo People Leads (si se proporcionaron)
+    FOREACH v_lead_id IN ARRAY p_people_lead_ids LOOP
+        INSERT INTO "TD_People_Lead" (
+            "ID_TalentDiscussion",
+            "ID_People_Lead"
+        ) VALUES (
+            v_new_td_id,
+            v_lead_id
+        );
+    END LOOP;
+    
+    RETURN v_new_td_id;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."create_talent_discussion_with_people_leads"("p_discussion_text" "text", "p_nivel" "text", "p_id_talent_lead" "uuid", "p_fecha_inicio" "date", "p_fecha_final" "date", "p_people_lead_ids" "uuid"[]) OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."delete_empleado"("p_id_empleado" "uuid") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
@@ -358,7 +401,7 @@ $$;
 ALTER FUNCTION "public"."get_employees_and_leads_by_level"("level_param" "text") OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."get_employees_by_level"("level_param" "text") RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "nivel" "text", "id_departamento" "uuid", "nombre_departamento" "text", "id_people_lead" "uuid", "nombre_people_lead" "text", "id_capability_lead" "uuid", "nombre_capability_lead" "text")
+CREATE OR REPLACE FUNCTION "public"."get_employees_by_level"("level_param" "text") RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "rol" "text", "nivel" "text", "id_departamento" "uuid", "nombre_departamento" "text", "cargabilidad" "text", "id_people_lead" "uuid", "nombre_people_lead" "text", "id_capability_lead" "uuid", "nombre_capability_lead" "text")
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -366,9 +409,11 @@ BEGIN
     SELECT 
         e."ID_Empleado",
         e."Nombre"::text AS "Nombre_Empleado",
+        e."Rol"::text,
         e."Nivel"::text,
         e."ID_Departamento",
         d."Nombre"::text AS "Nombre_Departamento",
+        e."Cargabilidad"::text,
         pl."ID" AS "ID_People_Lead",
         pl_emp."Nombre"::text AS "Nombre_People_Lead",
         cl."ID_CapabilityLead" AS "ID_Capability_Lead",
@@ -394,6 +439,66 @@ $$;
 
 
 ALTER FUNCTION "public"."get_employees_by_level"("level_param" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_talent_discussions"() RETURNS TABLE("id_talent_discussion" "uuid", "discussion" "text", "id_talent_lead" "uuid", "nombre_talent_lead" "text", "nivel" "text", "fecha_inicio" "date", "fecha_final" "date", "estado" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        td."ID_TalentDiscussion" AS ID_Talent_Discussion,
+        td."Discussion",
+        tl."ID_TalentLead" AS ID_Talent_Lead,
+        tl_emp."Nombre" AS Nombre_Talent_Lead,
+        td."Nivel",
+        td."Fecha_Inicio",
+        td."Fecha_Final",
+        td."Estado"
+    FROM 
+        "Talent_Discussion" td
+    JOIN 
+        "Talent_Lead" tl ON td."ID_TalentLead" = tl."ID_TalentLead"
+    JOIN 
+        "Empleado" tl_emp ON tl."ID_Empleado" = tl_emp."ID_Empleado"
+    ORDER BY 
+        td."Fecha_Inicio" DESC;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_talent_discussions"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_talent_discussions_by_lead"("p_id_talent_lead" "uuid") RETURNS TABLE("id_talent_discussion" "uuid", "discussion" "text", "id_talent_lead" "uuid", "nombre_talent_lead" "text", "nivel" "text", "fecha_inicio" "date", "fecha_final" "date", "estado" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        td."ID_TalentDiscussion" AS ID_Talent_Discussion,
+        td."Discussion",
+        tl."ID_TalentLead" AS ID_Talent_Lead,
+        tl_emp."Nombre" AS Nombre_Talent_Lead,
+        td."Nivel",
+        td."Fecha_Inicio",
+        td."Fecha_Final",
+        td."Estado"
+    FROM 
+        "Talent_Discussion" td
+    JOIN 
+        "Talent_Lead" tl ON td."ID_TalentLead" = tl."ID_TalentLead"
+    JOIN 
+        "Empleado" tl_emp ON tl."ID_Empleado" = tl_emp."ID_Empleado"
+    WHERE 
+        tl."ID_TalentLead" = p_id_talent_lead
+    ORDER BY 
+        td."Fecha_Inicio" DESC;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_talent_discussions_by_lead"("p_id_talent_lead" "uuid") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."insert_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") RETURNS "void"
