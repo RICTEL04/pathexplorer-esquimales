@@ -43,6 +43,7 @@ interface Departamento {
 }
 
 const STANDARD_PASSWORD = "password123"; // Contraseña estándar
+const SOFT_CATEGORY_ID = '6a8ab048-2033-4a16-a9fa-e2006952af4e';
 
 export default function EmployeeManagement() {
     const router = useRouter();
@@ -73,6 +74,8 @@ export default function EmployeeManagement() {
       deliveryLead: false,
       talentLead: false
     });
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [employeeProfile, setEmployeeProfile] = useState<any>(null);
 
     useEffect(() => {
       const fetchDepartments = async () => {
@@ -363,6 +366,79 @@ const handleSaveRoles = async () => {
     );
   };
 
+  // Función para obtener el perfil extendido del empleado
+  const fetchEmployeeProfile = async (employeeId: string) => {
+    // 1. Obtener datos básicos del empleado
+    const { data: empleado, error: empleadoError } = await supabase
+      .from('Empleado')
+      .select(`
+        ID_Empleado,
+        Nombre,
+        Rol,
+        Nivel,
+        FechaContratacion,
+        Departamento:Departamento(ID_Departamento, Nombre),
+        Contacto:Contacto(PK_Contacto, Email, Num_Telefono)
+      `)
+      .eq('ID_Empleado', employeeId)
+      .single();
+
+    if (empleadoError) {
+      console.error('Error fetching empleado:', empleadoError);
+      return {};
+    }
+
+    // 2. Obtener metas
+    const { data: metas } = await supabase
+      .from('Metas')
+      .select('Descripcion')
+      .eq('ID_Empleado', employeeId);
+
+    // 3. Obtener intereses
+    const { data: intereses } = await supabase
+      .from('Intereses')
+      .select('Descripcion')
+      .eq('ID_Empleado', employeeId);
+
+    // 4. Obtener hard skills usando RPC
+    const { data: hardSkills, error: hardError } = await supabase
+      .rpc('obtener_habilidades_empleado_excluyendo_categoria', {
+        p_id_empleado: employeeId,
+        p_id_categoria_excluir: SOFT_CATEGORY_ID
+      });
+    
+    if (hardError) {
+      console.error('Error fetching hard skills:', hardError);
+    }
+
+    // 5. Obtener soft skills usando RPC
+    const { data: softSkills, error: softError } = await supabase
+      .rpc('obtener_habilidades_por_categoria', {
+        p_id_empleado: employeeId,
+        p_id_categoria: SOFT_CATEGORY_ID
+      });
+    console.log('soft Skills:', softSkills);
+    if (softError) {
+      console.error('Error fetching soft skills:', softError);
+    }
+
+    return {
+      ...empleado,
+      metas: metas?.map(m => m.Descripcion) || [],
+      intereses: intereses || [],
+      hardSkills: hardSkills || [],
+      softSkills: softSkills || [],
+    };
+  };
+
+  const handleOpenReport = async (employee: Empleado) => {
+    setSelectedEmployee(employee);
+    // Aquí haces la consulta a la base de datos para traer metas, intereses, skills, etc.
+    const profile = await fetchEmployeeProfile(employee.ID_Empleado);
+    setEmployeeProfile(profile);
+    setShowReportModal(true);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <Head>
@@ -447,7 +523,7 @@ const handleSaveRoles = async () => {
                           <div className="flex items-center space-x-2">
                             {/* Icono para editar usuario */}
                             <Link 
-                              href={`/admin/empleados/${employee.ID_Empleado}`} // Reemplaza con tu ruta real
+                              href={`/admin/empleados/${employee.ID_Empleado}`}
                               className="text-blue-600 hover:text-blue-900"
                               title="Editar usuario"
                             >
@@ -459,15 +535,27 @@ const handleSaveRoles = async () => {
                             {/* Icono para modificar rol */}
                             <button 
                               onClick={async() => {
-                                setSelectedEmployee(employee); // Guarda el empleado seleccionado
-                                await checkRoles(employee.ID_Empleado); // Verificar roles primero
-                                setShowRoleModal(true)
+                                setSelectedEmployee(employee);
+                                await checkRoles(employee.ID_Empleado);
+                                setShowRoleModal(true);
                               }} 
                               className="text-purple-600 hover:text-purple-900"
                               title="Cambiar rol"
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                              </svg>
+                            </button>
+
+                            {/* Botón para generar reporte */}
+                            <button
+                              className="text-green-600 hover:text-green-900"
+                              title="Generar reporte"
+                              type="button"
+                              onClick={() => handleOpenReport(employee)}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                               </svg>
                             </button>
                           </div>
@@ -779,6 +867,46 @@ const handleSaveRoles = async () => {
                 >
                   Guardar Cambios
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para reporte de empleado */}
+      {showReportModal && employeeProfile && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-800">Reporte de Empleado</h2>
+              <button
+                onClick={() => setShowReportModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="space-y-2">
+              <div><span className="font-semibold">ID:</span> {employeeProfile.ID_Empleado}</div>
+              <div><span className="font-semibold">Nombre:</span> {employeeProfile.Nombre}</div>
+              <div><span className="font-semibold">Email:</span> {employeeProfile.Contacto?.[0]?.Email || 'N/A'}</div>
+              <div><span className="font-semibold">Rol:</span> {employeeProfile.Rol}</div>
+              <div><span className="font-semibold">Departamento:</span> {employeeProfile.Departamento?.[0]?.Nombre || 'N/A'}</div>
+              <div><span className="font-semibold">Fecha de Contratación:</span> {employeeProfile.FechaContratacion ? new Date(employeeProfile.FechaContratacion).toLocaleDateString() : 'N/A'}</div>
+              <div><span className="font-semibold">Nivel:</span> {employeeProfile.Nivel}</div>
+              <div>
+                <span className="font-semibold">Metas:</span> {employeeProfile.metas?.length ? employeeProfile.metas.join(", ") : 'N/A'}
+              </div>
+              <div>
+                <span className="font-semibold">Intereses:</span> {employeeProfile.intereses?.length ? employeeProfile.intereses.map(i => i.Descripcion).join(", ") : 'N/A'}
+              </div>
+              <div>
+                <span className="font-semibold">Hard Skills:</span> {employeeProfile.hardSkills?.length ? employeeProfile.hardSkills.map(h => h.nombre).join(", ") : 'N/A'}
+              </div>
+              <div>
+                <span className="font-semibold">Soft Skills:</span> {employeeProfile.softSkills?.length ? employeeProfile.softSkills.map(s => s.nombre_habilidad).join(", ") : 'N/A'}
               </div>
             </div>
           </div>

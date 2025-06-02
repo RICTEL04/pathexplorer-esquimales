@@ -51,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       Ordena los cursos por relevancia. Los cursos ya completados deben aparecer al final.
     `;
-
+    console.log("Prompt enviado a la API:", prompt);
     const completion = await openai.beta.chat.completions.parse({
       model: "gemini-2.0-flash",
       messages: [
