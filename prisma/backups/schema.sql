@@ -99,57 +99,57 @@ DECLARE
     v_id_capability_lead uuid;
     v_id_departamento_empleado uuid;
 BEGIN
-    -- Validar que el empleado existe
-    IF NOT EXISTS (SELECT 1 FROM Empleado WHERE ID_Empleado = p_id_empleado) THEN
+    -- Validar que el empleado existe (usando el nombre correcto de la tabla)
+    IF NOT EXISTS (SELECT 1 FROM "Empleado" WHERE "ID_Empleado" = p_id_empleado) THEN
         RAISE EXCEPTION 'Empleado con ID % no encontrado', p_id_empleado;
     END IF;
     
     -- Validar que la Talent Discussion existe
-    IF NOT EXISTS (SELECT 1 FROM Talent_Discussion WHERE ID_TalentDiscussion = p_id_talent_discussion) THEN
+    IF NOT EXISTS (SELECT 1 FROM "Talent_Discussion" WHERE "ID_TalentDiscussion" = p_id_talent_discussion) THEN
         RAISE EXCEPTION 'Talent Discussion con ID % no encontrada', p_id_talent_discussion;
     END IF;
     
     -- 1. Crear registro en TD_Employee
-    INSERT INTO TD_Employee (
-        ID_TalentDiscussion,
-        ID_Empleado
+    INSERT INTO "TD_Employee" (
+        "ID_TalentDiscussion",
+        "ID_Empleado"
     ) VALUES (
         p_id_talent_discussion,
         p_id_empleado
-    ) RETURNING ID_TD_Employee INTO v_id_td_employee;
+    ) RETURNING "ID_TD_Employee" INTO v_id_td_employee;
     
     -- 2. Crear registro en TD_Employee_Request (sin estado ni resultado)
-    INSERT INTO TD_Employee_Request (
-        ID_TalentDiscussion,
-        ID_TD_Employee,
-        Descripcion
+    INSERT INTO "TD_Employee_Request" (
+        "ID_TalentDiscussion",
+        "ID_TD_Employee",
+        "Descripcion"
     ) VALUES (
         p_id_talent_discussion,
         v_id_td_employee,
         p_descripcion_request
-    ) RETURNING ID_TD_Employee_Request INTO v_id_td_employee_request;
+    ) RETURNING "ID_TD_Employee_Request" INTO v_id_td_employee_request;
     
     -- 3. Buscar y crear registro en TD_Capability_Lead
     -- Primero obtener el departamento del empleado
-    SELECT ID_Departamento INTO v_id_departamento_empleado
-    FROM Empleado
-    WHERE ID_Empleado = p_id_empleado;
+    SELECT "ID_Departamento" INTO v_id_departamento_empleado
+    FROM "Empleado"
+    WHERE "ID_Empleado" = p_id_empleado;
     
     -- Luego obtener el Capability Lead de ese departamento
     IF v_id_departamento_empleado IS NOT NULL THEN
-        SELECT ID_CapabilityLead INTO v_id_capability_lead
-        FROM Capability_Lead
-        WHERE ID_Departamento = v_id_departamento_empleado;
+        SELECT "ID_CapabilityLead" INTO v_id_capability_lead
+        FROM "Capability_Lead"
+        WHERE "ID_Departamento" = v_id_departamento_empleado;
         
         -- Si existe un Capability Lead para ese departamento, crear el registro
         IF v_id_capability_lead IS NOT NULL THEN
-            INSERT INTO TD_Capability_Lead (
-                ID_TalentDiscussion,
-                ID_CapabilityLead
+            INSERT INTO "TD_Capability_Lead" (
+                "ID_TalentDiscussion",
+                "ID_CapabilityLead"
             ) VALUES (
                 p_id_talent_discussion,
                 v_id_capability_lead
-            ) RETURNING ID_TD_Capability_Lead INTO v_id_capability_lead;
+            ) RETURNING "ID_TD_Capability_Lead" INTO v_id_capability_lead;
         END IF;
     END IF;
     
@@ -576,8 +576,12 @@ CREATE OR REPLACE FUNCTION "public"."get_full_project_data"("project_id" "uuid")
   result jsonb;
 BEGIN
   WITH ProyectoBase AS (
-    SELECT *
-    FROM "public"."Proyectos"
+    SELECT pr.*,
+    perfil."Nombre" AS nombre_delivery,
+    perfil."ID_Empleado" AS ID_Empleado_delivery
+    FROM "public"."Proyectos" pr
+    JOIN "public"."Delivery_Lead" dv ON pr."ID_DeliveryLead" = dv."ID_DeliveryLead"
+    JOIN "public"."Empleado" perfil ON dv."ID_Empleado" = perfil."ID_Empleado"
     WHERE "ID_Proyecto" = project_id
   ),
   
