@@ -3,6 +3,7 @@ import Sidebar from "@/components/sidebar";
 import { Home, Briefcase, Award, TrendingUp, User, Target, Users, Folder, MessageCircle, BrainCircuit, BringToFront, Album, Diamond} from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useState, useRef } from "react";
+import Header from "@/components/Header";
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const [routes, setRoutes] = useState<any[]>([]);
@@ -117,9 +118,10 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
   if (loading) {
     return <div className="flex justify-center items-center min-h-screen">Cargando...</div>;
   }
+  
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+        <div className="flex min-h-screen bg-gray-100">
       <div 
         onMouseEnter={() => setIsSidebarOpen(true)}
         className="fixed inset-y-0 left-0 z-40 w-16" // Área invisible para detectar hover
@@ -131,12 +133,15 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
         setIsSidebarOpen={setIsSidebarOpen} 
       />
       
-      <main 
+      <div className="flex-1 flex flex-col pt-12">
+        <Header />
+        <main 
         className={`flex-1 p-6 overflow-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-16'}`}
         onClick={() => setIsSidebarOpen(false)}
       >
         {children}
       </main>
+      </div>
     </div>
   );
 }

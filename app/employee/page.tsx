@@ -3,13 +3,12 @@
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js"; // Import the User type from Supabase
 import { supabase } from "@/lib/supabase";
-import { CapabilityLead, DeliveryLead, getEmpleados, Proyecto, Metas } from "@/lib/empleadoService";
+import { Empleado, CapabilityLead, DeliveryLead, getEmpleados, Proyecto, Metas } from "@/lib/empleadoService";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 import { Star, ArrowBigUpDash, CalendarClock, Goal } from "lucide-react";
 import UserIcon from "@heroicons/react/24/solid/UserIcon";
 import { Tooltip as TooltipComponent } from "@/components/ui/tooltip";
 import { TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Empleado } from "@/lib/empleadoService";
 
 
 // Componentes reutilizables
@@ -97,7 +96,7 @@ export default function EmployeeDashboard() {
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [selectedEmpleado, setSelectedEmpleado] = useState<Empleado>();
   const [deliveryLead, setDeliveryLead] = useState<DeliveryLead>();
-  const [metasEmpleados, setMetasEmpleados] = useState<Metas[]>([]); 
+  const [metasEmpleados, setMetasEmpleados] = useState<Metas[]>([]);
   const [selectedEmpleado2, setSelectedEmpleado2] = useState<Empleado | null>(null);
   const [capabilityLead, setCapabilityLead] = useState<CapabilityLead>();
   const [user, setUser] = useState<User | null>(null);
@@ -113,7 +112,10 @@ export default function EmployeeDashboard() {
     const fetchUserAndData = async () => {
       try {
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError) throw sessionError;
+        if (sessionError) {
+          console.error("Error fetching session:", sessionError);
+          throw sessionError;
+        }
 
         const userId = sessionData.session?.user.id;
         if (!userId) {
@@ -123,44 +125,42 @@ export default function EmployeeDashboard() {
 
         setUser(sessionData.session?.user ?? null);
 
-        // Obtener roles del usuario
-        const userRoles = await fetchUserRoles(userId);
-        setRoles(userRoles);
+        // Fetch user roles
+        try {
+          const userRoles = await fetchUserRoles(userId);
+          setRoles(userRoles);
+        } catch (error) {
+          console.error("Error fetching user roles:", error);
+          throw error;
+        }
 
-        // Obtener empleados y filtrar por el usuario logueado
-        const empleadosData = await getEmpleados();
-        const empleadosMapped = empleadosData.map((empleado) => ({
-          ...empleado
-        }));
+        // Fetch employees
+        try {
+          console.log("Fetching empleados data for user ID:", userId);
+          const empleadosData = await getEmpleados();
+          console.log("Fetched empleados data:", empleadosData);
+          const empleadosMapped = empleadosData.map((empleado) => ({
+            ...empleado,
+          }));
+          setEmpleados(empleadosMapped);
+
+          const empleadoLogueado = empleadosMapped.find((empleado: any) => empleado.ID_Empleado === userId);
+          setSelectedEmpleado(empleadoLogueado);
+
+
+          const metas = empleadosData.flatMap((empleado) => empleado.Metas || []);
+          setMetasEmpleados(metas);
+
+          const firstEmpleadoWithMetas = empleadosData.find((empleado) => empleado.Metas && empleado.Metas.length > 0);
+          setSelectedEmpleado2(firstEmpleadoWithMetas || null);
+        } catch (error) {
+          console.error("Error fetching employees:", error);
+          throw error;
+        }
 
         
-
-        const empleadoLogueado = empleadosMapped.find((empleado: any) => empleado.ID_Empleado === userId);
-
-
-        setEmpleados(empleadosMapped);
-        setSelectedEmpleado(empleadoLogueado);
-
-        const metas = empleadosData
-        .flatMap((empleado) => empleado.Metas || []); // Combinar todas las metas en un solo array
-        setMetasEmpleados(metas); // Guardar las metas en el estado
-
-        const firstEmpleadoWithMetas = empleadosData.find((empleado) => empleado.Metas && empleado.Metas.length > 0);
-        setSelectedEmpleado2(firstEmpleadoWithMetas || null);
-
-
-        if (empleadoLogueado) {
-          const deliveryLeadData = empleadoLogueado.Delivery_Lead;
-          if (deliveryLeadData) {
-            setDeliveryLead(Array.isArray(deliveryLeadData) ? deliveryLeadData[0] : deliveryLeadData);
-          }
-          const capabilityLeadData = empleadoLogueado.Capability_Lead;
-          if (capabilityLeadData) {
-            setCapabilityLead(Array.isArray(capabilityLeadData) ? capabilityLeadData[0] : capabilityLeadData);
-          }
-        }
       } catch (error) {
-        console.error("Error fetching user or empleados:", error);
+        console.error("Error in fetchUserAndData:", error);
       }
     };
 
@@ -169,8 +169,39 @@ export default function EmployeeDashboard() {
   }, []);
 
   useEffect(() => {
-      console.log("Updated Delivery Lead Data:", deliveryLead);
-      console.log("Updated Delivery Lead Projects:", deliveryLead?.Proyectos);
+    // Fetch delivery and capability lead data
+    if (selectedEmpleado) {
+      try {
+        const deliveryLeadData = selectedEmpleado.Delivery_Lead;
+        console.log("Delivery Lead Data:", deliveryLeadData);
+        if (deliveryLeadData) {
+          setDeliveryLead(Array.isArray(deliveryLeadData) ? deliveryLeadData[0] : deliveryLeadData);
+        }
+
+      } catch (error) {
+        console.error("Error fetching delivery lead data:", error);
+        throw error;
+      }
+    }
+  }, [selectedEmpleado]);
+
+
+  useEffect(() => {
+    if (selectedEmpleado) {
+      try {
+        const capabilityLeadData = selectedEmpleado.Capability_Lead;
+        if (capabilityLeadData) {
+          setCapabilityLead(Array.isArray(capabilityLeadData) ? capabilityLeadData[0] : capabilityLeadData);
+        }
+      } catch (error) {
+        console.error("Error fetching capability lead data:", error);
+      }
+    }
+  }, [selectedEmpleado]);
+
+  useEffect(() => {
+    console.log("Updated Delivery Lead Data:", deliveryLead);
+    console.log("Updated Delivery Lead Projects:", deliveryLead?.Proyectos);
   }, [deliveryLead]);
 
   useEffect(() => {
@@ -193,18 +224,18 @@ export default function EmployeeDashboard() {
 
 
   // Datos para la gráfica de proyectos por año
-  const workData = Object.entries(
-    selectedEmpleado.Puesto_proyecto.flatMap((puesto) => puesto.Proyectos || [])
-      .filter((proyecto) => proyecto.fecha_fin) // Filtrar proyectos con fecha de fin
-      .reduce((acc: Record<string, number>, proyecto) => {
-        const year = new Date(proyecto.fecha_fin).getFullYear(); // Obtener el año de la fecha de fin
-        acc[year] = (acc[year] || 0) + 1; // Incrementar el contador para el año
-        return acc;
-      }, {})
-  )
-    .map(([year, count]) => ({ year, tasks: count })) // Convertir a formato de gráfico
-    .sort((a, b) => Number(a.year) - Number(b.year)); // Ordenar por año
-
+    const workData = Object.entries(
+     selectedEmpleado.Empleado_Proyectos.flatMap((puesto) => puesto.Proyectos || [])
+       .filter((proyecto) => proyecto.fecha_fin) // Filtrar proyectos con fecha de fin
+       .reduce((acc: Record<string, number>, proyecto) => {
+         const year = new Date(proyecto.fecha_fin).getFullYear(); // Obtener el año de la fecha de fin
+         acc[year] = (acc[year] || 0) + 1; // Incrementar el contador para el año
+         return acc;
+       }, {})
+   )
+     .map(([year, count]) => ({ year, tasks: count })) // Convertir a formato de gráfico
+     .sort((a, b) => Number(a.year) - Number(b.year)); // Ordenar por año
+  
   // Datos para la gráfica de estado de certificados
   const courseData = [
     { name: "Activos", value: selectedEmpleado.Certificados.filter((c) => c.Verificacion).length, color: "#4ade80" },
@@ -213,8 +244,11 @@ export default function EmployeeDashboard() {
 
 
   const empleadosAsignados = empleados.filter((empleado) => {
+    console.log("Departamento del empleado:", empleado.ID_Departamento);
+    console.log("Capability Lead:", capabilityLead);
     // Verificar si el empleado logueado tiene un ID_Departamento válido
     const departamentoLogueado = capabilityLead
+ 
 
       ? capabilityLead.ID_Departamento
       : "No disponible";
@@ -230,11 +264,11 @@ export default function EmployeeDashboard() {
 
 
   const empleadosSinProyectos = empleados.filter(
-    (empleado) => !empleado.Puesto_proyecto || empleado.Puesto_proyecto.length === 0
+    (empleado) => !empleado.Empleado_Proyectos || empleado.Empleado_Proyectos.length === 0
   );
 
   const empleadosConProyectos = empleados.filter(
-    (empleado) => empleado.Puesto_proyecto.length > 0
+    (empleado) => empleado.Empleado_Proyectos.length > 0
   );
 
   return (
@@ -274,9 +308,8 @@ export default function EmployeeDashboard() {
                       .map((empleado) => (
                         <li
                           key={empleado.ID_Empleado}
-                          className={`cursor-pointer p-2 hover:bg-gray-100 rounded-md ${
-                            selectedEmpleado2?.ID_Empleado === empleado.ID_Empleado ? "bg-gray-200" : ""
-                          }`}
+                          className={`cursor-pointer p-2 hover:bg-gray-100 rounded-md ${selectedEmpleado2?.ID_Empleado === empleado.ID_Empleado ? "bg-gray-200" : ""
+                            }`}
                           onClick={() => setSelectedEmpleado2(empleado)} // Actualizar el empleado seleccionado para metas
                         >
                           <span className="text-sm text-gray-800">{empleado.Nombre}</span>
@@ -286,7 +319,7 @@ export default function EmployeeDashboard() {
                 </div>
 
                 {/* Detalles de metas del empleado seleccionado */}
-                <div className= "pl-4 h-[200px] overflow-y-auto">
+                <div className="pl-4 h-[200px] overflow-y-auto">
                   <h4 className="text-md font-semibold mb-2">Detalles de metas</h4>
                   {selectedEmpleado2 && selectedEmpleado2.Metas && selectedEmpleado2.Metas.length > 0 ? (
                     <ul className="space-y-4">
@@ -316,7 +349,7 @@ export default function EmployeeDashboard() {
         )}
 
         {/* Información adicional basada en roles */}
-        
+
 
         {roles.capabilityLead && (
           <Card className="shadow-md rounded-sm">
@@ -385,13 +418,13 @@ export default function EmployeeDashboard() {
               </div>
 
               {/* Contenedor desplazable */}
-              <div className="max-h-64 overflow-y-auto h-[150px]">
+              <div className="max-h-42 overflow-y-auto">
                 {empleadosSinProyectos.length > 0 ? (
                   <ul className="space-y-2">
                     {empleadosSinProyectos.map((empleado) => {
                       // Calcular el tiempo sin proyecto
-                      const lastProjectEndDate = empleado.Puesto_proyecto
-                        ?.flatMap((puesto) => puesto.Proyectos.map((proyecto) => new Date(proyecto.fecha_fin)))
+                      const lastProjectEndDate = empleado.Empleado_Proyectos
+                        ?.flatMap((empleadoProyecto) => empleadoProyecto.Proyectos.map((proyecto) => new Date(proyecto.fecha_fin)))
                         .filter((date) => !isNaN(date.getTime())) // Filtrar fechas válidas
                         .sort((a, b) => b.getTime() - a.getTime())[0]; // Obtener la fecha más reciente
 
@@ -458,18 +491,17 @@ export default function EmployeeDashboard() {
               </div>
 
               {/* Contenedor desplazable */}
-              <div className="max-h-64 overflow-y-auto">
+              <div className="max-h-42 overflow-y-auto">
                 {empleadosConProyectos.length > 0 ? (
                   <ul className="space-y-2">
                     {empleadosConProyectos.map((empleado) => {
                       // Obtener el proyecto más reciente
-                      const currentProject = empleado.Puesto_proyecto
-                        ?.flatMap((puesto) => puesto.Proyectos)
+                      const currentProject = empleado.Empleado_Proyectos
+                        ?.flatMap((empleadoProyecto) => empleadoProyecto.Proyectos)
                         .sort((a, b) => new Date(b.fecha_inicio).getTime() - new Date(a.fecha_inicio).getTime())[0];
 
                       return (
                         <li key={empleado.ID_Empleado} className="flex items-center justify-between">
-                          {/* Nombre del empleado */}
                           <TooltipProvider>
                             <TooltipComponent>
                               <TooltipTrigger asChild>
@@ -496,7 +528,6 @@ export default function EmployeeDashboard() {
                             </TooltipComponent>
                           </TooltipProvider>
 
-                          {/* Estado */}
                           <Badge className="text-xs bg-green-100 text-green-800 w-1/4 text-center">
                             Activo
                           </Badge>
@@ -518,7 +549,7 @@ export default function EmployeeDashboard() {
             <CardContent>
 
               <h3 className="text-lg font-semibold mb-4">Empleados Asignados a Proyectos</h3>
-              <div className="space-y-2 h-[200px] overflow-y-auto">
+              <div className="space-y-2 h-[250px] overflow-y-auto flex flex-col">
                 {deliveryLead?.Proyectos.map((proyecto: Proyecto, index: number) => (
                   <div key={index} className="mb-6">
                     <h4 className="text-xl font-bold">{proyecto.Nombre}</h4>
@@ -528,11 +559,11 @@ export default function EmployeeDashboard() {
                     <div className="mt-4">
                       <h5 className="text-md font-semibold mb-2">Empleados:</h5>
 
-                      <ul className="space-y-2">
+                       <ul className="space-y-2">
                         {empleadosConProyectos
                           .filter((empleado) => {
                             // Verificar si algún proyecto del empleado coincide con el proyecto actual
-                            const proyectosEmpleado = empleado.Puesto_proyecto.flatMap((puesto) => puesto.Proyectos);
+                            const proyectosEmpleado = empleado.Empleado_Proyectos.flatMap((puesto) => puesto.Proyectos);
                             const isMatch = proyectosEmpleado.some((proyectoEmpleado) => proyectoEmpleado.ID_Proyecto === proyecto.ID_Proyecto);
 
                             console.log("Empleado:", empleado.Nombre);
@@ -548,7 +579,7 @@ export default function EmployeeDashboard() {
                               <Badge className="text-xs bg-green-100 text-green-800">{empleado.Rol}</Badge>
                             </li>
                           ))}
-                      </ul>
+                      </ul> 
 
                     </div>
                   </div>
@@ -561,11 +592,11 @@ export default function EmployeeDashboard() {
 
         {roles.deliveryLead && (deliveryLead?.Proyectos ?? []).length > 0 && (
           <Card className="shadow-md rounded-sm">
-            <CardContent>
+            <CardContent className="flex flex-col h-full">
               <h3 className="text-lg font-semibold mb-4">Proyectos Asignados</h3>
 
 
-              <div className="mb-4">
+              <div className="mb-4 flex-grow">
                 <h4 className="text-xl font-bold">{deliveryLead?.Proyectos[currentProjectIndex]?.Nombre}</h4>
                 <p className="text-sm text-gray-600 mt-2">
                   {deliveryLead?.Proyectos[currentProjectIndex]?.Descripcion}
@@ -582,14 +613,15 @@ export default function EmployeeDashboard() {
               </div>
 
               {/* Menú para cambiar entre proyectos */}
-              <div className="flex justify-center space-x-4">
+              <div className="flex justify-center space-x-4 ">
                 {deliveryLead?.Proyectos.map((_: Proyecto, index: number) => (
                   <button
                     key={index}
                     className={`px-4 py-2 rounded-full ${index === currentProjectIndex
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200 text-gray-800"
+                      ? "text-white"
+                      : "bg-gray-200 text-gray-800"
                       }`}
+                    style={index === currentProjectIndex ? { backgroundColor: "#8b36db" } : {}}
                     onClick={() => setCurrentProjectIndex(index)}
                   >
                     Proyecto {index + 1}
@@ -626,7 +658,7 @@ export default function EmployeeDashboard() {
           </CardContent>
         </Card>
 
-           <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {/* Primera tarjeta: Certificados totales */}
           <Card className="shadow-md rounded-sm h-40">
             <CardContent className="flex items-center space-x-4 p-6 h-full">
@@ -639,7 +671,7 @@ export default function EmployeeDashboard() {
               </div>
             </CardContent>
           </Card>
-        
+
           {/* Segunda tarjeta: Metas activas */}
           <Card className="shadow-md rounded-sm">
             <CardContent className="flex items-center space-x-4 p-6 h-full">
@@ -654,8 +686,8 @@ export default function EmployeeDashboard() {
               </div>
             </CardContent>
           </Card>
-        
-                    {/* Tercera tarjeta: Nivel del empleado */}
+
+          {/* Tercera tarjeta: Nivel del empleado */}
           <Card className="shadow-md rounded-sm h-40">
             <CardContent className="flex items-center justify-center space-x-4 p-6 h-full">
               <div className="flex-shrink-0">
@@ -667,7 +699,7 @@ export default function EmployeeDashboard() {
               </div>
             </CardContent>
           </Card>
-        
+
           {/* Cuarta tarjeta: Tiempo de antigüedad */}
           <Card className="shadow-md rounded-sm">
             <CardContent className="flex items-center space-x-4 p-6 h-full">
@@ -684,7 +716,7 @@ export default function EmployeeDashboard() {
           </Card>
         </div>
 
-    
+
 
         {/* Gráfica de proyectos por año */}
         <Card className="col-span-full shadow-md rounded-sm">
@@ -695,9 +727,9 @@ export default function EmployeeDashboard() {
                 <XAxis dataKey="year" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="tasks" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="tasks" fill="#8b36db" radius={[4, 4, 0, 0]} />
               </BarChart>
-            </ResponsiveContainer>
+            </ResponsiveContainer> 
           </CardContent>
         </Card>
 

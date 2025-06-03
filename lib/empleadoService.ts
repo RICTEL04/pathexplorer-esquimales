@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 
 export interface Proyecto {
   ID_Proyecto: any;
+  ID_DeliveryLead?: any; // Optional, as it is only included in Delivery_Lead
   fecha_inicio: any;
   fecha_fin: any;
   Nombre: any;
@@ -16,6 +17,13 @@ export interface Certificado {
   Documento: any;
   Verificacion: any;
   Descripcion: any;
+}
+
+export interface EmpleadoProyecto {
+  id: any;
+  ID_Empleado: any;
+  ID_Proyecto: any;
+  Proyectos: Proyecto[];
 }
 
 export interface PuestoProyecto {
@@ -51,6 +59,8 @@ export interface Metas {
   Fecha_limite: any;
 }
 
+
+
 export interface Empleado {
   ID_Empleado: any;
   Nombre: any;
@@ -59,7 +69,9 @@ export interface Empleado {
   FechaContratacion: any;
   ID_Departamento: any;
   Certificados: Certificado[];
+  Empleado_Proyectos: EmpleadoProyecto[]; // Adjusted to match the returned array structure
   Puesto_proyecto: PuestoProyecto[];
+  Proyectos: Proyecto[]; // Assuming this is a direct relation, adjust if needed
   Capability_Lead: CapabilityLead[]; // Adjusted to match the returned array structure
   Delivery_Lead: DeliveryLead[]; // Adjusted to match the returned array structure
   Metas: Metas[]; // Assuming Metas is defined elsewhere
@@ -94,10 +106,10 @@ export async function getEmpleados(): Promise<Empleado[]> {
         Verificacion,
         Descripcion
       ),
-      Puesto_proyecto (
+      Empleado_Proyectos (
         id,
-        created_at,
-        Puesto,
+        ID_Empleado,
+        ID_Proyecto,
         Proyectos (
           ID_Proyecto,
           fecha_inicio,
