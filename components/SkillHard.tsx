@@ -13,6 +13,8 @@ const EmployeeSkillsByCategory = ({ employeeId, categoryId }: { employeeId: stri
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1); // Nuevo estado para la página actual
+  const skillsPerPage = 6; // Número de habilidades por página
   const { refreshFlag } = useSkillRefresh();
 
   useEffect(() => {
@@ -48,6 +50,10 @@ const EmployeeSkillsByCategory = ({ employeeId, categoryId }: { employeeId: stri
     if (employeeId && categoryId) {
       fetchSkills();
     }
+  }, [employeeId, categoryId, refreshFlag]);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reinicia a la primera página cuando cambian los datos
   }, [employeeId, categoryId, refreshFlag]);
 
   const getLevelColor = (level: string = '') => {
@@ -91,35 +97,72 @@ const EmployeeSkillsByCategory = ({ employeeId, categoryId }: { employeeId: stri
 
   if (skills.length === 0) {
     return (
-        <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-gray-800">Habilidades Técnicas</h2>
-    <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
-      No se encontraron habilidades técnicas.
-    </div>
-    </div>
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-800">
+          Habilidades Técnicas <span className="text-gray-500">(0)</span>
+        </h2>
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+          No se encontraron habilidades técnicas.
+        </div>
+      </div>
     );
   }
 
+  // Paginación
+  const totalPages = Math.ceil(skills.length / skillsPerPage);
+  const startIndex = (currentPage - 1) * skillsPerPage;
+  const paginatedSkills = skills.slice(startIndex, startIndex + skillsPerPage);
+
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-gray-800">Habilidades Técnicas</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {skills.map((skill) => (
-          <div key={skill.id_habilidad} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="font-medium text-gray-900 text-lg">{skill.nombre}</h3>
-              <span className={`px-2 py-1 text-xs font-semibold text-white rounded-full ${getLevelColor(skill.nivel)}`}>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <span className="inline-block">Habilidades Técnicas</span>
+          <span className="inline-flex items-center justify-center bg-blue-100 text-blue-700 text-base font-semibold rounded-full px-3 py-0.5">
+            {skills.length}
+          </span>
+        </h2>
+        {totalPages > 1 && (
+          <div className="flex items-center gap-2">
+            <button
+              className={`px-3 py-1 rounded-lg border border-gray-300 bg-white hover:bg-blue-100 transition disabled:opacity-50`}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              ◀
+            </button>
+            <span className="text-gray-700 font-medium">
+              {currentPage} / {totalPages}
+            </span>
+            <button
+              className={`px-3 py-1 rounded-lg border border-gray-300 bg-white hover:bg-blue-100 transition disabled:opacity-50`}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+            >
+              ▶
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {paginatedSkills.map((skill) => (
+          <div
+            key={skill.id_habilidad}
+            className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition"
+          >
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="font-semibold text-gray-900 text-lg truncate">{skill.nombre}</h3>
+              <span className={`px-3 py-1 text-xs font-bold rounded-full shadow-sm ${getLevelColor(skill.nivel)}`}>
                 {getLevelText(skill.nivel)}
               </span>
             </div>
-            
             <div className="mt-2">
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div className="w-full bg-gray-100 rounded-full h-3">
                 <div
-                  className={`h-2.5 rounded-full ${getLevelColor(skill.nivel)}`}
+                  className={`h-3 rounded-full ${getLevelColor(skill.nivel)}`}
                   style={{
-                    width: skill.nivel === 'expert' ? '100%' : 
-                           skill.nivel === 'intermediate' ? '66%' : '33%'
+                    width: skill.nivel === 'expert' ? '100%' :
+                          skill.nivel === 'intermediate' ? '66%' : '33%'
                   }}
                 />
               </div>

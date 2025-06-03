@@ -188,7 +188,7 @@ export default function EmployeeManagement() {
           Rol: newEmployee.position,
           ID_Departamento: newEmployee.department,
           Nivel: newEmployee.level,
-          Cargabilidad: "0%",
+          Cargabilidad: 0,
           FechaContratacion: newEmployee.hireDate,
           FechaUltNivel: newEmployee.hireDate,
         });
@@ -644,7 +644,16 @@ const handleSaveRoles = async () => {
                 id="level"
                 name="level"
                 value={newEmployee.level}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                    const value = e.target.value;
+                    // Permite vacío o números del 1 al 12
+                    if (
+                        value === "" ||
+                        (/^\d{1,2}$/.test(value) && Number(value) >= 1 && Number(value) <= 12)
+                    ) {
+                        handleInputChange(e);
+                    }
+                }}
                 className="text-gray-700 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
             />
