@@ -66,6 +66,87 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+CREATE OR REPLACE FUNCTION "public"."actualizar_estado_people_lead_y_crear_requests"("p_id_people_lead" "uuid", "p_id_talent_discussion" "uuid", "p_empleados_ids" "uuid"[] DEFAULT NULL::"uuid"[], "p_estado" "text" DEFAULT 'Pendiente'::"text") RETURNS TABLE("td_people_lead_actualizado" boolean, "requests_creados" integer)
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    v_td_people_lead_id uuid;
+    v_td_employee_id uuid;
+    v_requests_creados integer := 0;
+BEGIN
+    -- 1. Actualizar estado en TD_People_Lead
+    UPDATE "TD_People_Lead"
+    SET "Estado" = p_estado
+    WHERE "ID_TalentDiscussion" = p_id_talent_discussion
+    AND "ID_People_Lead" = p_id_people_lead
+    RETURNING "ID_TD_People_Lead" INTO v_td_people_lead_id;
+    
+    -- Verificar si se actualizó correctamente
+    IF v_td_people_lead_id IS NULL THEN
+        RAISE NOTICE 'No se encontró registro en TD_People_Lead para People Lead % y Talent Discussion %', 
+            p_id_people_lead, p_id_talent_discussion;
+    END IF;
+    
+    -- 2. Crear Employee Requests si se proporcionaron IDs de empleados
+    IF p_empleados_ids IS NOT NULL AND array_length(p_empleados_ids, 1) > 0 THEN
+        -- Por cada empleado proporcionado
+        FOR i IN 1..array_length(p_empleados_ids, 1) LOOP
+            -- Buscar el TD_Employee correspondiente
+            SELECT "ID_TD_Employee" INTO v_td_employee_id
+            FROM "TD_Employee"
+            WHERE "ID_TalentDiscussion" = p_id_talent_discussion
+            AND "ID_Empleado" = p_empleados_ids[i];
+            
+            -- Si existe el registro en TD_Employee, crear el request
+            IF v_td_employee_id IS NOT NULL THEN
+                INSERT INTO "TD_Employee_Request" (
+                    "ID_TalentDiscussion",
+                    "ID_TD_Employee",
+                    "Descripcion",
+                    "Estado",
+                    "Resultado"
+                ) VALUES (
+                    p_id_talent_discussion,
+                    v_td_employee_id,
+                    'Decidio no participar'
+                    'No Asignado', -- Estado fijo como requeriste
+                    'No participa' -- Mensaje por defecto
+                );
+                
+                v_requests_creados := v_requests_creados + 1;
+            ELSE
+                RAISE NOTICE 'No se encontró registro en TD_Employee para empleado % en esta Talent Discussion', 
+                    p_empleados_ids[i];
+            END IF;
+        END LOOP;
+    END IF;
+    
+    -- Retornar resultados
+    RETURN QUERY SELECT 
+        (v_td_people_lead_id IS NOT NULL) AS td_people_lead_actualizado,
+        v_requests_creados AS requests_creados;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."actualizar_estado_people_lead_y_crear_requests"("p_id_people_lead" "uuid", "p_id_talent_discussion" "uuid", "p_empleados_ids" "uuid"[], "p_estado" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."aumentar_cargabilidad"("id" "uuid", "incremento" integer) RETURNS "void"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+begin
+  update "public"."Empleado"
+  set "Cargabilidad" = "Cargabilidad" + incremento
+  where "ID_Empleado" = id
+    and ("Cargabilidad" + incremento) <= 100;
+end;
+$$;
+
+
+ALTER FUNCTION "public"."aumentar_cargabilidad"("id" "uuid", "incremento" integer) OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."check_and_update_reviewed_trigger"() RETURNS "trigger"
     LANGUAGE "plpgsql"
     AS $$
@@ -88,6 +169,95 @@ $$;
 
 
 ALTER FUNCTION "public"."check_and_update_reviewed_trigger"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."crear_employee_request_con_capability_lead"("p_id_empleado" "uuid", "p_id_talent_discussion" "uuid", "p_descripcion_request" "text", "p_id_capability_lead" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id_td_employee_request" "uuid", "id_td_capability_lead" "uuid")
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    v_id_td_employee uuid;
+    v_id_td_employee_request uuid;
+    v_id_td_capability_lead uuid;
+    v_capability_lead_to_use uuid;
+BEGIN
+    -- Validar que el empleado existe
+    IF NOT EXISTS (SELECT 1 FROM "Empleado" WHERE "ID_Empleado" = p_id_empleado) THEN
+        RAISE EXCEPTION 'Empleado con ID % no encontrado', p_id_empleado;
+    END IF;
+    
+    -- Validar que la Talent Discussion existe
+    IF NOT EXISTS (SELECT 1 FROM "Talent_Discussion" WHERE "ID_TalentDiscussion" = p_id_talent_discussion) THEN
+        RAISE EXCEPTION 'Talent Discussion con ID % no encontrada', p_id_talent_discussion;
+    END IF;
+    
+    -- Obtener el ID de TD_Employee existente
+    SELECT "ID_TD_Employee" INTO v_id_td_employee
+    FROM "TD_Employee"
+    WHERE "ID_TalentDiscussion" = p_id_talent_discussion
+    AND "ID_Empleado" = p_id_empleado;
+    
+    -- Verificar que existe un registro en TD_Employee
+    IF v_id_td_employee IS NULL THEN
+        RAISE EXCEPTION 'No existe un registro en TD_Employee para este empleado y talent discussion';
+    END IF;
+    
+    -- Crear registro en TD_Employee_Request
+    INSERT INTO "TD_Employee_Request" (
+        "ID_TalentDiscussion",
+        "ID_TD_Employee",
+        "Descripcion",
+        "Estado"
+    ) VALUES (
+        p_id_talent_discussion,
+        v_id_td_employee,
+        p_descripcion_request,
+        'Pendiente' -- Estado por defecto
+    ) RETURNING "ID_TD_Employee_Request" INTO v_id_td_employee_request;
+    
+    -- Determinar qué Capability Lead usar
+    IF p_id_capability_lead IS NOT NULL THEN
+        -- Verificar que el Capability Lead proporcionado existe
+        IF NOT EXISTS (SELECT 1 FROM "Capability_Lead" WHERE "ID_CapabilityLead" = p_id_capability_lead) THEN
+            RAISE NOTICE 'El Capability Lead con ID % no existe, se intentará encontrar uno automáticamente', p_id_capability_lead;
+        ELSE
+            v_capability_lead_to_use := p_id_capability_lead;
+        END IF;
+    END IF;
+    
+    -- Si no se proporcionó un Capability Lead válido, buscar el del departamento del empleado
+    IF v_capability_lead_to_use IS NULL THEN
+        SELECT cl."ID_CapabilityLead" INTO v_capability_lead_to_use
+        FROM "Empleado" e
+        JOIN "Capability_Lead" cl ON e."ID_Departamento" = cl."ID_Departamento"
+        WHERE e."ID_Empleado" = p_id_empleado;
+    END IF;
+    
+    -- Si tenemos un capability lead válido, verificar si ya está asociado a la TD
+    IF v_capability_lead_to_use IS NOT NULL THEN
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM "TD_Capability_Lead" 
+            WHERE "ID_TalentDiscussion" = p_id_talent_discussion
+            AND "ID_CapabilityLead" = v_capability_lead_to_use
+        ) THEN
+            -- Si no existe, crear el registro
+            INSERT INTO "TD_Capability_Lead" (
+                "ID_TalentDiscussion",
+                "ID_CapabilityLead"
+            ) VALUES (
+                p_id_talent_discussion,
+                v_capability_lead_to_use
+            ) RETURNING "ID_TD_Capability_Lead" INTO v_id_td_capability_lead;
+        END IF;
+    END IF;
+    
+    -- Retornar los IDs de los registros creados
+    RETURN QUERY SELECT v_id_td_employee_request, v_id_td_capability_lead;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."crear_employee_request_con_capability_lead"("p_id_empleado" "uuid", "p_id_talent_discussion" "uuid", "p_descripcion_request" "text", "p_id_capability_lead" "uuid") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."crear_registros_talent_discussion"("p_id_empleado" "uuid", "p_id_talent_discussion" "uuid", "p_descripcion_request" "text") RETURNS TABLE("id_td_employee" "uuid", "id_td_employee_request" "uuid", "id_td_capability_lead" "uuid")
@@ -629,6 +799,64 @@ $$;
 ALTER FUNCTION "public"."get_employees_by_people_lead_and_nivel"("p_id_people_lead" "uuid", "p_nivel" "text") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_employees_by_td_and_pl"("p_id_people_lead" "uuid", "p_id_talent_discussion" "uuid") RETURNS TABLE("id_empleado" "uuid", "nombre" character varying, "rol" character varying, "nivel" character varying, "id_departamento" "uuid", "nombre_departamento" character varying, "cargabilidad" character varying, "fecha_contratacion" "date", "fechaultinivel" "date", "id_people_lead" "uuid", "nombre_people_lead" character varying, "id_capabilitylead" "uuid", "nombre_capabilitylead" character varying, "td_employee_request" "jsonb")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        e."ID_Empleado" AS id_empleado,
+        e."Nombre" AS nombre,
+        e."Rol" AS rol,
+        e."Nivel" AS nivel,
+        e."ID_Departamento" AS id_departamento,
+        d."Nombre" AS nombre_departamento,
+        e."Cargabilidad"::VARCHAR AS cargabilidad,  -- Conversión explícita a VARCHAR
+        e."FechaContratacion" AS fecha_contratacion,
+        e."FechaUltNivel" AS fechaultinivel,
+        e."ID_PeopleLead" AS id_people_lead,
+        pl_emp."Nombre" AS nombre_people_lead,
+        cl."ID_CapabilityLead" AS id_capabilitylead,
+        cl_emp."Nombre" AS nombre_capabilitylead,
+        CASE
+            WHEN ter."ID_TD_Employee_Request" IS NOT NULL THEN
+                jsonb_build_object(
+                    'id_td_employee_request', ter."ID_TD_Employee_Request",
+                    'id_talentdiscussion', ter."ID_TalentDiscussion",
+                    'id_td_employee', ter."ID_TD_Employee",
+                    'descripcion', ter."Descripcion",
+                    'estado', ter."Estado",
+                    'resultado', ter."Resultado"
+                )
+            ELSE NULL
+        END AS td_employee_request
+    FROM 
+        "Empleado" e
+    INNER JOIN
+        "TD_Employee" tde ON tde."ID_Empleado" = e."ID_Empleado"
+    LEFT JOIN 
+        "Departamento" d ON e."ID_Departamento" = d."ID_Departamento"
+    LEFT JOIN 
+        "People_lead" pl ON e."ID_PeopleLead" = pl."ID"
+    LEFT JOIN 
+        "Empleado" pl_emp ON pl."ID_Empleado" = pl_emp."ID_Empleado"
+    LEFT JOIN 
+        "Capability_Lead" cl ON d."ID_Departamento" = cl."ID_Departamento"
+    LEFT JOIN 
+        "Empleado" cl_emp ON cl."ID_Empleado" = cl_emp."ID_Empleado"
+    LEFT JOIN 
+        "TD_Employee_Request" ter ON ter."ID_TD_Employee" = tde."ID_TD_Employee" 
+        AND ter."ID_TalentDiscussion" = p_id_talent_discussion
+    WHERE 
+        e."ID_PeopleLead" = p_id_people_lead
+        AND tde."ID_TalentDiscussion" = p_id_talent_discussion;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employees_by_td_and_pl"("p_id_people_lead" "uuid", "p_id_talent_discussion" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_full_project_data"("project_id" "uuid") RETURNS "jsonb"
     LANGUAGE "plpgsql"
     AS $$DECLARE
@@ -875,6 +1103,53 @@ $$;
 ALTER FUNCTION "public"."insert_empleado"("p_id_empleado" "uuid", "p_nombre" "text", "p_rol" "text", "p_id_departamento" "uuid", "p_nivel" "text", "p_cargabilidad" "text", "p_fecha_contratacion" "date", "p_fecha_ult_nivel" "date", "p_biografia" "text") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."obtener_empleados_disponibles"("id_proyecto" "uuid", "cargabilidad_adicional" integer) RETURNS TABLE("id_empleado" "uuid", "nombre" "text", "cargabilidad" integer, "total_propuesta" integer)
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  RETURN QUERY 
+  SELECT 
+    e."ID_Empleado"::UUID,
+    e."Nombre"::TEXT,
+    e."Cargabilidad"::INTEGER,
+    (e."Cargabilidad" + cargabilidad_adicional)::INTEGER AS total_propuesta
+  FROM "Empleado" e
+  WHERE 
+    (e."Cargabilidad" + cargabilidad_adicional) <= 100
+    AND e."ID_Empleado" NOT IN (
+      SELECT pp."ID_Empleado"
+      FROM "Puesto_persona" pp
+      JOIN "Puesto_proyecto" pproy ON pp."ID_Puesto" = pproy."id"
+      WHERE pproy."ID_Proyecto" = id_proyecto
+    );
+END;
+$$;
+
+
+ALTER FUNCTION "public"."obtener_empleados_disponibles"("id_proyecto" "uuid", "cargabilidad_adicional" integer) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."obtener_empleados_por_puesto_proyecto"("id_puesto_proyecto" "uuid") RETURNS TABLE("id_empleado" "uuid", "nombre" "text", "cargabilidad" numeric)
+    LANGUAGE "sql"
+    AS $$
+  SELECT 
+    e."ID_Empleado" as id_empleado,
+    e."Nombre" as nombre,
+    e."Cargabilidad" as cargabilidad
+  FROM 
+    "public"."Empleado" e
+  JOIN 
+    "public"."Puesto_persona" pp ON e."ID_Empleado" = pp."ID_Empleado"
+  JOIN 
+    "public"."Puesto_proyecto" pproy ON pp."ID_Puesto" = pproy."id"
+  WHERE 
+    pproy."id" = id_puesto_proyecto;
+$$;
+
+
+ALTER FUNCTION "public"."obtener_empleados_por_puesto_proyecto"("id_puesto_proyecto" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."obtener_habilidades_empleado_excluyendo_categoria"("p_id_empleado" "uuid", "p_id_categoria_excluir" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre" "text", "nivel" "text")
     LANGUAGE "sql"
     AS $$
@@ -1022,6 +1297,99 @@ $$;
 
 
 ALTER FUNCTION "public"."obtener_habilidades_por_categoria"("p_id_empleado" "uuid", "p_id_categoria" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."obtener_talent_discussion_completa_json"("p_id_talent_discussion" "uuid") RETURNS "json"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    result_json json;
+BEGIN
+    SELECT json_build_object(
+        'talent_discussion', (
+            SELECT to_json(td) FROM (
+                SELECT 
+                    td."ID_TalentDiscussion",
+                    td."Discussion",
+                    td."ID_TalentLead",
+                    tl_emp."Nombre" AS nombre_talent_lead,
+                    td."Nivel",
+                    td."Fecha_Inicio",
+                    td."Fecha_Final",
+                    td."Estado"
+                FROM "Talent_Discussion" td
+                LEFT JOIN "Talent_Lead" tl ON td."ID_TalentLead" = tl."ID_TalentLead"
+                LEFT JOIN "Empleado" tl_emp ON tl."ID_Empleado" = tl_emp."ID_Empleado"
+                WHERE td."ID_TalentDiscussion" = p_id_talent_discussion
+            ) td
+        ),
+        'employees', (
+            SELECT json_agg(
+                json_build_object(
+                    'td_employee', to_json(tde),
+                    'empleado', to_json(e),
+                    'request', (
+                        SELECT to_json(ter) 
+                        FROM "TD_Employee_Request" ter
+                        WHERE ter."ID_TalentDiscussion" = p_id_talent_discussion
+                        AND ter."ID_TD_Employee" = tde."ID_TD_Employee"
+                    ),
+                    'people_lead', (
+                        SELECT to_json(pl)
+                        FROM "People_lead" pl
+                        WHERE pl."ID" = e."ID_PeopleLead"
+                    ),
+                    'capability_lead', (
+                        SELECT to_json(cl)
+                        FROM "Capability_Lead" cl
+                        WHERE cl."ID_Departamento" = e."ID_Departamento"
+                    )
+                )
+            )
+            FROM "TD_Employee" tde
+            JOIN "Empleado" e ON tde."ID_Empleado" = e."ID_Empleado"
+            WHERE tde."ID_TalentDiscussion" = p_id_talent_discussion
+        ),
+        'people_leads', (
+            SELECT json_agg(
+                json_build_object(
+                    'td_people_lead', to_json(tpl),
+                    'people_lead', to_json(pl),
+                    'empleado', (
+                        SELECT to_json(emp) 
+                        FROM "Empleado" emp 
+                        WHERE emp."ID_Empleado" = pl."ID_Empleado"
+                    )
+                )
+            )
+            FROM "TD_People_Lead" tpl
+            JOIN "People_lead" pl ON tpl."ID_People_Lead" = pl."ID"
+            WHERE tpl."ID_TalentDiscussion" = p_id_talent_discussion
+        ),
+        'capability_leads', (
+            SELECT json_agg(
+                json_build_object(
+                    'td_capability_lead', to_json(tcl),
+                    'capability_lead', to_json(cl),
+                    'empleado', (
+                        SELECT to_json(emp) 
+                        FROM "Empleado" emp 
+                        WHERE emp."ID_Empleado" = cl."ID_Empleado"
+                    )
+                )
+            )
+            FROM "TD_Capability_Lead" tcl
+            JOIN "Capability_Lead" cl ON tcl."ID_CapabilityLead" = cl."ID_CapabilityLead"
+            WHERE tcl."ID_TalentDiscussion" = p_id_talent_discussion
+        )
+    ) INTO result_json;
+    
+    RETURN result_json;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."obtener_talent_discussion_completa_json"("p_id_talent_discussion" "uuid") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."select_empleado"("p_id_empleado" "uuid") RETURNS TABLE("ID_Empleado" "uuid", "Nombre" "text", "Rol" "text", "ID_Departamento" "uuid", "Nivel" "text", "Cargabilidad" "text", "FechaContratacion" "date", "FechaUltNivel" "date", "Biografia" "text")
@@ -1254,11 +1622,12 @@ CREATE TABLE IF NOT EXISTS "public"."Empleado" (
     "Rol" character varying,
     "ID_Departamento" "uuid",
     "Nivel" character varying,
-    "Cargabilidad" character varying,
+    "Cargabilidad" smallint,
     "FechaContratacion" "date",
     "FechaUltNivel" "date",
     "ID_PeopleLead" "uuid",
-    "Biografia" character varying
+    "Biografia" character varying,
+    CONSTRAINT "chk_cargabilidad_max" CHECK (("Cargabilidad" <= 100))
 );
 
 
@@ -1451,11 +1820,22 @@ CREATE TABLE IF NOT EXISTS "public"."Puesto_habilidades" (
 ALTER TABLE "public"."Puesto_habilidades" OWNER TO "postgres";
 
 
+CREATE TABLE IF NOT EXISTS "public"."Puesto_persona" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_Puesto" "uuid" DEFAULT "gen_random_uuid"()
+);
+
+
+ALTER TABLE "public"."Puesto_persona" OWNER TO "postgres";
+
+
 CREATE TABLE IF NOT EXISTS "public"."Puesto_proyecto" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_Proyecto" "uuid" DEFAULT "gen_random_uuid"(),
     "Puesto" character varying,
-    "N_puestos" smallint
+    "N_puestos" smallint,
+    "Completo" boolean
 );
 
 
@@ -1521,9 +1901,9 @@ CREATE TABLE IF NOT EXISTS "public"."TD_Employee_Request" (
     "ID_TD_Employee_Request" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_TalentDiscussion" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_TD_Employee" "uuid" DEFAULT "gen_random_uuid"(),
-    "Descripcion" character varying,
+    "Descripcion" "text",
     "Estado" character varying DEFAULT 'Pendiente'::character varying,
-    "Resultado" character varying
+    "Resultado" "text"
 );
 
 
@@ -1734,6 +2114,11 @@ ALTER TABLE ONLY "public"."Puesto_habilidades"
 
 
 
+ALTER TABLE ONLY "public"."Puesto_persona"
+    ADD CONSTRAINT "Puesto_persona_pkey" PRIMARY KEY ("id");
+
+
+
 ALTER TABLE ONLY "public"."Puesto_proyecto"
     ADD CONSTRAINT "Puesto_proyecto_pkey" PRIMARY KEY ("id");
 
@@ -1934,6 +2319,16 @@ ALTER TABLE ONLY "public"."Puesto_habilidades"
 
 ALTER TABLE ONLY "public"."Puesto_habilidades"
     ADD CONSTRAINT "Puesto_habilidades_Id_puesto_fkey" FOREIGN KEY ("Id_puesto") REFERENCES "public"."Puesto_proyecto"("id");
+
+
+
+ALTER TABLE ONLY "public"."Puesto_persona"
+    ADD CONSTRAINT "Puesto_persona_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+
+
+
+ALTER TABLE ONLY "public"."Puesto_persona"
+    ADD CONSTRAINT "Puesto_persona_ID_Puesto_fkey" FOREIGN KEY ("ID_Puesto") REFERENCES "public"."Puesto_proyecto"("id");
 
 
 
@@ -2355,6 +2750,11 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puesto_habilidades" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puesto_habilidades" TO "anon";
+
+
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puesto_persona" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puesto_persona" TO "anon";
 
 
 
