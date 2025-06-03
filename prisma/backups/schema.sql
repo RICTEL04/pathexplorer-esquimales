@@ -162,6 +162,65 @@ $$;
 ALTER FUNCTION "public"."crear_registros_talent_discussion"("p_id_empleado" "uuid", "p_id_talent_discussion" "uuid", "p_descripcion_request" "text") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."create_talent_discussion_with_participants"("p_discussion_text" character varying, "p_id_talent_lead" "uuid", "p_nivel" character varying, "p_fecha_inicio" "date", "p_fecha_final" "date", "p_people_lead_ids" "uuid"[] DEFAULT NULL::"uuid"[], "p_employee_ids" "uuid"[] DEFAULT NULL::"uuid"[]) RETURNS "uuid"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE 
+    v_new_td_id uuid; 
+    v_lead_id uuid;
+    v_employee_id uuid;
+BEGIN 
+    -- 1. Crear la nueva Talent Discussion
+    INSERT INTO "Talent_Discussion" ( 
+        "Discussion", 
+        "ID_TalentLead", 
+        "Nivel", 
+        "Fecha_Inicio", 
+        "Fecha_Final", 
+        "Estado" 
+    ) VALUES ( 
+        p_discussion_text, 
+        p_id_talent_lead, 
+        p_nivel, 
+        p_fecha_inicio, 
+        p_fecha_final, 
+        'Pendiente' 
+    ) RETURNING "ID_TalentDiscussion" INTO v_new_td_id; 
+
+    -- 2. Agregar People Leads (si se proporcionaron)
+    IF p_people_lead_ids IS NOT NULL THEN
+        FOREACH v_lead_id IN ARRAY p_people_lead_ids LOOP 
+            INSERT INTO "TD_People_Lead" ( 
+                "ID_TalentDiscussion", 
+                "ID_People_Lead" 
+            ) VALUES ( 
+                v_new_td_id, 
+                v_lead_id 
+            ); 
+        END LOOP; 
+    END IF;
+
+    -- 3. Agregar Empleados a TD_Employee (si se proporcionaron)
+    IF p_employee_ids IS NOT NULL THEN
+        FOREACH v_employee_id IN ARRAY p_employee_ids LOOP 
+            INSERT INTO "TD_Employee" ( 
+                "ID_TalentDiscussion", 
+                "ID_Empleado" 
+            ) VALUES ( 
+                v_new_td_id, 
+                v_employee_id 
+            ); 
+        END LOOP;
+    END IF;
+
+    RETURN v_new_td_id; 
+END;
+$$;
+
+
+ALTER FUNCTION "public"."create_talent_discussion_with_participants"("p_discussion_text" character varying, "p_id_talent_lead" "uuid", "p_nivel" character varying, "p_fecha_inicio" "date", "p_fecha_final" "date", "p_people_lead_ids" "uuid"[], "p_employee_ids" "uuid"[]) OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."create_talent_discussion_with_people_leads"("p_discussion_text" "text", "p_nivel" "text", "p_id_talent_lead" "uuid", "p_fecha_inicio" "date", "p_fecha_final" "date", "p_people_lead_ids" "uuid"[]) RETURNS "uuid"
     LANGUAGE "plpgsql"
     AS $$
@@ -1369,6 +1428,7 @@ CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
     "cargabilidad_num" smallint DEFAULT '100'::smallint NOT NULL,
     "Cliente" "text",
     "created_at" timestamp with time zone DEFAULT "now"(),
+    "ImagenUrl" "text",
     CONSTRAINT "Proyectos_Status_check" CHECK (("Status" = ANY (ARRAY['active'::"text", 'inactive'::"text", 'pending'::"text", 'done'::"text"])))
 );
 
