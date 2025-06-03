@@ -560,7 +560,7 @@ export default function ProyectoDetalle() {
                   </Button>
                 )}
               </div>
-              {/* Lado derecho: Empleados disponibles */}
+              {/* Lado derechos: Empleados disponibles */}
               <div className="flex-1 p-6">
                 <div className="mb-4 text-lg font-semibold text-primary-700">Empleados disponibles
                   <span className="ml-2 text-base text-gray-500 font-normal">
