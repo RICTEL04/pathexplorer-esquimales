@@ -1,5 +1,5 @@
 "use client"
-import {FormEvent, useState, useMemo, useEffect } from 'react';
+import {FormEvent, useState, useMemo, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase'
@@ -10,6 +10,8 @@ import { handleDeliveryLeadActions } from "@/lib/insertDeliveryLead";
 import { handlePeopleLeadActions } from "@/lib/insertPeopleLead";
 import Link from "next/link";
 import { handleRemovePeopleLead, handleRemoveCapabilityLead, handleRemoveDeliveryLead, handleRemoveTalentLead  } from "@/lib/removeRoles";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 type NewEmployee = {
   id: string;
@@ -43,6 +45,7 @@ interface Departamento {
 }
 
 const STANDARD_PASSWORD = "password123"; // Contraseña estándar
+const SOFT_CATEGORY_ID = '6a8ab048-2033-4a16-a9fa-e2006952af4e';
 
 export default function EmployeeManagement() {
     const router = useRouter();
@@ -73,6 +76,13 @@ export default function EmployeeManagement() {
       deliveryLead: false,
       talentLead: false
     });
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [employeeProfile, setEmployeeProfile] = useState<any>(null);
+    const [reportText, setReportText] = useState<string | null>(null);
+    const [reportLoading, setReportLoading] = useState(false);
+    const [reportError, setReportError] = useState<string | null>(null);
+    const [experienciaLaboral, setExperienciaLaboral] = useState<any[]>([]);
+    const reportRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       const fetchDepartments = async () => {
@@ -363,6 +373,221 @@ const handleSaveRoles = async () => {
     );
   };
 
+  // Función para obtener el perfil extendido del empleado
+  const fetchEmployeeProfile = async (employeeId: string) => {
+    // 1. Obtener datos básicos del empleado
+    const { data: empleado, error: empleadoError } = await supabase
+      .from('Empleado')
+      .select(`
+        ID_Empleado,
+        Nombre,
+        Rol,
+        Nivel,
+        FechaContratacion,
+        Departamento:Departamento(ID_Departamento, Nombre),
+        Contacto:Contacto(PK_Contacto, Email, Num_Telefono)
+      `)
+      .eq('ID_Empleado', employeeId)
+      .single();
+
+    if (empleadoError) {
+      console.error('Error fetching empleado:', empleadoError);
+      return {};
+    }
+
+    // 2. Obtener metas
+    const { data: metas } = await supabase
+      .from('Metas')
+      .select('Descripcion')
+      .eq('ID_Empleado', employeeId);
+
+    // 3. Obtener intereses
+    const { data: intereses } = await supabase
+      .from('Intereses')
+      .select('Descripcion')
+      .eq('ID_Empleado', employeeId);
+
+    // 4. Obtener hard skills usando RPC
+    const { data: hardSkills, error: hardError } = await supabase
+      .rpc('obtener_habilidades_empleado_excluyendo_categoria', {
+        p_id_empleado: employeeId,
+        p_id_categoria_excluir: SOFT_CATEGORY_ID
+      });
+    
+    if (hardError) {
+      console.error('Error fetching hard skills:', hardError);
+    }
+
+    // 5. Obtener soft skills usando RPC
+    const { data: softSkills, error: softError } = await supabase
+      .rpc('obtener_habilidades_por_categoria', {
+        p_id_empleado: employeeId,
+        p_id_categoria: SOFT_CATEGORY_ID
+      });
+    console.log('soft Skills:', softSkills);
+    if (softError) {
+      console.error('Error fetching soft skills:', softError);
+    }
+
+    return {
+      ...empleado,
+      metas: metas?.map(m => m.Descripcion) || [],
+      intereses: intereses || [],
+      hardSkills: hardSkills || [],
+      softSkills: softSkills || [],
+    };
+  };
+
+  const fetchExperienciaLaboral = async (employeeId: string) => {
+    const { data, error } = await supabase
+      .from('Historial')
+      .select(`
+        id,
+        ID_Empleado,
+        NombrePosition,
+        NombreEmpresa,
+        Fecha_inicio,
+        Fecha_final,
+        Currentjob,
+        Descripcion
+      `)
+      .eq('ID_Empleado', employeeId)
+      .order('Fecha_inicio', { ascending: false });
+
+    if (error) {
+      console.error('Error al obtener experiencia laboral:', error);
+      return [];
+    }
+    return data;
+  };
+  const handleOpenReport = async (employee: Empleado) => {
+    setSelectedEmployee(employee);
+    setShowReportModal(true);
+    setReportText(null);
+    setReportError(null);
+    setReportLoading(true);
+
+    // Trae el perfil extendido
+    const profile = await fetchEmployeeProfile(employee.ID_Empleado);
+    setEmployeeProfile(profile);
+
+    // Trae la experiencia laboral
+    const experiencia = await fetchExperienciaLaboral(employee.ID_Empleado);
+    setExperienciaLaboral(experiencia);
+
+    // Llama a la API para generar el reporte
+    try {
+      const response = await fetch('/api/generateReport', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ empleado: profile }),
+      });
+      if (!response.ok) throw new Error('Error al generar el reporte');
+      const data = await response.json();
+      setReportText(data.reporte);
+    } catch (err: any) {
+      setReportError(err.message || 'Error al generar el reporte');
+    } finally {
+      setReportLoading(false);
+    }
+  };
+
+  const handleUploadReport = async () => {
+    if (!employeeProfile) return;
+    try {
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4"
+      });
+
+      let y = 40;
+      doc.setFontSize(18);
+      doc.text("Reporte de Empleado", 40, y);
+      y += 30;
+
+      doc.setFontSize(12);
+
+      // Utiliza la función para cada campo largo
+      y = printMultiline(doc, `ID: ${employeeProfile.ID_Empleado}`, 40, y, 500, 20);
+      y = printMultiline(doc, `Nombre: ${employeeProfile.Nombre}`, 40, y, 500, 20);
+      y = printMultiline(doc, `Email: ${employeeProfile.Contacto?.[0]?.Email || 'N/A'}`, 40, y, 500, 20);
+      y = printMultiline(doc, `Rol: ${employeeProfile.Rol}`, 40, y, 500, 20);
+      y = printMultiline(doc, `Departamento: ${employeeProfile.Departamento?.Nombre || 'N/A'}`, 40, y, 500, 20);
+      y = printMultiline(doc, `Fecha de Contratación: ${employeeProfile.FechaContratacion ? new Date(employeeProfile.FechaContratacion).toLocaleDateString() : 'N/A'}`, 40, y, 500, 20);
+      y = printMultiline(doc, `Nivel: ${employeeProfile.Nivel}`, 40, y, 500, 20);
+
+      y = printMultiline(doc, `Metas: ${employeeProfile.metas?.length ? employeeProfile.metas.join(", ") : 'N/A'}`, 40, y, 500, 20);
+      y = printMultiline(doc, `Intereses: ${employeeProfile.intereses?.length ? employeeProfile.intereses.map((i: { Descripcion: string }) => i.Descripcion).join(", ") : 'N/A'}`, 40, y, 500, 20);
+      y = printMultiline(doc, `Hard Skills: ${employeeProfile.hardSkills?.length ? employeeProfile.hardSkills.map((h: { nombre: string }) => h.nombre).join(", ") : 'N/A'}`, 40, y, 500, 20);
+      y = printMultiline(doc, `Soft Skills: ${employeeProfile.softSkills?.length ? employeeProfile.softSkills.map((s: { nombre_habilidad: string }) => s.nombre_habilidad).join(", ") : 'N/A'}`, 40, y, 500, 20);
+
+      // Experiencia Laboral
+      y = printMultiline(doc, "Experiencia Laboral:", 40, y, 500, 20);
+      if (experienciaLaboral.length === 0) {
+        y = printMultiline(doc, "Sin experiencia registrada.", 60, y, 480, 16);
+      } else {
+        experienciaLaboral.forEach((exp: any) => {
+          y = printMultiline(
+            doc,
+            `${exp.NombrePosition} en ${exp.NombreEmpresa} — ${exp.Fecha_inicio ? new Date(exp.Fecha_inicio).toLocaleDateString() : "?"} a ${exp.Currentjob ? "Actualidad" : (exp.Fecha_final ? new Date(exp.Fecha_final).toLocaleDateString() : "?")}`,
+            60, y, 480, 16
+          );
+          if (exp.Descripcion) {
+            doc.setFontSize(10);
+            y = printMultiline(doc, exp.Descripcion, 70, y, 460, 14);
+            doc.setFontSize(12);
+          }
+        });
+      }
+
+      // Reporte IA
+      if (reportText) {
+        y += 10;
+        y = printMultiline(doc, "Reporte IA:", 40, y, 500, 20);
+        doc.setFontSize(11);
+        y = printMultiline(doc, reportText, 60, y, 480, 16);
+        doc.setFontSize(12);
+      }
+
+      // Convierte el PDF a blob
+      const pdfBlob = doc.output('blob');
+
+      // Sube el PDF a Supabase Storage
+      const fileName = `${employeeProfile.ID_Empleado}/reporte_${employeeProfile.ID_Empleado}_${Date.now()}.pdf`;
+      const { data, error } = await supabase.storage
+        .from('reportes')
+        .upload(fileName, pdfBlob, {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: 'application/pdf'
+        });
+
+      if (error) {
+        alert('Error al subir el PDF: ' + error.message);
+      } else {
+        alert('Reporte subido correctamente al bucket "reportes".');
+      }
+    } catch (err: any) {
+      alert('Error al generar o subir el PDF: ' + err.message);
+    }
+  };
+
+  // --- Pega la función printMultiline fuera del componente ---
+  function printMultiline(doc: jsPDF, text: string, x: number, y: number, maxWidth: number, lineHeight: number) {
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const lines = doc.splitTextToSize(text, maxWidth);
+    lines.forEach((line: string) => {
+      if (y > pageHeight - 40) { // 40 es el margen inferior
+      doc.addPage();
+      y = 40;
+      }
+      doc.text(line, x, y);
+      y += lineHeight;
+    });
+    return y;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <Head>
@@ -447,7 +672,7 @@ const handleSaveRoles = async () => {
                           <div className="flex items-center space-x-2">
                             {/* Icono para editar usuario */}
                             <Link 
-                              href={`/admin/empleados/${employee.ID_Empleado}`} // Reemplaza con tu ruta real
+                              href={`/admin/empleados/${employee.ID_Empleado}`}
                               className="text-blue-600 hover:text-blue-900"
                               title="Editar usuario"
                             >
@@ -459,15 +684,27 @@ const handleSaveRoles = async () => {
                             {/* Icono para modificar rol */}
                             <button 
                               onClick={async() => {
-                                setSelectedEmployee(employee); // Guarda el empleado seleccionado
-                                await checkRoles(employee.ID_Empleado); // Verificar roles primero
-                                setShowRoleModal(true)
+                                setSelectedEmployee(employee);
+                                await checkRoles(employee.ID_Empleado);
+                                setShowRoleModal(true);
                               }} 
                               className="text-purple-600 hover:text-purple-900"
                               title="Cambiar rol"
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                              </svg>
+                            </button>
+
+                            {/* Botón para generar reporte */}
+                            <button
+                              className="text-green-600 hover:text-green-900"
+                              title="Generar reporte"
+                              type="button"
+                              onClick={() => handleOpenReport(employee)}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                               </svg>
                             </button>
                           </div>
@@ -682,103 +919,185 @@ const handleSaveRoles = async () => {
       {/* Modal para modificar roles - Con funcionalidad completa */}
       {showRoleModal && (
         <div className="fixed inset-0 bg-gray-950/70 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">Modificar Roles</h2>
-                <button 
-                  onClick={() => setShowRoleModal(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] p-6 overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-800">Modificar Roles</h2>
+              <button 
+                onClick={() => setShowRoleModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
-              <div className="mb-4">
-                <p className="text-gray-700 mb-2">
-                  Seleccionar roles para: 
-                  <span className="font-semibold">
-                    {selectedEmployee ? selectedEmployee.Nombre : 'Nombre del Empleado'}
-                  </span>
-                </p>
+            <div className="mb-4">
+              <p className="text-gray-700 mb-2">
+                Seleccionar roles para: 
+                <span className="font-semibold">
+                  {selectedEmployee ? selectedEmployee.Nombre : 'Nombre del Empleado'}
+                </span>
+              </p>
+              
+              <div className="space-y-2 mt-4">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="role-capability"
+                    checked={roles.peopleLead}
+                    onChange={() => setRoles({...roles, peopleLead: !roles.peopleLead})}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="role-capability" className="ml-2 block text-sm text-gray-700">
+                  People Lead
+                  </label>
+                </div>
                 
-                <div className="space-y-2 mt-4">
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="role-capability"
-                      checked={roles.peopleLead}
-                      onChange={() => setRoles({...roles, peopleLead: !roles.peopleLead})}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor="role-capability" className="ml-2 block text-sm text-gray-700">
-                    People Lead
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="role-delivery"
-                      checked={roles.capabilityLead}
-                      onChange={() => setRoles({...roles, capabilityLead: !roles.capabilityLead})}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor="role-delivery" className="ml-2 block text-sm text-gray-700">
-                    Capability Lead
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="role-people"
-                      checked={roles.deliveryLead}
-                      onChange={() => setRoles({...roles, deliveryLead: !roles.deliveryLead})}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor="role-people" className="ml-2 block text-sm text-gray-700">
-                    Delivery Lead
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="role-talent"
-                      checked={roles.talentLead}
-                      onChange={() => setRoles({...roles, talentLead: !roles.talentLead})}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor="role-talent" className="ml-2 block text-sm text-gray-700">
-                      Talent Lead
-                    </label>
-                  </div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="role-delivery"
+                    checked={roles.capabilityLead}
+                    onChange={() => setRoles({...roles, capabilityLead: !roles.capabilityLead})}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="role-delivery" className="ml-2 block text-sm text-gray-700">
+                  Capability Lead
+                  </label>
+                </div>
+                
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="role-people"
+                    checked={roles.deliveryLead}
+                    onChange={() => setRoles({...roles, deliveryLead: !roles.deliveryLead})}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="role-people" className="ml-2 block text-sm text-gray-700">
+                  Delivery Lead
+                  </label>
+                </div>
+                
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="role-talent"
+                    checked={roles.talentLead}
+                    onChange={() => setRoles({...roles, talentLead: !roles.talentLead})}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="role-talent" className="ml-2 block text-sm text-gray-700">
+                    Talent Lead
+                  </label>
                 </div>
               </div>
+            </div>
 
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => setShowRoleModal(false)}
-                  className="mr-2 px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSaveRoles}
-                  disabled={!hasRoleChanges()}
-                  className={`px-4 py-2 rounded-md ${
-                    hasRoleChanges() 
-                      ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
-                >
-                  Guardar Cambios
-                </button>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowRoleModal(false)}
+                className="mr-2 px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveRoles}
+                disabled={!hasRoleChanges()}
+                className={`px-4 py-2 rounded-md ${
+                  hasRoleChanges() 
+                    ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para reporte de empleado */}
+      console.log('Experiencia laboral:', employeeProfile);
+        
+      {showReportModal && employeeProfile && (
+        <div className="fixed inset-0 bg-transparent backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl h-[90vh] flex flex-col p-8 overflow-hidden">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-800">Reporte de Empleado</h2>
+              <button
+                onClick={handleUploadReport}
+                className="ml-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+              >
+                Subir reporte
+              </button>
+              <button
+                onClick={() => {
+                  setShowReportModal(false);
+                  setEmployeeProfile(null);
+                  setReportText(null);
+                  setReportError(null);
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div ref={reportRef} className="flex-1 overflow-y-auto space-y-2 pr-2" style={{ background: "#fff", color: "#222" }} >
+              <div><span className="font-semibold">ID:</span> {employeeProfile.ID_Empleado}</div>
+              <div><span className="font-semibold">Nombre:</span> {employeeProfile.Nombre}</div>
+              <div><span className="font-semibold">Email:</span> {employeeProfile.Contacto?.[0]?.Email || 'N/A'}</div>
+              <div><span className="font-semibold">Rol:</span> {employeeProfile.Rol}</div>
+              <div><span className="font-semibold">Departamento:</span> {employeeProfile.Departamento?.Nombre || 'N/A'}</div>
+              <div><span className="font-semibold">Fecha de Contratación:</span> {employeeProfile.FechaContratacion ? new Date(employeeProfile.FechaContratacion).toLocaleDateString() : 'N/A'}</div>
+              <div><span className="font-semibold">Nivel:</span> {employeeProfile.Nivel}</div>
+              <div>
+                <span className="font-semibold">Metas:</span> {employeeProfile.metas?.length ? employeeProfile.metas.join(", ") : 'N/A'}
+              </div>
+              <div>
+                <span className="font-semibold">Intereses:</span> {employeeProfile.intereses?.length ? employeeProfile.intereses.map((i: { Descripcion: string }) => i.Descripcion).join(", ") : 'N/A'}
+              </div>
+              <div>
+                <span className="font-semibold">Hard Skills:</span> {employeeProfile.hardSkills?.length ? employeeProfile.hardSkills.map((h: { nombre: string }) => h.nombre).join(", ") : 'N/A'}
+              </div>
+              <div>
+                <span className="font-semibold">Soft Skills:</span> {employeeProfile.softSkills?.length ? employeeProfile.softSkills.map((s: { nombre_habilidad: string }) => s.nombre_habilidad).join(", ") : 'N/A'}
+              </div>
+              <div>
+                <span className="font-semibold">Experiencia Laboral:</span>
+                {experienciaLaboral.length === 0 ? (
+                  <div className="text-gray-500">Sin experiencia registrada.</div>
+                ) : (
+                  <ul className="list-disc ml-5 space-y-1">
+                    {experienciaLaboral.map((exp) => (
+                      <li key={exp.id}>
+                        <span className="font-semibold">{exp.NombrePosition}</span> en <span className="font-semibold">{exp.NombreEmpresa}</span>
+                        {" — "}
+                        {exp.Fecha_inicio ? new Date(exp.Fecha_inicio).toLocaleDateString() : "?"}
+                        {" a "}
+                        {exp.Currentjob ? "Actualidad" : (exp.Fecha_final ? new Date(exp.Fecha_final).toLocaleDateString() : "?")}
+                        {exp.Descripcion && (
+                          <div className="text-gray-600 text-sm">{exp.Descripcion}</div>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <div>
+                <span className="font-semibold">Reporte IA:</span>
+                {reportLoading && <div className="text-blue-600">Generando reporte...</div>}
+                {reportError && <div className="text-red-600">{reportError}</div>}
+                {reportText && (
+                  <div className="mt-2 p-3 bg-gray-100 rounded text-gray-800 whitespace-pre-line">
+                    {reportText}
+                  </div>
+                )}
               </div>
             </div>
           </div>

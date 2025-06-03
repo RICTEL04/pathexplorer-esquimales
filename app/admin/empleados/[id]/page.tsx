@@ -1,6 +1,6 @@
 // app/capability-lead/perfil/[id]/page.tsx
 "use client"
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Profile from '@/components/Profile';
 import Card from '@/components/Card';
 import { useEmployeeProfile } from '@/lib/hooks/useEmployeeProfile';
@@ -10,6 +10,12 @@ import ExperienceModal from '@/components/ModalExperience';
 import ViewExperienceModal from '@/components/ViewExperienceModal';
 import EditExperienceModal from '@/components/EditExperienceModal';
 import { SkillRefreshProvider } from "@/context/SkillRefreshContext";
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 const UserProfilePage = () => {
   const params = useParams(); // Usar useParams en lugar de useRouter
@@ -34,6 +40,30 @@ const UserProfilePage = () => {
     handleHardSkillsChange,
     handleUpdateEmployeeAvatar
   } = useEmployeeProfile(id);
+
+  const [employeeReports, setEmployeeReports] = useState<{ name: string, url: string }[]>([]);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      if (!profileData?.ID_Empleado) return;
+      const { data, error } = await supabase.storage
+        .from('reportes')
+        .list(`${profileData.ID_Empleado}/`, { limit: 100 });
+      if (error) return;
+
+      const reports = await Promise.all(
+        (data ?? []).map(async (file) => {
+          const { data: urlData } = await supabase.storage
+            .from('reportes')
+            .getPublicUrl(`${profileData.ID_Empleado}/${file.name}`);
+          return { name: file.name, url: urlData.publicUrl };
+        })
+      );
+      setEmployeeReports(reports);
+    };
+
+    fetchReports();
+  }, [profileData?.ID_Empleado]);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
@@ -170,14 +200,19 @@ const UserProfilePage = () => {
 
 
               <h2 className="text-lg font-bold mb-4">Informes</h2>
-              {profileData.informes.length > 0 ? (
+              {employeeReports.length > 0 ? (
                 <div className="space-y-3">
-                  {profileData.informes.map((informe) => (
-                    <Card key={informe.id} className="p-3 hover:bg-gray-50 cursor-pointer">
+                  {employeeReports.map((informe) => (
+                    <Card key={informe.name} className="p-3 hover:bg-gray-50 cursor-pointer">
                       <div className="flex items-start justify-between">
-                        <p className="text-sm font-medium break-words min-w-0 flex-1">
+                        <a
+                          href={informe.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-medium break-words min-w-0 flex-1 text-blue-600 hover:underline"
+                        >
                           {informe.name}
-                        </p>
+                        </a>
                         <svg 
                           xmlns="http://www.w3.org/2000/svg" 
                           className="h-4 w-4 text-gray-400 flex-shrink-0 ml-2" 
