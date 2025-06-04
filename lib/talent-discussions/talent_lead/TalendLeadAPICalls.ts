@@ -10,6 +10,7 @@ import {
   TD_Capability_Lead,
   TD_PeopleLead,
 } from "@/lib/talent-discussions/talentDiscussionDefinitions";
+import { set } from "zod";
 
 export interface TalentDiscussionCompleta {
   talent_discussion: Talent_Discussion | null;
@@ -296,7 +297,7 @@ export async function getTalentDiscussionCompleta(
   }
 }
 
-export async function updateTalentDiscussionStatus(
+export async function forceTalentDiscussionParticipants(
   setLoading: (loading: boolean) => void,
   talentDiscussionId: string,
   peopleLeadIdsNoAsignados: string[] = [],
@@ -305,7 +306,7 @@ export async function updateTalentDiscussionStatus(
 ): Promise<boolean> {
   setLoading(true);
   try {
-    const { error } = await supabase.rpc("update_talent_discussion_status", {
+    const { error } = await supabase.rpc("force_talent_discussion_participants", {
       p_talent_discussion_id: talentDiscussionId,
       p_people_lead_ids_no_asignados: peopleLeadIdsNoAsignados.length > 0 ? peopleLeadIdsNoAsignados : null,
       p_people_lead_ids_asignados: peopleLeadIdsAsignados.length > 0 ? peopleLeadIdsAsignados : null,
@@ -315,6 +316,28 @@ export async function updateTalentDiscussionStatus(
     if (error) throw error;
     return true;
   } catch (error) {
+    return false;
+  } finally {
+    setLoading(false);
+  }
+}
+
+export async function cambiar_estado_talent_discussion(
+  setLoading: (loading: boolean) => void,
+  id_talent_discussion: string,
+  estado: string
+){
+  try {
+    const { error } = await supabase.rpc("cambiar_estado_talent_discussion", {
+      p_talent_discussion_id: id_talent_discussion,
+      p_nuevo_estado: estado,
+    });
+
+    if (error) throw error;
+
+    return true;
+  } catch (error) {
+    console.error("Error al cambiar el estado de la Talent Discussion:", error);
     return false;
   } finally {
     setLoading(false);
