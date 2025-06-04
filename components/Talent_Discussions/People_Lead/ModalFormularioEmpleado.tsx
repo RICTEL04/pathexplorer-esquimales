@@ -90,7 +90,7 @@ export const ModalFormularioEmpleado: React.FC<ModalFormularioEmpleadoProps> = (
           </button>
           <button
             type="submit"
-            className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+            className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700"
             disabled={loading || (!bonoChecked && !promocionChecked)}
           >
             {loading ? "Enviando..." : "Enviar"}

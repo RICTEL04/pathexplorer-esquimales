@@ -6,7 +6,7 @@ interface EmployeeCardProps {
 }
 
 export const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee }) => (
-  <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+  <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 mb-4">
     {/* Header */}
     <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4">
       <div className="flex items-center justify-between">
@@ -25,7 +25,7 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({ employee }) => (
           )}
         </div>
       </div>
-      <p className="text-blue-100 text-sm mt-1">{employee.Rol}</p>
+      <p className="text-purple-100 text-sm mt-1">{employee.Rol}</p>
     </div>
 
     {/* Body - Mantenemos la misma estructura pero sin la sección de solicitud */}

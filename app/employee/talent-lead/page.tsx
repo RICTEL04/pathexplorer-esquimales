@@ -73,7 +73,7 @@ export default function EmployeePage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
         <p className="mt-4 text-gray-600">Cargando Talent Discussions...</p>
       </div>
     );
@@ -90,7 +90,7 @@ export default function EmployeePage() {
           <p className="text-gray-600 mt-2">No se ha podido cargar la sesión de usuario</p>
           <button 
             onClick={() => window.location.reload()}
-            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+            className="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors"
           >
             Recargar Página
           </button>
@@ -109,7 +109,7 @@ export default function EmployeePage() {
             <p className="text-gray-600 mt-1">Gestiona las discusiones de talento de tu equipo</p>
           </div>
           <button
-            className="mt-4 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow-md transition-colors flex items-center"
+            className="mt-4 md:mt-0 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md shadow-md transition-colors flex items-center"
             onClick={() => setShowCreateTalentDiscussionForm(true)}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -130,12 +130,7 @@ export default function EmployeePage() {
               </svg>
               <h3 className="mt-2 text-lg font-medium text-gray-900">No hay discusiones</h3>
               <p className="mt-1 text-sm text-gray-500">Crea tu primera Talent Discussion para comenzar.</p>
-              <button
-                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
-                onClick={() => setShowCreateTalentDiscussionForm(true)}
-              >
-                Crear Talent Discussion
-              </button>
+              
             </div>
           )}
         </div>

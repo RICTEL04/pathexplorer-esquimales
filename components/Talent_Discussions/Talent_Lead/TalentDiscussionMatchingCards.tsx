@@ -6,8 +6,8 @@ export function EmpleadoCard({ planeado, actual }: { planeado: any, actual: any 
     if (actual?.TD_Employee_Requests) {
         estado = actual.TD_Employee_Requests.Estado;
         estadoColor = {
-            "Aprobado": "green",
-            "Rechazado": "red",
+            "Aprobada": "green",
+            "Rechazada": "red",
             "Pendiente": "yellow",
             "No Asignado": "gray"
         }[estado] || "gray";
@@ -20,14 +20,14 @@ export function EmpleadoCard({ planeado, actual }: { planeado: any, actual: any 
         <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between">
                 <div>
-                    <h3 className="font-bold text-lg text-gray-800">{planeado.Nombre}</h3>
-                    <p className="text-sm text-gray-600">{planeado.Rol}</p>
+                    <h3 className="font-bold text-lg text-gray-800">{planeado.Nombre ?? ""}</h3>
+                    <p className="text-sm text-gray-600">{planeado.Rol ?? ""}</p>
                     <div className="mt-2 flex items-center">
-                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full mr-2">
+                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full mr-2">
                             Nivel {planeado.Nivel}
                         </span>
                         <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">
-                            {planeado.Nombre_Departamento}
+                            {planeado.Nombre_Departamento ?? ""}
                         </span>
                     </div>
                 </div>
@@ -39,11 +39,11 @@ export function EmpleadoCard({ planeado, actual }: { planeado: any, actual: any 
             {actual?.TD_Employee_Requests && (
                 <div className="mt-3 pt-3 border-t border-gray-100">
                     <p className="text-sm text-gray-700">
-                        <span className="font-semibold">Solicitud:</span> {actual.TD_Employee_Requests.Descripcion}
+                        <span className="font-semibold">Solicitud:</span> {actual.TD_Employee_Requests.Descripcion ?? ""}
                     </p>
                     {actual.TD_Employee_Requests.Resultado && (
                         <p className="text-sm text-gray-700 mt-1">
-                            <span className="font-semibold">Respuesta:</span> {actual.TD_Employee_Requests.Resultado}
+                            <span className="font-semibold">Respuesta:</span> {actual.TD_Employee_Requests.Resultado ?? ""}
                         </p>
                     )}
                 </div>

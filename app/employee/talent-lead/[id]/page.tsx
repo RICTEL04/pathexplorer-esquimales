@@ -44,6 +44,7 @@ export default function TalentLeadTDWithID() {
                                 (TalendDiscussionData.employees ?? []).map(async (emp: any) => {
                                     const reportes = await fetchReportsForEmployee(emp.ID_Empleado);
                                     // reportes es un array de { name, url }
+                                    console.log("ID_Empleado:", emp.ID_Empleado, "Reportes:", reportes);
                                     return {
                                         ...emp,
                                         Reportes: reportes // Asigna el array directamente
@@ -89,9 +90,11 @@ export default function TalentLeadTDWithID() {
                         <p><span className="font-semibold text-gray-600">Nivel:</span> {td.Nivel}</p>
                         <p><span className="font-semibold text-gray-600">Estado:</span>
                             <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
-                                td.Estado === 'Completado' ? 'bg-green-100 text-green-800' :
+                                td.Estado === 'Finalizada' ? 'bg-green-100 text-green-800' :
                                 td.Estado === 'En Progreso' ? 'bg-blue-100 text-blue-800' :
-                                'bg-yellow-100 text-yellow-800'
+                                td.Estado === 'Pendiente' ? 'bg-yellow-100 text-yellow-800' :
+                                td.Estado === 'Cancelada' ? 'bg-red-100 text-red-800' :
+                                'bg-gray-100 text-gray-800'
                             }`}>
                                 {td.Estado}
                             </span>
@@ -145,7 +148,7 @@ export default function TalentLeadTDWithID() {
     if (loading && !TalentDiscussionFullData) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }

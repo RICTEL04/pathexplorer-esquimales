@@ -220,7 +220,7 @@ export default function TalentDiscussionWithID() {
                     { TalentDiscussion.Estado_TD_People_Lead === "Pendiente" && !allHaveRequest && (
                         <div className="mt-4 flex justify-end">
                             <button
-                                className="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800 transition"
+                                className="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800 transition"
                                 onClick={handleAsignarSolicitudes}
                                 disabled={loading}
                             >

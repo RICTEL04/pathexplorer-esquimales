@@ -83,7 +83,7 @@ export function TalentDiscussionForm({ onClose, onSubmit }: TalentDiscussionForm
             <label className="block text-sm font-medium text-gray-700 mb-1">Discussion</label>
             <textarea
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               value={discussion}
               onChange={e => setDiscussion(e.target.value)}
               placeholder="Describe la discusión de talento..."
@@ -96,7 +96,7 @@ export function TalentDiscussionForm({ onClose, onSubmit }: TalentDiscussionForm
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Nivel</label>
               <select
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 value={nivel}
                 onChange={e => setNivel(e.target.value)}
                 disabled={loading}
@@ -115,7 +115,7 @@ export function TalentDiscussionForm({ onClose, onSubmit }: TalentDiscussionForm
               <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
               <input
                 type="date"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 value={fechaInicio}
                 onChange={e => setFechaInicio(e.target.value)}
               />
@@ -126,7 +126,7 @@ export function TalentDiscussionForm({ onClose, onSubmit }: TalentDiscussionForm
               <label className="block text-sm font-medium text-gray-700 mb-1">Fecha final</label>
               <input
                 type="date"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 value={fechaFinal}
                 onChange={e => setFechaFinal(e.target.value)}
               />
@@ -136,8 +136,8 @@ export function TalentDiscussionForm({ onClose, onSubmit }: TalentDiscussionForm
           {/* Loading and Error States */}
           {loading && (
             <div className="flex items-center justify-center p-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-              <span className="ml-2 text-blue-600">Buscando involucrados...</span>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+              <span className="ml-2 text-purple-600">Buscando involucrados...</span>
             </div>
           )}
 
@@ -170,7 +170,7 @@ export function TalentDiscussionForm({ onClose, onSubmit }: TalentDiscussionForm
                         <div className="flex items-center">
                           <span className="font-medium text-gray-800">{emp.Nombre}</span>
                           {emp.Nombre_Departamento && (
-                            <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+                            <span className="ml-2 text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">
                               {emp.Nombre_Departamento}
                             </span>
                           )}
@@ -231,7 +231,7 @@ export function TalentDiscussionForm({ onClose, onSubmit }: TalentDiscussionForm
             <button
               className={`w-full py-2 px-4 rounded-md font-medium text-white transition-colors ${
                 canSubmit 
-                  ? "bg-blue-600 hover:bg-blue-700 shadow-md"
+                  ? "bg-purple-600 hover:bg-purple-700 shadow-md"
                   : "bg-gray-400 cursor-not-allowed"
               }`}
               onClick={() =>

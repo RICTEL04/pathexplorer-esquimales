@@ -63,8 +63,8 @@ export const ModalDetalleSolicitud: React.FC<ModalDetalleSolicitudProps> = ({
 
           {/* Sección de solicitud TD (solo si existe) */}
           {employee.TD_Employee_Requests && (
-            <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
-              <h3 className="text-lg font-semibold text-blue-800 mb-3">Solicitud Talent Discussion</h3>
+            <div className="bg-blue-50 rounded-lg p-4 border border-purple-100">
+              <h3 className="text-lg font-semibold text-purple-800 mb-3">Solicitud Talent Discussion</h3>
               <div className="space-y-3">
                 <div>
                   <p className="font-semibold text-gray-700">Descripción:</p>
@@ -73,9 +73,9 @@ export const ModalDetalleSolicitud: React.FC<ModalDetalleSolicitudProps> = ({
                 <div className="flex items-center">
                   <p className="font-semibold text-gray-700 mr-2">Estado:</p>
                   <span className={`px-3 py-1 rounded-full text-sm ${
-                    employee.TD_Employee_Requests.Estado === "Aprobado"
+                    employee.TD_Employee_Requests.Estado === "Aprobada"
                       ? "bg-green-100 text-green-800"
-                      : employee.TD_Employee_Requests.Estado === "Rechazado"
+                      : employee.TD_Employee_Requests.Estado === "Rechazada"
                       ? "bg-red-100 text-red-800"
                       : employee.TD_Employee_Requests.Estado === "Pendiente"
                       ? "bg-yellow-100 text-yellow-800"
@@ -99,7 +99,7 @@ export const ModalDetalleSolicitud: React.FC<ModalDetalleSolicitudProps> = ({
         <div className="sticky bottom-0 bg-white p-4 border-t flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
           >
             Cerrar
           </button>

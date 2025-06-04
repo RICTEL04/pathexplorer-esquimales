@@ -194,6 +194,17 @@ export async function getTalentDiscussionCompleta(
 
     const json = data as any;
 
+    console.log("JSON obtenido:", json);
+
+    // Crear un mapa de ID_CapabilityLead a nombre_capabilityLead
+    const capabilityLeadIdToName: Record<string, string> = {};
+    (json.capability_leads ?? []).forEach((cl: any) => {
+      if (cl.capability_lead?.ID_CapabilityLead && cl.empleado?.Nombre) {
+        capabilityLeadIdToName[cl.capability_lead.ID_CapabilityLead] = cl.empleado.Nombre;
+        console.log(`Capability Lead ID: ${cl.capability_lead.ID_CapabilityLead}, Nombre: ${cl.empleado.Nombre}`);
+      }
+    });
+
     // Parsear talent_discussion
     const td = json.talent_discussion;
     const talent_discussion: Talent_Discussion | null = td
@@ -210,19 +221,18 @@ export async function getTalentDiscussionCompleta(
         }
       : null;
 
-    // Parsear employees
+    // Parsear employees y asignar Nombre_CapabilityLead
     const employees: employeeForTalentDiscussion[] = (json.employees ?? []).map((emp: any) => {
       const empleado = emp.empleado || {};
-      const request = emp.request || null;
       const people_lead = emp.people_lead || {};
       const capability_lead = emp.capability_lead || {};
 
       return {
-        ID_Empleado: empleado.ID_Empleado,
-        Nombre: empleado.Nombre,
-        Rol: empleado.Rol,
-        Nivel: empleado.Nivel,
-        ID_Departamento: empleado.ID_Departamento,
+        ID_Empleado: empleado.ID_Empleado ?? "",
+        Nombre: empleado.Nombre ?? "",
+        Rol: empleado.Rol ?? "",
+        Nivel: empleado.Nivel ?? "",
+        ID_Departamento: empleado.ID_Departamento ?? "",
         Nombre_Departamento: empleado.Nombre_Departamento ?? "",
         Cargabilidad: empleado.Cargabilidad ?? "",
         Fecha_Contratacion: empleado.Fecha_Contratacion ? new Date(empleado.Fecha_Contratacion) : undefined,
@@ -230,22 +240,23 @@ export async function getTalentDiscussionCompleta(
         ID_People_Lead: people_lead?.ID ?? "",
         Nombre_People_Lead: people_lead?.Nombre ?? "",
         ID_CapabilityLead: capability_lead?.ID_CapabilityLead ?? "",
-        Nombre_CapabilityLead: capability_lead?.Nombre ?? "",
-        Metas: [], // Si necesitas metas, deberás agregarlas aquí
-        TD_Employee_Requests: request
+        // Aquí asignas el nombre usando el mapa
+        Nombre_CapabilityLead: capabilityLeadIdToName[capability_lead?.ID_CapabilityLead] ?? "No Asignado",
+        Metas: [],
+        TD_Employee_Requests: emp.request
           ? {
-              ID_TD_Employee_Request: request.ID_TD_Employee_Request,
-              ID_TalentDiscussion: request.ID_TalentDiscussion,
-              ID_TD_Employee: request.ID_TD_Employee,
-              Descripcion: request.Descripcion,
-              Estado: request.Estado,
-              Resultado: request.Resultado,
+              ID_TD_Employee_Request: emp.request.ID_TD_Employee_Request,
+              ID_TalentDiscussion: emp.request.ID_TalentDiscussion,
+              ID_TD_Employee: emp.request.ID_TD_Employee,
+              Descripcion: emp.request.Descripcion,
+              Estado: emp.request.Estado,
+              Resultado: emp.request.Resultado,
             }
           : null,
         Reportes: emp.Reportes ? Object.entries(emp.Reportes).map(([name, url]) => ({ name, url })) : [],
       };
     });
-
+    console
     // Parsear people_leads
     const people_leads = (json.people_leads ?? []).map((pl: any) => ({
       td_people_lead: {
@@ -256,7 +267,7 @@ export async function getTalentDiscussionCompleta(
       },
       people_lead: {
         ID_People_Lead: pl.people_lead.ID,
-        nombre_People_Lead: pl.people_lead.Nombre,
+        nombre_People_Lead: pl.empleado.Nombre,
       },
       empleado: pl.empleado
         ? {
@@ -275,7 +286,7 @@ export async function getTalentDiscussionCompleta(
       },
       capability_lead: {
         ID_CapabilityLead: cl.capability_lead.ID_CapabilityLead,
-        nombre_capabilityLead: cl.capability_lead.Nombre,
+        nombre_capabilityLead: cl.empleado.Nombre,
       },
       empleado: cl.empleado
         ? {
@@ -360,4 +371,35 @@ export async function fetchReportsForEmployee(employeeId: string) {
         })
     );
     return reports;
+}
+
+export async function actualizarTD_Employee_Request(
+  setLoading: (loading: boolean) => void,
+  idTD_Employee_Request: string,
+  estado: string,
+  resultado: string
+): Promise<{ success: boolean; message: string; updated_record: any } | null> {
+  setLoading(true);
+  try {
+    const { data, error } = await supabase.rpc("actualizar_td_employee_request", {
+      p_id_td_employee_request: idTD_Employee_Request,
+      p_estado: estado,
+      p_resultado: resultado,
+    });
+
+    if (error || !data || data.length === 0) {
+      return null;
+    }
+
+    // El registro actualizado viene en data[0].updated_record
+    return {
+      success: data[0].success,
+      message: data[0].message,
+      updated_record: data[0].updated_record,
+    };
+  } catch (err) {
+    return null;
+  } finally {
+    setLoading(false);
+  }
 }
