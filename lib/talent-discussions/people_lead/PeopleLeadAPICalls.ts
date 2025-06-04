@@ -180,7 +180,6 @@ export async function crearEmployeeRequestConCapabilityLead(
 }
 
 
-
 export async function actualizarEstadoPeopleLeadYCrearRequests(
   setLoading: (loading: boolean) => void,
   idPeopleLead: string,
@@ -188,7 +187,6 @@ export async function actualizarEstadoPeopleLeadYCrearRequests(
   empleadosIds: string[],
   estado: string = "Pendiente"
 ): Promise<ActualizarEstadoPeopleLeadYCrearRequestsResult | null> {
-  setLoading(true);
   try {
     const { data, error } = await supabase.rpc("actualizar_estado_people_lead_y_crear_requests", {
       p_id_people_lead: idPeopleLead,
@@ -205,6 +203,35 @@ export async function actualizarEstadoPeopleLeadYCrearRequests(
       requests_creados: result.requests_creados,
     };
   } catch (error) {
+    return null;
+  } finally {
+    setLoading(false);
+  }
+}
+
+
+export async function actualizar_estado_td_people_lead(
+  setLoading: (loading: boolean) => void,
+  idTalentDiscussion: string,
+  idPeopleLead: string,
+  nuevoEstado: string = "Asignados"
+): Promise<{ actualizado: boolean; mensaje: string } | null> {
+  try {
+    const { data, error } = await supabase.rpc("actualizar_estado_td_people_lead", {
+      p_id_talent_discussion: idTalentDiscussion,
+      p_id_people_lead: idPeopleLead,
+      p_nuevo_estado: nuevoEstado,
+    });
+
+    if (error || !data || data.length === 0) return null;
+
+    // La función retorna un objeto con actualizado y mensaje
+    return {
+      actualizado: data[0].actualizado,
+      mensaje: data[0].mensaje,
+    };
+  } catch (error) {
+    console.error("Error updating TD People Lead state:", error);
     return null;
   } finally {
     setLoading(false);

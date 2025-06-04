@@ -3,11 +3,17 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { fetchSession } from "@/lib/metas-empleados/apiCallsMetas";
 import { Talent_Discussion, employeeForTalentDiscussion } from "@/lib/talent-discussions/talentDiscussionDefinitions";
-import { getPeopleLeadIdForEmployee, getEmployeesByTalentDiscussionAndPeopleLead, getTalentDiscussionByIdAndPeopleLead, actualizarEstadoPeopleLeadYCrearRequests } from "@/lib/talent-discussions/people_lead/PeopleLeadAPICalls";
+import { getPeopleLeadIdForEmployee, 
+        getEmployeesByTalentDiscussionAndPeopleLead, 
+        getTalentDiscussionByIdAndPeopleLead, 
+        actualizarEstadoPeopleLeadYCrearRequests, 
+        actualizar_estado_td_people_lead } 
+        from "@/lib/talent-discussions/people_lead/PeopleLeadAPICalls";
 import { EmployeeCard } from "@/components/Talent_Discussions/People_Lead/EmployeeForTalentDiscussion";
 import { crearEmployeeRequestConCapabilityLead } from "@/lib/talent-discussions/people_lead/PeopleLeadAPICalls";
 import { ModalFormularioEmpleado } from "@/components/Talent_Discussions/People_Lead/ModalFormularioEmpleado";
 import { ModalDetalleSolicitud } from "@/components/Talent_Discussions/People_Lead/ModalDetalleSolicitud";
+import { useCallback } from "react";
 
 function ConfirmModal({ open, onClose, onConfirm, count }: { open: boolean, onClose: () => void, onConfirm: () => void, count: number }) {
     if (!open) return null;
@@ -44,6 +50,66 @@ export default function TalentDiscussionWithID() {
     const [pendingIds, setPendingIds] = useState<string[]>([]);
     const [pendingEstado, setPendingEstado] = useState<string>("");
 
+
+
+    // --- Lógica de carga centralizada ---
+    const loadAllData = useCallback(async () => {
+        setLoading(true);
+        try {
+            const session2 = await fetchSession(setLoading);
+            setSession(session2);
+
+            if (session2?.user?.id) {
+                const ID_PeopleLead2 = await getPeopleLeadIdForEmployee(setLoading, session2.user.id);
+                if (ID_PeopleLead2) {
+                    setID_PeopleLead(ID_PeopleLead2);
+                    const TalentDiscussionData = await getTalentDiscussionByIdAndPeopleLead(setLoading, id, ID_PeopleLead2);
+                    setTalentDiscussion(TalentDiscussionData);
+                    if (TalentDiscussionData) {
+                        const EmployeesByNivelData = await getEmployeesByTalentDiscussionAndPeopleLead(setLoading, ID_PeopleLead2, TalentDiscussionData.ID_Talent_Discussion);
+                        setEmployeesByNivel(EmployeesByNivelData);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error loading data:", error);
+        } finally {
+            setLoading(false);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        loadAllData();
+    }, [loadAllData]);
+
+
+
+    // --- Nuevo: lógica para mostrar botón de cambio de estado ---
+    const allHaveRequest = EmployeesByNivel.length > 0 && EmployeesByNivel.every(
+        emp => emp.TD_Employee_Requests && emp.TD_Employee_Requests.Estado !== undefined && emp.TD_Employee_Requests.Estado !== null
+    );
+    const algunoConSolicitud = EmployeesByNivel.some(
+        emp => emp.TD_Employee_Requests && emp.TD_Employee_Requests.Estado !== "No Asignado"
+    );
+    const todosNoAsignados = EmployeesByNivel.length > 0 && EmployeesByNivel.every(
+        emp => emp.TD_Employee_Requests && emp.TD_Employee_Requests.Estado === "No Asignado"
+    );
+    const puedeCambiarEstadoPeopleLead = TalentDiscussion?.Estado_TD_People_Lead === "Pendiente" && allHaveRequest;
+
+    // Handler para cambiar estado del people lead
+    const handleCambiarEstadoPeopleLead = async (nuevoEstado: "Asignados" | "No Asignados") => {
+        if (!TalentDiscussion || !ID_PeopleLead) return;
+        setLoading(true);
+        await actualizar_estado_td_people_lead(
+            setLoading,
+            TalentDiscussion.ID_Talent_Discussion,
+            ID_PeopleLead,
+            nuevoEstado
+        );
+        await loadAllData();
+        setLoading(false);
+    };
+
     const handleOpenDetalleModal = (employee: employeeForTalentDiscussion) => {
         setDetalleEmployee(employee);
         setDetalleModalOpen(true);
@@ -54,8 +120,10 @@ export default function TalentDiscussionWithID() {
         setModalOpen(true);
     };
 
+    // --- Handlers que usan loading global ---
     const handleSubmitSolicitud = async (descripcion: string) => {
         if (!selectedEmployee || !TalentDiscussion) return;
+        setLoading(true);
         await crearEmployeeRequestConCapabilityLead(
             setLoading,
             selectedEmployee.ID_Empleado,
@@ -67,40 +135,9 @@ export default function TalentDiscussionWithID() {
             const EmployeesByNivelData = await getEmployeesByTalentDiscussionAndPeopleLead(setLoading, ID_PeopleLead, TalentDiscussion.ID_Talent_Discussion);
             setEmployeesByNivel(EmployeesByNivelData);
         }
+        await loadAllData(); // Refrescar datos después de la solicitud
+        setLoading(false);
     };
-
-    useEffect(() => {
-        const loadData = async (): Promise<void> => {
-            try {
-                setLoading(true);
-                const session2 = await fetchSession(setLoading);
-                setSession(session2);
-
-                if (session2?.user?.id) {
-                    const ID_PeopleLead2 = await getPeopleLeadIdForEmployee(setLoading, session2.user.id);
-                    if (ID_PeopleLead2) {
-                        setID_PeopleLead(ID_PeopleLead2);
-                        const TalentDiscussionData = await getTalentDiscussionByIdAndPeopleLead(setLoading, id, ID_PeopleLead2);
-                        setTalentDiscussion(TalentDiscussionData);
-                        if (TalentDiscussionData) {
-                            const EmployeesByNivelData = await getEmployeesByTalentDiscussionAndPeopleLead(setLoading, ID_PeopleLead2, TalentDiscussionData.ID_Talent_Discussion);
-                            setEmployeesByNivel(EmployeesByNivelData);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("Error loading data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadData();
-    }, []);
-
-    if (!id) {
-        return <div>ID no encontrado en la URL</div>;
-    }
 
     const employeesSinSolicitud = EmployeesByNivel.filter(
         emp => !emp.TD_Employee_Requests || 
@@ -140,6 +177,7 @@ export default function TalentDiscussionWithID() {
 
     const ejecutarAsignacion = async (estado: string, ids: string[]) => {
         if (!ID_PeopleLead || !TalentDiscussion) return;
+        setLoading(true);
         await actualizarEstadoPeopleLeadYCrearRequests(
             setLoading,
             ID_PeopleLead,
@@ -151,7 +189,13 @@ export default function TalentDiscussionWithID() {
         const EmployeesByNivelData = await getEmployeesByTalentDiscussionAndPeopleLead(setLoading, ID_PeopleLead, TalentDiscussion.ID_Talent_Discussion);
         setEmployeesByNivel(EmployeesByNivelData);
         setConfirmOpen(false);
+        await loadAllData(); // Refrescar datos después de la asignación
+        setLoading(false);
     };
+
+    if (!id) {
+        return <div>ID no encontrado en la URL</div>;
+    }
 
     return (
         <div>
@@ -172,14 +216,28 @@ export default function TalentDiscussionWithID() {
                         </div>
                     </div>
 
-                    { TalentDiscussion.Estado_TD_People_Lead === "Pendiente"&& (
+                    {/* Botón de asignación masiva solo si NO todos tienen request */}
+                    { TalentDiscussion.Estado_TD_People_Lead === "Pendiente" && !allHaveRequest && (
                         <div className="mt-4 flex justify-end">
                             <button
                                 className="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800 transition"
                                 onClick={handleAsignarSolicitudes}
                                 disabled={loading}
                             >
-                                Asignar solicitudes masivamente
+                                Marcar el resto sin asignar
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Botón de cambiar estado solo si todos tienen request */}
+                    { puedeCambiarEstadoPeopleLead && (
+                        <div className="mt-4 flex justify-end gap-2">
+                            <button
+                                className="px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800 transition"
+                                disabled={loading || !algunoConSolicitud}
+                                onClick={() => handleCambiarEstadoPeopleLead("Asignados")}
+                            >
+                                Cambiar estado a Asignados
                             </button>
                         </div>
                     )}

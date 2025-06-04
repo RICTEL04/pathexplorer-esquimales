@@ -13,7 +13,7 @@ export default function TalentDiscussionsPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [ID_PeopleLead, setID_PeopleLead] = useState<string | null>(null);
   const [TalentDiscussions, setTalentDiscussions] = useState<Talent_Discussion[]>([]);
-  
+
   useEffect(() => {
     const loadData = async (): Promise<void> => {
       try {
@@ -91,7 +91,13 @@ export default function TalentDiscussionsPage() {
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-lg text-blue-700">{td.Discussion}</span>
-                    <span className={`px-2 py-1 rounded text-xs font-semibold ${td.Estado === "Pendiente" ? "bg-yellow-100 text-yellow-800" : "bg-green-100 text-green-800"}`}>
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                        td.Estado === "Pendiente" ? "bg-yellow-100 text-yellow-800" : 
+                        td.Estado === "Finalizada" ? "bg-green-100 text-green-800" : 
+                        td.Estado === "Cancelada" ? "bg-red-100 text-red-800" : 
+                        "bg-gray-300 text-gray-800"
+                        
+                        }`}>
                       {td.Estado}
                     </span>
                   </div>

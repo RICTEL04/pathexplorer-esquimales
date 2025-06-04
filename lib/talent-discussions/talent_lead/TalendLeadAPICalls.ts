@@ -242,6 +242,7 @@ export async function getTalentDiscussionCompleta(
               Resultado: request.Resultado,
             }
           : null,
+        Reportes: emp.Reportes ? Object.entries(emp.Reportes).map(([name, url]) => ({ name, url })) : [],
       };
     });
 
@@ -342,4 +343,21 @@ export async function cambiar_estado_talent_discussion(
   } finally {
     setLoading(false);
   }
+}
+
+export async function fetchReportsForEmployee(employeeId: string) {
+    const { data, error } = await supabase.storage
+        .from('reportes')
+        .list(`${employeeId}/`, { limit: 100 });
+    if (error) return [];
+
+    const reports = await Promise.all(
+        (data ?? []).map(async (file) => {
+            const { data: urlData } = await supabase.storage
+                .from('reportes')
+                .getPublicUrl(`${employeeId}/${file.name}`);
+            return { name: file.name, url: urlData.publicUrl };
+        })
+    );
+    return reports;
 }

@@ -30,6 +30,7 @@ export interface TD_Employee {
     ID_TD_Employee: string;
     ID_TalentDiscussion: string;
     ID_Empleado : string;
+    TD_Employee_Request: TD_Employee_Request | null;
 }
 
 export interface TD_PeopleLead {
@@ -71,7 +72,7 @@ export interface employeeForTalentDiscussion {
     Nombre_CapabilityLead?: string; // Opcional, si necesitas el nombre del Capability Lead
     Metas: Meta[];
     TD_Employee_Requests: TD_Employee_Request | null; // Opcional, si necesitas las solicitudes de TD_Employee
-     
+    Reportes: { [key: string]: string[] };
 }
 
 export interface capabilityLeadSmallData 

@@ -74,12 +74,12 @@ export const ModalDetalleSolicitud: React.FC<ModalDetalleSolicitudProps> = ({
                   <p className="font-semibold text-gray-700 mr-2">Estado:</p>
                   <span className={`px-3 py-1 rounded-full text-sm ${
                     employee.TD_Employee_Requests.Estado === "Aprobado"
-                      ? "bg-green-800 text-green-100"
+                      ? "bg-green-100 text-green-800"
                       : employee.TD_Employee_Requests.Estado === "Rechazado"
-                      ? "bg-red-800 text-red-100"
+                      ? "bg-red-100 text-red-800"
                       : employee.TD_Employee_Requests.Estado === "Pendiente"
-                      ? "bg-yellow-800 text-yellow-100"
-                      : "bg-gray-500 text-gray-100"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-gray-300 text-gray-900"
                   }`}>
                     {employee.TD_Employee_Requests.Estado}
                   </span>
