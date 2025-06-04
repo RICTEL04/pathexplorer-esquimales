@@ -108,9 +108,9 @@ BEGIN
                 ) VALUES (
                     p_id_talent_discussion,
                     v_td_employee_id,
-                    'Decidio no participar'
+                    'No Participa',
                     'No Asignado', -- Estado fijo como requeriste
-                    'No participa' -- Mensaje por defecto
+                    'No participa(establecido por people lead)' -- Mensaje por defecto
                 );
                 
                 v_requests_creados := v_requests_creados + 1;
@@ -132,6 +132,103 @@ $$;
 ALTER FUNCTION "public"."actualizar_estado_people_lead_y_crear_requests"("p_id_people_lead" "uuid", "p_id_talent_discussion" "uuid", "p_empleados_ids" "uuid"[], "p_estado" "text") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."actualizar_estado_td_people_lead"("p_id_talent_discussion" "uuid", "p_id_people_lead" "uuid", "p_nuevo_estado" "text") RETURNS TABLE("actualizado" boolean, "mensaje" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+  v_registros_afectados integer;
+BEGIN
+  -- Validar que el nuevo estado no sea nulo
+  IF p_nuevo_estado IS NULL THEN
+    RETURN QUERY SELECT false, 'Error: El estado no puede ser nulo';
+    RETURN;
+  END IF;
+  
+  -- Actualizar el estado en TD_People_Lead
+  UPDATE "TD_People_Lead"
+  SET "Estado" = p_nuevo_estado
+  WHERE "ID_TalentDiscussion" = p_id_talent_discussion
+    AND "ID_People_Lead" = p_id_people_lead;
+  
+  -- Obtener número de registros afectados
+  GET DIAGNOSTICS v_registros_afectados = ROW_COUNT;
+  
+  -- Retornar resultados
+  IF v_registros_afectados > 0 THEN
+    RETURN QUERY SELECT true, 'Estado actualizado correctamente a ' || p_nuevo_estado;
+  ELSE
+    RETURN QUERY SELECT false, 'No se encontró el registro con ID_TalentDiscussion=' || p_id_talent_discussion || 
+                              ' e ID_People_Lead=' || p_id_people_lead;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."actualizar_estado_td_people_lead"("p_id_talent_discussion" "uuid", "p_id_people_lead" "uuid", "p_nuevo_estado" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."actualizar_td_employee_request"("p_id_td_employee_request" "uuid", "p_estado" character varying, "p_resultado" "text") RETURNS TABLE("success" boolean, "message" "text", "updated_record" "record")
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    v_record_exists BOOLEAN := FALSE;
+    v_updated_record RECORD;
+BEGIN
+    -- Verificar si el registro existe
+    SELECT EXISTS(
+        SELECT 1 
+        FROM public.TD_Employee_Request 
+        WHERE ID_TD_Employee_Request = p_id_td_employee_request
+    ) INTO v_record_exists;
+    
+    -- Si el registro no existe, retornar error
+    IF NOT v_record_exists THEN
+        RETURN QUERY SELECT 
+            FALSE as success,
+            'No se encontró el TD_Employee_Request con el ID proporcionado' as message,
+            NULL::RECORD as updated_record;
+        RETURN;
+    END IF;
+    
+    -- Actualizar el registro
+    UPDATE public.TD_Employee_Request 
+    SET 
+        Estado = p_estado,
+        Resultado = p_resultado
+    WHERE ID_TD_Employee_Request = p_id_td_employee_request;
+    
+    -- Obtener el registro actualizado para confirmar los cambios
+    SELECT 
+        ID_TD_Employee_Request,
+        ID_TalentDiscussion,
+        ID_TD_Employee,
+        Descripcion,
+        Estado,
+        Resultado
+    INTO v_updated_record
+    FROM public.TD_Employee_Request 
+    WHERE ID_TD_Employee_Request = p_id_td_employee_request;
+    
+    -- Retornar éxito con el registro actualizado
+    RETURN QUERY SELECT 
+        TRUE as success,
+        'TD_Employee_Request actualizado correctamente' as message,
+        v_updated_record as updated_record;
+    
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Manejar cualquier error inesperado
+        RETURN QUERY SELECT 
+            FALSE as success,
+            'Error al actualizar: ' || SQLERRM as message,
+            NULL::RECORD as updated_record;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."actualizar_td_employee_request"("p_id_td_employee_request" "uuid", "p_estado" character varying, "p_resultado" "text") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."aumentar_cargabilidad"("id" "uuid", "incremento" integer) RETURNS "void"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
@@ -147,7 +244,7 @@ $$;
 ALTER FUNCTION "public"."aumentar_cargabilidad"("id" "uuid", "incremento" integer) OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."cambiar_estado_talent_discussion"("p_talent_discussion_id" "uuid", "p_nuevo_estado" "text") RETURNS "void"
+CREATE OR REPLACE FUNCTION "public"."cambiar_estado_talent_discussion"("p_talent_discussion_id" "uuid", "p_nuevo_estado" "text") RETURNS "text"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -156,24 +253,20 @@ BEGIN
     RAISE EXCEPTION 'El nuevo estado no puede ser nulo';
   END IF;
   
-  -- Validar que la Talent Discussion exista
+  -- Validar que la Talent Discussion exista (usando el nombre correcto de la tabla)
   IF NOT EXISTS (
-    SELECT 1 FROM Talent_Discussion 
-    WHERE ID_TalentDiscussion = p_talent_discussion_id
+    SELECT 1 FROM "Talent_Discussion" 
+    WHERE "ID_TalentDiscussion" = p_talent_discussion_id
   ) THEN
     RAISE EXCEPTION 'No se encontró la Talent Discussion con ID %', p_talent_discussion_id;
   END IF;
   
   -- Actualizar el estado de la Talent Discussion
-  UPDATE Talent_Discussion
-  SET Estado = p_nuevo_estado
-  WHERE ID_TalentDiscussion = p_talent_discussion_id;
+  UPDATE "Talent_Discussion"
+  SET "Estado" = p_nuevo_estado
+  WHERE "ID_TalentDiscussion" = p_talent_discussion_id;
   
-  -- Opcional: Registrar el cambio (puedes crear una tabla de historial si lo necesitas)
-  -- INSERT INTO Talent_Discussion_Historial (ID_TalentDiscussion, Estado_Anterior, Estado_Nuevo, Fecha_Cambio)
-  -- SELECT p_talent_discussion_id, Estado, p_nuevo_estado, NOW()
-  -- FROM Talent_Discussion
-  -- WHERE ID_TalentDiscussion = p_talent_discussion_id;
+  RETURN 'Estado actualizado correctamente a ' || p_nuevo_estado;
 END;
 $$;
 
@@ -1073,6 +1166,106 @@ $$;
 ALTER FUNCTION "public"."get_people_lead_id_for_employee"("p_employee_id" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_proyectos_by_delivery_lead"("emp_id" "uuid") RETURNS TABLE("id_proyecto" "uuid", "nombre_proyecto" "text", "descripcion" "text", "status" "text", "id_deliverylead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isreviewed" boolean, "cargabilidad_num" smallint, "cliente" "text", "created_at" timestamp with time zone, "imagenurl" "text", "habilidades" "json")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    p."ID_Proyecto",
+    p."Nombre" AS nombre_proyecto,
+    p."Descripcion",
+    p."Status",
+    p."ID_DeliveryLead",
+    p."fecha_inicio",
+    p."fecha_fin",
+    p."isReviewed",
+    p."cargabilidad_num",
+    p."Cliente",
+    p."created_at",
+    p."ImagenUrl",
+    COALESCE(
+      json_agg(
+        DISTINCT jsonb_build_object(
+          'ID_Habilidad', h."ID_Habilidad",
+          'Nombre', h."Nombre",
+          'nivel', ph."nivel"
+        )
+      ) FILTER (WHERE h."ID_Habilidad" IS NOT NULL),
+      '[]'
+    ) AS habilidades
+  FROM 
+    "public"."Proyectos" p
+  LEFT JOIN 
+    "public"."Proyecto_Habilidades" ph ON p."ID_Proyecto" = ph."ID_Proyecto"
+  LEFT JOIN 
+    "public"."Habilidades" h ON ph."ID_Habilidad" = h."ID_Habilidad"
+  WHERE 
+    p."ID_DeliveryLead" = emp_id
+  GROUP BY 
+    p."ID_Proyecto", p."Nombre", p."Descripcion", p."Status",
+    p."ID_DeliveryLead", p."fecha_inicio", p."fecha_fin", p."isReviewed",
+    p."cargabilidad_num", p."Cliente", p."created_at", p."ImagenUrl"
+  ORDER BY 
+    p."created_at" DESC;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_proyectos_by_delivery_lead"("emp_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_proyectos_con_habilidades"() RETURNS "jsonb"
+    LANGUAGE "plpgsql"
+    AS $$
+declare
+  result jsonb;
+begin
+  select jsonb_agg(proyecto) into result
+  from (
+    select 
+      p."ID_Proyecto",
+      p."Nombre" AS nombre_proyecto,
+      p."Descripcion",
+      p."Status",
+      p."ID_DeliveryLead",
+      p."fecha_inicio",
+      p."fecha_fin",
+      p."isReviewed",
+      p."cargabilidad_num",
+      p."Cliente",
+      p."created_at",
+      p."ImagenUrl",
+      coalesce(
+        jsonb_agg(
+          distinct jsonb_build_object(
+            'ID_Habilidad', h."ID_Habilidad",
+            'Nombre', h."Nombre",
+            'nivel', ph."nivel"
+          )
+        ) filter (where h."ID_Habilidad" is not null),
+        '[]'
+      ) as habilidades
+    from 
+      public."Proyectos" p
+    left join 
+      public."Proyecto_Habilidades" ph on p."ID_Proyecto" = ph."ID_Proyecto"
+    left join 
+      public."Habilidades" h on ph."ID_Habilidad" = h."ID_Habilidad"
+    group by 
+      p."ID_Proyecto"
+    order by 
+      p."created_at" desc
+  ) proyecto;
+
+  return result;
+end;
+$$;
+
+
+ALTER FUNCTION "public"."get_proyectos_con_habilidades"() OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_talent_discussion_by_id_and_people_lead"("p_id_talent_discussion" "uuid", "p_id_people_lead" "uuid") RETURNS TABLE("id_talent_discussion" "uuid", "discussion" "text", "id_talent_lead" "uuid", "nombre_talent_lead" "text", "nivel" "text", "fecha_inicio" "date", "fecha_final" "date", "estado" "text", "estado_td_people_lead" "text")
     LANGUAGE "plpgsql"
     AS $$
@@ -1652,6 +1845,34 @@ $$;
 
 
 ALTER FUNCTION "public"."update_is_reviewed"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."verificar_cargabilidad_empleados"("id_proyecto" "uuid", "cargabilidad_nueva" integer, "cargabilidad_actual_proyecto" integer) RETURNS TABLE("id_empleado" "uuid", "nombre" "text", "cargabilidad_actual" integer, "cargabilidad_calculada" integer)
+    LANGUAGE "plpgsql"
+    AS $$
+begin
+  return query
+  select  
+    e."ID_Empleado" as "ID_Empleado",
+    e."Nombre"::text as "Nombre",
+    e."Cargabilidad"::integer as "Cargabilidad_actual", -- CAST AQUÍ
+    (e."Cargabilidad"::integer + (cargabilidad_nueva - cargabilidad_actual_proyecto)) as "Cargabilidad_calculada"
+  from 
+    "public"."Empleado" e
+  join 
+    "public"."Puesto_persona" pp on pp."ID_Empleado" = e."ID_Empleado"
+  join 
+    "public"."Puesto_proyecto" pu on pu."id" = pp."ID_Puesto"
+  join 
+    "public"."Proyectos" p on p."ID_Proyecto" = pu."ID_Proyecto"
+  where 
+    p."ID_Proyecto" = id_proyecto
+    and (e."Cargabilidad"::integer + (cargabilidad_nueva - cargabilidad_actual_proyecto)) > 100;
+end;
+$$;
+
+
+ALTER FUNCTION "public"."verificar_cargabilidad_empleados"("id_proyecto" "uuid", "cargabilidad_nueva" integer, "cargabilidad_actual_proyecto" integer) OWNER TO "postgres";
 
 SET default_tablespace = '';
 
