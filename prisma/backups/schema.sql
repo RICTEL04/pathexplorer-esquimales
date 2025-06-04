@@ -1652,22 +1652,6 @@ COMMENT ON COLUMN "public"."Empleado_Habilidades"."Estado" IS 'Estado de la habi
 
 
 
-CREATE TABLE IF NOT EXISTS "public"."Empleado_Proyectos" (
-    "ID_Empleado" "uuid" NOT NULL,
-    "ID_Proyecto" "uuid" NOT NULL,
-    "isApproved" boolean DEFAULT false,
-    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "isReviewed" boolean DEFAULT false NOT NULL
-);
-
-
-ALTER TABLE "public"."Empleado_Proyectos" OWNER TO "postgres";
-
-
-COMMENT ON COLUMN "public"."Empleado_Proyectos"."isApproved" IS 'determines wether an employee is approved to a project or still on the postulation process';
-
-
-
 CREATE TABLE IF NOT EXISTS "public"."Evaluacion_Proyecto" (
     "ID_Evaluacion" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_DeliveryLead" "uuid" DEFAULT "gen_random_uuid"(),
@@ -1854,21 +1838,6 @@ CREATE TABLE IF NOT EXISTS "public"."Revisor_Meta" (
 ALTER TABLE "public"."Revisor_Meta" OWNER TO "postgres";
 
 
-CREATE TABLE IF NOT EXISTS "public"."Roles" (
-    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "role_name" "text" DEFAULT 'name'::"text" NOT NULL,
-    "Proyecto_id" "uuid" NOT NULL,
-    "cantidad" smallint
-);
-
-
-ALTER TABLE "public"."Roles" OWNER TO "postgres";
-
-
-COMMENT ON TABLE "public"."Roles" IS 'roles para proyectos';
-
-
-
 CREATE TABLE IF NOT EXISTS "public"."TD_Capability_Lead" (
     "ID_TD_Capability_Lead" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_TalentDiscussion" "uuid" DEFAULT "gen_random_uuid"(),
@@ -2044,11 +2013,6 @@ ALTER TABLE ONLY "public"."Empleado_Habilidades"
 
 
 
-ALTER TABLE ONLY "public"."Empleado_Proyectos"
-    ADD CONSTRAINT "Empleado_Proyectos_pkey" PRIMARY KEY ("id");
-
-
-
 ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_pkey" PRIMARY KEY ("ID_Empleado");
 
@@ -2134,11 +2098,6 @@ ALTER TABLE ONLY "public"."Evaluacion_Proyecto"
 
 
 
-ALTER TABLE ONLY "public"."Roles"
-    ADD CONSTRAINT "Roles_pkey" PRIMARY KEY ("id");
-
-
-
 ALTER TABLE ONLY "public"."TD_Capability_Lead"
     ADD CONSTRAINT "TD_Capability_Lead_pkey" PRIMARY KEY ("ID_TD_Capability_Lead");
 
@@ -2174,16 +2133,7 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 
 
 
-ALTER TABLE ONLY "public"."Empleado_Proyectos"
-    ADD CONSTRAINT "unique_empleado_proyecto" UNIQUE ("ID_Empleado", "ID_Proyecto");
-
-
-
 CREATE OR REPLACE TRIGGER "after_insert_evaluacion" AFTER INSERT ON "public"."Evaluacion_Proyecto" FOR EACH ROW EXECUTE FUNCTION "public"."update_is_reviewed"();
-
-
-
-CREATE OR REPLACE TRIGGER "update_proyecto_review_status" AFTER UPDATE ON "public"."Empleado_Proyectos" FOR EACH ROW EXECUTE FUNCTION "public"."check_and_update_reviewed_trigger"();
 
 
 
@@ -2239,16 +2189,6 @@ ALTER TABLE ONLY "public"."Empleado"
 
 ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_ID_PeopleLead_fkey" FOREIGN KEY ("ID_PeopleLead") REFERENCES "public"."People_lead"("ID");
-
-
-
-ALTER TABLE ONLY "public"."Empleado_Proyectos"
-    ADD CONSTRAINT "Empleado_Proyectos_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."Empleado_Proyectos"
-    ADD CONSTRAINT "Empleado_Proyectos_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto") ON DELETE CASCADE;
 
 
 
@@ -2364,11 +2304,6 @@ ALTER TABLE ONLY "public"."Evaluacion_Proyecto"
 
 ALTER TABLE ONLY "public"."Evaluacion_Proyecto"
     ADD CONSTRAINT "Revisor_Proyecto_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
-
-
-
-ALTER TABLE ONLY "public"."Roles"
-    ADD CONSTRAINT "Roles_Proyecto_id_fkey" FOREIGN KEY ("Proyecto_id") REFERENCES "public"."Proyectos"("ID_Proyecto") ON DELETE CASCADE;
 
 
 
@@ -2693,11 +2628,6 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "a
 
 
 
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Proyectos" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Proyectos" TO "anon";
-
-
-
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "anon";
 
@@ -2765,11 +2695,6 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Puesto_proyecto" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Revisor_Meta" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Revisor_Meta" TO "anon";
-
-
-
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Roles" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Roles" TO "anon";
 
 
 
