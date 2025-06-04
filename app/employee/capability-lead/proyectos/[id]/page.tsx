@@ -241,6 +241,14 @@ export default function ProyectoDetalle() {
             <Tag color="blue" icon={<CalendarOutlined />} className="font-medium">
               {proyecto.fecha_inicio} - {proyecto.fecha_fin}
             </Tag>
+            {/* Botón de editar */}
+            <button
+              className="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all text-sm"
+              onClick={() => router.push(`/employee/capability-lead/proyectos/${proyecto.ID_Proyecto}/edit`)}
+              type="button"
+            >
+              Editar proyecto
+            </button>
           </div>
           <Title level={2} className="mb-0 text-gray-800 truncate">
             {proyecto.Nombre}
@@ -261,7 +269,6 @@ export default function ProyectoDetalle() {
           </div>
         </div>
       </div>
-
       {/* Tarjeta principal */}
       <Card className="mb-6 shadow-sm">
         <Title level={4} className="mb-4 text-gray-700">Descripción del Proyecto</Title>
@@ -482,7 +489,7 @@ export default function ProyectoDetalle() {
                       }
                     }}
                     fetchAvatarURL={fetchAvatarURL}
-                    onRemove={(removeIdx) => {
+                    onRemove={async (removeIdx) => {
                       // Solo pide confirmación si el slot tenía un empleado originalmente
                       if (asignadosOriginales[removeIdx]) {
                         setConfirmModal({ visible: true, index: removeIdx, newEmpleado: null, action: "remove" });
@@ -492,6 +499,8 @@ export default function ProyectoDetalle() {
                           nuevo[removeIdx] = null;
                           return nuevo;
                         });
+                        // Refresca empleados disponibles también aquí
+                        await fetchEmpleadosDisponibles(proyecto?.cargabilidad_num || 0);
                       }
                     }}
                   />
@@ -637,6 +646,8 @@ export default function ProyectoDetalle() {
                 nuevo[confirmModal.index!] = null;
                 return nuevo;
               });
+              // <--- Agrega esta línea para refrescar empleados disponibles
+              await fetchEmpleadosDisponibles(proyecto?.cargabilidad_num || 0);
             }
             if (confirmModal.action === "replace" && confirmModal.newEmpleado) {
               setAsignados(prev => {
