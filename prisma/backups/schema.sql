@@ -147,6 +147,40 @@ $$;
 ALTER FUNCTION "public"."aumentar_cargabilidad"("id" "uuid", "incremento" integer) OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."cambiar_estado_talent_discussion"("p_talent_discussion_id" "uuid", "p_nuevo_estado" "text") RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  -- Validar que el nuevo estado no sea nulo
+  IF p_nuevo_estado IS NULL THEN
+    RAISE EXCEPTION 'El nuevo estado no puede ser nulo';
+  END IF;
+  
+  -- Validar que la Talent Discussion exista
+  IF NOT EXISTS (
+    SELECT 1 FROM Talent_Discussion 
+    WHERE ID_TalentDiscussion = p_talent_discussion_id
+  ) THEN
+    RAISE EXCEPTION 'No se encontró la Talent Discussion con ID %', p_talent_discussion_id;
+  END IF;
+  
+  -- Actualizar el estado de la Talent Discussion
+  UPDATE Talent_Discussion
+  SET Estado = p_nuevo_estado
+  WHERE ID_TalentDiscussion = p_talent_discussion_id;
+  
+  -- Opcional: Registrar el cambio (puedes crear una tabla de historial si lo necesitas)
+  -- INSERT INTO Talent_Discussion_Historial (ID_TalentDiscussion, Estado_Anterior, Estado_Nuevo, Fecha_Cambio)
+  -- SELECT p_talent_discussion_id, Estado, p_nuevo_estado, NOW()
+  -- FROM Talent_Discussion
+  -- WHERE ID_TalentDiscussion = p_talent_discussion_id;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."cambiar_estado_talent_discussion"("p_talent_discussion_id" "uuid", "p_nuevo_estado" "text") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."check_and_update_reviewed_trigger"() RETURNS "trigger"
     LANGUAGE "plpgsql"
     AS $$
@@ -445,6 +479,117 @@ $$;
 
 
 ALTER FUNCTION "public"."delete_empleado"("p_id_empleado" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."force_talent_discussion_participants"("p_talent_discussion_id" "uuid", "p_people_lead_ids_no_asignados" "uuid"[] DEFAULT NULL::"uuid"[], "p_people_lead_ids_asignados" "uuid"[] DEFAULT NULL::"uuid"[], "p_employee_ids" "uuid"[] DEFAULT NULL::"uuid"[]) RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $_$
+DECLARE
+  invalid_uuid_found boolean := false;
+  array_len integer;
+BEGIN
+  -- Validar formatos UUID primero
+  -- Verificar People Leads no asignados
+  IF p_people_lead_ids_no_asignados IS NOT NULL THEN
+    array_len := array_length(p_people_lead_ids_no_asignados, 1);
+    IF array_len IS NOT NULL THEN
+      FOR i IN 1..array_len LOOP
+        IF p_people_lead_ids_no_asignados[i] IS NOT NULL AND p_people_lead_ids_no_asignados[i]::text !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' THEN
+          invalid_uuid_found := true;
+          RAISE NOTICE 'UUID inválido encontrado en p_people_lead_ids_no_asignados: %', p_people_lead_ids_no_asignados[i];
+        END IF;
+      END LOOP;
+    END IF;
+  END IF;
+  
+  -- Verificar People Leads asignados
+  IF p_people_lead_ids_asignados IS NOT NULL THEN
+    array_len := array_length(p_people_lead_ids_asignados, 1);
+    IF array_len IS NOT NULL THEN
+      FOR i IN 1..array_len LOOP
+        IF p_people_lead_ids_asignados[i] IS NOT NULL AND p_people_lead_ids_asignados[i]::text !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' THEN
+          invalid_uuid_found := true;
+          RAISE NOTICE 'UUID inválido encontrado en p_people_lead_ids_asignados: %', p_people_lead_ids_asignados[i];
+        END IF;
+      END LOOP;
+    END IF;
+  END IF;
+  
+  -- Verificar Employee IDs
+  IF p_employee_ids IS NOT NULL THEN
+    array_len := array_length(p_employee_ids, 1);
+    IF array_len IS NOT NULL THEN
+      FOR i IN 1..array_len LOOP
+        IF p_employee_ids[i] IS NOT NULL AND p_employee_ids[i]::text !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' THEN
+          invalid_uuid_found := true;
+          RAISE NOTICE 'UUID inválido encontrado en p_employee_ids: %', p_employee_ids[i];
+        END IF;
+      END LOOP;
+    END IF;
+  END IF;
+  
+  IF invalid_uuid_found THEN
+    RAISE EXCEPTION 'Se encontraron UUIDs con formato inválido. Verifica los NOTICES anteriores para más detalles.';
+  END IF;
+  
+  -- Actualizar People Leads a estado "No Asignados"
+  IF p_people_lead_ids_no_asignados IS NOT NULL AND array_length(p_people_lead_ids_no_asignados, 1) > 0 THEN
+    UPDATE "TD_People_Lead"
+    SET "Estado" = 'No Asignados'
+    WHERE "ID_TalentDiscussion" = p_talent_discussion_id
+      AND "ID_People_Lead" = ANY(p_people_lead_ids_no_asignados)
+      AND "Estado" = 'Pendiente';
+  END IF;
+  
+  -- Actualizar People Leads a estado "Asignados"
+  IF p_people_lead_ids_asignados IS NOT NULL AND array_length(p_people_lead_ids_asignados, 1) > 0 THEN
+    UPDATE "TD_People_Lead"
+    SET "Estado" = 'Asignados'
+    WHERE "ID_TalentDiscussion" = p_talent_discussion_id
+      AND "ID_People_Lead" = ANY(p_people_lead_ids_asignados)
+      AND "Estado" = 'Pendiente';
+  END IF;
+  
+  -- Procesar Employee IDs
+  IF p_employee_ids IS NOT NULL AND array_length(p_employee_ids, 1) > 0 THEN
+    -- Insertar registros en TD_Employee si no existen
+    INSERT INTO "TD_Employee" ("ID_TalentDiscussion", "ID_Empleado")
+    SELECT p_talent_discussion_id, emp_id
+    FROM unnest(p_employee_ids) AS emp_id
+    WHERE NOT EXISTS (
+      SELECT 1 FROM "TD_Employee" 
+      WHERE "ID_TalentDiscussion" = p_talent_discussion_id 
+        AND "ID_Empleado" = emp_id
+    );
+    
+    -- Crear TD_Employee_Request
+    INSERT INTO "TD_Employee_Request" (
+      "ID_TalentDiscussion",
+      "ID_TD_Employee",
+      "Descripcion",
+      "Estado",
+      "Resultado"
+    )
+    SELECT 
+      p_talent_discussion_id,
+      tde."ID_TD_Employee",
+      'Omitida por talent lead',
+      'No Asignado',
+      'Omitida por talent lead'
+    FROM "TD_Employee" tde
+    WHERE tde."ID_TalentDiscussion" = p_talent_discussion_id
+      AND tde."ID_Empleado" = ANY(p_employee_ids)
+      AND NOT EXISTS (
+        SELECT 1 FROM "TD_Employee_Request" tder
+        WHERE tder."ID_TalentDiscussion" = p_talent_discussion_id
+          AND tder."ID_TD_Employee" = tde."ID_TD_Employee"
+      );
+  END IF;
+END;
+$_$;
+
+
+ALTER FUNCTION "public"."force_talent_discussion_participants"("p_talent_discussion_id" "uuid", "p_people_lead_ids_no_asignados" "uuid"[], "p_people_lead_ids_asignados" "uuid"[], "p_employee_ids" "uuid"[]) OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."get_available_delivery_leads"() RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "id_deliverylead" "uuid")
