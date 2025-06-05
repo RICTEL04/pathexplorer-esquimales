@@ -27,9 +27,10 @@ export default function EmpleadosPage() {
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedEmpleado, setSelectedEmpleado] = useState<Empleado | null>(null);
-  const [expandedCertificado, setExpandedCertificado] = useState<string | null>(null); 
+  const [expandedCertificado, setExpandedCertificado] = useState<string | null>(null);
   const [descripcion, setDescripcion] = useState<string>("");
   const [verificacion, setVerificacion] = useState<boolean>(false);
+  const [denyVerification, setDenyVerification] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchEmpleados = async () => {
@@ -46,10 +47,10 @@ export default function EmpleadosPage() {
 
   const handleCertificadoExpand = (cert: Certificado) => {
     if (expandedCertificado === cert.ID_Certificado) {
-      
+
       setExpandedCertificado(null);
     } else {
-      
+
       setExpandedCertificado(cert.ID_Certificado);
       setDescripcion(cert.Descripcion);
       setVerificacion(cert.Verificacion);
@@ -60,11 +61,23 @@ export default function EmpleadosPage() {
     try {
       await updateCertificado(certId, verificacion, descripcion);
       alert("Certificado actualizado correctamente.");
-      setExpandedCertificado(null); 
+      setExpandedCertificado(null);
       window.location.reload();
     } catch (error) {
       console.error("Error al actualizar el certificado:", error);
       alert("Hubo un error al actualizar el certificado.");
+    }
+  };
+
+  const handleDenyVerification = async (certId: string) => {
+    try {
+      await updateCertificado(certId, false, "Verificación negada");
+      alert("La verificación ha sido negada correctamente.");
+      setExpandedCertificado(null);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error al negar la verificación:", error);
+      alert("Hubo un error al negar la verificación.");
     }
   };
 
@@ -116,72 +129,88 @@ export default function EmpleadosPage() {
                 </thead>
                 <tbody>
                   {selectedEmpleado.Certificados
-                  .filter((cert => cert.Verificacion === null))
-                  .map((cert) => (
-                    <>
-                      <tr key={cert.ID_Certificado}>
-                        <td><strong>{cert.Nombre}</strong></td>
-                        <td>
-                          <button
-                            className="document-button"
-                            onClick={() => window.open(cert.Documento, '_blank')}
-                          >
-                            Ver Documento
-                          </button>
-                        </td>
-                        <td>
-                          <button
-                            className="edit-button"
-                            onClick={() => handleCertificadoExpand(cert)}
-                          >
-                            {expandedCertificado === cert.ID_Certificado ? "Cerrar" : "Editar"}
-                          </button>
-                        </td>
-                      </tr>
-                      {expandedCertificado === cert.ID_Certificado && (
-                        <tr className="dropdown-row">
-                          <td colSpan={3}>
-                            <form
-                              onSubmit={(e) => {
-                                e.preventDefault();
-                                handleUpdateCertificado(cert.ID_Certificado);
-                              }}
+                    .filter((cert => cert.Verificacion === null))
+                    .map((cert) => (
+                      <>
+                        <tr key={cert.ID_Certificado}>
+                          <td><strong>{cert.Nombre}</strong></td>
+                          <td>
+                            <button
+                              className="document-button"
+                              onClick={() => window.open(cert.Documento, '_blank')}
                             >
-                              <div className="form-group">
-                                <label htmlFor={`descripcion-${cert.ID_Certificado}`}>Descripción:</label>
-                                <textarea
-                                  id={`descripcion-${cert.ID_Certificado}`}
-                                  value={descripcion}
-                                  onChange={(e) => setDescripcion(e.target.value)}
-                                  className="form-input"
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label htmlFor={`verificacion-${cert.ID_Certificado}`}>Verificación:</label>
-                                <input
-                                  id={`verificacion-${cert.ID_Certificado}`}
-                                  type="checkbox"
-                                  checked={verificacion}
-                                  onChange={(e) => setVerificacion(e.target.checked)}
-                                  className="form-checkbox"
-                                />
-                              </div>
-                              <button type="submit" className="save-button">
-                                Guardar
-                              </button>
-                              <button
-                                type="button"
-                                className="cancel-button"
-                                onClick={() => setExpandedCertificado(null)}
-                              >
-                                Cancelar
-                              </button>
-                            </form>
+                              Ver Documento
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="edit-button"
+                              onClick={() => handleCertificadoExpand(cert)}
+                            >
+                              {expandedCertificado === cert.ID_Certificado ? "Cerrar" : "Editar"}
+                            </button>
                           </td>
                         </tr>
-                      )}
-                    </>
-                  ))}
+                        {expandedCertificado === cert.ID_Certificado && (
+                          <tr className="dropdown-row">
+                            <td colSpan={3}>
+                              {!denyVerification ? (
+                                <div className="button-group">
+                                  <button
+                                    className="negar-boton"
+                                    onClick={() => {
+                                      setDenyVerification(true);
+                                      setVerificacion(false); // Establece el valor de verificacion en false
+                                    }}
+                                  >
+                                    Negar Certificado
+                                  </button>
+                                  <button
+                                    className="continuar-boton"
+                                    onClick={() => {
+                                      setDenyVerification(true);
+                                      setVerificacion(true); // Establece el valor de verificacion en true
+                                    }}
+                                  >
+                                    Validar Certificado
+                                  </button>
+                                </div>
+                              ) : (
+                                <form
+                                  onSubmit={(e) => {
+                                    e.preventDefault();
+                                    handleUpdateCertificado(cert.ID_Certificado);
+                                  }}
+                                >
+                                  <div className="form-group">
+                                    <label htmlFor={`descripcion-${cert.ID_Certificado}`}>Retroalimentación:</label>
+                                    <textarea
+                                      id={`descripcion-${cert.ID_Certificado}`}
+                                      value={descripcion}
+                                      onChange={(e) => setDescripcion(e.target.value)}
+                                      className="form-input"
+                                    />
+                                  </div>
+                                  <button type="submit" className="save-button">
+                                    Guardar
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="cancel-button"
+                                    onClick={() => {
+                                      setExpandedCertificado(null);
+                                      setDenyVerification(false);
+                                    }}
+                                  >
+                                    Cancelar
+                                  </button>
+                                </form>
+                              )}
+                            </td>
+                          </tr>
+                        )}
+                      </>
+                    ))}
                 </tbody>
               </table>
             </div>
