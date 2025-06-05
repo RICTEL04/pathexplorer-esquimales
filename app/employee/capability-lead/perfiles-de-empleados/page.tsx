@@ -57,7 +57,7 @@ export default function EmployeeProfilesPage() {
   if (loading) return <div className="p-8">Cargando perfiles...</div>;
 
   return (
-    <div className="flex flex-row h-[90vh] p-8 w-full max-w-none mx-0">
+    <div className="flex flex-row h-[90vh] p-4 w-full max-w-none mx-0">
       {/* Left: Scrollable employee cards */}
       <div className="flex flex-col gap-4 w-1/3 pr-2">
         <h1 className="text-3xl font-bold mb-6">Perfiles de Empleados</h1>

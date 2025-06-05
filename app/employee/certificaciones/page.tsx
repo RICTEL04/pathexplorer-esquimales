@@ -78,8 +78,7 @@ export default function CertificacionesPage() {
                     </div>
                 </div>
             )}
-            <h1 className="text-gray-800 text-2xl font-bold mb-4">Certificaciones</h1>
-            <p className="text-gray-600">Aquí puedes gestionar tus certificaciones.</p>
+            <h1 className="text-gray-800 text-2xl font-bold mb-2">Certificaciones</h1>
 
             <div className="flex justify-between">
                 {/* Toggle Switch for View Modes */}

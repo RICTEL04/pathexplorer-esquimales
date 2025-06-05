@@ -15,7 +15,7 @@ export default function CertificationsCards({
     const [selectedCertification, setSelectedCertification] = React.useState<number>(0);
 
     return (
-        <div className="flex flex-row h-[75vh]">
+        <div className="flex flex-row h-[70vh]">
             <div className="flex flex-col gap-4 w-1/3 pr-2 overflow-y-scroll overflow-x-hidden">
                 {certifications.map((certification, index) => (
                     <CertificationsCard

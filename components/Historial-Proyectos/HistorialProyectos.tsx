@@ -32,7 +32,7 @@ export default function HistorialProyectos({ projects }: HistorialProyectosProps
                     />
                 ) : (
                     <div className="flex items-center justify-center h-full text-gray-500">
-                        <p className="text-lg">Selecciona una certificación para ver los detalles</p>
+                        <p className="text-lg">Selecciona un proyecto para ver los detalles</p>
                     </div>
                 )}
             </div>
