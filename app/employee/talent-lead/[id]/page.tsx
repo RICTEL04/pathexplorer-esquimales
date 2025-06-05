@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { fetchSession } from "@/lib/metas-empleados/apiCallsMetas";
 import { getTalentLeadIdForEmployee, getTalentDiscussionCompleta } from "@/lib/talent-discussions/talent_lead/TalendLeadAPICalls";
-import { getEmployeesByNivel } from "@/lib/talent-discussions/talent_lead/TalendLeadAPICalls";
+import { getEmployeesByNivel, getPossibleEmployeesByTD } from "@/lib/talent-discussions/talent_lead/TalendLeadAPICalls";
 import { fetchReportsForEmployee } from "@/lib/talent-discussions/talent_lead/TalendLeadAPICalls";
 
 // Importar los componentes de estado
@@ -37,7 +37,7 @@ export default function TalentLeadTDWithID() {
                     const TalendDiscussionData = await getTalentDiscussionCompleta(setLoading, id);
                     setTalentDiscussionFullData(TalendDiscussionData);
                     if (TalendDiscussionData?.talent_discussion) {
-
+                        console.log("Talent Discussion Data:", TalendDiscussionData);
                         // Si está en progreso, obtener reportes para cada empleado
                         if (TalendDiscussionData?.talent_discussion?.Estado === 'En Progreso') {
                             const employeesWithReports = await Promise.all(
@@ -58,7 +58,9 @@ export default function TalentLeadTDWithID() {
                         } else {
                             setTalentDiscussionFullData(TalendDiscussionData);
                             if (TalendDiscussionData?.talent_discussion) {
-                                const TalentDiscussionBaseEmployeesData = await getEmployeesByNivel(setLoading, TalendDiscussionData.talent_discussion.Nivel);
+                                //const TalentDiscussionBaseEmployeesData = await getEmployeesByNivel(setLoading, TalendDiscussionData.talent_discussion.Nivel);
+                                const TalentDiscussionBaseEmployeesData = await getPossibleEmployeesByTD(setLoading, id);
+                                console.log("Base Employees Data:", TalentDiscussionBaseEmployeesData);
                                 setTalentDiscussionBaseEmployees(TalentDiscussionBaseEmployeesData);
                             }
                         }

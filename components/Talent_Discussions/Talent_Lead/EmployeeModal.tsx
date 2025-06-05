@@ -14,6 +14,7 @@ interface EmployeeModalProps {
     Reportes?: Array<{ name: string; url: string }>;
     TD_Employee_Requests: {
       ID_TD_Employee_Request: string;
+      Descripcion: string;
       Estado: string;
       Resultado: string;
     };
@@ -106,7 +107,7 @@ export default function EmployeeModal({
                 {/* Documentos del Empleado */}
                 <div className="bg-white border border-gray-200 rounded-lg">
                 <div className="p-6 border-b border-gray-200">
-                    <h3 className="font-semibold text-xl text-gray-800">Documentos del Empleado</h3>
+                    <h3 className="font-semibold text-xl text-gray-800">Resumen de desempeño</h3>
                 </div>
                 
                 {reportes.length > 0 ? (
@@ -121,7 +122,7 @@ export default function EmployeeModal({
                                 onClick={() => setSelectedReport(rep)}
                                 className={`w-full text-left p-3 rounded-lg flex items-center justify-between transition-colors ${
                                 selectedReport?.name === rep.name 
-                                    ? "bg-blue-100 text-blue-700 border border-blue-200" 
+                                    ? "bg-purple-100 text-purple-700 border border-purple-200" 
                                     : "bg-white hover:bg-gray-100 border border-gray-200"
                                 }`}
                             >
@@ -184,7 +185,15 @@ export default function EmployeeModal({
                 {/* Sección de evaluación en dos columnas */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Columna 1: Estado de la solicitud */}
-                    <div className="bg-white border border-gray-200 p-6 rounded-lg">
+                    <div className="bg-white border flex-row border-gray-200 p-6 rounded-lg">
+                        <div className="flex flex-col gap-2 mb-4">
+                        <span className="font-semibold text-gray-700">Petición:</span>
+                        <div
+                            className="font-semibold text-gray-800 bg-gray-50 border border-gray-200 overflow-y-auto overflow-x-hidden p-4 rounded-lg h-32 whitespace-pre-line break-words"
+                        >
+                            {employee.TD_Employee_Requests.Descripcion}
+                        </div>
+                        </div>
                         <Label htmlFor="approval-switch" className="font-semibold text-gray-800 mb-4 block text-lg">
                             Estado de la Solicitud
                         </Label>
@@ -210,7 +219,7 @@ export default function EmployeeModal({
                         </Label>
                         <textarea
                             id="result"
-                            className="w-full border border-gray-300 rounded-lg p-4 h-40 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                            className="w-full border border-gray-300 rounded-lg p-4 h-40 focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                             value={resultado}
                             onChange={(e) => setResultado(e.target.value)}
                             placeholder="Agrega tus comentarios detallados sobre la evaluación del empleado..."
@@ -235,7 +244,7 @@ export default function EmployeeModal({
             <Button 
                 onClick={handleSubmit}
                 disabled={!resultado || submitting}
-                className="bg-blue-600 hover:bg-blue-700 px-6 py-2 relative z-20"
+                className="bg-purple-600 hover:bg-purple-700 px-6 py-2 relative z-20"
             >
                 {submitting ? "Guardando..." : "Guardar cambios"}
             </Button>

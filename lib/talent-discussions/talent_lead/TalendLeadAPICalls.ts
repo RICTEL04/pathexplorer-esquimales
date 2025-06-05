@@ -86,6 +86,76 @@ export async function getEmployeesByNivel(setLoading: (loading: boolean) => void
       const { data, error } = await supabase.rpc("get_employees_by_level", {
         level_param: level,
       });
+      
+      console.log("Data from get_employees_by_level:", data);
+
+      if (error) throw error;
+
+      const capabilityLeadMap = new Map<string, capabilityLeadSmallData>();
+      const peopleLeadMap = new Map<string, PeopleLeadSmallData>();
+
+      const employees: employeeForTalentDiscussion[] = (data ?? []).map((row: any) => {
+        // Agrupa capability leads únicos
+        if (row.id_capability_lead && row.nombre_capability_lead) {
+          capabilityLeadMap.set(row.id_capability_lead, {
+            ID_CapabilityLead: row.id_capability_lead,
+            nombre_capabilityLead: row.nombre_capability_lead,
+          });
+        }
+        // Agrupa people leads únicos
+        if (row.id_people_lead && row.nombre_people_lead) {
+          peopleLeadMap.set(row.id_people_lead, {
+            ID_People_Lead: row.id_people_lead,
+            nombre_People_Lead: row.nombre_people_lead,
+          });
+        }
+
+        // Mapeo exacto a la interfaz
+        return {
+          ID_Empleado: row.id_empleado,
+          Nombre: row.nombre_empleado,
+          Rol: row.rol,
+          Nivel: row.nivel,
+          ID_Departamento: row.id_departamento,
+          Nombre_Departamento: row.nombre_departamento,
+          Cargabilidad: row.cargabilidad,
+          Fecha_Contratacion: undefined, // No viene en el select, puedes mapear si lo agregas
+          FechaUltiNivel: undefined,     // No viene en el select, puedes mapear si lo agregas
+          ID_People_Lead: row.id_people_lead,
+          Nombre_People_Lead: row.nombre_people_lead,
+          ID_CapabilityLead: row.id_capability_lead,
+          Nombre_CapabilityLead: row.nombre_capability_lead,
+          Metas: [],
+        };
+      });
+
+      return {
+        employees,
+        capabilityLeads: Array.from(capabilityLeadMap.values()),
+        peopleLeads: Array.from(peopleLeadMap.values()),
+      };
+  } catch (error){
+    // Return empty arrays if there is an error
+    return {
+      employees: [],
+      capabilityLeads: [],
+      peopleLeads: [],
+    };
+  } finally {
+    setLoading(false)
+  }
+
+
+}
+
+export async function getPossibleEmployeesByTD(setLoading: (loading: boolean) => void, id: string): Promise<EmployeesByNivelResult> {
+  
+  try{
+      const { data, error } = await supabase.rpc("get_employees_by_talent_discussion", {
+        p_id_talent_discussion: id,
+      });
+      
+      console.log("Data from get_employees_by_level:", data);
 
       if (error) throw error;
 

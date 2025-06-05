@@ -1,6 +1,6 @@
 "use client";
 
-import { getEmployeesByNivel, getTalentDiscussionsByLead, 
+import { getTalentDiscussionsByLead, 
   getTalentLeadIdForEmployee, 
   createTalentDiscussionWithParticipants
 } from "@/lib/talent-discussions/talent_lead/TalendLeadAPICalls";
@@ -55,8 +55,8 @@ export default function EmployeePage() {
         ID_TalentLead ?? "",
         formData.fechaInicio,
         formData.fechaFinal,
-        formData.employeesByNivel.peopleLeads,
-        formData.employeesByNivel.employees
+        formData.peopleLeads,
+        formData.employees
       );
       setShowCreateTalentDiscussionForm(false);
       if (ID_TalentLead) {
