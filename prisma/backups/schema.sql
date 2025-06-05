@@ -687,19 +687,53 @@ ALTER FUNCTION "public"."force_talent_discussion_participants"("p_talent_discuss
 
 CREATE OR REPLACE FUNCTION "public"."get_available_delivery_leads"() RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "id_deliverylead" "uuid")
     LANGUAGE "sql"
-    AS $$
-  SELECT 
+    AS $$SELECT 
     e."ID_Empleado", 
     e."Nombre" AS nombre_empleado, 
     dl."ID_DeliveryLead"
   FROM "Empleado" e
   JOIN "Delivery_Lead" dl ON dl."ID_Empleado" = e."ID_Empleado"
   LEFT JOIN "Proyectos" p ON p."ID_DeliveryLead" = dl."ID_DeliveryLead"
-  WHERE p."ID_Proyecto" IS NULL;
-$$;
+  WHERE p."ID_Proyecto" IS NULL;$$;
 
 
 ALTER FUNCTION "public"."get_available_delivery_leads"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_available_delivery_leads2"() RETURNS TABLE("ID_Empleado" "uuid", "nombre_empleado" "text", "Cargabilidad" smallint, "ID_DeliveryLead" "uuid")
+    LANGUAGE "sql"
+    AS $$SELECT 
+    e."ID_Empleado", 
+    e."Nombre" AS nombre_empleado, 
+    e."Cargabilidad",
+    dl."ID_DeliveryLead"
+FROM "Empleado" e
+JOIN "Delivery_Lead" dl ON dl."ID_Empleado" = e."ID_Empleado"
+LEFT JOIN "Proyectos" p ON p."ID_DeliveryLead" = dl."ID_DeliveryLead"
+GROUP BY e."ID_Empleado", e."Nombre", e."Cargabilidad", dl."ID_DeliveryLead"
+HAVING COUNT(p."ID_Proyecto") = 0 OR 
+       BOOL_AND(p."Status" = 'done');$$;
+
+
+ALTER FUNCTION "public"."get_available_delivery_leads2"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_available_delivery_leads3"() RETURNS SETOF "record"
+    LANGUAGE "sql"
+    AS $$
+  SELECT 
+      e."ID_Empleado", 
+      e."Nombre" AS nombre_empleado, 
+      e."Cargabilidad",
+      dl."ID_DeliveryLead"
+  FROM "Empleado" e
+  JOIN "Delivery_Lead" dl ON dl."ID_Empleado" = e."ID_Empleado"
+  LEFT JOIN "Proyectos" p ON p."ID_DeliveryLead" = dl."ID_DeliveryLead"
+  WHERE p."ID_Proyecto" IS NULL OR p."Status" = 'done';
+$$;
+
+
+ALTER FUNCTION "public"."get_available_delivery_leads3"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."get_employee_skills_excluding_category"("employee_id" "uuid", "excluded_category_id" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre_habilidad" "text", "nivel" "text", "nombre_position" "text", "nombre_empresa" "text")
@@ -2162,7 +2196,7 @@ CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
     "ID_Proyecto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "Nombre" "text" NOT NULL,
     "Descripcion" "text",
-    "Status" "text" DEFAULT 'active'::"text" NOT NULL,
+    "Status" "text" DEFAULT 'inactive'::"text" NOT NULL,
     "ID_DeliveryLead" "uuid",
     "fecha_inicio" "date",
     "fecha_fin" "date",
