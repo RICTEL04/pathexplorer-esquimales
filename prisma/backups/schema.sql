@@ -1071,6 +1071,87 @@ $$;
 ALTER FUNCTION "public"."get_employees_by_people_lead_and_nivel"("p_id_people_lead" "uuid", "p_nivel" "text") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_employees_by_talent_discussion"("p_id_talent_discussion" "uuid") RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "rol" "text", "nivel" "text", "id_departamento" "uuid", "nombre_departamento" "text", "cargabilidad" "text", "id_people_lead" "uuid", "nombre_people_lead" "text", "id_capability_lead" "uuid", "nombre_capability_lead" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    WITH employees_in_td AS (
+        SELECT 
+            te."ID_TD_Employee",
+            e."ID_Empleado",
+            e."Nombre",
+            e."Rol",
+            e."Nivel",
+            e."ID_Departamento",
+            e."Cargabilidad",
+            e."ID_PeopleLead"
+        FROM 
+            "TD_Employee" te
+        JOIN 
+            "Empleado" e ON te."ID_Empleado" = e."ID_Empleado"
+        WHERE 
+            te."ID_TalentDiscussion" = p_id_talent_discussion
+    ),
+    
+    people_leads_in_td AS (
+        SELECT DISTINCT
+            pl."ID" AS "ID_People_Lead",
+            pl_emp."Nombre" AS "Nombre_People_Lead"
+        FROM 
+            "TD_People_Lead" tpl
+        JOIN 
+            "People_lead" pl ON tpl."ID_People_Lead" = pl."ID"
+        JOIN 
+            "Empleado" pl_emp ON pl."ID_Empleado" = pl_emp."ID_Empleado"
+        WHERE 
+            tpl."ID_TalentDiscussion" = p_id_talent_discussion
+    ),
+    
+    department_capability_leads AS (
+        SELECT DISTINCT
+            d."ID_Departamento",
+            cl."ID_CapabilityLead",
+            cl_emp."Nombre" AS "Nombre_Capability_Lead"
+        FROM 
+            employees_in_td e
+        JOIN 
+            "Departamento" d ON e."ID_Departamento" = d."ID_Departamento"
+        LEFT JOIN 
+            "Capability_Lead" cl ON d."ID_Departamento" = cl."ID_Departamento"
+        LEFT JOIN 
+            "Empleado" cl_emp ON cl."ID_Empleado" = cl_emp."ID_Empleado"
+    )
+    
+    SELECT 
+        e."ID_Empleado"::uuid,
+        e."Nombre"::text,
+        e."Rol"::text,
+        e."Nivel"::text,
+        e."ID_Departamento"::uuid,
+        d."Nombre"::text,
+        e."Cargabilidad"::text,
+        pl."ID_People_Lead"::uuid,
+        pl."Nombre_People_Lead"::text,
+        dcl."ID_CapabilityLead"::uuid,
+        dcl."Nombre_Capability_Lead"::text
+    FROM 
+        employees_in_td e
+    JOIN 
+        "Departamento" d ON e."ID_Departamento" = d."ID_Departamento"
+    LEFT JOIN 
+        people_leads_in_td pl ON e."ID_PeopleLead" = pl."ID_People_Lead"
+    LEFT JOIN 
+        department_capability_leads dcl ON e."ID_Departamento" = dcl."ID_Departamento"
+    ORDER BY 
+        e."Nombre";
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employees_by_talent_discussion"("p_id_talent_discussion" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_employees_by_td_and_pl"("p_id_people_lead" "uuid", "p_id_talent_discussion" "uuid") RETURNS TABLE("id_empleado" "uuid", "nombre" character varying, "rol" character varying, "nivel" character varying, "id_departamento" "uuid", "nombre_departamento" character varying, "cargabilidad" character varying, "fecha_contratacion" "date", "fechaultinivel" "date", "id_people_lead" "uuid", "nombre_people_lead" character varying, "id_capabilitylead" "uuid", "nombre_capabilitylead" character varying, "td_employee_request" "jsonb")
     LANGUAGE "plpgsql"
     AS $$
@@ -1384,8 +1465,7 @@ ALTER FUNCTION "public"."get_talent_discussions"() OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."get_talent_discussions_by_lead"("p_id_talent_lead" "uuid") RETURNS TABLE("id_talent_discussion" "uuid", "discussion" "text", "id_talent_lead" "uuid", "nombre_talent_lead" "text", "nivel" "text", "fecha_inicio" "date", "fecha_final" "date", "estado" "text")
     LANGUAGE "plpgsql"
-    AS $$
-BEGIN
+    AS $$BEGIN
     RETURN QUERY
     SELECT 
         td."ID_TalentDiscussion" AS ID_Talent_Discussion,
@@ -1405,9 +1485,8 @@ BEGIN
     WHERE 
         tl."ID_TalentLead" = p_id_talent_lead
     ORDER BY 
-        td."Fecha_Inicio" DESC;
-END;
-$$;
+        td."created_at" DESC;
+END;$$;
 
 
 ALTER FUNCTION "public"."get_talent_discussions_by_lead"("p_id_talent_lead" "uuid") OWNER TO "postgres";
@@ -2333,7 +2412,8 @@ CREATE TABLE IF NOT EXISTS "public"."Talent_Discussion" (
     "Nivel" character varying,
     "Fecha_Inicio" "date",
     "Fecha_Final" "date",
-    "Estado" character varying DEFAULT 'Pendiente'::character varying
+    "Estado" character varying DEFAULT 'Pendiente'::character varying,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
 );
 
 
@@ -2353,6 +2433,10 @@ COMMENT ON COLUMN "public"."Talent_Discussion"."Fecha_Final" IS 'Fecha final del
 
 
 COMMENT ON COLUMN "public"."Talent_Discussion"."Estado" IS 'Estado de la talent discussion: Pendiente, En Progreso, Finalizada';
+
+
+
+COMMENT ON COLUMN "public"."Talent_Discussion"."created_at" IS 'A que fecha se creó';
 
 
 
