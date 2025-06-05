@@ -106,10 +106,11 @@ export default function EmployeeDashboard() {
     deliveryLead: false,
     talentLead: false,
   });
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserAndData = async () => {
+      setLoading(true);
       try {
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
         if (sessionError) {
@@ -136,9 +137,7 @@ export default function EmployeeDashboard() {
 
         // Fetch employees
         try {
-          console.log("Fetching empleados data for user ID:", userId);
           const empleadosData = await getEmpleados();
-          console.log("Fetched empleados data:", empleadosData);
           const empleadosMapped = empleadosData.map((empleado) => ({
             ...empleado,
           }));
@@ -158,9 +157,11 @@ export default function EmployeeDashboard() {
           throw error;
         }
 
-        
+
       } catch (error) {
         console.error("Error in fetchUserAndData:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -173,7 +174,6 @@ export default function EmployeeDashboard() {
     if (selectedEmpleado) {
       try {
         const deliveryLeadData = selectedEmpleado.Delivery_Lead;
-        console.log("Delivery Lead Data:", deliveryLeadData);
         if (deliveryLeadData) {
           setDeliveryLead(Array.isArray(deliveryLeadData) ? deliveryLeadData[0] : deliveryLeadData);
         }
@@ -216,26 +216,37 @@ export default function EmployeeDashboard() {
   }, [selectedEmpleado]);
 
 
-  if (!selectedEmpleado) {
-    return <div>Cargando datos...</div>;
+  // Loading spinner
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+      </div>
+    );
   }
 
-
-
+  // Null check
+  if (!selectedEmpleado) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <span className="text-gray-500 text-lg">No se encontró información del empleado.</span>
+      </div>
+    );
+  }
 
   // Datos para la gráfica de proyectos por año
-    const workData = Object.entries(
-     selectedEmpleado.Empleado_Proyectos.flatMap((puesto) => puesto.Proyectos || [])
-       .filter((proyecto) => proyecto.fecha_fin) // Filtrar proyectos con fecha de fin
-       .reduce((acc: Record<string, number>, proyecto) => {
-         const year = new Date(proyecto.fecha_fin).getFullYear(); // Obtener el año de la fecha de fin
-         acc[year] = (acc[year] || 0) + 1; // Incrementar el contador para el año
-         return acc;
-       }, {})
-   )
-     .map(([year, count]) => ({ year, tasks: count })) // Convertir a formato de gráfico
-     .sort((a, b) => Number(a.year) - Number(b.year)); // Ordenar por año
-  
+  const workData = Object.entries(
+    selectedEmpleado.Empleado_Proyectos.flatMap((puesto) => puesto.Proyectos || [])
+      .filter((proyecto) => proyecto.fecha_fin) // Filtrar proyectos con fecha de fin
+      .reduce((acc: Record<string, number>, proyecto) => {
+        const year = new Date(proyecto.fecha_fin).getFullYear(); // Obtener el año de la fecha de fin
+        acc[year] = (acc[year] || 0) + 1; // Incrementar el contador para el año
+        return acc;
+      }, {})
+  )
+    .map(([year, count]) => ({ year, tasks: count })) // Convertir a formato de gráfico
+    .sort((a, b) => Number(a.year) - Number(b.year)); // Ordenar por año
+
   // Datos para la gráfica de estado de certificados
   const courseData = [
     { name: "Activos", value: selectedEmpleado.Certificados.filter((c) => c.Verificacion).length, color: "#4ade80" },
@@ -244,11 +255,9 @@ export default function EmployeeDashboard() {
 
 
   const empleadosAsignados = empleados.filter((empleado) => {
-    console.log("Departamento del empleado:", empleado.ID_Departamento);
-    console.log("Capability Lead:", capabilityLead);
     // Verificar si el empleado logueado tiene un ID_Departamento válido
     const departamentoLogueado = capabilityLead
- 
+
 
       ? capabilityLead.ID_Departamento
       : "No disponible";
@@ -484,10 +493,12 @@ export default function EmployeeDashboard() {
               </h3>
 
               {/* Encabezados de las columnas */}
-              <div className="flex items-center justify-between border-b pb-2 mb-2">
-                <span className="text-sm font-semibold text-gray-600 w-1/2">Nombre</span>
-                <span className="text-sm font-semibold text-gray-600 w-1/4 text-center">Proyecto actual</span>
-                <span className="text-sm font-semibold text-gray-600 w-1/4 text-center">Estado</span>
+              <div className="border-b pb-2 mb-2">
+                <ul className="flex items-center w-full">
+                  <li className="text-sm font-semibold text-gray-600 flex-1 text-left">Nombre</li>
+                  <li className="text-sm font-semibold text-gray-600 flex-1 text-center">Proyectos actuales</li>
+                  <li className="text-sm font-semibold text-gray-600 flex-1 text-center">Estado</li>
+                </ul>
               </div>
 
               {/* Contenedor desplazable */}
@@ -495,42 +506,58 @@ export default function EmployeeDashboard() {
                 {empleadosConProyectos.length > 0 ? (
                   <ul className="space-y-2">
                     {empleadosConProyectos.map((empleado) => {
-                      // Obtener el proyecto más reciente
-                      const currentProject = empleado.Empleado_Proyectos
+                      // Obtener todos los proyectos únicos asignados al empleado
+                      const allProjects = empleado.Empleado_Proyectos
                         ?.flatMap((empleadoProyecto) => empleadoProyecto.Proyectos)
-                        .sort((a, b) => new Date(b.fecha_inicio).getTime() - new Date(a.fecha_inicio).getTime())[0];
+                        .filter((p) => !!p && !!p.Nombre);
+
+                      // Eliminar proyectos duplicados por ID_Proyecto
+                      const uniqueProjects = allProjects
+                        ? allProjects.filter(
+                            (proj, idx, arr) =>
+                              arr.findIndex((p) => p.ID_Proyecto === proj.ID_Proyecto) === idx
+                          )
+                        : [];
 
                       return (
-                        <li key={empleado.ID_Empleado} className="flex items-center justify-between">
-                          <TooltipProvider>
-                            <TooltipComponent>
-                              <TooltipTrigger asChild>
-                                <span className="text-sm text-gray-600 truncate block w-32">
+                        <li key={empleado.ID_Empleado} className="flex items-center justify-between w-full">
+                          <div className="flex-1 text-left">
+                            <TooltipProvider>
+                              <TooltipComponent>
+                                <TooltipTrigger asChild>
+                                  <span className="text-sm text-gray-600 truncate block w-32">
+                                    {empleado.Nombre}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
                                   {empleado.Nombre}
-                                </span>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                {empleado.Nombre}
-                              </TooltipContent>
-                            </TooltipComponent>
-                          </TooltipProvider>
-
-                          <TooltipProvider>
-                            <TooltipComponent>
-                              <TooltipTrigger asChild>
-                                <span className="text-sm text-gray-600 truncate block w-16">
-                                  {currentProject?.Nombre || "Sin proyecto"}
-                                </span>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                {currentProject?.Nombre || "Sin proyecto"}
-                              </TooltipContent>
-                            </TooltipComponent>
-                          </TooltipProvider>
-
-                          <Badge className="text-xs bg-green-100 text-green-800 w-1/4 text-center">
-                            Activo
-                          </Badge>
+                                </TooltipContent>
+                              </TooltipComponent>
+                            </TooltipProvider>
+                          </div>
+                          <div className="flex-1 text-center">
+                            <TooltipProvider>
+                              <TooltipComponent>
+                                <TooltipTrigger asChild>
+                                  <span className="text-sm text-gray-600 truncate block w-32">
+                                    {uniqueProjects.length > 0
+                                      ? uniqueProjects.map((p) => p.Nombre).join(", ")
+                                      : "Sin proyecto"}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  {uniqueProjects.length > 0
+                                    ? uniqueProjects.map((p) => p.Nombre).join(", ")
+                                    : "Sin proyecto"}
+                                </TooltipContent>
+                              </TooltipComponent>
+                            </TooltipProvider>
+                          </div>
+                          <div className="flex-1 text-center">
+                            <Badge className="text-xs bg-green-100 text-green-800 w-full text-center">
+                              Activo
+                            </Badge>
+                          </div>
                         </li>
                       );
                     })}
@@ -559,18 +586,12 @@ export default function EmployeeDashboard() {
                     <div className="mt-4">
                       <h5 className="text-md font-semibold mb-2">Empleados:</h5>
 
-                       <ul className="space-y-2">
+                      <ul className="space-y-2">
                         {empleadosConProyectos
                           .filter((empleado) => {
                             // Verificar si algún proyecto del empleado coincide con el proyecto actual
                             const proyectosEmpleado = empleado.Empleado_Proyectos.flatMap((puesto) => puesto.Proyectos);
                             const isMatch = proyectosEmpleado.some((proyectoEmpleado) => proyectoEmpleado.ID_Proyecto === proyecto.ID_Proyecto);
-
-                            console.log("Empleado:", empleado.Nombre);
-                            console.log("Proyectos del empleado:", proyectosEmpleado);
-                            console.log("Proyecto actual ID_Proyecto:", proyecto.ID_Proyecto);
-                            console.log("Match:", isMatch);
-
                             return isMatch;
                           })
                           .map((empleado, empIndex) => (
@@ -579,7 +600,7 @@ export default function EmployeeDashboard() {
                               <Badge className="text-xs bg-green-100 text-green-800">{empleado.Rol}</Badge>
                             </li>
                           ))}
-                      </ul> 
+                      </ul>
 
                     </div>
                   </div>
@@ -729,7 +750,7 @@ export default function EmployeeDashboard() {
                 <Tooltip />
                 <Bar dataKey="tasks" fill="#8b36db" radius={[4, 4, 0, 0]} />
               </BarChart>
-            </ResponsiveContainer> 
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
