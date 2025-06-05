@@ -177,8 +177,8 @@ BEGIN
     -- Verificar si el registro existe
     SELECT EXISTS(
         SELECT 1 
-        FROM public.TD_Employee_Request 
-        WHERE ID_TD_Employee_Request = p_id_td_employee_request
+        FROM public."TD_Employee_Request"  -- Nota las comillas para nombres con mayúsculas
+        WHERE "ID_TD_Employee_Request" = p_id_td_employee_request
     ) INTO v_record_exists;
     
     -- Si el registro no existe, retornar error
@@ -191,23 +191,23 @@ BEGIN
     END IF;
     
     -- Actualizar el registro
-    UPDATE public.TD_Employee_Request 
+    UPDATE public."TD_Employee_Request" 
     SET 
-        Estado = p_estado,
-        Resultado = p_resultado
-    WHERE ID_TD_Employee_Request = p_id_td_employee_request;
+        "Estado" = p_estado,
+        "Resultado" = p_resultado
+    WHERE "ID_TD_Employee_Request" = p_id_td_employee_request;
     
     -- Obtener el registro actualizado para confirmar los cambios
     SELECT 
-        ID_TD_Employee_Request,
-        ID_TalentDiscussion,
-        ID_TD_Employee,
-        Descripcion,
-        Estado,
-        Resultado
+        "ID_TD_Employee_Request",
+        "ID_TalentDiscussion",
+        "ID_TD_Employee",
+        "Descripcion",
+        "Estado",
+        "Resultado"
     INTO v_updated_record
-    FROM public.TD_Employee_Request 
-    WHERE ID_TD_Employee_Request = p_id_td_employee_request;
+    FROM public."TD_Employee_Request" 
+    WHERE "ID_TD_Employee_Request" = p_id_td_employee_request;
     
     -- Retornar éxito con el registro actualizado
     RETURN QUERY SELECT 
