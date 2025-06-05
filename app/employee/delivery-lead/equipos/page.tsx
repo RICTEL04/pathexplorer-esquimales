@@ -1,7 +1,6 @@
 "use client";
 import { getCapabilityLead } from "@/lib/capabilityLead";
 import { useEffect, useState } from "react";
-import EmployeeCard from "./EmployeeCard";
 
 interface Proyectos {
   ID_Proyecto: string;
@@ -124,11 +123,6 @@ export default function PerfilesDeEmpleadosPage() {
       </div>
 
       {/* Tarjetas de Empleados */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredEmployees.map((employee) => (
-          <EmployeeCard key={employee.ID_Empleado} employee={mapEmployeeData(employee)} />
-        ))}
-      </div>
     </div>
   );
 }
