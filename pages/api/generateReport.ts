@@ -1,7 +1,10 @@
+import EmpleadosPage from "@/app/employee/people-lead/validarCursos/page";
 import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
+// Importa fetchMetas desde tu archivo de llamadas
+import { fetchMetas } from "@/lib/metas-empleados/apiCallsMetas";
 
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_GOOGLE_AI_API_KEY,
@@ -25,6 +28,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    // --- NUEVO: Obtener metas del empleado ---
+    const metas = await fetchMetas(empleado.ID_Empleado, () => {});
+    empleado.metas = metas || [];
+
+    // Construir string detallado de metas
+    const metasDetalle = empleado.metas.length
+      ? empleado.metas.map((m: any, idx: number) => {
+          const revisores = m.Revisores?.length
+            ? m.Revisores.map((r: any) =>
+                `- ${r.Nombre || 'Sin nombre'}${r.Retroalimentacion ? ` (Retroalimentación: ${r.Retroalimentacion})` : ''}`
+              ).join('\n      ')
+            : 'Sin revisores';
+          return `
+  Meta #${idx + 1}:
+    - Nombre: ${m.Nombre}
+    - Tipo: ${m.Tipo_Meta}
+    - Plazo: ${m.Plazo}
+    - Descripción: ${m.Descripcion}
+    - Fecha de inicio: ${m.Fecha_Inicio}
+    - Fecha límite: ${m.Fecha_limite}
+    - Estado: ${m.Estado}
+    - Reflexión personal: ${m.Self_Reflection || 'N/A'}
+    - Revisores:
+      ${revisores}
+        `;
+        }).join('\n')
+      : 'N/A';
+
     const prompt = `
 Eres un experto en gestión de talento y recursos humanos. 
 Con base en la siguiente información del empleado, genera un reporte profesional y persuasivo que resuma sus fortalezas, logros, habilidades y potencial, con el objetivo de defender su caso para un ascenso, aumento de salario o asignación a un mejor puesto durante una talent discussion. 
@@ -38,13 +69,14 @@ Datos del empleado:
 - Departamento: ${empleado.Departamento?.[0]?.Nombre || 'N/A'}
 - Fecha de Contratación: ${empleado.FechaContratacion || 'N/A'}
 - Nivel: ${empleado.Nivel}
-- Metas: ${empleado.metas?.length ? empleado.metas.join(", ") : 'N/A'}
+- Metas:
+${metasDetalle}
 - Intereses: ${empleado.intereses?.length ? empleado.intereses.map((i: any) => i.Descripcion).join(", ") : 'N/A'}
 - Hard Skills: ${empleado.hardSkills?.length ? empleado.hardSkills.map((h: any) => h.nombre || h.nombre_habilidad).join(", ") : 'N/A'}
 - Soft Skills: ${empleado.softSkills?.length ? empleado.softSkills.map((s: any) => s.nombre_habilidad || s.nombre).join(", ") : 'N/A'}
 
 El reporte debe estar orientado a resaltar el valor del empleado para la organización y su potencial de crecimiento.
-Devuelve el resultado en el siguiente formato JSON:
+Devuelve el resultado en el siguiente formato JSON, el reporte debe incluir una seccion al final detallando las metas del empleado y su progreso y todos los detalles:
 {
   "reporte": "Texto del reporte aquí"
 }

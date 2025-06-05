@@ -1,4 +1,4 @@
-import { getEmpleadosSinAutoevaluacion, selectProyectosPostulados } from "@/lib/autoevaluacion-empleado/apiCalls";
+import { getEmpleadosSinAutoevaluacion, selectProyectosPostulados, getProyectosNoTerminados} from "@/lib/autoevaluacion-empleado/apiCalls";
 import { Employee, ProjectJson } from "@/lib/delivery-lead-proyectos/definitions";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -21,7 +21,7 @@ export default function CurrentProjectsColumn({
             if (!empleado?.ID_Empleado) return;
 
             try {
-                const proyectosPostulados = await selectProyectosPostulados(empleado.ID_Empleado);
+                const proyectosPostulados = await getProyectosNoTerminados();
                 setProyectosPostulados(proyectosPostulados ?? []);
                 console.log("Proyectos postulados:", proyectosPostulados);
                 // Filter the suggested projects to match the current project IDs

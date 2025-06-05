@@ -40,3 +40,15 @@ export async function selectProyectosPostulados(empleadoID: string) {
   console.log("Proyectos postulados:", data);
   return data;
 }
+
+export async function getProyectosNoTerminados() {
+  const { data, error } = await supabase
+    .from("Proyectos")
+    .select("*")
+    .eq("isReviewed", false);
+
+  if (error) {
+    console.error("Error fetching unfinished projects:", error);
+  }
+  return data;
+}
