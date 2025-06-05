@@ -1095,6 +1095,29 @@ $$;
 ALTER FUNCTION "public"."get_employees_by_td_and_pl"("p_id_people_lead" "uuid", "p_id_talent_discussion" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_employees_in_projects"() RETURNS "json"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    result json;
+BEGIN
+    SELECT json_agg(row_to_json(t))
+    INTO result
+    FROM (
+        SELECT e."ID_Empleado", e."Nombre", p."ID_Proyecto", p."Nombre" AS "Proyecto_Nombre"
+        FROM public."Empleado" e
+        JOIN public."Delivery_Lead" dl ON e."ID_Empleado" = dl."ID_Empleado"
+        JOIN public."Proyectos" p ON dl."ID_DeliveryLead" = p."ID_DeliveryLead"
+    ) t;
+
+    RETURN result;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employees_in_projects"() OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_full_project_data"("project_id" "uuid") RETURNS "jsonb"
     LANGUAGE "plpgsql"
     AS $$DECLARE
