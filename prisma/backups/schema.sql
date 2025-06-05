@@ -1160,7 +1160,8 @@ BEGIN
   WITH ProyectoBase AS (
     SELECT pr.*,
     perfil."Nombre" AS nombre_delivery,
-    perfil."ID_Empleado" AS ID_Empleado_delivery
+    perfil."ID_Empleado" AS ID_Empleado_delivery,
+    perfil."Cargabilidad" AS Cargabilidad_delivery
     FROM "public"."Proyectos" pr
     JOIN "public"."Delivery_Lead" dv ON pr."ID_DeliveryLead" = dv."ID_DeliveryLead"
     JOIN "public"."Empleado" perfil ON dv."ID_Empleado" = perfil."ID_Empleado"
