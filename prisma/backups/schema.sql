@@ -2203,7 +2203,8 @@ CREATE TABLE IF NOT EXISTS "public"."Historial" (
     "Fecha_final" "date",
     "Descripcion" "text",
     "Currentjob" boolean,
-    "created_at" timestamp with time zone DEFAULT "now"()
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "Proyecto" boolean DEFAULT false
 );
 
 
