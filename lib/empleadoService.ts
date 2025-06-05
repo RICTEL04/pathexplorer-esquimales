@@ -59,8 +59,6 @@ export interface Metas {
   Fecha_limite: any;
 }
 
-
-
 export interface Empleado {
   ID_Empleado: any;
   Nombre: any;
@@ -70,7 +68,6 @@ export interface Empleado {
   ID_Departamento: any;
   Certificados: Certificado[];
   Empleado_Proyectos: EmpleadoProyecto[]; // Adjusted to match the returned array structure
-  Puesto_proyecto: PuestoProyecto[];
   Proyectos: Proyecto[]; // Assuming this is a direct relation, adjust if needed
   Capability_Lead: CapabilityLead[]; // Adjusted to match the returned array structure
   Delivery_Lead: DeliveryLead[]; // Adjusted to match the returned array structure
@@ -82,68 +79,126 @@ export interface Empleado {
 export async function getEmpleados(): Promise<Empleado[]> {
   const { data, error } = await supabase
     .from('Empleado')
-    .select(`
+    .select(
+      `
+    ID_Empleado,
+    Nombre,
+    Rol,
+    Nivel,
+    FechaContratacion,
+    ID_Departamento,
+    Metas(
+      ID_meta,
       ID_Empleado,
       Nombre,
-      Rol,
-      Nivel,
-      FechaContratacion,
-      ID_Departamento,
-      Metas (
-        ID_meta,
-        ID_Empleado,
-        Nombre,
-        Descripcion,
-        Tipo_Meta,
-        Plazo,
-        Fecha_limite
-      ),
-      Certificados (
-        ID_Certificado,
-        Nombre,
-        Fecha_caducidad,
-        Documento,
-        Verificacion,
-        Descripcion
-      ),
-      Empleado_Proyectos (
-        id,
-        ID_Empleado,
-        ID_Proyecto,
-        Proyectos (
+      Descripcion,
+      Tipo_Meta,
+      Plazo,
+      Fecha_limite
+    ),
+    Certificados(
+      ID_Certificado,
+      Nombre,
+      Fecha_caducidad,
+      Documento,
+      Verificacion,
+      Descripcion
+    ),
+    Puesto_persona(
+      ID_Puesto,
+      Puesto_proyecto(
+        Puesto,
+        N_puestos,
+        Completo,
+        Proyectos(
           ID_Proyecto,
           fecha_inicio,
           fecha_fin,
           Nombre,
-          Descripcion
-        )
-      ),
-      Capability_Lead (
-        ID_Empleado,
-        ID_Departamento,
-        ID_CapabilityLead,
-        Departamento (
-          Nombre,
-          Descripcion
-        )
-      ),
-      Delivery_Lead (
-        ID_DeliveryLead,
-        ID_Empleado,
-        Proyectos (
-          ID_Proyecto,
-          Nombre,
           Descripcion,
-          Status,
-          fecha_inicio,
-          fecha_fin
+          Status
         )
       )
-    `);
+    ),
+    Capability_Lead(
+      ID_Empleado,
+      ID_Departamento,
+      ID_CapabilityLead,
+      Departamento(
+        Nombre,
+        Descripcion
+      )
+    ),
+    Delivery_Lead(
+      ID_Empleado,
+      ID_DeliveryLead,
+      Proyectos!ID_DeliveryLead(
+        ID_Proyecto,
+        ID_DeliveryLead,
+        fecha_inicio,
+        fecha_fin,
+        Nombre,
+        Descripcion,
+        Status
+      )
+    )
+    `,
+    )
 
-  if (error) throw error;
+  if (error) {
+    console.error('Error al obtener los empleados:', error);
+    throw error;
+  }
+  console.log('Datos obtenidos:', data);
 
   console.log('Empleados:', data);
 
-  return data as Empleado[];
+  // Map the data to ensure all required properties exist
+  const empleados: Empleado[] = (data ?? []).map((item: any) => ({
+    ID_Empleado: item.ID_Empleado,
+    Nombre: item.Nombre,
+    Rol: item.Rol,
+    Nivel: item.Nivel,
+    FechaContratacion: item.FechaContratacion,
+    ID_Departamento: item.ID_Departamento,
+    Certificados: item.Certificados ?? [],
+    Empleado_Proyectos: (Array.isArray(item.Puesto_persona)
+      ? item.Puesto_persona.flatMap((pp: any) => {
+        const proyectosArr: EmpleadoProyecto[] = [];
+        const puestoProyecto = pp.Puesto_proyecto;
+        if (puestoProyecto) {
+          // Handle array or object for Puesto_proyecto
+          const ppArr = Array.isArray(puestoProyecto) ? puestoProyecto : [puestoProyecto];
+          ppArr.forEach((ep: any) => {
+            // Handle array or object for Proyectos
+            const proyectos = ep.Proyectos
+              ? Array.isArray(ep.Proyectos) ? ep.Proyectos : [ep.Proyectos]
+              : [];
+            proyectosArr.push({
+              id: ep.id ?? pp.ID_Puesto ?? null,
+              ID_Empleado: ep.ID_Empleado ?? item.ID_Empleado,
+              ID_Proyecto: ep.ID_Proyecto ?? (proyectos[0]?.ID_Proyecto ?? null),
+              Proyectos: proyectos.map((p: any) => ({
+                ID_Proyecto: p.ID_Proyecto,
+                ID_DeliveryLead: p.ID_DeliveryLead,
+                fecha_inicio: p.fecha_inicio,
+                fecha_fin: p.fecha_fin,
+                Nombre: p.Nombre,
+                Descripcion: p.Descripcion,
+                Status: p.Status,
+              })),
+            });
+          });
+        }
+        return proyectosArr;
+      })
+      : []
+    ),
+    Proyectos: item.Proyectos ?? [],
+    Capability_Lead: item.Capability_Lead ?? [],
+    Delivery_Lead: item.Delivery_Lead ?? [],
+    Metas: item.Metas ?? [],
+  }));
+
+  return empleados;
 }
