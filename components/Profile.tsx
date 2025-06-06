@@ -1,6 +1,6 @@
 //components/Profile.tsx
 import React from 'react';
-import CardTable from '../components/Table';
+import CertificadoCard from '../components/Table';
 import InterestSection from './InterestSection';
 import AddressSection from './AddressSection';
 import StringEditor from './StringEditor';
@@ -111,13 +111,6 @@ const Profile: React.FC<ProfileProps> = ({
   onUpdateAvatarURL,
 
 }) => {
-  const projectColumns: { key: keyof Project; label: string }[] = [
-    { key: 'id', label: 'ID'},
-    { key: 'name', label: 'Nombre' },
-    { key: 'client', label: 'Cliente' },
-    { key: 'puesto', label: 'Puesto' },
-    { key: 'status', label: 'Status' },
-  ];
 
   const certificationsColumns: { key: keyof Certification; label: string }[] = [
     { key: 'Nombre', label: 'Nombre' },
@@ -290,9 +283,16 @@ const Profile: React.FC<ProfileProps> = ({
       {/* Sección de certificados */}
       <div className="mt-8">
         <h3 className="text-lg font-semibold text-gray-800 mb-3">Certificados</h3>
-        {certifications.length > 0 ? (
-          <CardTable columns={certificationsColumns} data={certifications} />
-        ) : renderEmptyMessage("certificados")}
+        <CertificadoCard 
+          certificados={certifications}
+          emptyState={renderEmptyMessage("certificados")}
+          showFields={{
+            nombre: true,
+            fecha: true,
+            verificacion: true,
+            descripcion: true // Ejemplo: ocultar descripción
+          }}
+        />
       </div>
 
       {/* Sección de historial profesional */}

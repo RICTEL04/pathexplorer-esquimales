@@ -7,7 +7,7 @@ import { Habilidad as Hability, Direccion as Direction, Certificado as Certifica
 import { FiMail, FiPhone, FiMapPin, FiUser, FiAward, FiCircle, FiBook } from 'react-icons/fi';
 import EmployeeSkills from '../SkillSection';
 import EmployeeSkillsHard from '../SkillHard';
-import CardTable from '../Table';
+import CertificadoCard from '../Table';
 import ReadOnlyExperience from './ReadOnlyExperience';
 
 interface Project {
@@ -84,6 +84,7 @@ const ReadOnlyProfile: React.FC<ReadOnlyProfileProps> = ({
   HardSkills = [],
   interests = [],
 }) => {
+  
   const certificationsColumns: { key: keyof Certification; label: string }[] = [
     { key: 'Nombre', label: 'Nombre' },
     { key: 'Fecha_caducidad', label: 'Fecha Límite' },
@@ -200,17 +201,16 @@ const ReadOnlyProfile: React.FC<ReadOnlyProfileProps> = ({
       {/* Sección de certificados */}
       <div className="mt-8">
         <h3 className="text-lg font-semibold text-gray-800 mb-3">Certificados</h3>
-        {certifications.length > 0 ? (
-          <CardTable
-            columns={certificationsColumns}
-            data={certifications}
-            onRowClick={(cert) => {
-              if (cert.Documento) {
-                window.open(cert.Documento, '_blank');
-              }
-            }}
-          />
-        ) : renderEmptyMessage("certificados")}
+        <CertificadoCard 
+          certificados={certifications}
+          emptyState={renderEmptyMessage("certificados")}
+          showFields={{
+            nombre: true,
+            fecha: true,
+            verificacion: true,
+            descripcion: true // Ejemplo: ocultar descripción
+          }}
+        />
       </div>
 
       {/* Sección de historial profesional */}
