@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getEmpleados } from "@/lib/empleadoService";
 import { updateCertificado } from "@/lib/empleadoUpdate";
 import { Certificate } from 'crypto';
+import React from 'react';
 
 interface Certificado {
   ID_Certificado: string;
@@ -131,8 +132,8 @@ export default function EmpleadosPage() {
                   {selectedEmpleado.Certificados
                     .filter((cert => cert.Verificacion === null))
                     .map((cert) => (
-                      <>
-                        <tr key={cert.ID_Certificado}>
+                      <React.Fragment key={cert.ID_Certificado}>
+                        <tr>
                           <td><strong>{cert.Nombre}</strong></td>
                           <td>
                             <button
@@ -145,7 +146,12 @@ export default function EmpleadosPage() {
                           <td>
                             <button
                               className="edit-button"
-                              onClick={() => handleCertificadoExpand(cert)}
+                              onClick={() => {
+                                setExpandedCertificado(null);
+                                setDenyVerification(false);
+                                handleCertificadoExpand(cert);
+
+                              }}
                             >
                               {expandedCertificado === cert.ID_Certificado ? "Cerrar" : "Editar"}
                             </button>
@@ -209,7 +215,7 @@ export default function EmpleadosPage() {
                             </td>
                           </tr>
                         )}
-                      </>
+                      </React.Fragment>
                     ))}
                 </tbody>
               </table>
