@@ -831,7 +831,7 @@ BEGIN
     LEFT JOIN "public"."Empleado" pl_emp ON pl."ID_Empleado" = pl_emp."ID_Empleado"
     LEFT JOIN "public"."Capability_Lead" cl ON d."ID_Departamento" = cl."ID_Departamento"
     LEFT JOIN "public"."Empleado" cl_emp ON cl."ID_Empleado" = cl_emp."ID_Empleado"
-    WHERE e."ID_Empleado" = '5f096705-11c3-49b1-b42c-d7bd17a75439';
+    WHERE e."ID_Empleado" = p_id_empleado;
 
     RETURN result;
 END;
