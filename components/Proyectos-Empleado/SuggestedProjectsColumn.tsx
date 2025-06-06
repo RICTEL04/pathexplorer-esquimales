@@ -16,12 +16,28 @@ export default function SuggestedProjectsColumn() {
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
 
+  // Extraer metas y habilidades igual que en page.tsx
+  const metas = empleado?.metas
+    ? empleado.metas.map((m: any) => m.Nombre || m)
+    : [];
+
+  const habilidades = [
+    ...(empleado?.hardSkills || []),
+    ...(empleado?.softSkills || []),
+  ].map((h: any) => h.nombre || h.nombre_habilidad || h);
+
+  // Intereses igual
+  const intereses = empleado?.intereses
+    ? empleado.intereses.map((i: any) => i.Descripcion || i)
+    : [];
+
   // Obtener el ID del usuario logeado
   useEffect(() => {
     const getSession = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+      console.log("Usuario logeado:", session?.user.id);
       setUserId(session?.user.id ?? null);
     };
     getSession();
@@ -33,12 +49,14 @@ export default function SuggestedProjectsColumn() {
       if (!userId) return;
       setLoading(true);
       const { data, error } = await supabase.rpc("get_empleado_a_recomendar", { p_id_empleado: userId });
+      console.log("Datos del empleado222222:", data);
       if (error) {
         console.error("Error obteniendo empleado:", error);
         setLoading(false);
         return;
       }
-      setEmpleado(data?.empleado || null);
+      // Guarda el objeto completo, no solo data.empleado
+      setEmpleado(data || null);
       setLoading(false);
     };
     fetchEmpleado();
@@ -55,6 +73,7 @@ export default function SuggestedProjectsColumn() {
         setLoading(false);
         return;
       }
+      console.log("Proyectos disponibles:", data);
       setProyectosDisponibles(data || []);
       setLoading(false);
     };
@@ -66,23 +85,26 @@ export default function SuggestedProjectsColumn() {
     if (viewType !== "sugeridos" || !empleado) return;
     const fetchProyectosSugeridos = async () => {
       setLoading(true);
-      // Obtener todos los proyectos inactivos para enviar a la IA
       const { data: proyectos, error } = await supabase.rpc("get_inactive_projects_with_skills");
       if (error) {
         console.error("Error obteniendo proyectos para sugerencias:", error);
         setLoading(false);
         return;
       }
-      // Prepara los datos para el request
-      const metas = Array.isArray(empleado.Metas)
-        ? empleado.Metas.map((m: any) => m.Nombre || m)
+
+      // Usa los arrays directos del objeto recibido
+      const metas = Array.isArray(empleado?.metas_en_progreso)
+        ? empleado.metas_en_progreso.map((m: any) => m.Nombre || m)
         : [];
-      const habilidades = Array.isArray(empleado.Habilidades)
-        ? empleado.Habilidades.map((h: any) => h.nombre_habilidad || h.nombre || h)
+
+      const habilidades = Array.isArray(empleado?.habilidades)
+        ? empleado.habilidades.map((h: any) => h.nombre || h.nombre_habilidad || h)
         : [];
-      const intereses = Array.isArray(empleado.Intereses)
-        ? empleado.Intereses.map((i: any) => i.Descripcion || i)
+
+      const intereses = Array.isArray(empleado?.intereses)
+        ? empleado.intereses.map((i: any) => i.Descripcion || i)
         : [];
+
       const proyectosList = (proyectos || []).map((p: any) => ({
         ID_Proyecto: p.ID_Proyecto,
         Nombre: p.Nombre,
@@ -94,6 +116,13 @@ export default function SuggestedProjectsColumn() {
         habilidades_proyecto: p.habilidades_proyecto,
         ImagenUrl: p.ImagenUrl,
       }));
+
+      console.log("Body para ProjectRecommender:", {
+        metas,
+        habilidades,
+        intereses,
+        proyectos: proyectosList,
+      });
 
       try {
         const response = await fetch("/api/ProjectRecommender", {
@@ -116,7 +145,7 @@ export default function SuggestedProjectsColumn() {
       setLoading(false);
     };
     fetchProyectosSugeridos();
-  }, [Boolean(empleado), viewType]);
+  }, [empleado, viewType]);
 
   // Decide qué lista mostrar y aplicar filtro solo en "disponibles"
   const proyectosFiltrados =
