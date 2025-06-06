@@ -1405,6 +1405,60 @@ $$;
 ALTER FUNCTION "public"."get_proyectos_con_habilidades"() OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_proyectos_inactivos_con_habilidades"("cargabilidad_personal" integer) RETURNS SETOF "jsonb"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  RETURN QUERY
+  SELECT to_jsonb(p) || jsonb_build_object(
+    'habilidades_proyecto',
+      (
+        SELECT json_agg(
+          json_build_object(
+            'ID_Habilidad', ph."ID_Habilidad",
+            'Nombre', h."Nombre",
+            'nivel', ph."nivel"
+          )
+        )
+        FROM "public"."Proyecto_Habilidades" ph
+        JOIN "public"."Habilidades" h ON h."ID_Habilidad" = ph."ID_Habilidad"
+        WHERE ph."ID_Proyecto" = p."ID_Proyecto"
+      ),
+    'habilidades_por_puesto',
+      (
+        SELECT json_agg(
+          json_build_object(
+            'Puesto', pp."Puesto",
+            'N_puestos', pp."N_puestos",
+            'Completo', pp."Completo",
+            'habilidades', (
+              SELECT json_agg(
+                json_build_object(
+                  'ID_Habilidad', ph2."ID_Habilidad",
+                  'Nombre', h2."Nombre",
+                  'nivel', ph2."nivel"
+                )
+              )
+              FROM "public"."Proyecto_Habilidades" ph2
+              JOIN "public"."Habilidades" h2 ON h2."ID_Habilidad" = ph2."ID_Habilidad"
+              WHERE ph2."ID_Proyecto" = pp."ID_Proyecto"
+            )
+          )
+        )
+        FROM "public"."Puesto_proyecto" pp
+        WHERE pp."ID_Proyecto" = p."ID_Proyecto"
+      )
+  ) AS resultado
+  FROM "public"."Proyectos" p
+  WHERE p."Status" = 'inactive'
+    AND p."cargabilidad_num" + cargabilidad_personal <= 100;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_proyectos_inactivos_con_habilidades"("cargabilidad_personal" integer) OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_talent_discussion_by_id_and_people_lead"("p_id_talent_discussion" "uuid", "p_id_people_lead" "uuid") RETURNS TABLE("id_talent_discussion" "uuid", "discussion" "text", "id_talent_lead" "uuid", "nombre_talent_lead" "text", "nivel" "text", "fecha_inicio" "date", "fecha_final" "date", "estado" "text", "estado_td_people_lead" "text")
     LANGUAGE "plpgsql"
     AS $$
@@ -2204,7 +2258,7 @@ CREATE TABLE IF NOT EXISTS "public"."Historial" (
     "Descripcion" "text",
     "Currentjob" boolean,
     "created_at" timestamp with time zone DEFAULT "now"(),
-    "Proyecto" boolean DEFAULT false
+    "ID_Proyecto" "uuid"
 );
 
 
@@ -2728,6 +2782,11 @@ ALTER TABLE ONLY "public"."Historial_Habilidades"
 
 ALTER TABLE ONLY "public"."Historial"
     ADD CONSTRAINT "Historial_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+
+
+
+ALTER TABLE ONLY "public"."Historial"
+    ADD CONSTRAINT "Historial_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
 
 
 
