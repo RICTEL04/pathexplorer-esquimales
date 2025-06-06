@@ -16,7 +16,6 @@ export default function SuggestedProjectsColumn() {
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
 
-
   // Obtener el ID del usuario logeado
   useEffect(() => {
     const getSession = async () => {
@@ -28,13 +27,12 @@ export default function SuggestedProjectsColumn() {
     getSession();
   }, []);
 
-  // Obtener datos del empleado logeado (incluye cargabilidad)
+  // Obtener datos del empleado logeado (incluye cargabilidad, metas, habilidades, intereses)
   useEffect(() => {
     const fetchEmpleado = async () => {
       if (!userId) return;
       setLoading(true);
       const { data, error } = await supabase.rpc("get_empleado_a_recomendar", { p_id_empleado: userId });
-
       if (error) {
         console.error("Error obteniendo empleado:", error);
         setLoading(false);
@@ -46,33 +44,58 @@ export default function SuggestedProjectsColumn() {
     fetchEmpleado();
   }, [userId]);
 
-  // Obtener proyectos sugeridos (IA) usando la cargabilidad y la API interna
+  // Obtener proyectos disponibles (todos los inactivos)
   useEffect(() => {
-    const fetchProyectosSugeridos = async () => {
-      if (!empleado?.Cargabilidad) return;
+    if (viewType !== "disponibles") return;
+    const fetchProyectosDisponibles = async () => {
       setLoading(true);
-
-      // 1. Obtener proyectos inactivos con habilidades y cargabilidad personal
-      const { data, error } = await supabase.rpc(
-        "get_proyectos_inactivos_con_habilidades",
-        { cargabilidad_personal: empleado.Cargabilidad }
-      );
+      const { data, error } = await supabase.rpc("get_inactive_projects_with_skills");
       if (error) {
-        console.error("Error obteniendo proyectos sugeridos:", error);
+        console.error("Error obteniendo proyectos disponibles:", error);
         setLoading(false);
         return;
       }
+      setProyectosDisponibles(data || []);
+      setLoading(false);
+    };
+    fetchProyectosDisponibles();
+  }, [viewType]);
 
-      // El resultado ya es un array de proyectos, no necesitas mapear 'resultado'
-      const proyectos = data || [];
-
-      // 2. Preparar datos para la API
-      const metas = empleado?.Metas || [];
-      const habilidades = empleado?.Habilidades || [];
-      const intereses = empleado?.Intereses || [];
+  // Obtener proyectos sugeridos (IA)
+  useEffect(() => {
+    if (viewType !== "sugeridos" || !empleado) return;
+    const fetchProyectosSugeridos = async () => {
+      setLoading(true);
+      // Obtener todos los proyectos inactivos para enviar a la IA
+      const { data: proyectos, error } = await supabase.rpc("get_inactive_projects_with_skills");
+      if (error) {
+        console.error("Error obteniendo proyectos para sugerencias:", error);
+        setLoading(false);
+        return;
+      }
+      // Prepara los datos para el request
+      const metas = Array.isArray(empleado.Metas)
+        ? empleado.Metas.map((m: any) => m.Nombre || m)
+        : [];
+      const habilidades = Array.isArray(empleado.Habilidades)
+        ? empleado.Habilidades.map((h: any) => h.nombre_habilidad || h.nombre || h)
+        : [];
+      const intereses = Array.isArray(empleado.Intereses)
+        ? empleado.Intereses.map((i: any) => i.Descripcion || i)
+        : [];
+      const proyectosList = (proyectos || []).map((p: any) => ({
+        ID_Proyecto: p.ID_Proyecto,
+        Nombre: p.Nombre,
+        Descripcion: p.Descripcion,
+        Status: p.Status,
+        fecha_inicio: p.fecha_inicio,
+        fecha_fin: p.fecha_fin,
+        cargabilidad_num: p.cargabilidad_num,
+        habilidades_proyecto: p.habilidades_proyecto,
+        ImagenUrl: p.ImagenUrl,
+      }));
 
       try {
-        // 3. Llamar a la API interna
         const response = await fetch("/api/ProjectRecommender", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -80,7 +103,7 @@ export default function SuggestedProjectsColumn() {
             metas,
             habilidades,
             intereses,
-            proyectos,
+            proyectos: proyectosList,
           }),
         });
         if (!response.ok) throw new Error("Error en la API interna");
@@ -92,34 +115,14 @@ export default function SuggestedProjectsColumn() {
       }
       setLoading(false);
     };
-    if (viewType === "sugeridos" && empleado?.Cargabilidad !== undefined) {
-      fetchProyectosSugeridos();
-    }
-  }, [empleado, viewType]);
-
-  // Obtener proyectos disponibles (todos los inactivos)
-  useEffect(() => {
-    const fetchProyectosDisponibles = async () => {
-      setLoading(true);
-      const { data, error } = await supabase.rpc("get_inactive_projects_with_skills");
-      console.log("Proyectos disponibles:", data);
-      if (error) {
-        console.error("Error obteniendo proyectos disponibles:", error);
-        setLoading(false);
-        return;
-      }
-      setProyectosDisponibles(data || []);
-      setLoading(false);
-    };
-    if (viewType === "disponibles") fetchProyectosDisponibles();
-  }, [viewType]);
+    fetchProyectosSugeridos();
+  }, [Boolean(empleado), viewType]);
 
   // Decide qué lista mostrar y aplicar filtro solo en "disponibles"
   const proyectosFiltrados =
     viewType === "disponibles"
       ? proyectosDisponibles
           .filter((proyecto) => {
-            // Filtro de búsqueda por nombre o ID
             const term = searchTerm.toLowerCase();
             return (
               proyecto.Nombre?.toLowerCase().includes(term) ||
@@ -127,7 +130,6 @@ export default function SuggestedProjectsColumn() {
             );
           })
           .filter((proyecto) => {
-            // Filtro de candidato
             if (!empleado?.Cargabilidad || candidatoFilter === "todos") return true;
             const cargabilidadProyecto =
               proyecto.cargabilidad_num !== undefined
@@ -144,7 +146,6 @@ export default function SuggestedProjectsColumn() {
 
   // Función para manejar el click en proyecto disponible
   const handleProjectClick = (proyecto: any) => {
-    // Solo aplica en "disponibles"
     if (viewType !== "disponibles") {
       router.push(`/employee/proyectos/${proyecto.ID_Proyecto}`);
       return;
@@ -213,148 +214,90 @@ export default function SuggestedProjectsColumn() {
         </>
       )}
       <div className="space-y-4 overflow-y-scroll no-scrollbar mt-4 h-[80vh]">
-        {proyectosFiltrados.map((proyecto: any) => {
-          // Determinar la imagen a mostrar
-          const imagenSrc = proyecto.ImagenUrl
-            ? `https://nuyfnqiodjynfkubkqpn.supabase.co/storage/v1/object/public/project-images/${proyecto.ImagenUrl}`
-            : proyecto.Imagen || undefined;
-
-          // Determinar la cargabilidad
-          const cargabilidad =
-            proyecto.cargabilidad_num !== undefined
-              ? proyecto.cargabilidad_num
-              : proyecto.Cargabilidad !== undefined
-              ? proyecto.Cargabilidad
-              : undefined;
-
-          // Determinar las habilidades
-          const habilidades =
-            proyecto.habilidades_proyecto?.length > 0
-              ? proyecto.habilidades_proyecto
-              : proyecto.Habilidades?.length > 0
-              ? proyecto.Habilidades
-              : [];
-
-          return viewType === "sugeridos" ? (
-            // Tarjeta para proyectos sugeridos
-            <div
-              key={proyecto.ID_Proyecto}
-              className="bg-white rounded-lg border-l-4 border-purple-400 border shadow-md p-4 relative cursor-pointer hover:shadow-xl transition-all duration-200 flex flex-col"
-              onClick={() => router.push(`/employee/proyectos/${proyecto.ID_Proyecto}`)}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <h3 className="text-lg font-bold text-purple-700">{proyecto.Nombre}</h3>
-                  <span className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700 border">{proyecto.Status}</span>
-                </div>
-                {imagenSrc && (
-                  <img
-                    src={imagenSrc}
-                    alt={proyecto.Nombre}
-                    className="w-20 h-20 object-cover rounded-full border-2 border-purple-300 shadow ml-4"
-                    style={{ objectPosition: "center" }}
-                  />
-                )}
-              </div>
-              {cargabilidad !== undefined && (
-                <div className="mb-2">
-                  <span className="inline-block text-xs font-semibold text-purple-600 bg-purple-100 rounded px-2 py-0.5">
-                    Cargabilidad: {cargabilidad}%
-                  </span>
-                </div>
-              )}
-              {habilidades.length > 0 && (
-                <div className="mb-2">
-                  <span className="text-gray-600 text-xs font-semibold">Habilidades requeridas:</span>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {habilidades.map((hab: any, idx: number) => (
-                      <span
-                        key={idx}
-                        className="bg-purple-50 text-purple-700 text-xs px-2 py-0.5 rounded-full border border-purple-200"
-                      >
-                        {hab.Nombre || hab}
-                      </span>
-                    ))}
+        {loading ? (
+          <div className="text-center text-gray-400 py-8">Cargando proyectos...</div>
+        ) : proyectosFiltrados.length === 0 ? (
+          <div className="text-center text-gray-400 py-8">No hay proyectos para mostrar.</div>
+        ) : (
+          proyectosFiltrados.map((proyecto: any) => {
+            const imagenSrc = proyecto.ImagenUrl
+              ? `https://nuyfnqiodjynfkubkqpn.supabase.co/storage/v1/object/public/project-images/${proyecto.ImagenUrl}`
+              : proyecto.Imagen || undefined;
+            const cargabilidad =
+              proyecto.cargabilidad_num !== undefined
+                ? proyecto.cargabilidad_num
+                : proyecto.Cargabilidad !== undefined
+                ? proyecto.Cargabilidad
+                : undefined;
+            const habilidades =
+              proyecto.habilidades_proyecto?.length > 0
+                ? proyecto.habilidades_proyecto
+                : proyecto.Habilidades?.length > 0
+                ? proyecto.Habilidades
+                : [];
+            return (
+              <div
+                key={proyecto.ID_Proyecto}
+                className="bg-white rounded-lg border-l-4 border-purple-400 border shadow-md p-4 relative cursor-pointer hover:shadow-xl transition-all duration-200 flex flex-col"
+                onClick={() => handleProjectClick(proyecto)}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h3 className="text-lg font-bold text-purple-700">{proyecto.Nombre}</h3>
+                    <span className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700 border">{proyecto.Status}</span>
                   </div>
+                  {imagenSrc && (
+                    <img
+                      src={imagenSrc}
+                      alt={proyecto.Nombre}
+                      className="w-20 h-20 object-cover rounded-full border-2 border-purple-300 shadow ml-4"
+                      style={{ objectPosition: "center" }}
+                    />
+                  )}
                 </div>
-              )}
-              <div className="flex gap-4 mt-auto text-xs text-gray-500 pt-2 border-t">
-                {proyecto.fecha_inicio && (
-                  <span>
-                    <b>Inicio:</b> {new Date(proyecto.fecha_inicio).toLocaleDateString()}
-                  </span>
-                )}
-                {proyecto.fecha_fin && (
-                  <span>
-                    <b>Fin:</b> {new Date(proyecto.fecha_fin).toLocaleDateString()}
-                  </span>
-                )}
-              </div>
-            </div>
-          ) : (
-            // Tarjeta para proyectos disponibles
-            <div
-              key={proyecto.ID_Proyecto}
-              className="bg-white rounded-lg border-l-4 border-purple-400 border shadow-md p-4 relative cursor-pointer hover:shadow-xl transition-all duration-200 flex flex-col"
-              onClick={() => handleProjectClick(proyecto)}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <h3 className="text-lg font-bold text-purple-700">{proyecto.Nombre}</h3>
-                  <span className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700 border">{proyecto.Status}</span>
-                </div>
-                {imagenSrc && (
-                  <img
-                    src={imagenSrc}
-                    alt={proyecto.Nombre}
-                    className="w-20 h-20 object-cover rounded-full border-2 border-purple-300 shadow ml-4"
-                    style={{ objectPosition: "center" }}
-                  />
-                )}
-              </div>
-              {cargabilidad !== undefined && (
-                <div className="mb-2">
-                  <span className="inline-block text-xs font-semibold text-purple-600 bg-purple-100 rounded px-2 py-0.5">
-                    Cargabilidad: {cargabilidad}%
-                  </span>
-                </div>
-              )}
-              {habilidades.length > 0 && (
-                <div className="mb-2">
-                  <span className="text-gray-600 text-xs font-semibold">Habilidades requeridas:</span>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {habilidades.map((hab: any, idx: number) => (
-                      <span
-                        key={idx}
-                        className="bg-purple-50 text-purple-700 text-xs px-2 py-0.5 rounded-full border border-purple-200"
-                      >
-                        {hab.Nombre || hab}
-                      </span>
-                    ))}
+                {cargabilidad !== undefined && (
+                  <div className="mb-2">
+                    <span className="inline-block text-xs font-semibold text-purple-600 bg-purple-100 rounded px-2 py-0.5">
+                      Cargabilidad: {cargabilidad}%
+                    </span>
                   </div>
+                )}
+                {habilidades.length > 0 && (
+                  <div className="mb-2">
+                    <span className="text-gray-600 text-xs font-semibold">Habilidades requeridas:</span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {habilidades.map((hab: any, idx: number) => (
+                        <span
+                          key={idx}
+                          className="bg-purple-50 text-purple-700 text-xs px-2 py-0.5 rounded-full border border-purple-200"
+                        >
+                          {hab.Nombre || hab}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="flex gap-4 mt-auto text-xs text-gray-500 pt-2 border-t">
+                  {proyecto.fecha_inicio && (
+                    <span>
+                      <b>Inicio:</b> {new Date(proyecto.fecha_inicio).toLocaleDateString()}
+                    </span>
+                  )}
+                  {proyecto.fecha_fin && (
+                    <span>
+                      <b>Fin:</b> {new Date(proyecto.fecha_fin).toLocaleDateString()}
+                    </span>
+                  )}
                 </div>
-              )}
-              <div className="flex gap-4 mt-auto text-xs text-gray-500 pt-2 border-t">
-                {proyecto.fecha_inicio && (
-                  <span>
-                    <b>Inicio:</b> {new Date(proyecto.fecha_inicio).toLocaleDateString()}
-                  </span>
-                )}
-                {proyecto.fecha_fin && (
-                  <span>
-                    <b>Fin:</b> {new Date(proyecto.fecha_fin).toLocaleDateString()}
-                  </span>
-                )}
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
       {/* Modal de aviso */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-700/20 bg-opacity-40">
           <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full text-center relative">
-            {/* Botón de cerrar (X) */}
             <button
               className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-xl font-bold"
               onClick={() => setShowModal(false)}
