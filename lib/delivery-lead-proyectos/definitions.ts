@@ -15,6 +15,7 @@ export interface ProjectJson {
     Nombre: string;
     Status: string;
     // Agrega aquí las propiedades que llegan de Supabase
+    ID_DeliveryLead: string;
     Cliente?: string;
     ID_Cliente?: number;
     Fecha_Inicio?: string;

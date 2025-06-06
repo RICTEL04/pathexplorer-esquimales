@@ -1,9 +1,15 @@
 import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
-export default function SuggestedProjectsColumn() {
+// Props esperados
+interface EmployeeSkillsHardProps {
+  employeeId: string;
+  categoryId: string;
+}
+
+const EmployeeSkillsHard: React.FC<EmployeeSkillsHardProps> = ({ employeeId, categoryId }) => {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [empleado, setEmpleado] = useState<any>(null);
@@ -15,7 +21,8 @@ export default function SuggestedProjectsColumn() {
   const [candidatoFilter, setCandidatoFilter] = useState<"todos" | "candidato" | "no-candidato">("todos");
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
-
+  const [skills, setSkills] = useState<any[]>([]);
+  const [loadingSkills, setLoadingSkills] = useState(true);
 
   // Obtener el ID del usuario logeado
   useEffect(() => {
@@ -163,6 +170,19 @@ export default function SuggestedProjectsColumn() {
       router.push(`/employee/proyectos/${proyecto.ID_Proyecto}`);
     }
   };
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      setLoadingSkills(true);
+      const { data, error } = await supabase.rpc('obtener_habilidades_por_categoria', {
+        p_id_empleado: userId,
+        p_id_categoria: 'hard_skills', // Asumiendo que esta es la categoría para habilidades duras
+      });
+      setSkills(data || []);
+      setLoadingSkills(false);
+    };
+    if (userId) fetchSkills();
+  }, [userId]);
 
   return (
     <div className="lg:col-span-2">
@@ -381,6 +401,28 @@ export default function SuggestedProjectsColumn() {
           </div>
         </div>
       )}
+      {/* Sección de habilidades duras */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Habilidades duras</h2>
+        {loadingSkills ? (
+          <div>Cargando habilidades duras...</div>
+        ) : (
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {skills.length > 0 ? (
+              skills.map((skill) => (
+                <li key={skill.id_habilidad} className="bg-white p-4 rounded shadow border">
+                  <span className="font-semibold">{skill.nombre_habilidad}</span>
+                  <span className="ml-2 text-sm text-gray-500">{skill.nivel_habilidad}</span>
+                </li>
+              ))
+            ) : (
+              <div>No hay habilidades duras registradas.</div>
+            )}
+          </ul>
+        )}
+      </div>
     </div>
   );
-}
+};
+
+export default EmployeeSkillsHard;

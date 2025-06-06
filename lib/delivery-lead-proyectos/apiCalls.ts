@@ -45,8 +45,8 @@ export async function insertProject(projectData: ProjectJson) {
     .insert({
       Nombre: projectData.Nombre,
       Descripcion: projectData.Descripcion,
-      fecha_inicio: projectData.fecha_inicio,
-      fecha_fin: projectData.fecha_fin,
+      Fecha_Inicio: projectData.Fecha_Inicio,
+      Fecha_Fin: projectData.Fecha_Fin,
       ID_DeliveryLead: projectData.ID_DeliveryLead,
     })
     .select()
@@ -66,8 +66,8 @@ export async function updateProject(editProject: ProjectJson) {
     .update({
       Nombre: editProject.Nombre,
       Descripcion: editProject.Descripcion,
-      fecha_inicio: editProject.fecha_inicio,
-      fecha_fin: editProject.fecha_fin,
+      Fecha_Inicio: editProject.Fecha_Inicio,
+      Fecha_Fin: editProject.Fecha_Fin,
     })
     .eq('ID_Proyecto', editProject.ID_Proyecto);
   if (error) throw error;
