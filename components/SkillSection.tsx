@@ -137,7 +137,7 @@ const EmployeeSkillsByCategory = ({ employeeId, categoryId }: { employeeId: stri
               ◀
             </button>
             <span className="text-gray-700 font-medium">
-              Página {currentPage} de {totalPages}
+              {currentPage} / {totalPages}
             </span>
             <button
               className="px-3 py-1 rounded-lg border border-gray-300 bg-white hover:bg-blue-100 transition disabled:opacity-50"
@@ -172,27 +172,6 @@ const EmployeeSkillsByCategory = ({ employeeId, categoryId }: { employeeId: stri
           </div>
         ))}
       </div>
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-2">
-          <button
-            className="px-3 py-1 rounded-lg border border-gray-300 bg-white hover:bg-blue-100 transition disabled:opacity-50"
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-          >
-            ◀ Anterior
-          </button>
-          <span className="text-gray-700 font-medium">
-            Página {currentPage} de {totalPages}
-          </span>
-          <button
-            className="px-3 py-1 rounded-lg border border-gray-300 bg-white hover:bg-blue-100 transition disabled:opacity-50"
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-          >
-            Siguiente ▶
-          </button>
-        </div>
-      )}
     </div>
   );
 };

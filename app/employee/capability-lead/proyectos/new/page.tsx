@@ -43,6 +43,9 @@ export default function NewProjectPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
+  // Nuevo estado para controlar el modal de advertencia
+  const [showCargabilidadWarning, setShowCargabilidadWarning] = useState(false);
+
   // Mostrar preview al seleccionar imagen
   useEffect(() => {
     if (projectImage) {
@@ -114,6 +117,11 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Si hay delivery lead seleccionado y la suma de cargabilidad sobrepasa 100, muestra el modal y no envía
+    if (selectedDeliveryLead && sobrepasaCargabilidad) {
+      setShowCargabilidadWarning(true);
+      return;
+    }
     setIsSubmitting(true);
     const proyectoId = crypto.randomUUID();
   
@@ -134,7 +142,7 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
       }
 
       // 1. Crear el proyecto
-      const { data: proyecto, error: proyectoError } = await supabase
+        const { data: proyecto, error: proyectoError } = await supabase
         .from("Proyectos")
         .insert({
           ID_Proyecto: proyectoId,
@@ -142,7 +150,7 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
           Descripcion: description,
           fecha_inicio: startDate,
           fecha_fin: endDate,
-          ID_DeliveryLead: selectedDeliveryLead?.id_deliverylead || null,
+          ID_DeliveryLead: selectedDeliveryLead?.ID_DeliveryLead || null, // <--- aquí el cambio
           cargabilidad_num: cargabilidad,
           Cliente: clientName,
           ImagenUrl: imageUrl,
@@ -151,6 +159,14 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
         .single();
   
       if (proyectoError) throw proyectoError;
+
+      // Aumentar cargabilidad del Delivery Lead seleccionado
+      if (selectedDeliveryLead && proyecto?.cargabilidad_num) {
+        await supabase.rpc("aumentar_cargabilidad", {
+          id: selectedDeliveryLead.ID_Empleado,
+          incremento: cargabilidad,
+        });
+      }
   
       // 2. Insertar los puestos y sus habilidades
       for (const role of roles) {
@@ -209,6 +225,44 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
 
   // Cargar habilidades y categorías al montar
   // Cargar habilidades, categorías y Delivery Leads al montar
+  const fetchAvatarURL = async (employeeID: string | null): Promise<string | null> => {
+    if (!employeeID) return null;
+
+    const bucketName = "profile-pictures";
+    const basePath = `${employeeID}/perfil`;
+
+    try {
+      const { data: files, error } = await supabase.storage
+        .from(bucketName)
+        .list(`${employeeID}`, {
+          limit: 1,
+          search: 'perfil'
+        });
+
+      if (error || !files || files.length === 0) {
+        console.log('No se encontró archivo de avatar:', error?.message);
+        return null;
+      }
+
+      const actualFileName = files[0].name;
+      const fullFilePath = `${employeeID}/${actualFileName}`;
+
+      const { data: signedUrl } = await supabase.storage
+        .from(bucketName)
+        .createSignedUrl(fullFilePath, 3600);
+
+      if (!signedUrl?.signedUrl) {
+        console.log('No se pudo generar URL firmada');
+        return null;
+      }
+
+      return signedUrl.signedUrl;
+    } catch (error) {
+      console.error('Error verificando avatar:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       // Cargar categorías y habilidades (mantén tu código existente)
@@ -220,7 +274,7 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
       // Cargar Delivery Leads usando tu consulta SQL específica
       setLoadingLeads(true);
       try {
-        const { data, error } = await supabase.rpc('get_available_delivery_leads');
+        const { data, error } = await supabase.rpc('get_available_delivery_leads2');
         if (error) throw error;
         setDeliveryLeads(data || []);
 
@@ -228,7 +282,7 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
         const avatarLinks: { [id: string]: string | null } = {};
         await Promise.all(
           (data || []).map(async (lead: any) => {
-            avatarLinks[lead.id_empleado] = await fetchAvatarURL(lead.id_empleado);
+            avatarLinks[lead.ID_Empleado] = await fetchAvatarURL(lead.ID_Empleado);
           })
         );
         setLeadAvatars(avatarLinks);
@@ -284,17 +338,24 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
 
   // Filtrado y paginación de delivery leads
   const filteredLeads = deliveryLeads
-    .filter(lead =>
-      (!selectedDeliveryLead || lead.id_empleado !== selectedDeliveryLead.id_empleado) &&
-      (
-        lead.nombre_empleado.toLowerCase().includes(leadSearch.toLowerCase()) ||
-        String(lead.id_empleado).includes(leadSearch)
-      )
-    );
-  const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);
-  const paginatedLeads = filteredLeads.slice((leadPage - 1) * leadsPerPage, leadPage * leadsPerPage);
+  .filter(lead =>
+    (!selectedDeliveryLead || lead.ID_Empleado !== selectedDeliveryLead.ID_Empleado) &&
+    (
+      lead.nombre_empleado.toLowerCase().includes(leadSearch.toLowerCase()) ||
+      String(lead.ID_Empleado).includes(leadSearch)
+    )
+  )
+  // FILTRO DE CARGABILIDAD: solo mostrar leads cuya suma de cargabilidad + la del proyecto no exceda 100
+  .filter(lead => {
+    const leadCargabilidad = Number(lead.Cargabilidad) || 0;
+    const proyectoCargabilidad = Number(cargabilidad) || 0;
+    return leadCargabilidad + proyectoCargabilidad <= 100;
+  });
 
-  // Filtrar habilidades para el modal de skills por nombre y que no estén ya agregadas al rol
+const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);
+const paginatedLeads = filteredLeads.slice((leadPage - 1) * leadsPerPage, leadPage * leadsPerPage);
+
+// Filtrar habilidades para el modal de skills por nombre y que no estén ya agregadas al rol
   const filteredModalSkills = habilidades.filter(h =>
     h.Nombre.toLowerCase().includes(modalSkillSearch.toLowerCase())
   );
@@ -312,48 +373,19 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
   ];
     const [leadAvatars, setLeadAvatars] = useState<{ [id: string]: string | null }>({});
 
-  const fetchAvatarURL = async (employeeID: string | null): Promise<string | null> => {
-  if (!employeeID) return null;
+  const isFormValid =
+  projectName.trim() !== "" &&
+  clientName.trim() !== "" &&
+  cargabilidad !== null &&
+  startDate.trim() !== "" &&
+  endDate.trim() !== "" &&
+  selectedDeliveryLead !== null;
 
-  const bucketName = "profile-pictures";
-  const basePath = `${employeeID}/perfil`;
-  
-  try {
-    // 1. Listar archivos en el directorio para encontrar la imagen real
-    const { data: files, error } = await supabase.storage
-      .from(bucketName)
-      .list(`${employeeID}`, {
-        limit: 1,
-        search: 'perfil'
-      });
-
-    if (error || !files || files.length === 0) {
-      console.log('No se encontró archivo de avatar:', error?.message);
-      return null;
-    }
-
-    // Obtener el nombre real del archivo (con extensión)
-    const actualFileName = files[0].name;
-    const fullFilePath = `${employeeID}/${actualFileName}`;
-
-    // 2. Obtener URL firmada (temporal) para acceder al archivo
-    const { data: signedUrl } = await supabase.storage
-      .from(bucketName)
-      .createSignedUrl(fullFilePath, 3600); // URL válida por 1 hora
-
-    if (!signedUrl?.signedUrl) {
-      console.log('No se pudo generar URL firmada');
-      return null;
-    }
-
-    console.log('Avatar encontrado:', signedUrl.signedUrl);
-    return signedUrl.signedUrl;
-    
-  } catch (error) {
-    console.error('Error verificando avatar:', error);
-    return null;
-  }
-};
+  // Calcula la suma de cargabilidad para el delivery lead seleccionado
+  const selectedLeadCargabilidad = Number(selectedDeliveryLead?.Cargabilidad) || 0;
+  const proyectoCargabilidad = Number(cargabilidad) || 0;
+  const sumaCargabilidad = selectedLeadCargabilidad + proyectoCargabilidad;
+  const sobrepasaCargabilidad = sumaCargabilidad > 100;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -489,18 +521,43 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
                       }}
                     >
                       {selectedDeliveryLead ? (
-                        <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-3 w-full">
                           <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
-                      <img
-                        src={leadAvatars[selectedDeliveryLead.id_empleado] || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
-                        alt={`Avatar de ${selectedDeliveryLead.nombre_empleado}`}
-                        width={60}
-                        height={60}
-                        className="object-cover w-full h-full"
-                        loading="lazy"
-                      />
-                    </div>
-                          <span className="font-medium">{selectedDeliveryLead.nombre_empleado}</span>
+                            <img
+                              src={leadAvatars[selectedDeliveryLead.ID_Empleado] || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+                              alt={`Avatar de ${selectedDeliveryLead.nombre_empleado}`}
+                              width={60}
+                              height={60}
+                              className="object-cover w-full h-full"
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <span className="font-medium">{selectedDeliveryLead.nombre_empleado}</span>
+                            {/* Barra de cargabilidad combinada */}
+                            <div className="mt-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-gray-600">Cargabilidad total:</span>
+                                <span className={`text-xs font-semibold ${sobrepasaCargabilidad ? "text-red-600" : "text-purple-700"}`}>
+                                  {sumaCargabilidad}%
+                                </span>
+                                {sobrepasaCargabilidad && (
+                                  <span className="ml-2 text-xs text-red-600 flex items-center" title="La suma de cargabilidad supera el 100%">
+                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    ¡Cargabilidad excedida!
+                                  </span>
+                                )}
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div
+                                  className={`h-2 rounded-full transition-all ${sobrepasaCargabilidad ? "bg-red-500" : "bg-purple-500"}`}
+                                  style={{ width: `${Math.min(sumaCargabilidad, 100)}%` }}
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
                           <button
                             type="button"
                             className="ml-2 text-red-500 hover:text-red-700"
@@ -841,7 +898,7 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
                 <button
                   type="submit"
                   className="px-6 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-200 disabled:opacity-70"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !isFormValid}
                 >
                   {isSubmitting ? (
                     <>
@@ -869,13 +926,12 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-700"></div>
             <span className="ml-3">Cargando delivery leads...</span>
           </div>
-        ) : deliveryLeads.length === 0 ? (
+        ) : filteredLeads.length === 0 ? (
           <div className="text-center py-4">
             <p className="text-gray-500">No hay delivery leads disponibles actualmente.</p>
           </div>
         ) : (
           <>
-          
             {/* Barra de búsqueda y paginación */}
             <div className="mb-4">
               <div className="relative">
@@ -922,7 +978,7 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
             <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
               {paginatedLeads.map((lead) => (
                 <div
-                  key={lead.id_empleado}
+                  key={lead.ID_DeliveryLead}
                   className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-move"
                   draggable
                   onDragStart={e => {
@@ -932,7 +988,7 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
                   <div className="flex items-start">
                     <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
                       <img
-                        src={leadAvatars[lead.id_empleado] || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+                        src={leadAvatars[lead.ID_Empleado] || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
                         alt={`Avatar de ${lead.nombre_empleado}`}
                         width={60}
                         height={60}
@@ -940,8 +996,21 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
                         loading="lazy"
                       />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 ml-4">
                       <h4 className="font-medium text-gray-900">{lead.nombre_empleado}</h4>
+                      {/* Barra de cargabilidad */}
+                      <div className="mt-2">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs text-gray-600">Cargabilidad</span>
+                          <span className="text-xs font-semibold text-purple-700">{lead.Cargabilidad ?? 0}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-purple-500 h-2 rounded-full transition-all"
+                            style={{ width: `${lead.Cargabilidad ?? 0}%` }}
+                          ></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1112,6 +1181,35 @@ const removeSkillFromRole = (roleIdx: number, skillId: string) => {
           onClick={closeSkillModal}
         >
           Listo
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{showCargabilidadWarning && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-700/40 bg-opacity-40">
+    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+      <button
+        className="absolute top-2 right-3 text-gray-400 hover:text-gray-600 text-xl"
+        onClick={() => setShowCargabilidadWarning(false)}
+        title="Cerrar"
+      >×</button>
+      <div className="flex items-center mb-4">
+        <svg className="w-8 h-8 text-red-500 mr-2" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h2 className="text-lg font-semibold text-red-600">Cargabilidad excedida</h2>
+      </div>
+      <p className="mb-4 text-gray-700">
+        La suma de la cargabilidad actual del Delivery Lead y la cargabilidad propuesta para este proyecto es <b>{sumaCargabilidad}%</b>, lo cual excede el 100%.<br />
+        Por favor, ajusta la cargabilidad del proyecto o selecciona otro Delivery Lead.
+      </p>
+      <div className="flex justify-end">
+        <button
+          className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+          onClick={() => setShowCargabilidadWarning(false)}
+        >
+          Entendido
         </button>
       </div>
     </div>

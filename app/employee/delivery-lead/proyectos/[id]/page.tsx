@@ -53,9 +53,6 @@ export default function ProyectoDetalle() {
   const [finishProjectModal, setFinishProjectModal] = useState(false);
   const [finishCountdown, setFinishCountdown] = useState(5);
   const [finishEnabled, setFinishEnabled] = useState(false);
-  const [postulados, setPostulados] = useState<any[]>([]);
-  // Agrega este estado antes del return principal
-  const [empleadoTab, setEmpleadoTab] = useState<"todos" | "postulados">("todos");
 
   // Mueve fetchData fuera del useEffect para poder reutilizarla
   const fetchData = async () => {
@@ -148,43 +145,6 @@ export default function ProyectoDetalle() {
     return data || [];
   };
 
-  // Nuevo: obtener empleados postulados para el puesto y proyecto actual
-  const fetchPostulados = async (puestoId: string) => {
-    if (!proyecto?.ID_Proyecto || !puestoId) {
-      setPostulados([]);
-      return;
-    }
-    // Trae los empleados postulados a este puesto en este proyecto
-    const { data, error } = await supabase
-      .from("Postulaciones")
-      .select(`
-        ID_empleado,
-        Empleado:ID_empleado (
-          ID_Empleado,
-          Nombre,
-          Cargabilidad
-        )
-      `)
-      .eq("ID_Proyecto", proyecto.ID_Proyecto)
-      .eq("ID_Puesto", puestoId);
-
-    if (!error && data) {
-      // Normaliza el formato para las tarjetas
-      setPostulados(
-        data
-          .map((p: any) => ({
-            id_empleado: p.Empleado?.ID_Empleado,
-            nombre: p.Empleado?.Nombre,
-            // Asegúrate de tomar el campo correcto y convertirlo a número
-            cargabilidad: Number(p.Empleado?.Cargabilidad ?? p.Empleado?.cargabilidad ?? 0),
-          }))
-          .filter((p: any) => !!p.id_empleado)
-      );
-    } else {
-      setPostulados([]);
-    }
-  };
-
   // Reset asignados cuando cambie el puesto seleccionado
   useEffect(() => {
     if (selectedPuesto) {
@@ -192,29 +152,13 @@ export default function ProyectoDetalle() {
     }
   }, [selectedPuesto]);
 
-  // Llama fetchPostulados cuando se selecciona un puesto
-  useEffect(() => {
-    if (selectedPuesto) {
-      fetchPostulados(selectedPuesto.id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPuesto, proyecto?.ID_Proyecto]);
-
   // Handler para drop
   const handleDropEmpleado = (empleado: any, index: number) => {
     setAsignados(prev => {
       // Evita duplicados
       if (prev.some(e => e && e.id_empleado === empleado.id_empleado)) return prev;
       const nuevo = [...prev];
-      // Si el empleado es postulado, calcula total_propuesta
-      if (empleado.cargabilidad !== undefined && empleado.total_propuesta === undefined) {
-        nuevo[index] = {
-          ...empleado,
-          total_propuesta: (empleado.cargabilidad ?? 0) + (proyecto?.cargabilidad_num ?? 0),
-        };
-      } else {
-        nuevo[index] = empleado;
-      }
+      nuevo[index] = empleado;
       return nuevo;
     });
   };
@@ -310,7 +254,7 @@ export default function ProyectoDetalle() {
       {/* Botón de regreso con mejor contraste */}
       <button
         className="mb-6 px-4 py-2 bg-white border border-purple-200 text-purple-600 hover:bg-purple-50 rounded-lg transition-all duration-200 flex items-center gap-1 shadow-xs"
-        onClick={() => router.push("/employee/capability-lead/proyectos")}
+        onClick={() => router.push("/employee/delivery-lead/proyectos")}
       >
         <ArrowLeftOutlined className="text-sm" />
         <span>Regresar</span>
@@ -327,7 +271,7 @@ export default function ProyectoDetalle() {
             {proyecto.Status === "inactive" && (
             <button
               className="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all text-sm"
-              onClick={() => router.push(`/employee/capability-lead/proyectos/${proyecto.ID_Proyecto}/edit`)}
+              onClick={() => router.push(`/employee/delivery-lead/proyectos/${proyecto.ID_Proyecto}/edit`)}
               type="button"
             >
               Editar proyecto
@@ -684,29 +628,10 @@ export default function ProyectoDetalle() {
               {/* Lado derecho: Empleados disponibles solo si el proyecto NO está activo */}
               {(proyecto.Status !== "active" && proyecto.Status !== "done") && (
                 <div className="flex-1 p-6">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className="text-lg font-semibold text-primary-700">
-                      {empleadoTab === "todos" ? "Empleados disponibles" : "Empleados postulados"}
-                      <span className="ml-2 text-base text-gray-500 font-normal">
-                        ({empleadoTab === "todos" ? empleadosDisponibles.length : postulados.length})
-                      </span>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        type={empleadoTab === "todos" ? "primary" : "default"}
-                        onClick={() => setEmpleadoTab("todos")}
-                        size="small"
-                      >
-                        Todos
-                      </Button>
-                      <Button
-                        type={empleadoTab === "postulados" ? "primary" : "default"}
-                        onClick={() => setEmpleadoTab("postulados")}
-                        size="small"
-                      >
-                        Postulados
-                      </Button>
-                    </div>
+                  <div className="mb-4 text-lg font-semibold text-primary-700">Empleados disponibles
+                    <span className="ml-2 text-base text-gray-500 font-normal">
+                      ({empleadosDisponibles.length})
+                    </span>
                   </div>
                   <Input
                     placeholder="Buscar por nombre o ID de empleado"
@@ -716,44 +641,23 @@ export default function ProyectoDetalle() {
                     allowClear
                   />
                   <div className="overflow-y-auto" style={{ maxHeight: 600 }}>
-                    {empleadoTab === "todos" ? (
-                      loadingEmpleados ? (
-                        <div className="text-center text-gray-500 py-8">Cargando empleados...</div>
-                      ) : empleadosDisponibles.length === 0 ? (
-                        <div className="text-center text-gray-400 py-8">No hay empleados disponibles para este puesto.</div>
-                      ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
-                          {empleadosDisponibles
-                            .filter(emp =>
-                              emp.nombre.toLowerCase().includes(searchEmpleado.toLowerCase()) ||
-                              String(emp.id_empleado).toLowerCase().includes(searchEmpleado.toLowerCase())
-                            )
-                            .filter(emp => !asignados.some(a => a && a.id_empleado === emp.id_empleado))
-                            .filter(emp => emp.id_empleado !== proyecto.id_empleado_delivery)
-                            .map(emp => (
-                              <EmpleadoCard key={emp.id_empleado} empleado={emp} fetchAvatarURL={fetchAvatarURL} />
-                            ))}
-                        </div>
-                      )
+                    {loadingEmpleados ? (
+                      <div className="text-center text-gray-500 py-8">Cargando empleados...</div>
+                    ) : empleadosDisponibles.length === 0 ? (
+                      <div className="text-center text-gray-400 py-8">No hay empleados disponibles para este puesto.</div>
                     ) : (
-                      (() => {
-                        const postuladosFiltrados = postulados
+                      <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
+                        {empleadosDisponibles
                           .filter(emp =>
                             emp.nombre.toLowerCase().includes(searchEmpleado.toLowerCase()) ||
                             String(emp.id_empleado).toLowerCase().includes(searchEmpleado.toLowerCase())
                           )
+                          .filter(emp => !asignados.some(a => a && a.id_empleado === emp.id_empleado))
                           .filter(emp => emp.id_empleado !== proyecto.id_empleado_delivery)
-                          .filter(emp => !asignados.some(a => a && a.id_empleado === emp.id_empleado));
-                        return postuladosFiltrados.length === 0 ? (
-                          <div className="text-center text-gray-400 py-8">No hay empleados postulados para este puesto.</div>
-                        ) : (
-                          <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
-                            {postuladosFiltrados.map(emp => (
-                              <EmpleadoCard key={emp.id_empleado} empleado={emp} fetchAvatarURL={fetchAvatarURL} />
-                            ))}
-                          </div>
-                        );
-                      })()
+                          .map(emp => (
+                            <EmpleadoCard key={emp.id_empleado} empleado={emp} fetchAvatarURL={fetchAvatarURL} />
+                          ))}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -950,16 +854,6 @@ export default function ProyectoDetalle() {
                 }
               }
             }
-
-            // Eliminar postulaciones del proyecto
-            const { error: errorPostulaciones } = await supabase
-              .from("Postulaciones")
-              .delete()
-              .eq("ID_Proyecto", proyecto.ID_Proyecto);
-            if (errorPostulaciones) {
-              console.error("Error eliminando postulaciones:", errorPostulaciones);
-            }
-
             // Cambiar status del proyecto
             await supabase
               .from("Proyectos")

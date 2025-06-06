@@ -1,275 +1,179 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { Plus } from 'lucide-react';
-import {
-  fetchProjects as fetchProjectsApi,
-  insertProject,
-  insertRoles,
-  updateProject,
-  deleteRolesByProject,
-  updateProjectStatus,
-} from '@/lib/delivery-lead-proyectos/apiCalls';
-import NewProjectModal from '@/components/Delivery-Lead-Proyectos/NewProjectModal';
-import EditProjectModal from '@/components/Delivery-Lead-Proyectos/EditProjectModal';
-import ConfirmModal from '@/components/Delivery-Lead-Proyectos/ConfirmModal';
-import ReviewModal from '@/components/Delivery-Lead-Proyectos/ReviewModal';
-import { ProjectJson } from '@/lib/delivery-lead-proyectos/definitions';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+
+// Elimina la interfaz ProyectoConHabilidades y usa solo el json dinámico
 
 export default function ProyectosPage() {
-  const [showNewProjectModal, setShowNewProjectModal] = useState(false);
-  const [roles, setRoles] = useState([{ role: '', quantity: 1 }]);
-  const [projectName, setProjectName] = useState('');
-  const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [Status, setStatus] = useState('active');
-  const [deliveryLeadId, setDeliveryLeadId] = useState('');
-  const [projects, setProjects] = useState<ProjectJson[]>([]);
-
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editProject, setEditProject] = useState<ProjectJson | null>(null);
-  const [editRoles, setEditRoles] = useState<{ role: string; quantity: number }[]>([]);
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [confirmProjectId, setConfirmProjectId] = useState<string | undefined>(undefined);
-  const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<ProjectJson | null>(null);
-
-  const fetchProjects = async () => {
-    try {
-      const data = await fetchProjectsApi();
-      setProjects(data);
-      if (data.length > 0) {
-        setDeliveryLeadId(data[0].ID_DeliveryLead);
-        console.log('Delivery Lead ID:', data[0].ID_DeliveryLead);
-      }
-    } catch (error) {
-      console.error('Error fetching projects:', error);
-    }
-  }
+  const [projects, setProjects] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
+  const [deliveryLeadId, setDeliveryLeadId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const loadProjects = async () => {
-      try {
-        await fetchProjects();
-      } catch (error) {
-        console.error('Error loading projects:', error);
+    const fetchDeliveryLeadIdAndProjects = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const userId = session?.user.id ?? null;
+      setUserId(userId);
+
+      if (!userId) return;
+
+      const { data: deliveryLeadData, error: deliveryLeadError } = await supabase
+        .from("Delivery_Lead")
+        .select("ID_DeliveryLead")
+        .eq("ID_Empleado", userId)
+        .single();
+
+      if (deliveryLeadError || !deliveryLeadData) return;
+
+      const deliveryLeadId = deliveryLeadData.ID_DeliveryLead;
+      setDeliveryLeadId(deliveryLeadId);
+
+      const { data: proyectosData, error: proyectosError } = await supabase
+        .rpc("get_proyectos_by_delivery_lead", { emp_id: deliveryLeadId });
+
+      if (!proyectosError && proyectosData) {
+        setProjects(proyectosData);
       }
     };
-    loadProjects();
-  }, [showNewProjectModal]);
 
-  // Handler to create a new project
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const projectData: ProjectJson = {
-      ID_Proyecto: '',
-      Nombre: projectName,
-      Descripcion: description,
-      fecha_inicio: startDate,
-      fecha_fin: endDate,
-      Status: Status,
-      ID_DeliveryLead: deliveryLeadId,
-      isReviewed: false,
-      roles: roles.map((role) => ({
-        puesto: role.role,
-        cantidad: role.quantity,
-      })),
-    };
+    fetchDeliveryLeadIdAndProjects();
+  }, []);
 
-    try {
-      const proyecto = await insertProject(projectData);
-      const rolesData = (projectData.roles ?? []).map((role) => ({
-        role_name: role.puesto,
-        Proyecto_id: proyecto.ID_Proyecto,
-      }));
-      await insertRoles(rolesData);
-      setShowNewProjectModal(false);
-      setProjectName('');
-      setDescription('');
-      setStartDate('');
-      setEndDate('');
-      setRoles([{ role: '', quantity: 1 }]);
-    } catch (error) {
-      console.error('Error inserting data:', error);
-    }
-  };
+  // Filtrado de proyectos por nombre o ID
+  const filteredProjects = projects.filter(
+    (project) =>
+      project.nombre_proyecto?.toLowerCase().includes(search.toLowerCase()) ||
+      project.id_proyecto?.toLowerCase().includes(search.toLowerCase())
+  );
 
-  // Open edit modal and populate fields
-  const openEditModal = (project: ProjectJson) => {
-    setEditProject(project);
-    setEditRoles(
-      project.roles?.map(r => ({
-        role: r.puesto,
-        quantity: r.cantidad,
-      })) || [{ role: '', quantity: 1 }]
-    );
-    setEditModalOpen(true);
-  };
-
-  // Save edited project
-  const handleEditSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editProject) return;
-    try {
-      await updateProject(editProject);
-      if (editProject.ID_Proyecto) {
-        await deleteRolesByProject(editProject.ID_Proyecto);
-      }
-      const rolesData = editRoles.map(role => ({
-        role_name: role.role,
-        Proyecto_id: editProject.ID_Proyecto,
-      }));
-      if (rolesData.length > 0) {
-        await insertRoles(rolesData);
-      }
-      setEditModalOpen(false);
-      setEditProject(null);
-      fetchProjects();
-    } catch (error) {
-      console.error('Error updating project:', error);
-    }
-  };
-
-  // Handler to open confirmation modal
-  const openConfirmModal = (projectId: string | undefined) => {
-    setConfirmProjectId(projectId);
-    setConfirmModalOpen(true);
-  };
-
-  // Handler to open review modal
-  const openReviewModal = (project: ProjectJson) => {
-    setReviewModalOpen(true);
-    setSelectedProject(project);
-  };
-
-  // Handler to confirm marking as done
-  const handleConfirmMarkAsDone = async () => {
-    if (!confirmProjectId) return;
-    try {
-      await updateProjectStatus(confirmProjectId, 'done');
-      setConfirmModalOpen(false);
-      fetchProjects();
-    } catch (error) {
-      console.error('Error confirming mark as done:', error);
-    }
+  // Mapeo de status a nombres en español
+  const statusMap: Record<string, string> = {
+    active: "Activo",
+    inactive: "En progreso",
+    done: "Finalizado",
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <button
-        onClick={() => setShowNewProjectModal(true)}
-        className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 transition-all duration-300 text-white font-bold rounded-lg"
-      >
-        <Plus className="w-5 h-5" />
-        <span>Nuevo Proyecto</span>
-      </button>
-      {showNewProjectModal && (
-        <NewProjectModal
-          onClose={() => setShowNewProjectModal(false)}
-          onSubmit={handleSubmit}
-          projectName={projectName}
-          setProjectName={setProjectName}
-          description={description}
-          setDescription={setDescription}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={setEndDate}
-          setEndDate={setEndDate}
-          roles={roles}
-          setRoles={setRoles}
+    <div className="p-8">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-gray-800 text-4xl font-bold mb-2">Proyectos</h1>
+          <p className="text-gray-600">Aquí puedes gestionar los proyectos.</p>
+        </div>
+      </div>
+      {/* Filtro de búsqueda */}
+      <div className="mb-6 flex ">
+        <input
+          type="text"
+          placeholder="Buscar por nombre o ID..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
-      )}
-
-      {/* Edit Project Modal */}
-      {editModalOpen && editProject && (
-        <EditProjectModal
-          onClose={() => setEditModalOpen(false)}
-          onSubmit={handleEditSubmit}
-          editProject={editProject}
-          setEditProject={setEditProject}
-          editRoles={editRoles}
-          setEditRoles={setEditRoles}
-        />
-      )}
-
-      {/* Review Modal */}
-      {reviewModalOpen && (
-        <ReviewModal
-          onClose={() => setReviewModalOpen(false)}
-          selectedProject={selectedProject}
-        />
-      )}
-
-      {/* Display the projects */}
+      </div>
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">Proyectos</h2>
-        {projects.length === 0 ? (
+        <h2 className="text-2xl font-semibold text-purple-700 mb-4">Proyectos activos</h2>
+        {filteredProjects.length === 0 ? (
           <p className="text-gray-600">No hay proyectos disponibles.</p>
         ) : (
-          projects.map((project) => (
-            <div
-              key={project.ID_Proyecto}
-              className="bg-white rounded-lg border border-gray-200 p-4 mb-4 flex items-center justify-between"
-            >
-              <div className="w-1/3 flex flex-col gap-1">
-                <h3 className="text-black font-bold">{project.Nombre}</h3>
-                <p className="text-gray-600 text-sm">{project.Descripcion}</p>
-              </div>
-              <div className="flex w-1/3 gap-4 mt-1">
-                <p className="text-gray-600 text-s">Inicio: {project.fecha_inicio}</p>
-                <p className="text-gray-600 text-s">Fin: {project.fecha_fin}</p>
-              </div>
-              <div className="ml-6 flex items-center gap-2 w-1/3">
-                {project.Status === 'active' ? (
-                  <>
-                    <button
-                      className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded transition-all"
-                      onClick={() => openEditModal(project)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition-all"
-                      onClick={() => openConfirmModal(project.ID_Proyecto)}
-                    >
-                      Marcar como hecho
-                    </button>
-                  </>
-                ) : project.Status === 'done' && project.isReviewed ? (
-                  <span className="inline-block px-3 py-1 bg-green-200 text-green-800 rounded text-lg font-medium">
-                    Proyecto Concluido
-                  </span>
-                ) : project.Status === "done" && !project.isReviewed ? (
-                  <>
-                    <button
-                      className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded transition-all"
-                      onClick={() => openEditModal(project)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-all"
-                      onClick={() => { openReviewModal(project) }}
-                    >
-                      Revisar
-                    </button>
-                  </>
-                ) : null}
-              </div>
-            </div>
-          ))
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProjects.map((project) => {
+              const supabaseUrl = "https://nuyfnqiodjynfkubkqpn.supabase.co/storage/v1/object/public/project-images/";
+              const imagenUrlCompleta = project.imagenurl ? supabaseUrl + project.imagenurl : null;
+
+              return (
+                <div
+                  key={project.id_proyecto}
+                  className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-xl transition cursor-pointer flex flex-col"
+                  onClick={() => router.push(`./proyectos/${project.id_proyecto}`)}
+                >
+                  {/* Encabezado: Nombre, Status y Imagen circular */}
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <h3 className="text-black font-bold text-lg">{project.nombre_proyecto}</h3>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          project.status === "active"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-200 text-gray-600"
+                        }`}
+                      >
+                        {statusMap[project.status] || project.status}
+                      </span>
+                    </div>
+                    {imagenUrlCompleta && (
+                      <img
+                        src={imagenUrlCompleta}
+                        alt={project.nombre_proyecto}
+                        className="w-20 h-20 object-cover rounded-full border-2 border-purple-200 shadow ml-4"
+                        style={{
+                          width: "5rem",
+                          height: "5rem",
+                          minWidth: "5rem",
+                          minHeight: "5rem",
+                          maxWidth: "5rem",
+                          maxHeight: "5rem",
+                          objectFit: "cover",
+                        }}
+                      />
+                    )}
+                  </div>
+
+                  {/* Cliente */}
+                  <div className="mb-2">
+                    <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-semibold">
+                      Cliente: {project.cliente}
+                    </span>
+                  </div>
+
+                  {/* Fechas */}
+                  <div className="flex gap-4 text-xs text-gray-500 mb-2">
+                    <span>Inicio: <span className="font-semibold">{project.fecha_inicio}</span></span>
+                    <span>Fin: <span className="font-semibold">{project.fecha_fin}</span></span>
+                  </div>
+
+                  {/* Empleados asignados y cargabilidad */}
+                  <div className="flex gap-4 items-center mb-2">
+                    <span className="text-orange-700 font-semibold text-xs">
+                      Cargabilidad: {project.cargabilidad_num}%
+                    </span>
+                    {project.isreviewed && (
+                      <span className="bg-green-200 text-green-800 px-2 py-0.5 rounded text-xs ml-auto">
+                        Revisado
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Habilidades */}
+                  <div className="mt-auto">
+                    <span className="font-semibold text-gray-700 text-sm">Habilidades requeridas:</span>
+                    <ul className="flex flex-wrap gap-2 mt-1">
+                      {project.habilidades && project.habilidades.length > 0 ? (
+                        project.habilidades.map((hab: any) => (
+                          <li
+                            key={`${project.id_proyecto}-${hab.ID_Habilidad}`}
+                            className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs"
+                          >
+                            {hab.Nombre} ({hab.nivel})
+                          </li>
+                        ))
+                      ) : (
+                        <li key={`no-habilidad-${project.id_proyecto}`} className="text-gray-400 text-xs">Ninguna</li>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         )}
       </div>
-
-      {/* Confirmation Modal */}
-      {confirmModalOpen && (
-        <ConfirmModal
-          onClose={() => setConfirmModalOpen(false)}
-          onConfirm={handleConfirmMarkAsDone}
-        />
-      )}
-
     </div>
   );
 }

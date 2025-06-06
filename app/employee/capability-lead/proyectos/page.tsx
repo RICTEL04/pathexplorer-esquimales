@@ -31,6 +31,7 @@ export default function ProyectosPage() {
   const [projects, setProjects] = useState<ProyectoConHabilidades[]>([]);
   const [employeeCounts, setEmployeeCounts] = useState<{ [key: string]: number }>({});
   const [search, setSearch] = useState(""); // Nuevo estado para el filtro
+  const [statusFilter, setStatusFilter] = useState(""); // "" para todos
   const router = useRouter();
 
   useEffect(() => {
@@ -59,12 +60,23 @@ export default function ProyectosPage() {
     fetchProjectsAndCounts();
   }, []);
 
-  // Filtrado de proyectos por nombre o ID
+  // Filtrado de proyectos por nombre o ID y status
   const filteredProjects = projects.filter(
     (project) =>
-      project.nombre_proyecto.toLowerCase().includes(search.toLowerCase()) ||
-      project.ID_Proyecto.toLowerCase().includes(search.toLowerCase())
+      (project.nombre_proyecto.toLowerCase().includes(search.toLowerCase()) ||
+        project.ID_Proyecto.toLowerCase().includes(search.toLowerCase())) &&
+      (statusFilter === "" || 
+        (statusFilter === "active" && project.Status === "active") ||
+        (statusFilter === "inactive" && project.Status === "inactive") ||
+        (statusFilter === "done" && project.Status === "done"))
   );
+
+  // Mapeo de status a nombres en español
+  const statusMap: Record<string, string> = {
+    active: "Activo",
+    inactive: "En progreso",
+    done: "Finalizado",
+  };
 
   return (
     <div className="p-8">
@@ -82,7 +94,7 @@ export default function ProyectosPage() {
         </button>
       </div>
       {/* Filtro de búsqueda */}
-      <div className="mb-6 flex ">
+      <div className="mb-6 flex gap-4 items-center">
         <input
           type="text"
           placeholder="Buscar por nombre o ID..."
@@ -90,6 +102,16 @@ export default function ProyectosPage() {
           onChange={(e) => setSearch(e.target.value)}
           className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
+        <select
+          value={statusFilter}
+          onChange={e => setStatusFilter(e.target.value)}
+          className="border border-gray-300 rounded-lg px-4 py-2"
+        >
+          <option value="">Todos</option>
+          <option value="active">Activo</option>
+          <option value="inactive">Inactivo</option>
+          <option value="done">Finalizado</option>
+        </select>
       </div>
       <div className="mt-8">
         {filteredProjects.length === 0 ? (
@@ -112,12 +134,12 @@ export default function ProyectosPage() {
                       <h3 className="text-black font-bold text-lg">{project.nombre_proyecto}</h3>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          project.Status === "Activo"
+                          project.Status === "active"
                             ? "bg-green-100 text-green-700"
                             : "bg-gray-200 text-gray-600"
                         }`}
                       >
-                        {project.Status}
+                        {statusMap[project.Status] || project.Status}
                       </span>
                     </div>
                     {imagenUrlCompleta && (
