@@ -20,7 +20,7 @@ export default function ReviewModal({
 
   useEffect(() => {
     const fetchEmpleados = async () => {
-      await sleep(2000);
+      await sleep(500);
       if (selectedProject?.ID_Proyecto) {
         try {
           const data = await fetchEmployeesByProject(selectedProject.ID_Proyecto);
