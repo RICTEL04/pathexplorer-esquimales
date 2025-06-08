@@ -56,7 +56,10 @@ export default function ProyectoDetalle() {
   const [finishEnabled, setFinishEnabled] = useState(false);
   const [postulados, setPostulados] = useState<any[]>([]);
   // Agrega este estado antes del return principal
-  const [empleadoTab, setEmpleadoTab] = useState<"todos" | "postulados">("todos");
+  const [empleadoTab, setEmpleadoTab] = useState<"todos" | "postulados" | "ia">("todos");
+  const [detallesEmpleados, setDetallesEmpleados] = useState<any[]>([]); // Nuevo estado para detalles de empleados
+  const [ranking, setRanking] = useState<any[]>([]);
+  const [loadingRanking, setLoadingRanking] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
 
   // Mueve fetchData fuera del useEffect para poder reutilizarla
@@ -262,6 +265,230 @@ export default function ProyectoDetalle() {
     }
   }, [finishProjectModal]);
 
+  // Efecto para cargar detalles de empleados cuando cambia empleadosDisponibles
+  interface EmpleadoDisponible {
+    id_empleado: string;
+    nombre: string;
+    cargabilidad?: number;
+    [key: string]: any;
+  }
+
+  interface Proyecto {
+    ID_Proyecto: string;
+    Nombre: string;
+    Descripcion: string;
+    Status: string;
+    fecha_inicio: string;
+    fecha_fin: string;
+    cargabilidad_num: number;
+    ImagenUrl?: string;
+    [key: string]: any;
+  }
+
+  interface Puesto {
+    id: string;
+    Puesto: string;
+    N_puestos: number;
+    Completo?: boolean;
+    [key: string]: any;
+  }
+
+  interface HabilidadPuesto {
+    id: string;
+    Id_puesto: string;
+    nombre_habilidad: string;
+    nivel: string;
+    [key: string]: any;
+  }
+
+  interface DetalleEmpleado {
+    metas_en_progreso?: Array<{ Nombre?: string; nombre?: string } | string>;
+    habilidades?: Array<{ nombre?: string; nombre_habilidad?: string } | string>;
+    intereses?: Array<{ Descripcion?: string; descripcion?: string } | string>;
+    empleado?: any;
+    [key: string]: any;
+  }
+
+  interface ProyectoListItem {
+    ID_Proyecto: string;
+    Nombre: string;
+    Descripcion: string;
+    Status: string;
+    fecha_inicio: string;
+    fecha_fin: string;
+    cargabilidad_num: number;
+    habilidades_proyecto: string[];
+    ImagenUrl?: string;
+  }
+
+  interface BodyEmpleado {
+    id_empleado: string;
+    nombre: string;
+    metas: string[];
+    habilidades: string[];
+    intereses: string[];
+    proyectos: ProyectoListItem[];
+    jefe?: any;
+  }
+
+  useEffect(() => {
+    const cargarDetalles = async () => {
+      const detalles: (DetalleEmpleado | null)[] = await Promise.all(
+        empleadosDisponibles.map(async (emp: EmpleadoDisponible) => {
+          console.log("Consultando detalles para:", emp.id_empleado);
+          const detalle = await fetchEmpleadoDetalle(emp.id_empleado);
+          console.log("Detalle recibido para", emp.id_empleado, ":", detalle);
+          return detalle;
+        })
+      );
+      console.log("IDs de empleados disponibles:", empleadosDisponibles.map((e: EmpleadoDisponible) => e.id_empleado));
+      setDetallesEmpleados(detalles);
+
+      // Aquí armas el body para cada empleado
+      const proyectosList: ProyectoListItem[] = puestos?.map((p: Puesto) => ({
+        ID_Proyecto: proyecto.ID_Proyecto,
+        Nombre: proyecto.Nombre,
+        Descripcion: proyecto.Descripcion,
+        Status: proyecto.Status,
+        fecha_inicio: proyecto.fecha_inicio,
+        fecha_fin: proyecto.fecha_fin,
+        cargabilidad_num: proyecto.cargabilidad_num,
+        habilidades_proyecto: habilidadesPuestos
+          .filter((h: HabilidadPuesto) => h.Id_puesto === p.id)
+          .map((h: HabilidadPuesto) => h.nombre_habilidad),
+        ImagenUrl: proyecto.ImagenUrl,
+      })) || [];
+
+      const bodies: (BodyEmpleado | null)[] = empleadosDisponibles.map((emp: EmpleadoDisponible, idx: number) => {
+        const detalle = detalles[idx];
+        if (!detalle) return null;
+        const metas: string[] = Array.isArray(detalle.metas_en_progreso)
+          ? detalle.metas_en_progreso.map((m: any) => m.Nombre || m.nombre || m)
+          : [];
+        const habilidades: string[] = Array.isArray(detalle.habilidades)
+          ? detalle.habilidades.map((h: any) => h.nombre || h.nombre_habilidad || h)
+          : [];
+        const intereses: string[] = Array.isArray(detalle.intereses)
+          ? detalle.intereses.map((i: any) => i.Descripcion || i.descripcion || i)
+          : [];
+
+        // Si tienes un solo puesto seleccionado (por ejemplo, en el modal):
+        const puesto = selectedPuesto || null;
+
+        // O si tienes una relación de puestos por empleado, ajústalo aquí
+
+        return {
+          id_empleado: emp.id_empleado,
+          nombre: emp.nombre,
+          metas,
+          habilidades,
+          intereses,
+          proyectos: proyectosList,
+          jefe: detalle.empleado,
+          puesto: puesto // <--- agrega aquí el puesto
+        };
+      });
+      // Solo para depuración, muestra el body de cada empleado
+      console.log("Bodies para ProjectRecommender:", bodies);
+
+      bodies.forEach((body, idx) => {
+        if (!body) return;
+        console.log(`Detalles de proyectos para empleado ${body.id_empleado} (${body.nombre}):`);
+        body.proyectos.forEach((proyecto: any, pidx: number) => {
+          console.log(`  Proyecto ${pidx + 1}:`, proyecto);
+        });
+      });
+      // Aquí podrías hacer el fetch a la API para cada body si lo necesitas
+    };
+
+    if (empleadosDisponibles.length > 0) {
+      cargarDetalles();
+    }
+  }, [
+    empleadosDisponibles.map((e: EmpleadoDisponible) => e.id_empleado).join(','),
+    puestos?.map((p: Puesto) => p.id).join(','),
+    proyecto?.ID_Proyecto,
+    habilidadesPuestos?.map((h: HabilidadPuesto) => h.id).join(',')
+  ]);
+
+  // Construye el array bodies a partir de empleadosDisponibles y detallesEmpleados
+  const bodies: (BodyEmpleado | null)[] = empleadosDisponibles.map((emp: EmpleadoDisponible, idx: number) => {
+    const detalle = detallesEmpleados[idx];
+    if (!detalle) return null;
+    const metas: string[] = Array.isArray(detalle.metas_en_progreso)
+      ? detalle.metas_en_progreso.map((m: any) => m.Nombre || m.nombre || m)
+      : [];
+    const habilidades: string[] = Array.isArray(detalle.habilidades)
+      ? detalle.habilidades.map((h: any) => h.nombre || h.nombre_habilidad || h)
+      : [];
+    const intereses: string[] = Array.isArray(detalle.intereses)
+      ? detalle.intereses.map((i: any) => i.Descripcion || i.descripcion || i)
+      : [];
+
+    // Si tienes un solo puesto seleccionado (por ejemplo, en el modal):
+    const puesto = selectedPuesto || null;
+
+    // O si tienes una relación de puestos por empleado, ajústalo aquí
+
+    const proyectosList: ProyectoListItem[] = puestos?.map((p: Puesto) => ({
+      ID_Proyecto: proyecto.ID_Proyecto,
+      Nombre: proyecto.Nombre,
+      Descripcion: proyecto.Descripcion,
+      Status: proyecto.Status,
+      fecha_inicio: proyecto.fecha_inicio,
+      fecha_fin: proyecto.fecha_fin,
+      cargabilidad_num: proyecto.cargabilidad_num,
+      habilidades_proyecto: habilidadesPuestos
+        .filter((h: HabilidadPuesto) => h.Id_puesto === p.id)
+        .map((h: HabilidadPuesto) => h.nombre_habilidad),
+      ImagenUrl: proyecto.ImagenUrl,
+    })) || [];
+
+    return {
+      id_empleado: emp.id_empleado,
+      nombre: emp.nombre,
+      metas,
+      habilidades,
+      intereses,
+      proyectos: proyectosList,
+      jefe: detalle.empleado,
+      puesto: puesto // <--- agrega aquí el puesto
+    };
+  });
+
+  // Nueva función para obtener el ranking de empleados
+  const fetchEmployeeRanking = async () => {
+    setLoadingRanking(true);
+    try {
+      // Prepara los datos (puedes ajustar según tu estructura)
+      const empleados = bodies.filter(Boolean); // bodies ya tiene la info de cada empleado
+      const proyectoData = {
+        ...proyecto,
+        puestos,
+        habilidades_proyecto: habilidadesGenerales?.map((h: any) => h.nombre_habilidad) || [],
+      };
+
+      const response = await fetch("/api/EmployeeRanking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ empleados, proyecto: proyectoData }),
+      });
+      const data = await response.json();
+      setRanking(data.rankedEmployees || []);
+    } catch (error) {
+      console.error("Error al obtener ranking:", error);
+      setRanking([]);
+    }
+    setLoadingRanking(false);
+  };
+
+  useEffect(() => {
+    if (bodies && bodies.length > 0) {
+      fetchEmployeeRanking();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(bodies)]);
+
   if (loading)
     return (
       <div className="flex justify-center items-center h-64">
@@ -305,6 +532,15 @@ export default function ProyectoDetalle() {
     };
 
     return <Tag color={level.color} className="font-medium">{level.text}</Tag>;
+  };
+
+  const fetchEmpleadoDetalle = async (id_empleado: string) => {
+    const { data, error } = await supabase.rpc("get_empleado_a_recomendar", { p_id_empleado: id_empleado });
+    if (error) {
+      console.error("Error obteniendo detalles del empleado:", error);
+      return null;
+    }
+    return data;
   };
 
   return (
@@ -728,6 +964,13 @@ export default function ProyectoDetalle() {
                       >
                         Postulados
                       </Button>
+                      <Button
+                        type={empleadoTab === "ia" ? "primary" : "default"}
+                        onClick={() => setEmpleadoTab("ia")}
+                        size="small"
+                      >
+                        IA
+                      </Button>
                     </div>
                   </div>
                   <Input
@@ -757,7 +1000,7 @@ export default function ProyectoDetalle() {
                             ))}
                         </div>
                       )
-                    ) : (
+                    ) : empleadoTab === "postulados" ? (
                       (() => {
                         const postuladosFiltrados = postulados
                           .filter(emp =>
@@ -776,6 +1019,32 @@ export default function ProyectoDetalle() {
                           </div>
                         );
                       })()
+                    ) : (
+                      // IA TAB
+                      loadingRanking ? (
+                        <div className="text-center text-gray-500 py-8">Cargando ranking...</div>
+                      ) : ranking.length === 0 ? (
+                        <div className="text-center text-gray-400 py-8">No hay ranking disponible.</div>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
+                          {ranking
+                            .filter(emp =>
+                              emp.nombre.toLowerCase().includes(searchEmpleado.toLowerCase()) ||
+                              String(emp.id_empleado).toLowerCase().includes(searchEmpleado.toLowerCase())
+                            )
+                            .filter(emp => !asignados.some(a => a && a.id_empleado === emp.id_empleado))
+                            .filter(emp => emp.id_empleado !== proyecto.id_empleado_delivery)
+                            .map(emp => (
+                              <EmpleadoCard
+                                key={emp.id_empleado}
+                                empleado={emp}
+                                fetchAvatarURL={fetchAvatarURL}
+                                // No pongas draggable={false}, así es drag & drop
+                                // showCargabilidad es true por default
+                              />
+                            ))}
+                        </div>
+                      )
                     )}
                   </div>
                 </div>
@@ -1084,6 +1353,38 @@ export default function ProyectoDetalle() {
           )}
         </div>
       </Modal>
+
+      {/* Ranking de empleados sugeridos por IA */}
+      <Card
+        title={
+          <div className="flex items-center gap-2">
+            <StarOutlined className="text-primary-500" />
+            <span className="text-gray-800">Ranking de empleados sugeridos</span>
+          </div>
+        }
+        className="shadow-sm my-8"
+      >
+        {loadingRanking ? (
+          <div className="text-center text-gray-500 py-8">Cargando ranking...</div>
+        ) : ranking.length === 0 ? (
+          <div className="text-center text-gray-400 py-8">No hay ranking disponible.</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {ranking.map((emp: any, idx: number) => (
+              <div key={emp.id_empleado} className="mb-2">
+                <EmpleadoCard empleado={emp} fetchAvatarURL={fetchAvatarURL} draggable={false} />
+                <div className="text-xs text-gray-500 ml-2 mt-1">
+                  <span className="font-semibold">#{idx + 1}</span>
+                  {emp.puesto?.Puesto && <span> &middot; Puesto: {emp.puesto.Puesto}</span>}
+                  {emp.score !== undefined && (
+                    <span> &middot; Score: <b>{emp.score}</b></span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
     </div>
   );
 }
@@ -1095,7 +1396,8 @@ function EmpleadoCard({
   useTotalPropuesta = false,
   showRemove = false,
   onRemove,
-  showCargabilidad = true // <--- Nuevo valor por defecto
+  showCargabilidad = true,
+  draggable = true
 }: {
   empleado: any,
   fetchAvatarURL: (id: string) => Promise<string | null>,
@@ -1103,7 +1405,8 @@ function EmpleadoCard({
   useTotalPropuesta?: boolean,
   showRemove?: boolean,
   onRemove?: () => void,
-  showCargabilidad?: boolean // <--- Nuevo prop
+  showCargabilidad?: boolean,
+  draggable?: boolean
 }) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
@@ -1115,31 +1418,30 @@ function EmpleadoCard({
     return () => { mounted = false; };
   }, [empleado.id_empleado, fetchAvatarURL]);
 
-  const [{ isDragging }, drag] = useDrag({
-    type: ItemTypes.EMPLEADO,
-    item: { ...empleado },
-    end: (item, monitor) => {
-      if (monitor.didDrop() && onDrag) onDrag();
-    },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
+  // Solo usa useDrag si draggable es true
+  const [dragCollected, drag, /* dragPreview */] = draggable
+    ? useDrag({
+        type: ItemTypes.EMPLEADO,
+        item: { ...empleado },
+        end: (item, monitor) => {
+          if (monitor.didDrop() && onDrag) onDrag();
+        },
+        collect: (monitor) => ({
+          isDragging: monitor.isDragging(),
+        }),
+      })
+    : [{ isDragging: false }, () => {}];
 
-  const porcentaje = useTotalPropuesta
-    ? empleado.total_propuesta ?? 0
-    : empleado.cargabilidad ?? 0;
+  const { isDragging } = dragCollected;
 
   return (
     <div
-      ref={(node) => {
-        if (node) drag(node);
-      }}
+      ref={draggable ? (node) => { if (node) drag(node); } : undefined}
       className={`flex items-center bg-white rounded-2xl shadow-lg p-3 border border-gray-200 hover:shadow-2xl transition-shadow duration-200 min-h-0 ${isDragging ? "opacity-50" : ""}`}
       style={{
         minHeight: 50,
         maxHeight: 70,
-        cursor: "grab",
+        cursor: draggable ? "grab" : "default",
         position: "relative",
         width: "100%",
       }}
@@ -1163,24 +1465,35 @@ function EmpleadoCard({
       <div className="flex-1 flex flex-col justify-center">
         <span className="font-semibold text-gray-800 text-base">{empleado.nombre}</span>
         {showCargabilidad && (
-          <>
-            <span className="text-sm text-gray-600 font-semibold ml-1">
-              {porcentaje}%
-            </span>
-            <div className="w-full mt-1">
-              <Progress
-                percent={porcentaje}
-                size="small"
-                showInfo={false}
-                strokeColor={
-                  porcentaje > 70 ? "#f5222d"
-                    : porcentaje > 40 ? "#fa8c16"
-                      : "#52c41a"
-                }
-                className="mx-auto"
-              />
-            </div>
-          </>
+          (() => {
+            // Calcula el porcentaje de cargabilidad
+            let porcentaje = 0;
+            if (useTotalPropuesta && empleado.total_propuesta !== undefined) {
+              porcentaje = Number(empleado.total_propuesta);
+            } else if (empleado.cargabilidad !== undefined) {
+              porcentaje = Number(empleado.cargabilidad);
+            }
+            return (
+              <>
+                <span className="text-sm text-gray-600 font-semibold ml-1">
+                  {porcentaje}%
+                </span>
+                <div className="w-full mt-1">
+                  <Progress
+                    percent={porcentaje}
+                    size="small"
+                    showInfo={false}
+                    strokeColor={
+                      porcentaje > 70 ? "#f5222d"
+                        : porcentaje > 40 ? "#fa8c16"
+                          : "#52c41a"
+                    }
+                    className="mx-auto"
+                  />
+                </div>
+              </>
+            );
+          })()
         )}
       </div>
     </div>

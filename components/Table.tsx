@@ -1,42 +1,51 @@
 import React, { useState } from 'react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { Certificado } from '@/lib/employeeService';
 
-type TableProps<T> = {
-  columns: {
-    key: keyof T;
-    label: string;
-    width?: string;
-    render?: (value: any, row: T) => React.ReactNode;
-    align?: 'left' | 'center' | 'right';
+interface CertificadoCardProps {
+  certificados: {
+    ID_Certificado: string;
+    Nombre: string;
+    Fecha_caducidad: string;
+    Verificacion: string;
+    Descripcion: string;
   }[];
-  data: T[];
   rowsPerPage?: number;
   showPaginationControls?: boolean;
   emptyState?: React.ReactNode;
-  onRowClick?: (row: T) => void;
+  onCardClick?: (certificado: Certificado) => void;
   className?: string;
-};
+  cardClassName?: string;
+  showFields?: {
+    nombre?: boolean;
+    fecha?: boolean;
+    verificacion?: boolean;
+    descripcion?: boolean;
+  };
+}
 
-const CardTable = <T,>({ 
-  columns, 
-  data, 
+const CertificadoCard: React.FC<CertificadoCardProps> = ({
+  certificados = [],
   rowsPerPage = 3,
   showPaginationControls = true,
   emptyState,
-  onRowClick,
-  className = ''
-}: TableProps<T>) => {
+  onCardClick,
+  className = '',
+  cardClassName = 'bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md p-4',
+  showFields = {
+    nombre: true,
+    fecha: true,
+    verificacion: true,
+    descripcion: true
+  }
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   
-  // Calcular datos paginados
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  // Calculate paginated data
+  const totalPages = Math.ceil(certificados.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
-  const paginatedData = data.slice(startIndex, endIndex);
-
-  // Definimos anchos para las columnas
-  const gridTemplateColumns = columns.map(col => 
-    col.width || 'minmax(150px, 1fr)'
-  ).join(' ');
+  const paginatedData = certificados.slice(startIndex, endIndex);
 
   const handlePrevious = () => {
     if (currentPage > 1) {
@@ -56,89 +65,124 @@ const CardTable = <T,>({
     }
   };
 
-  // Render para contenido vacío
-  if (data.length === 0) {
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'No especificada';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  // Empty state render
+  if (certificados.length === 0) {
     return emptyState ? (
       <div className={`text-center py-8 ${className}`}>
         {emptyState}
       </div>
     ) : (
       <div className={`text-center py-8 text-gray-500 ${className}`}>
-        No hay datos disponibles
+        No hay certificados disponibles
       </div>
     );
   }
 
   return (
     <div className={`space-y-4 w-full ${className}`}>
-      {/* Contenedor principal con scroll horizontal */}
-      <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-        {/* Contenedor con ancho fijo basado en columnas */}
-        <div style={{ width: 'fit-content', minWidth: '100%' }}>
-          {/* Encabezados */}
-          <div 
-            className="hidden md:grid px-4 py-3 bg-gray-50 rounded-t-lg border-b border-gray-200"
-            style={{
-              gridTemplateColumns,
-              gap: '1rem'
-            }}
-          >
-            {columns.map((col) => (
-              <div 
-                key={col.key as string}
-                className={`text-sm font-semibold text-gray-700 truncate ${
-                  col.align === 'center' ? 'text-center' : 
-                  col.align === 'right' ? 'text-right' : 'text-left'
-                }`}
-              >
-                {col.label}
-              </div>
-            ))}
-          </div>
-
-          {/* Filas */}
-          <div className="space-y-2">
-            {paginatedData.map((item, rowIndex) => (
+      {/* Carousel container */}
+      <div className="relative">
+        {/* Cards container */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {paginatedData.map((certificado) => (
+            certificado && certificado.ID_Certificado && (
               <div
-                key={rowIndex}
-                className={`grid p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all ${
-                  onRowClick ? 'cursor-pointer hover:border-purple-300' : ''
+                key={certificado.ID_Certificado}
+                className={`transition-all ${cardClassName} ${
+                  onCardClick ? 'cursor-pointer hover:border-purple-300' : ''
                 }`}
-                style={{
-                  gridTemplateColumns,
-                  gap: '1rem'
-                }}
-                onClick={() => onRowClick && onRowClick(item)}
+                onClick={() => onCardClick && onCardClick(certificado)}
               >
-                {columns.map((col) => (
-                  <div 
-                    key={col.key as string}
-                    className={`min-w-0 ${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'}`}
-                  >
-                    {/* Label para móvil */}
-                    <div className="md:hidden text-xs font-medium text-gray-500 mb-1 truncate">
-                      {col.label}
+                {/* Card content */}
+                <div className="space-y-3">
+                  {/* Nombre */}
+                  {showFields.nombre && certificado.Nombre && certificado.Nombre != undefined && (
+                    <div>
+                      <div className="text-xs font-medium text-gray-500 mb-1">Nombre</div>
+                      <div className="text-sm font-semibold text-gray-800 break-words">
+                        {certificado.Nombre}
+                      </div>
                     </div>
-                    {/* Contenido */}
-                    <div 
-                      className="text-sm text-gray-800 truncate w-full"
-                      title={col.render ? undefined : String(item[col.key])}
-                    >
-                      {col.render ? col.render(item[col.key], item) : String(item[col.key])}
+                  )}
+
+                  {/* Fecha de caducidad */}
+                  {showFields.fecha && certificado.Fecha_caducidad && certificado.Fecha_caducidad != undefined && (
+                    <div>
+                      <div className="text-xs font-medium text-gray-500 mb-1">Fecha Límite</div>
+                      <div className="text-sm text-gray-800 break-words">
+                        {formatDate(certificado.Fecha_caducidad)}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )}
+
+                  {/* Verificación */}
+                  {showFields.verificacion && certificado.Verificacion != null && certificado.Verificacion != undefined && (
+                    <div>
+                      <div className="text-xs font-medium text-gray-500 mb-1">Verificado</div>
+                      <div className="text-sm text-gray-800 break-words">
+                        {(certificado.Verificacion.toString() === "true" ) ? "Si" : "No"}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Descripción */}
+                  {showFields.descripcion && certificado.Descripcion && certificado.Descripcion != undefined && (
+                    <div>
+                      <div className="text-xs font-medium text-gray-500 mb-1">Descripción</div>
+                      <div className="text-sm text-gray-600 break-words">
+                        {certificado.Descripcion}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            ))}
-          </div>
+            )
+          ))}
         </div>
+
+        {/* Navigation arrows */}
+        {certificados.length > rowsPerPage && (
+          <>
+            <button
+              onClick={handlePrevious}
+              disabled={currentPage === 1}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 p-2 rounded-full shadow-md bg-white text-gray-700 hover:bg-gray-100 transition-colors ${
+                currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              aria-label="Previous page"
+            >
+              <FiChevronLeft size={20} />
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 p-2 rounded-full shadow-md bg-white text-gray-700 hover:bg-gray-100 transition-colors ${
+                currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              aria-label="Next page"
+            >
+              <FiChevronRight size={20} />
+            </button>
+          </>
+        )}
       </div>
 
-      {/* Paginación */}
-      {showPaginationControls && data.length > rowsPerPage && (
+      {/* Pagination controls */}
+      {showPaginationControls && certificados.length > rowsPerPage && (
         <div className="flex flex-col sm:flex-row items-center justify-between px-2 gap-4">
           <div className="text-sm text-gray-600">
-            Mostrando <span className="font-medium">{startIndex + 1}</span>-<span className="font-medium">{Math.min(endIndex, data.length)}</span> de <span className="font-medium">{data.length}</span>
+            Mostrando <span className="font-medium">{startIndex + 1}</span>-<span className="font-medium">{Math.min(endIndex, certificados.length)}</span> de <span className="font-medium">{certificados.length}</span>
           </div>
           
           <div className="flex items-center gap-2">
@@ -156,7 +200,7 @@ const CardTable = <T,>({
             </button>
             
             <div className="flex items-center gap-1">
-              {/* Botón primera página */}
+              {/* First page button */}
               {currentPage > 3 && totalPages > 5 && (
                 <>
                   <button
@@ -169,7 +213,7 @@ const CardTable = <T,>({
                 </>
               )}
 
-              {/* Páginas cercanas */}
+              {/* Nearby pages */}
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                 let pageNum;
                 if (totalPages <= 5) {
@@ -198,7 +242,7 @@ const CardTable = <T,>({
                 );
               })}
 
-              {/* Botón última página */}
+              {/* Last page button */}
               {currentPage < totalPages - 2 && totalPages > 5 && (
                 <>
                   {currentPage < totalPages - 3 && <span className="px-1">...</span>}
@@ -231,4 +275,4 @@ const CardTable = <T,>({
   );
 };
 
-export default CardTable;
+export default CertificadoCard;

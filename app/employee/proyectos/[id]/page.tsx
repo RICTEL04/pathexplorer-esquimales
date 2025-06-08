@@ -382,40 +382,76 @@ export default function ProyectoDetalle() {
           <List
             itemLayout="vertical"
             dataSource={puestos}
-            renderItem={(puesto: any) => (
-              <List.Item
-                key={puesto.id}
-                className="hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors"
-                extra={
-                  <Tag color="purple" className="font-medium">{puesto.N_puestos} posiciones</Tag>
-                }
-                // Solo permite click si el proyecto está activo o done
-                onClick={() => 
-                  (["active", "done"].includes(proyecto.Status?.toLowerCase()))
-                    ? handleVerAsignados(puesto)
-                    : undefined
-                }
-                style={{
-                  cursor: ["active", "done"].includes(proyecto.Status?.toLowerCase()) ? "pointer" : "default"
-                }}
-              >
-                <List.Item.Meta
-                  title={<Text strong className="text-gray-800">{puesto.Puesto}</Text>}
-                  description={
-                    <div className="mt-3 space-y-2">
-                      {habilidadesPuestos
-                        .filter((h: any) => h.Id_puesto === puesto.id)
-                        .map((h: any) => (
-                          <div key={h.id} className="flex items-center justify-between">
-                            <Text className="text-gray-600">{h.nombre_habilidad}</Text>
-                            {getSkillLevelTag(h.nivel)}
-                          </div>
-                        ))}
-                    </div>
+            renderItem={(puesto: any) => {
+              // Condición para mostrar el botón de postularse
+              const puedePostularse =
+                proyecto.Status?.toLowerCase() === "inactive" &&
+                miCargabilidad !== null &&
+                proyecto.cargabilidad_num !== undefined &&
+                miCargabilidad + proyecto.cargabilidad_num < 100 &&
+                !postulaciones.includes(puesto.id);
+
+              return (
+                <List.Item
+                  key={puesto.id}
+                  className="hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors"
+                  extra={
+                    <Tag color="purple" className="font-medium">{puesto.N_puestos} posiciones</Tag>
                   }
-                />
-              </List.Item>
-            )}
+                  onClick={() =>
+                    (["active", "done"].includes(proyecto.Status?.toLowerCase()))
+                      ? handleVerAsignados(puesto)
+                      : undefined
+                  }
+                  style={{
+                    cursor: ["active", "done"].includes(proyecto.Status?.toLowerCase()) ? "pointer" : "default"
+                  }}
+                  actions={[
+                    postulaciones.includes(puesto.id) ? (
+                      <Button
+                        key="cancelar"
+                        danger
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleCancelarPostulacion(puesto);
+                        }}
+                      >
+                        Cancelar postulación
+                      </Button>
+                    ) : (
+                      puedePostularse && (
+                        <Button
+                          key="postularse"
+                          type="primary"
+                          onClick={e => {
+                            e.stopPropagation();
+                            handlePostularse(puesto);
+                          }}
+                        >
+                          Postularse
+                        </Button>
+                      )
+                    )
+                  ].filter(Boolean)}
+                >
+                  <List.Item.Meta
+                    title={<Text strong className="text-gray-800">{puesto.Puesto}</Text>}
+                    description={
+                      <div className="mt-3 space-y-2">
+                        {habilidadesPuestos
+                          .filter((h: any) => h.Id_puesto === puesto.id)
+                          .map((h: any) => (
+                            <div key={h.id} className="flex items-center justify-between">
+                              <Text className="text-gray-600">{h.nombre_habilidad}</Text>
+                              {getSkillLevelTag(h.nivel)}
+                            </div>
+                          ))}
+                      </div>
+                    }
+                  />
+                </List.Item>
+              );
+            }}
           />
         </Card>
 

@@ -70,7 +70,6 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
           subRoutes: [
             { href: "/employee/capability-lead/proyectos", label: "Proyectos capability", Icon: Folder },
             { href: "/employee/capability-lead/perfiles-de-empleados", label: "Perfiles de Capability", Icon: Users },
-            { href: "/employee/capability-lead/talent-discussions", label: "Talent Discussions", Icon: MessageCircle },
           ]
         });
       }
