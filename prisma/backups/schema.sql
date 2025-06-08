@@ -2167,7 +2167,7 @@ CREATE OR REPLACE FUNCTION "public"."update_is_reviewed"() RETURNS "trigger"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
-    UPDATE public."Empleado_Proyectos"
+    UPDATE public."Puesto_Proyecto"
     SET "isReviewed" = true
     WHERE "ID_Empleado" = NEW."ID_Empleado" AND "ID_Proyecto" = NEW."ID_Proyecto";
     
@@ -2489,7 +2489,8 @@ ALTER TABLE "public"."Puesto_habilidades" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Puesto_persona" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"(),
-    "ID_Puesto" "uuid" DEFAULT "gen_random_uuid"()
+    "ID_Puesto" "uuid" DEFAULT "gen_random_uuid"(),
+    "isReviewed" boolean DEFAULT false NOT NULL
 );
 
 
