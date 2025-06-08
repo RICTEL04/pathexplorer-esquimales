@@ -52,3 +52,35 @@ export async function getProyectosNoTerminados() {
   }
   return data;
 }
+
+export async function getProyectosSinAutoevaluacion(empleadoID: string) {
+  const { data, error } = await supabase
+    .from('Proyectos')
+    .select(`
+      ID_Proyecto,
+      Nombre,
+      Descripcion,
+      Status,
+      ID_DeliveryLead,
+      fecha_inicio,
+      fecha_fin,
+      Cargabilidad,
+      Puesto_proyecto(
+        ID_Puesto,
+        Puesto_persona(
+          ID_Empleado,
+          isReviewed
+        )
+      )
+    `)
+    .in('Puesto_proyecto.Puesto_persona.ID_Empleado', [empleadoID]);
+
+  // Now filter out projects where an auto-evaluation exists
+  // (Supabase can't do NOT EXISTS in one query, so you may need to filter in JS)
+  // Optionally, you can fetch Evaluacion_Proyecto separately and filter in JS
+
+  if (error) {
+    console.error("Error fetching projects:", error);
+  }
+  return data;
+}

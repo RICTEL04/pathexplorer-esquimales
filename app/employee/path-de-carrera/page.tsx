@@ -173,7 +173,7 @@ export default function PathDeCarreraPage() {
             activeSection === "employeeData" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
           }`}
         >
-          Datos del Empleado
+          Cursos Disponibles
         </button>
       </div>
 
@@ -239,7 +239,7 @@ export default function PathDeCarreraPage() {
       {/* Sección de Datos del Empleado */}
       {!loading && activeSection === "employeeData" && employee && (
         <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Datos del Empleado</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Lista de Cursos</h2>
           <CoursesCards courses={courses} employee={employee} certifications={certifications} />
         </div>
       )}

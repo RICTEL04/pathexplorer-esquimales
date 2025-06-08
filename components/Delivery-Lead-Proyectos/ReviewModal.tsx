@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchEmployeesByProject, insertReview } from "@/lib/delivery-lead-proyectos/apiCalls";
 import { Employee } from "@/lib/delivery-lead-proyectos/definitions";
+import { sleep } from "openai/core.mjs";
 
 export default function ReviewModal({
   onClose,
@@ -19,6 +20,7 @@ export default function ReviewModal({
 
   useEffect(() => {
     const fetchEmpleados = async () => {
+      await sleep(2000);
       if (selectedProject?.ID_Proyecto) {
         try {
           const data = await fetchEmployeesByProject(selectedProject.ID_Proyecto);

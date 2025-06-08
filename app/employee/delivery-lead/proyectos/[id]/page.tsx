@@ -14,6 +14,7 @@ import {
 } from "@ant-design/icons";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import ReviewModal from "@/components/Delivery-Lead-Proyectos/ReviewModal";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -27,8 +28,8 @@ export default function ProyectoDetalle() {
     params && typeof params["id"] === "string"
       ? params["id"]
       : Array.isArray(params?.["id"])
-      ? params?.["id"][0]
-      : undefined;
+        ? params?.["id"][0]
+        : undefined;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [leadAvatarUrl, setLeadAvatarUrl] = useState<string | null>(null);
@@ -53,6 +54,7 @@ export default function ProyectoDetalle() {
   const [finishProjectModal, setFinishProjectModal] = useState(false);
   const [finishCountdown, setFinishCountdown] = useState(5);
   const [finishEnabled, setFinishEnabled] = useState(false);
+  const [openReviewModal, setOpenReviewModal] = useState(false);
 
   // Mueve fetchData fuera del useEffect para poder reutilizarla
   const fetchData = async () => {
@@ -251,6 +253,12 @@ export default function ProyectoDetalle() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+      {openReviewModal && proyecto && (
+        <ReviewModal
+          selectedProject={proyecto}
+          onClose={() => setOpenReviewModal(false)}
+        />
+      )}
       {/* Botón de regreso con mejor contraste */}
       <button
         className="mb-6 px-4 py-2 bg-white border border-purple-200 text-purple-600 hover:bg-purple-50 rounded-lg transition-all duration-200 flex items-center gap-1 shadow-xs"
@@ -269,13 +277,13 @@ export default function ProyectoDetalle() {
               {proyecto.fecha_inicio} - {proyecto.fecha_fin}
             </Tag>
             {proyecto.Status === "inactive" && (
-            <button
-              className="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all text-sm"
-              onClick={() => router.push(`/employee/delivery-lead/proyectos/${proyecto.ID_Proyecto}/edit`)}
-              type="button"
-            >
-              Editar proyecto
-            </button>
+              <button
+                className="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all text-sm"
+                onClick={() => router.push(`/employee/delivery-lead/proyectos/${proyecto.ID_Proyecto}/edit`)}
+                type="button"
+              >
+                Editar proyecto
+              </button>
             )}
             {proyecto.Status === "inactive" && (
               <button
@@ -300,10 +308,10 @@ export default function ProyectoDetalle() {
             {proyecto.Nombre}
           </Title>
         </div>
-        
+
         {/* Tarjeta del cliente */}
         <div className="flex items-center gap-4 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 w-full md:w-auto">
-          <Avatar 
+          <Avatar
             size={48}
             src={imagenUrlCompleta}
             icon={<UserOutlined />}
@@ -333,15 +341,15 @@ export default function ProyectoDetalle() {
                 proyecto.cargabilidad_num > 70
                   ? "exception"
                   : proyecto.cargabilidad_num > 40
-                  ? "active"
-                  : "success"
+                    ? "active"
+                    : "success"
               }
               strokeColor={
                 proyecto.cargabilidad_num > 70
                   ? "#f5222d"
                   : proyecto.cargabilidad_num > 40
-                  ? "#fa8c16"
-                  : "#52c41a"
+                    ? "#fa8c16"
+                    : "#52c41a"
               }
               format={(percent) => (
                 <span className="font-medium">{percent}%</span>
@@ -350,7 +358,7 @@ export default function ProyectoDetalle() {
             />
           </div>
 
-            <div>
+          <div>
             <Title level={5} className="mb-3 text-gray-700">Líder del Proyecto</Title>
             <div className="flex items-center gap-3 bg-white rounded-lg shadow-sm mx-auto p-2">
               <Avatar
@@ -369,9 +377,22 @@ export default function ProyectoDetalle() {
               <Tag icon={<CheckCircleOutlined />} color="success" className="font-medium text-sm py-1 px-3">
                 Revisado
               </Tag>
+            ) : proyecto.Status === "done" ? (
+              <div>
+                <Tag icon={<ClockCircleOutlined />} color="warning" className="font-medium text-sm py-1 px-3">
+                  Revisión al finalizar
+                </Tag>
+                <Button
+                  type="primary"
+                  className="mt-2 w-full"
+                  onClick={() => setOpenReviewModal(true)}
+                >
+                  Dar retroalimentación
+                </Button>
+              </div>
             ) : (
               <Tag icon={<ClockCircleOutlined />} color="warning" className="font-medium text-sm py-1 px-3">
-                Revision al finalizar
+                Revisión al finalizar
               </Tag>
             )}
           </div>
@@ -462,7 +483,7 @@ export default function ProyectoDetalle() {
             <List
               dataSource={habilidadesGenerales}
               renderItem={(h: any, idx: number) => (
-                <List.Item 
+                <List.Item
                   key={idx}
                   className="hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors"
                 >
@@ -750,7 +771,7 @@ export default function ProyectoDetalle() {
       </Modal>
 
       {/* Modal para confirmar inicio de proyecto */}
-            <Modal
+      <Modal
         open={startProjectModal}
         title="¿Seguro que quieres comenzar el proyecto?"
         onCancel={() => setStartProjectModal(false)}
@@ -1047,7 +1068,7 @@ function EmpleadoCard({
                 strokeColor={
                   porcentaje > 70 ? "#f5222d"
                     : porcentaje > 40 ? "#fa8c16"
-                    : "#52c41a"
+                      : "#52c41a"
                 }
                 className="mx-auto"
               />
