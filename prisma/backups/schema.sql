@@ -279,18 +279,34 @@ CREATE OR REPLACE FUNCTION "public"."check_and_update_reviewed_trigger"() RETURN
     AS $$
 DECLARE
     all_reviewed boolean;
+    project_id uuid;
 BEGIN
+    -- Retrieve the ID_Proyecto based on the ID_Puesto
+    SELECT "ID_Proyecto" INTO project_id
+    FROM public."Puesto_proyecto"
+    WHERE "id" = NEW."ID_Puesto";
+
+    -- Check if all related Puesto_persona entries for the project are reviewed
     SELECT COUNT(*) = 0 INTO all_reviewed
-    FROM public."Empleado_Proyectos"
-    WHERE "ID_Proyecto" = NEW."ID_Proyecto" AND "isReviewed" = false;
+    FROM public."Puesto_persona"
+    WHERE "ID_Puesto" IN (
+        SELECT "id" FROM public."Puesto_proyecto" WHERE "ID_Proyecto" = project_id
+    )
+    AND "isReviewed" = false;
 
     IF all_reviewed THEN
+        -- Update the project to set it as reviewed
         UPDATE public."Proyectos"
         SET "isReviewed" = true
-        WHERE "ID_Proyecto" = NEW."ID_Proyecto";
+        WHERE "ID_Proyecto" = project_id;
     END IF;
 
     RETURN NEW;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Handle any exceptions that occur
+        RAISE EXCEPTION 'Error updating project review status: %', SQLERRM;
+        RETURN NULL;
 END;
 $$;
 
@@ -2167,10 +2183,15 @@ CREATE OR REPLACE FUNCTION "public"."update_is_reviewed"() RETURNS "trigger"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
-    UPDATE public."Puesto_Proyecto"
+    -- Update the isReviewed column in Puesto_persona
+    UPDATE public."Puesto_persona"
     SET "isReviewed" = true
-    WHERE "ID_Empleado" = NEW."ID_Empleado" AND "ID_Proyecto" = NEW."ID_Proyecto";
-    
+    WHERE "ID_Empleado" = NEW."ID_Empleado" 
+      AND "ID_Puesto" = (SELECT "ID_Puesto" 
+                         FROM public."Puesto_proyecto" 
+                         WHERE "ID_Proyecto" = NEW."ID_Proyecto"
+                         LIMIT 1);  -- Ensure only one row is returned
+
     RETURN NEW;
 END;
 $$;
@@ -2835,6 +2856,10 @@ ALTER TABLE ONLY "public"."Talent_Lead"
 
 
 CREATE OR REPLACE TRIGGER "after_insert_evaluacion" AFTER INSERT ON "public"."Evaluacion_Proyecto" FOR EACH ROW EXECUTE FUNCTION "public"."update_is_reviewed"();
+
+
+
+CREATE OR REPLACE TRIGGER "check_and_update_reviewed" AFTER UPDATE ON "public"."Puesto_persona" FOR EACH ROW EXECUTE FUNCTION "public"."check_and_update_reviewed_trigger"();
 
 
 
