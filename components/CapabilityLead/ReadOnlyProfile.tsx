@@ -122,6 +122,7 @@ const ReadOnlyProfile: React.FC<ReadOnlyProfileProps> = ({
           avatarUrl={avatarUrl}
           name={name}
           editable={false}
+          empleadoId={id ?? ''}
         />
 
         {/* Columna 2 - Información principal */}

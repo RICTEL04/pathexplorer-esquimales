@@ -180,6 +180,7 @@ const Profile: React.FC<ProfileProps> = ({
           name = {name}
           editable = {true}
           onSave={onUpdateAvatarURL}
+          empleadoId={id || ''}
         />
 
 
