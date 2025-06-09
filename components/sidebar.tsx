@@ -57,7 +57,7 @@ export default function Sidebar({ routes, isSidebarOpen, setIsSidebarOpen }: Sid
 
   return (
     <div
-      className={`fixed top-1 left-0 h-screen bg-white shadow-md p-4 flex flex-col justify-between z-40 transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-16"
+      className={`fixed top-1 left-0 h-screen bg-white shadow-md p-4 flex flex-col justify-between overflow-y-scroll no-scrollbar z-40 transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-16"
         }`}
       onMouseEnter={() => setIsSidebarOpen(true)}
       onMouseLeave={() => setIsSidebarOpen(false)}
@@ -84,13 +84,22 @@ export default function Sidebar({ routes, isSidebarOpen, setIsSidebarOpen }: Sid
           {routes.map(({ href, label, Icon, subRoutes }) => (
             <div key={label} className="flex flex-col">
               <div className="flex items-center">
-                <Link
-                  href={href}
-                  className={`text-gray-800 flex-1 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 ${isActive(href, subRoutes) ? "bg-gray-300 font-bold" : ""
-                    }`}
-                >
-                  <Icon className="w-5 h-5" /> {isSidebarOpen && label}
-                </Link>
+                {subRoutes ? (
+                  <button
+                    type="button"
+                    onClick={() => toggleDropdown(label)}
+                    className={`text-gray-800 flex-1 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 text-left ${isActive(href, subRoutes) ? "bg-gray-300 font-bold" : ""}`}
+                  >
+                    <Icon className="w-5 h-5" /> {isSidebarOpen && label}
+                  </button>
+                ) : (
+                  <Link
+                    href={href}
+                    className={`text-gray-800 flex-1 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 ${isActive(href) ? "bg-gray-300 font-bold" : ""}`}
+                  >
+                    <Icon className="w-5 h-5" /> {isSidebarOpen && label}
+                  </Link>
+                )}
 
                 {isSidebarOpen && subRoutes && (
                   <button
@@ -112,8 +121,7 @@ export default function Sidebar({ routes, isSidebarOpen, setIsSidebarOpen }: Sid
                     <Link
                       key={subRoute.href}
                       href={subRoute.href}
-                      className={`text-gray-600 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 text-sm ${pathname === subRoute.href ? "bg-gray-200 font-medium" : ""
-                        }`}
+                      className={`text-gray-600 flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 text-sm ${pathname === subRoute.href ? "bg-gray-200 font-medium" : ""}`}
                     >
                       <subRoute.Icon className="w-4 h-4" /> {subRoute.label}
                     </Link>

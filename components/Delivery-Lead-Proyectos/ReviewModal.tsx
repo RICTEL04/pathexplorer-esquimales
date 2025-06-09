@@ -26,6 +26,10 @@ export default function ReviewModal({
           const data = await fetchEmployeesByProject(selectedProject.ID_Proyecto);
           const filteredData = data.filter((empleado) => !empleado.isReviewed);
           setEmpleados(filteredData);
+          if (filteredData.length === 0) {
+            onClose();
+            window.location.reload();
+          }
         } catch (error) {
           console.error("Error fetching employees:", error);
         }
