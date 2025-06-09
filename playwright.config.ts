@@ -34,12 +34,13 @@ export default defineConfig({
             token: "abb869e77ae236c803a5d49e7518ead31ecc2a8d434ab3ac2c616547bae481ee",
           },
           project: 'ESKIMALES',
-          uploadAttachments: false,
+          uploadAttachments: true,
 
           run: {
             complete: true,
           },
         },
+        rootSuiteTitle: 'Pruebas Automatizadas'
       },
     ],
   ],
@@ -50,18 +51,36 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure', // Capturas automáticas en fallos
+    video: 'retain-on-failure', // Videos de pruebas fallidas
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { 
+        ...devices['Desktop Chrome'],
+        // Metadatos para identificar el navegador en Qase
+        contextOptions: {
+          extraHTTPHeaders: {
+            'X-Test-Browser': 'Chrome'
+          }
+        }
+      },
+      testDir: './tests',
     },
-
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: { 
+        ...devices['Desktop Firefox'],
+        contextOptions: {
+          extraHTTPHeaders: {
+            'X-Test-Browser': 'Firefox'
+          }
+        }
+      },
+      testDir: './tests',
     },
 
     /* Test against mobile viewports. */
