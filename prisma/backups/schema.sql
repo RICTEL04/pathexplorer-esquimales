@@ -2125,7 +2125,7 @@ $$;
 ALTER FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."select_proyectos_terminados_empleado"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "ID_Cliente" "uuid", "Descripcion" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isAutoevaluacion" boolean, "Fortalezas" "text", "Area_Mejora" "text", "Calificacion" smallint)
+CREATE OR REPLACE FUNCTION "public"."select_proyectos_terminados_empleado"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "Cliente" "text", "Descripcion" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isAutoevaluacion" boolean, "Fortalezas" "text", "Area_Mejora" "text", "Calificacion" smallint)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -2133,23 +2133,24 @@ BEGIN
     SELECT 
         p."ID_Proyecto", 
         p."Nombre", 
-        p."ID_Cliente", 
+        p."Cliente",  -- Changed from ID_Cliente to Cliente
         p."Descripcion", 
         p."ID_DeliveryLead", 
         p."fecha_inicio", 
         p."fecha_fin",
-        evp."esAutoevaluacion",
+        evp."esAutoevaluacion",  -- Corrected column name
         evp."Fortalezas",
         evp."Areas_Mejora",
         evp."Calificacion"
     FROM public."Proyectos" p
-    JOIN public."Empleado_Proyectos" ep ON p."ID_Proyecto" = ep."ID_Proyecto"
+    JOIN public."Puesto_proyecto" pp ON p."ID_Proyecto" = pp."ID_Proyecto"
+    JOIN public."Puesto_persona" ps ON pp."id" = ps."ID_Puesto"
     JOIN public."Evaluacion_Proyecto" evp ON p."ID_Proyecto" = evp."ID_Proyecto"
     WHERE 
-    ep."ID_Empleado" = p_id_empleado AND
-    ep."isReviewed" = true AND
-    evp."ID_Empleado" = p_id_empleado AND
-    p."isReviewed" = true;
+        ps."ID_Empleado" = p_id_empleado AND
+        ps."isReviewed" = true AND
+        evp."ID_Empleado" = p_id_empleado AND
+        p."isReviewed" = true;
 END;
 $$;
 
