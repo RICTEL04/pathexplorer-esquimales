@@ -2,6 +2,10 @@ import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { Tag } from "antd";
+import {
+  CalendarOutlined,
+} from "@ant-design/icons";
 
 export default function SuggestedProjectsColumn() {
   const router = useRouter();
@@ -15,6 +19,8 @@ export default function SuggestedProjectsColumn() {
   const [candidatoFilter, setCandidatoFilter] = useState<"todos" | "candidato" | "no-candidato">("todos");
   const [showModal, setShowModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [noAplicaPorCargabilidad, setNoAplicaPorCargabilidad] = useState(false);
+  const [hayProyectosDisponibles, setHayProyectosDisponibles] = useState(true); // NUEVO ESTADO
 
   // Extraer metas y habilidades igual que en page.tsx
   const metas = empleado?.metas
@@ -55,8 +61,15 @@ export default function SuggestedProjectsColumn() {
         setLoading(false);
         return;
       }
-      // Guarda el objeto completo, no solo data.empleado
-      setEmpleado(data || null);
+      // Si data es un array, toma el primer elemento
+      // Si data tiene un campo 'empleado', usa ese campo
+      let empleadoObj = data;
+      if (Array.isArray(data)) {
+        empleadoObj = data[0] || null;
+      } else if (data?.empleado) {
+        empleadoObj = data.empleado;
+      }
+      setEmpleado(empleadoObj || null);
       setLoading(false);
     };
     fetchEmpleado();
@@ -85,6 +98,9 @@ export default function SuggestedProjectsColumn() {
     if (viewType !== "sugeridos" || !empleado) return;
     const fetchProyectosSugeridos = async () => {
       setLoading(true);
+      setNoAplicaPorCargabilidad(false);
+      setHayProyectosDisponibles(true); // reset
+
       const { data: proyectos, error } = await supabase.rpc("get_inactive_projects_with_skills");
       if (error) {
         console.error("Error obteniendo proyectos para sugerencias:", error);
@@ -92,7 +108,14 @@ export default function SuggestedProjectsColumn() {
         return;
       }
 
-      // Usa los arrays directos del objeto recibido
+      // Si no hay proyectos en la base, marcarlo
+      if (!proyectos || proyectos.length === 0) {
+        setProyectosSugeridos([]);
+        setHayProyectosDisponibles(false);
+        setLoading(false);
+        return;
+      }
+
       const metas = Array.isArray(empleado?.metas_en_progreso)
         ? empleado.metas_en_progreso.map((m: any) => m.Nombre || m)
         : [];
@@ -105,24 +128,35 @@ export default function SuggestedProjectsColumn() {
         ? empleado.intereses.map((i: any) => i.Descripcion || i)
         : [];
 
-      const proyectosList = (proyectos || []).map((p: any) => ({
-        ID_Proyecto: p.ID_Proyecto,
-        Nombre: p.Nombre,
-        Descripcion: p.Descripcion,
-        Status: p.Status,
-        fecha_inicio: p.fecha_inicio,
-        fecha_fin: p.fecha_fin,
-        cargabilidad_num: p.cargabilidad_num,
-        habilidades_proyecto: p.habilidades_proyecto,
-        ImagenUrl: p.ImagenUrl,
-      }));
+      const cargabilidadEmpleado = Number(empleado.Cargabilidad ?? 0);
+      const proyectosList = (proyectos || [])
+        .filter((p: any) => {
+          const cargabilidadProyecto =
+            p.cargabilidad_num !== undefined
+              ? Number(p.cargabilidad_num)
+              : p.Cargabilidad !== undefined
+              ? Number(p.Cargabilidad)
+              : 0;
+          return cargabilidadEmpleado + cargabilidadProyecto <= 100; // Cambia aquí: antes era < 100
+        })
+        .map((p: any) => ({
+          ID_Proyecto: p.ID_Proyecto,
+          Nombre: p.Nombre,
+          Descripcion: p.Descripcion,
+          Status: p.Status,
+          fecha_inicio: p.fecha_inicio,
+          fecha_fin: p.fecha_fin,
+          cargabilidad_num: p.cargabilidad_num,
+          habilidades_proyecto: p.habilidades_proyecto,
+          ImagenUrl: p.ImagenUrl,
+        }));
 
-      console.log("Body para ProjectRecommender:", {
-        metas,
-        habilidades,
-        intereses,
-        proyectos: proyectosList,
-      });
+      if (proyectosList.length === 0) {
+        setProyectosSugeridos([]);
+        setNoAplicaPorCargabilidad(true);
+        setLoading(false);
+        return;
+      }
 
       try {
         const response = await fetch("/api/ProjectRecommender", {
@@ -137,7 +171,12 @@ export default function SuggestedProjectsColumn() {
         });
         if (!response.ok) throw new Error("Error en la API interna");
         const { suggestedProjects } = await response.json();
-        setProyectosSugeridos(suggestedProjects || []);
+        // Enriquecer los proyectos sugeridos con la info completa
+        const proyectosCompletos = (suggestedProjects || []).map((sp: any) => {
+          const original = proyectosList.find((p: any) => p.ID_Proyecto === sp.ID_Proyecto);
+          return original ? { ...original, ...sp } : sp;
+        });
+        setProyectosSugeridos(proyectosCompletos);
       } catch (err) {
         console.error("Error llamando a ProjectRecommender:", err);
         setProyectosSugeridos([]);
@@ -159,16 +198,16 @@ export default function SuggestedProjectsColumn() {
             );
           })
           .filter((proyecto) => {
-            if (!empleado?.Cargabilidad || candidatoFilter === "todos") return true;
+            if (candidatoFilter === "todos") return true;
             const cargabilidadProyecto =
               proyecto.cargabilidad_num !== undefined
                 ? proyecto.cargabilidad_num
                 : proyecto.Cargabilidad !== undefined
                 ? proyecto.Cargabilidad
                 : 0;
-            const suma = Number(empleado.Cargabilidad) + Number(cargabilidadProyecto);
-            if (candidatoFilter === "candidato") return suma < 100;
-            if (candidatoFilter === "no-candidato") return suma >= 100;
+            const suma = Number(empleado?.Cargabilidad ?? 0) + Number(cargabilidadProyecto);
+            if (candidatoFilter === "candidato") return suma <= 100;
+            if (candidatoFilter === "no-candidato") return suma > 100;
             return true;
           })
       : proyectosSugeridos;
@@ -246,7 +285,24 @@ export default function SuggestedProjectsColumn() {
         {loading ? (
           <div className="text-center text-gray-400 py-8">Cargando proyectos...</div>
         ) : proyectosFiltrados.length === 0 ? (
-          <div className="text-center text-gray-400 py-8">No hay proyectos para mostrar.</div>
+          viewType === "sugeridos" ? (
+            !hayProyectosDisponibles ? (
+              <div className="text-center text-gray-400 py-8">
+                No hay proyectos para mostrar.
+              </div>
+            ) : noAplicaPorCargabilidad ? (
+              <div className="text-center text-red-500 py-8">
+                Tu cargabilidad es muy alta, no puedes aplicar a proyectos.<br />
+                <span className="font-bold">Cargabilidad actual: {empleado?.Cargabilidad ?? 0}%</span>
+              </div>
+            ) : (
+              <div className="text-center text-gray-400 py-8">
+                No hay proyectos sugeridos para ti en este momento.
+              </div>
+            )
+          ) : (
+            <div className="text-center text-gray-400 py-8">No hay proyectos para mostrar.</div>
+          )
         ) : (
           proyectosFiltrados.map((proyecto: any) => {
             const imagenSrc = proyecto.ImagenUrl
@@ -270,10 +326,30 @@ export default function SuggestedProjectsColumn() {
                 className="bg-white rounded-lg border-l-4 border-purple-400 border shadow-md p-4 relative cursor-pointer hover:shadow-xl transition-all duration-200 flex flex-col"
                 onClick={() => handleProjectClick(proyecto)}
               >
+                {/* Marca para proyectos NO candidatos */}
+                {viewType === "disponibles" && (() => {
+                  const cargabilidadProyecto =
+                    proyecto.cargabilidad_num !== undefined
+                      ? proyecto.cargabilidad_num
+                      : proyecto.Cargabilidad !== undefined
+                      ? proyecto.Cargabilidad
+                      : 0;
+                  const suma = Number(empleado?.Cargabilidad ?? 0) + Number(cargabilidadProyecto);
+                  if (suma > 100) { // Cambia aquí
+                    return (
+                      <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded shadow z-10">
+                        No aplicas
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <h3 className="text-lg font-bold text-purple-700">{proyecto.Nombre}</h3>
-                    <span className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700 border">{proyecto.Status}</span>
+                    <Tag color="blue" icon={<CalendarOutlined />} className="font-medium">
+                      {proyecto.fecha_inicio} - {proyecto.fecha_fin}
+                    </Tag>
                   </div>
                   {imagenSrc && (
                     <img
@@ -306,18 +382,6 @@ export default function SuggestedProjectsColumn() {
                     </div>
                   </div>
                 )}
-                <div className="flex gap-4 mt-auto text-xs text-gray-500 pt-2 border-t">
-                  {proyecto.fecha_inicio && (
-                    <span>
-                      <b>Inicio:</b> {new Date(proyecto.fecha_inicio).toLocaleDateString()}
-                    </span>
-                  )}
-                  {proyecto.fecha_fin && (
-                    <span>
-                      <b>Fin:</b> {new Date(proyecto.fecha_fin).toLocaleDateString()}
-                    </span>
-                  )}
-                </div>
               </div>
             );
           })
