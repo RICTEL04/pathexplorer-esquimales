@@ -4377,6 +4377,7 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	eecc9fe2-6cbb-4ae0-9dc1-24fdd502a4b0	{"action":"login","actor_id":"b5c684f0-24d7-436f-b752-71cd9e361c8f","actor_username":"a00836530@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 22:44:44.077849+00	
 00000000-0000-0000-0000-000000000000	bb981f25-57b1-4d15-8658-0b8e13f089bb	{"action":"logout","actor_id":"b5c684f0-24d7-436f-b752-71cd9e361c8f","actor_username":"a00836530@tec.mx","actor_via_sso":false,"log_type":"account"}	2025-06-10 22:45:12.560944+00	
 00000000-0000-0000-0000-000000000000	12842c7c-3007-4e0b-852b-119a0ec0e6be	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 22:45:18.790798+00	
+00000000-0000-0000-0000-000000000000	6a5c7657-e032-4ea6-8f52-6dff441e0f0b	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 22:53:28.84399+00	
 \.
 
 
@@ -4393,7 +4394,7 @@ COPY "auth"."flow_state" ("id", "user_id", "auth_code", "code_challenge_method",
 --
 
 COPY "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at", "is_anonymous") FROM stdin;
-00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-06-10 22:13:23.019574+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-06-10 22:13:23.029338+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-06-10 22:53:28.846504+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-06-10 22:53:28.850295+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	3912d459-b96e-4150-9a2a-fb9135ebc374	authenticated	authenticated	jose@gmail.com	$2a$10$Su9b0KFAIjFbPVqxuJc1MeFTCaAxjPLMYTUZOMLwZVVkyxjQ7b9a6	2025-04-25 21:31:52.222825+00	\N		\N		\N			\N	2025-04-28 22:35:45.159374+00	{"provider": "email", "providers": ["email"]}	{"sub": "3912d459-b96e-4150-9a2a-fb9135ebc374", "name": "Jose", "role": "employee", "email": "jose@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-04-25 21:31:52.206193+00	2025-05-02 21:39:53.81215+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	36abc818-b3a6-440f-933a-79ff41fe5b67	authenticated	authenticated	a01722728@tec.mx	$2a$10$5K/odDwK9GopcT3HEMMJJuKobGM0rnAcC/vvgwCYP8UajOWsAjQVG	2025-04-25 20:53:07.523904+00	\N		\N		\N			\N	2025-06-10 22:20:36.160667+00	{"provider": "email", "providers": ["email"]}	{"sub": "36abc818-b3a6-440f-933a-79ff41fe5b67", "name": "David", "role": "employee", "email": "a01722728@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 20:53:07.512718+00	2025-06-10 22:20:36.173642+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	1fbfe562-cea4-4b33-b830-0c9f5f301251	authenticated	authenticated	m@g.com	$2a$10$4TUs/5wybxnEEZO.IV9MU.z81EZy8W0nrrIxD0gTQAz8UAXax17CO	2025-06-03 05:09:32.073283+00	\N		\N		\N			\N	2025-06-10 22:39:08.36865+00	{"provider": "email", "providers": ["email"]}	{"sub": "1fbfe562-cea4-4b33-b830-0c9f5f301251", "name": "Mauricio", "role": "employee", "email": "m@g.com", "email_verified": true, "phone_verified": false}	\N	2025-06-03 05:09:32.040179+00	2025-06-10 22:39:08.395699+00	\N	\N			\N		0	\N		\N	f	\N	f
@@ -4452,6 +4453,7 @@ COPY "auth"."sessions" ("id", "user_id", "created_at", "updated_at", "factor_id"
 9ff90124-5412-4cc1-89ab-455384f45348	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-05 20:34:09.999251+00	2025-06-06 19:52:29.692802+00	\N	aal1	\N	2025-06-06 19:52:29.692732	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	131.178.102.148	\N
 235961dd-b49d-44e1-bc51-cad2295664be	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-10 22:20:36.160825+00	2025-06-10 22:20:36.160825+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	131.178.102.128	\N
 851ff9fd-c7c1-41d0-ab53-677a34b2d691	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-15 16:15:04.632374+00	2025-05-16 23:04:22.946081+00	\N	aal1	\N	2025-05-16 23:04:22.945967	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	131.178.102.136	\N
+f77267a1-1daf-4739-84d8-e5a0eb094885	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-10 22:53:28.846579+00	2025-06-10 22:53:28.846579+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	131.178.102.200	\N
 f4f1ce21-bf22-41cb-8f22-ea708994782d	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-06 20:53:17.747224+00	2025-06-06 22:54:29.682329+00	\N	aal1	\N	2025-06-06 22:54:29.681526	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	131.178.102.148	\N
 bfd59fca-362e-4e20-84f3-973ba1b0201e	3912d459-b96e-4150-9a2a-fb9135ebc374	2025-04-28 22:35:45.159456+00	2025-04-29 20:45:55.77718+00	\N	aal1	\N	2025-04-29 20:45:55.777094	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.204	\N
 ceb1528c-4e8e-4055-b627-7d826dc44790	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-03 21:33:15.52221+00	2025-06-05 04:36:41.537967+00	\N	aal1	\N	2025-06-05 04:36:41.537885	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	201.173.64.100	\N
@@ -4487,6 +4489,7 @@ b4b82c60-ac9b-45ac-819e-5d1c7e52e1e4	2025-06-05 20:24:35.64079+00	2025-06-05 20:
 2348789b-4a7c-4539-8a08-847f2186e7f1	2025-06-06 20:25:33.384156+00	2025-06-06 20:25:33.384156+00	password	95481bbf-dc36-4ed5-be55-c84b4a7f5bd9
 f4f1ce21-bf22-41cb-8f22-ea708994782d	2025-06-06 20:53:17.769711+00	2025-06-06 20:53:17.769711+00	password	9b594885-a967-487c-88f4-a8936229498b
 c7ebc51f-0145-41a1-9f06-d343228e87f6	2025-06-10 21:33:19.419364+00	2025-06-10 21:33:19.419364+00	password	4a5cd6cd-6c5d-470e-b022-733b1048c1c1
+f77267a1-1daf-4739-84d8-e5a0eb094885	2025-06-10 22:53:28.850883+00	2025-06-10 22:53:28.850883+00	password	1c43874f-0f8e-40db-8f4b-2764668f35ee
 4d6029a6-9e04-4b70-b168-79d77c684559	2025-05-15 16:13:39.388166+00	2025-05-15 16:13:39.388166+00	otp	5358c447-cec3-467c-851a-65996e5c4283
 4ec60657-5f2c-4759-a834-509a35f140f6	2025-05-15 16:14:29.409282+00	2025-05-15 16:14:29.409282+00	otp	889fc1c9-511d-43c1-bb26-f50457c5e835
 851ff9fd-c7c1-41d0-ab53-677a34b2d691	2025-05-15 16:15:04.63491+00	2025-05-15 16:15:04.63491+00	password	f2aebb97-db77-4112-b997-6334bb6124c6
@@ -4569,6 +4572,7 @@ COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked"
 00000000-0000-0000-0000-000000000000	1543	xu6k4fdetkfn	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-05 20:24:34.562645+00	2025-06-05 20:24:34.562645+00	5zkvarwdov7j	ba9531ef-629b-4893-915c-76caca99774a
 00000000-0000-0000-0000-000000000000	1544	c2u6vslckrwa	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-05 20:24:35.638818+00	2025-06-05 20:24:35.638818+00	\N	b4b82c60-ac9b-45ac-819e-5d1c7e52e1e4
 00000000-0000-0000-0000-000000000000	2876	incazon7tp26	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 22:45:18.795796+00	2025-06-10 22:45:18.795796+00	\N	5bd2ffe9-cc55-42ec-8eda-e933920e1bfe
+00000000-0000-0000-0000-000000000000	2877	leie3fewqiom	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-06-10 22:53:28.848311+00	2025-06-10 22:53:28.848311+00	\N	f77267a1-1daf-4739-84d8-e5a0eb094885
 \.
 
 
@@ -4636,11 +4640,11 @@ COPY "public"."Empleado" ("ID_Empleado", "Nombre", "Rol", "ID_Departamento", "Ni
 7b23b8a4-8f26-40a9-86c0-c591b423ea6a	Jorge Beyanzo	QA	d85d9ef9-0288-4462-bb3b-13c1d86cdf68	10	31	2025-05-15	2025-05-15	4fde1b00-e11e-41c5-88c8-9e38d71facce	\N
 76db1355-d074-41ef-ab95-5701689639ae	New User	NU	cf57cc7b-7d64-473a-b31e-97fc5736d380	10	0	2025-06-10	2025-06-10	\N	\N
 ce40b8ef-93d7-4445-aa23-d0f5ac989bb3	Richie	a	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	11	0	2025-06-10	2025-06-10	\N	\N
+36abc818-b3a6-440f-933a-79ff41fe5b67	David	dev	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	1	0	2025-04-25	2025-04-25	66d20503-e75f-43d9-9572-54fa189dfb95	\N
 386e63ba-dc8f-4af6-9447-44f7976a4a0c	Pancho	Admin	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	1	30	2025-05-13	2025-05-13	4fde1b00-e11e-41c5-88c8-9e38d71facce	Biografía
 fc1276e7-efc6-4ec5-b2cd-bfab2005930e	Yolanda	Dev	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	11	0	2025-04-29	2025-04-29	66d20503-e75f-43d9-9572-54fa189dfb95	ksd
 3912d459-b96e-4150-9a2a-fb9135ebc374	Jose	Dev	cf57cc7b-7d64-473a-b31e-97fc5736d380	6	0	2025-04-25	2025-04-25	3cb8081b-1a2b-4e32-a007-fae5c77735ba	\N
 1fbfe562-cea4-4b33-b830-0c9f5f301251	Mauricio	Zy	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	12	0	2025-06-02	2025-06-02	92360b89-f39a-4a6a-9401-8e0aa6420b12	\N
-36abc818-b3a6-440f-933a-79ff41fe5b67	David	dev	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	1	0	2025-04-25	2025-04-25	92360b89-f39a-4a6a-9401-8e0aa6420b12	\N
 86315508-992d-4200-a53d-3a2a99f47329	Ricardo	Admin	cf57cc7b-7d64-473a-b31e-97fc5736d380	1	0	2025-05-15	2025-05-15	4fde1b00-e11e-41c5-88c8-9e38d71facce	\N
 900fdfaf-7517-4876-8d20-b83da73a8347	Jorge Betanzo	Developer	d85d9ef9-0288-4462-bb3b-13c1d86cdf68	10	0	2025-04-25	2025-04-25	66d20503-e75f-43d9-9572-54fa189dfb95	ITC 6° Semestre
 5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Isaac Francisco Sánchez Veloquio	Developer	ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	5	0	2023-03-10	2023-03-10	\N	\N
@@ -4718,6 +4722,7 @@ ac897777-7a53-4d79-937c-13cac2435872	Bases de Datos Intermedio	2026-04-30	https:
 a8475023-2151-4836-add0-f708a1e67f3c	Introducción a JavaScript	2026-05-14	https://nuyfnqiodjynfkubkqpn.supabase.co/storage/v1/object/public/documentos/5f096705-11c3-49b1-b42c-d7bd17a75439/CertificadoJS.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	\N	Esto jala
 9e7f66bc-ab15-4b20-8f0c-bfccc4e4e41d	yolanda	2025-04-29	https://nuyfnqiodjynfkubkqpn.supabase.co/storage/v1/object/public/documentos/fc1276e7-efc6-4ec5-b2cd-bfab2005930e/Application_Form_Incomings%20(2).pdf	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	t	
 9c765ebd-61ce-4fda-a214-5971068c585e	Certificación DB	2025-07-10	https://nuyfnqiodjynfkubkqpn.supabase.co/storage/v1/object/public/documentos/5ad0bb87-f4fc-413c-adba-ef4b0b9402d1/CertificadoDBIsaac.pdf	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	\N	
+107c053b-ec8a-4650-a119-2bb19c97dc48	Experto.pdf	2024-09-25	https://nuyfnqiodjynfkubkqpn.supabase.co/storage/v1/object/public/documentos/36abc818-b3a6-440f-933a-79ff41fe5b67/Avance%20de%20proyecto%20y%20nuevo%20sprint.pdf	36abc818-b3a6-440f-933a-79ff41fe5b67	\N	
 \.
 
 
@@ -6092,6 +6097,7 @@ fd62a968-6b83-46d9-a3d9-1d4e785ff8a6	project-images	proyectos/62653857-76fa-488e
 53cd55b8-fdb8-4922-977e-134135d7ab04	project-images	proyectos/31f3912a-ad69-44f5-9176-13702c2bdda3/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-09 09:11:52.041605+00	2025-06-09 09:11:52.041605+00	2025-06-09 09:11:52.041605+00	{"eTag": "\\"a8e1bd43e54b1295a821f4f0c2c1353d\\"", "size": 3864397, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-09T09:11:52.000Z", "contentLength": 3864397, "httpStatusCode": 200}	53174476-eb5e-402c-ae74-183ee411d92f	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 387c5777-d813-41f0-8afc-31a8320f1ea1	reportes	386e63ba-dc8f-4af6-9447-44f7976a4a0c/reporte_386e63ba-dc8f-4af6-9447-44f7976a4a0c_1749569018623.pdf	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:23:37.024983+00	2025-06-10 15:23:37.024983+00	2025-06-10 15:23:37.024983+00	{"eTag": "\\"5a82c482473285e33bc81870ea4ccdb3\\"", "size": 16753, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-10T15:23:37.000Z", "contentLength": 16753, "httpStatusCode": 200}	1cd500a9-d169-4970-9330-1bd0ffe84b17	386e63ba-dc8f-4af6-9447-44f7976a4a0c	{}
 1005951c-0c12-45cb-83a1-ad016313436a	reportes	7b23b8a4-8f26-40a9-86c0-c591b423ea6a/reporte_7b23b8a4-8f26-40a9-86c0-c591b423ea6a_1749586506087.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-10 20:15:06.760148+00	2025-06-10 20:15:06.760148+00	2025-06-10 20:15:06.760148+00	{"eTag": "\\"f11ecbe3a9fb2b2173e5de1150ad7a9d\\"", "size": 13596, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-10T20:15:07.000Z", "contentLength": 13596, "httpStatusCode": 200}	6e3aca43-7ea5-43ac-82b9-9e5901f40bf0	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+4769a8e7-83c9-46c2-8f85-5e3ff3493212	documentos	36abc818-b3a6-440f-933a-79ff41fe5b67/Avance de proyecto y nuevo sprint.pdf	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-10 22:55:19.595261+00	2025-06-10 22:55:19.595261+00	2025-06-10 22:55:19.595261+00	{"eTag": "\\"4e0b99b89bafca3a60f461af24dab647\\"", "size": 278962, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-10T22:55:20.000Z", "contentLength": 278962, "httpStatusCode": 200}	46a60bdc-bdcd-452d-bb99-b8855272a8cc	36abc818-b3a6-440f-933a-79ff41fe5b67	{}
 \.
 
 
@@ -6115,7 +6121,7 @@ COPY "storage"."s3_multipart_uploads_parts" ("id", "upload_id", "size", "part_nu
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 2876, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 2877, true);
 
 
 --
