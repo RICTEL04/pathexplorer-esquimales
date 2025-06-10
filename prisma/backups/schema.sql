@@ -2379,20 +2379,6 @@ COMMENT ON COLUMN "public"."Empleado"."Biografia" IS 'Biografia del empleado(com
 
 
 
-CREATE TABLE IF NOT EXISTS "public"."Empleado_Habilidades" (
-    "ID_Empleado" "uuid" NOT NULL,
-    "ID_Habilidad" "uuid" NOT NULL,
-    "Estado" character varying
-);
-
-
-ALTER TABLE "public"."Empleado_Habilidades" OWNER TO "postgres";
-
-
-COMMENT ON COLUMN "public"."Empleado_Habilidades"."Estado" IS 'Estado de la habilidad(aceptada, en espera, rechazada)';
-
-
-
 CREATE TABLE IF NOT EXISTS "public"."Evaluacion_Proyecto" (
     "ID_Evaluacion" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_DeliveryLead" "uuid" DEFAULT "gen_random_uuid"(),
@@ -2407,19 +2393,6 @@ CREATE TABLE IF NOT EXISTS "public"."Evaluacion_Proyecto" (
 
 
 ALTER TABLE "public"."Evaluacion_Proyecto" OWNER TO "postgres";
-
-
-CREATE TABLE IF NOT EXISTS "public"."FeedBack" (
-    "ID_FeedBack" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "ID_People_lead" "uuid" NOT NULL,
-    "ID_Empleado" "uuid" NOT NULL,
-    "Descripcion" character varying,
-    "AreaMejora" character varying,
-    "Desempeno" character varying
-);
-
-
-ALTER TABLE "public"."FeedBack" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Habilidades" (
@@ -2701,14 +2674,6 @@ CREATE TABLE IF NOT EXISTS "public"."Talent_Lead" (
 ALTER TABLE "public"."Talent_Lead" OWNER TO "postgres";
 
 
-CREATE TABLE IF NOT EXISTS "public"."result" (
-    "jsonb_build_object" "jsonb"
-);
-
-
-ALTER TABLE "public"."result" OWNER TO "postgres";
-
-
 ALTER TABLE ONLY "public"."Administrador"
     ADD CONSTRAINT "Administrador_pkey" PRIMARY KEY ("id");
 
@@ -2774,18 +2739,8 @@ ALTER TABLE ONLY "public"."Departamento"
 
 
 
-ALTER TABLE ONLY "public"."Empleado_Habilidades"
-    ADD CONSTRAINT "Empleado_Habilidades_pkey" PRIMARY KEY ("ID_Empleado", "ID_Habilidad");
-
-
-
 ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_pkey" PRIMARY KEY ("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."FeedBack"
-    ADD CONSTRAINT "FeedBack_pkey" PRIMARY KEY ("ID_FeedBack");
 
 
 
@@ -2952,16 +2907,6 @@ ALTER TABLE ONLY "public"."Delivery_Lead"
 
 
 
-ALTER TABLE ONLY "public"."Empleado_Habilidades"
-    ADD CONSTRAINT "Empleado_Habilidades_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."Empleado_Habilidades"
-    ADD CONSTRAINT "Empleado_Habilidades_ID_Habilidad_fkey" FOREIGN KEY ("ID_Habilidad") REFERENCES "public"."Habilidades"("ID_Habilidad");
-
-
-
 ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_ID_Departamento_fkey" FOREIGN KEY ("ID_Departamento") REFERENCES "public"."Departamento"("ID_Departamento");
 
@@ -2969,16 +2914,6 @@ ALTER TABLE ONLY "public"."Empleado"
 
 ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_ID_PeopleLead_fkey" FOREIGN KEY ("ID_PeopleLead") REFERENCES "public"."People_lead"("ID");
-
-
-
-ALTER TABLE ONLY "public"."FeedBack"
-    ADD CONSTRAINT "FeedBack_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."FeedBack"
-    ADD CONSTRAINT "FeedBack_ID_People_lead_fkey" FOREIGN KEY ("ID_People_lead") REFERENCES "public"."People_lead"("ID");
 
 
 
@@ -3467,18 +3402,8 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado" TO "anon";
 
 
 
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "anon";
-
-
-
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "anon";
-
-
-
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "anon";
 
 
 
@@ -3569,11 +3494,6 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Discussion" TO "anon
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Lead" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Lead" TO "anon";
-
-
-
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."result" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."result" TO "anon";
 
 
 
