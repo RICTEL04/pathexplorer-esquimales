@@ -2468,9 +2468,9 @@ ALTER TABLE "public"."Metas" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Notificaciones" (
     "id" bigint NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "ID_Empleado" "uuid",
     "Titulo" "text",
-    "Desc" "text"
+    "Desc" "text",
+    "ID_Empleado" "uuid"
 );
 
 
@@ -3429,6 +3429,11 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Intereses" TO "anon";
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Metas" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Metas" TO "anon";
+
+
+
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Notificaciones" TO "anon";
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Notificaciones" TO "authenticated";
 
 
 
