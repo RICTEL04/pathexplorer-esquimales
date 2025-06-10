@@ -33,9 +33,7 @@ export default function EmpleadosPage() {
   const [descripcion, setDescripcion] = useState<string>("");
   const [verificacion, setVerificacion] = useState<boolean>(false);
   const [denyVerification, setDenyVerification] = useState<boolean>(false);
-
   const [idpeoplelead, setIdPeoplelead] = useState<string | null>(null);
-
 
   useEffect(() => {
       const fetchCapabilityLead = async () => {
@@ -78,32 +76,6 @@ export default function EmpleadosPage() {
     fetchEmpleados();
   }, [idpeoplelead]);
 
-
-  const sortedEmpleados = [...empleados].sort((a, b) => {
-    if (sortOption === "option1") {
-      return a.Nombre.localeCompare(b.Nombre); // Ordenar por nombre
-    } else if (sortOption === "option2") {
-      return (
-        b.Certificados.filter((cert) => cert.Verificacion === null).length -
-        a.Certificados.filter((cert) => cert.Verificacion === null).length
-      ); // Ordenar por número de certificados pendientes
-    } else if (sortOption === "option3") {
-      return a.Rol.localeCompare(b.Rol); // Ordenar por rol
-    }
-    return 0;
-  });
-
-  const dropdown = document.querySelector('.dropdown');
-  const dropdownContent = document.querySelector('.dropdown-content') as HTMLElement | null;
-  if (dropdown && dropdownContent) {
-    dropdown.addEventListener('mouseover', () => {
-      if (dropdownContent) dropdownContent.style.display = 'block';
-    });
-    dropdown.addEventListener('mouseleave', () => {
-      if (dropdownContent) dropdownContent.style.display = 'none';
-    });
-  }
-
   const handleCertificadoExpand = (cert: Certificado) => {
     if (expandedCertificado === cert.ID_Certificado) {
 
@@ -128,6 +100,18 @@ export default function EmpleadosPage() {
     }
   };
 
+  const handleDenyVerification = async (certId: string) => {
+    try {
+      await updateCertificado(certId, false, "Verificación negada");
+      alert("La verificación ha sido negada correctamente.");
+      setExpandedCertificado(null);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error al negar la verificación:", error);
+      alert("Hubo un error al negar la verificación.");
+    }
+  };
+
   const closePopup = () => {
     setSelectedEmpleado(null);
     setExpandedCertificado(null);
@@ -138,24 +122,9 @@ export default function EmpleadosPage() {
       <h1 className="text-2xl font-bold mb-4">Certificados Pendientes</h1>
       <p className="mb-4">Haz clic en un empleado para ver sus certificados pendientes.</p>
 
-
-
-      {/* Menú desplegable para ordenar */}
-      <div className="select-box">
-        <select className='manejar-dropdown'
-          value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)} 
-        >
-          <option value="option1">Nombre</option>
-          <option value="option2">Número de Certificados</option>
-          <option value="option3">Rol</option>
-        </select>
-      </div>
-
       {error && <p className="text-red-500">{error}</p>}
 
       <div className="grid-container">
-
         {empleados.length === 0 ||
         empleados.filter(
           (empleado) =>
