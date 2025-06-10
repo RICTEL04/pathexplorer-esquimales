@@ -176,24 +176,26 @@ export default function EmployeeManagement() {
   
     try {
       // 1. Registrar el usuario en Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: newEmployee.email,
-        password: STANDARD_PASSWORD,
-        options: {
-          data: {
-            name: newEmployee.name,
-            role: 'employee'
-          }
-        }
+      // 1. Llama a tu API interna
+        const response = await fetch('/api/create-employee', { // <-- Cambia aquí
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: newEmployee.email,
+          password: STANDARD_PASSWORD,
+          name: newEmployee.name,
+          role: 'employee'
+        })
       });
-    
-      if (authError) throw authError;
-  
-      // 2. Insertar el empleado en la tabla Empleado
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Error al crear usuario');
+      const userId = result.user?.id;
+      if (!userId) throw new Error('No se pudo obtener el ID del usuario creado');
+      
       const { error: dbError } = await supabase
         .from('Empleado')
         .insert({
-          ID_Empleado: authData.user?.id,
+          ID_Empleado: userId,
           Nombre: newEmployee.name,
           Rol: newEmployee.position,
           ID_Departamento: newEmployee.department,
@@ -204,12 +206,12 @@ export default function EmployeeManagement() {
         });
       
       if (dbError) throw dbError;
-  
+      
       // 3. Insertar en la segunda tabla (ejemplo: 'Empleado_Detalles')
       const { error: secondTableError } = await supabase
         .from('Contacto')
         .insert({
-          ID_empleado: authData.user?.id,
+          ID_empleado: userId,
           Email: newEmployee.email,
         });
       
@@ -217,7 +219,7 @@ export default function EmployeeManagement() {
   
       // Crear el objeto del nuevo empleado para agregar al estado
       const newEmpleado: Empleado = {
-        ID_Empleado: authData.user?.id || '',
+        ID_Empleado: userId,
         Nombre: newEmployee.name,
         Contacto: [{
           PK_Contacto: '', // Aquí deberías poner el ID real si lo necesitas
@@ -1030,7 +1032,6 @@ const handleSaveRoles = async () => {
       )}
 
       {/* Modal para reporte de empleado */}
-      console.log('Experiencia laboral:', employeeProfile);
         
       {showReportModal && employeeProfile && (
         <div className="fixed inset-0 bg-transparent backdrop-blur-sm flex items-center justify-center z-50">
