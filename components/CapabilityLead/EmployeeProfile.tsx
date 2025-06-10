@@ -31,11 +31,32 @@ interface EmployeeProfileProps {
     id: string;
 }
 
+const fetchAvatarURL = async (employeeID: string | null): Promise<string | null> => {
+  if (!employeeID) return null;
+  const bucketName = "profile-pictures";
+  try {
+    const { data: files, error } = await supabase.storage
+      .from(bucketName)
+      .list(`${employeeID}`, { limit: 1, search: 'perfil' });
+    if (error || !files || files.length === 0) return null;
+    const actualFileName = files[0].name;
+    const fullFilePath = `${employeeID}/${actualFileName}`;
+    const { data: signedUrl } = await supabase.storage
+      .from(bucketName)
+      .createSignedUrl(fullFilePath, 3600);
+    return signedUrl?.signedUrl ?? null;
+  } catch {
+    return null;
+  }
+};
+
 const EmployeeProfile: React.FC<EmployeeProfileProps> = ({ id }) => {
     const [profileData, setProfileData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [peopleLead, setPeopleLead] = useState<PeopleLead | null>(null);
     const [capabilityLead, setCapabilityLead] = useState<CapabilityLead | null>(null);
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+    const [peopleLeadAvatar, setPeopleLeadAvatar] = useState<string | null>(null);
 
     const getEmployeeName = async (employeeID: string): Promise<string> => {
         const { data, error } = await supabase
@@ -136,7 +157,18 @@ const EmployeeProfile: React.FC<EmployeeProfileProps> = ({ id }) => {
         if (id) fetchProfile();
     }, [id]);
 
+    // Obtener avatar del empleado
+    useEffect(() => {
+      if (!id) return;
+      fetchAvatarURL(id).then(setAvatarUrl);
+    }, [id]);
 
+    // Obtener avatar del People Lead cuando se cargue
+    useEffect(() => {
+      if (peopleLead?.ID_Empleado) {
+        fetchAvatarURL(peopleLead.ID_Empleado).then(setPeopleLeadAvatar);
+      }
+    }, [peopleLead?.ID_Empleado]);
 
     if (loading) return <div className="p-8">Cargando perfil...</div>;
     if (!profileData) return <div className="p-8">No se encontró el perfil.</div>;
@@ -195,7 +227,7 @@ const EmployeeProfile: React.FC<EmployeeProfileProps> = ({ id }) => {
                                             <div className="flex flex-col xs:flex-row items-center xs:items-start gap-3 sm:gap-4">
                                                 <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
                                                     <img
-                                                        src={"https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+                                                        src={peopleLeadAvatar || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
                                                         width={60}
                                                         height={60}
                                                         className="object-cover w-full h-full"
@@ -224,7 +256,7 @@ const EmployeeProfile: React.FC<EmployeeProfileProps> = ({ id }) => {
                         </div>
                         {/* Columna central */}
                         <div className="lg:col-span-16 space-y-6">
-                            <ReadOnlyProfile {...userProfileData} />
+                          <ReadOnlyProfile {...userProfileData} avatarUrl={avatarUrl} />
                         </div>
                     </div>
                     <ExperienceModal />

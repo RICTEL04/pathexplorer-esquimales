@@ -1,25 +1,71 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FiEdit2, FiCheck, FiX, FiUpload } from 'react-icons/fi';
+import { supabase } from '@/lib/supabase';
 
 interface AvatarSectionProps {
   avatarUrl?: string | null;
   name?: string | null;
   editable?: boolean;
   onSave?: (imageFile: File) => Promise<void>;
+  empleadoId: string; // Cambia cargabilidad por empleadoId
 }
 
 const AvatarSection: React.FC<AvatarSectionProps> = ({
   avatarUrl,
   name = null,
   editable = false,
-  onSave
+  onSave,
+  empleadoId,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cargabilidad, setCargabilidad] = useState<number>(0);
+  const [animatedCarga, setAnimatedCarga] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Obtener cargabilidad desde Supabase usando el id
+  useEffect(() => {
+    const fetchCargabilidad = async () => {
+      if (!empleadoId) return;
+      const { data, error } = await supabase
+        .from('Empleado')
+        .select('Cargabilidad')
+        .eq('ID_Empleado', empleadoId)
+        .single();
+      if (error) {
+        setCargabilidad(0);
+      } else {
+        setCargabilidad(data?.Cargabilidad ?? 0);
+      }
+    };
+    fetchCargabilidad();
+  }, [empleadoId]);
+
+  // Animación de la barra de progreso
+  useEffect(() => {
+    let raf: number;
+    let start: number | null = null;
+    const duration = 1500; // ms
+    const from = 0;
+    const to = Math.min(Math.max(cargabilidad, 0), 100);
+
+    const animate = (timestamp: number) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      setAnimatedCarga(from + (to - from) * progress);
+      if (progress < 1) {
+        raf = requestAnimationFrame(animate);
+      }
+    };
+
+    setAnimatedCarga(0);
+    raf = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(raf);
+  }, [cargabilidad]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -81,26 +127,89 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="relative group">
-        <div className={`relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 ${isEditing ? 'border-blue-500' : 'border-gray-200'} shrink-0`}>
-          <img
-            src={previewUrl || avatarUrl || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
-            alt={`${name || 'Usuario'}'s profile picture`}
-            className="object-cover w-full h-full"
-          />
-
-          {editable && !isEditing && (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="absolute inset-0 flex items-center justify-center bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200"
-              aria-label="Editar foto de perfil"
-            >
-              <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center w-10 h-10 bg-white bg-opacity-80 rounded-full">
-                <FiEdit2 className="text-gray-700 text-lg" />
-              </div>
-            </button>
-          )}
+        <div
+          className={`relative w-28 h-28 md:w-36 md:h-36 rounded-full overflow-visible border-4
+            ${isEditing ? 'border-blue-500' : 'border-gray-200'} shrink-0`}
+          style={{ boxShadow: '0 0 0 6px rgba(168,85,247,0.10)' }}
+        >
+          {/* SVG de progreso circular mejorado */}
+          <svg
+            className="absolute -top-5 -left-5 w-[144px] h-[144px] md:w-[180px] md:h-[180px] z-0 pointer-events-none"
+            viewBox="0 0 90 90"
+          >
+            <defs>
+              <linearGradient id="carga-gradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#34d399" />
+                <stop offset="50%" stopColor="#a855f7" />
+                <stop offset="100%" stopColor="#f59e42" />
+              </linearGradient>
+              <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                {/* @ts-ignore */}
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            {/* Fondo gris */}
+            <circle
+              cx="45"
+              cy="45"
+              r="36"
+              fill="none"
+              stroke="#e5e7eb"
+              strokeWidth="7"
+            />
+            {/* Progreso con gradiente y glow, inicia desde abajo */}
+            <circle
+              cx="45"
+              cy="45"
+              r="36"
+              fill="none"
+              stroke="url(#carga-gradient)"
+              strokeWidth="8"
+              strokeDasharray={2 * Math.PI * 36}
+              strokeDashoffset={
+                2 * Math.PI * 36 * (1 - Math.min(Math.max(animatedCarga, 0), 100) / 100)
+              }
+              strokeLinecap="butt"
+              style={{
+                transition: 'stroke-dashoffset 0s',
+                transform: 'rotate(90deg)',
+                transformOrigin: '45px 45px'
+              }}
+              filter="url(#glow)"
+            />
+          </svg>
+          {/* Avatar con botón de editar encima */}
+          <div className="relative w-full h-full z-10">
+            <img
+              src={previewUrl || avatarUrl || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+              alt={`${name || 'Usuario'}'s profile picture`}
+              className="object-cover w-full h-full rounded-full"
+            />
+            {editable && !isEditing && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent focus:outline-none"
+                aria-label="Editar foto de perfil"
+                style={{ border: "none", background: "transparent", padding: 0 }}
+              >
+                <div className="opacity-0 hover:opacity-100 transition-opacity duration-200 flex items-center justify-center w-10 h-10 bg-white bg-opacity-80 rounded-full m-auto">
+                  <FiEdit2 className="text-gray-700 text-lg" />
+                </div>
+              </button>
+            )}
+          </div>
         </div>
-
+        {/* Número de cargabilidad debajo del avatar */}
+        <div className="w-full flex justify-center mt-2">
+          <span className="text-sm font-semibold text-violet-600 bg-violet-50 px-3 py-0.5 rounded-full shadow-sm">
+            Cargabilidad: {Math.round(cargabilidad)}%
+          </span>
+        </div>
+        {/* Fin número de cargabilidad */}
         <input
           ref={fileInputRef}
           type="file"

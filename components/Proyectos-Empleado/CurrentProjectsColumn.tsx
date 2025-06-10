@@ -1,7 +1,10 @@
-import { getEmpleadosSinAutoevaluacion, selectProyectosPostulados } from "@/lib/autoevaluacion-empleado/apiCalls";
+import { selectProyectosPostulados } from "@/lib/autoevaluacion-empleado/apiCalls";
 import { Employee, ProjectJson } from "@/lib/delivery-lead-proyectos/definitions";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase"; // Asegúrate de tener tu cliente supabase aquí
+import { useRouter } from "next/navigation";
+import { Card, Tag } from "antd";
 
 export default function CurrentProjectsColumn({
     empleado,
@@ -12,38 +15,28 @@ export default function CurrentProjectsColumn({
     setSelfReviewModalOpen: (open: boolean) => void;
     setSelectedProject: (project: ProjectJson) => void;
 }) {
+    const router = useRouter();
     const [proyectosActuales, setProyectosActuales] = useState<ProjectJson[]>([]);
     const [proyectosPostulados, setProyectosPostulados] = useState<ProjectJson[]>([]);
+    const [postulacionesDetalladas, setPostulacionesDetalladas] = useState<any[]>([]);
 
-    // Fetch current projects for the employee
+    // Fetch current projects for the employee usando la función RPC
     useEffect(() => {
         const fetchCurrentProjects = async () => {
             if (!empleado?.ID_Empleado) return;
 
             try {
-                const proyectosPostulados = await selectProyectosPostulados(empleado.ID_Empleado);
-                setProyectosPostulados(proyectosPostulados ?? []);
-                console.log("Proyectos postulados:", proyectosPostulados);
-                // Filter the suggested projects to match the current project IDs
-                const currentProjectsResult = await getEmpleadosSinAutoevaluacion(empleado?.ID_Empleado);
-
-                if (Array.isArray(currentProjectsResult)) {
-                    const mappedProyectos: ProjectJson[] = currentProjectsResult.map((proyecto: any) => ({
-                        ID_Proyecto: proyecto.ID_Proyecto,
-                        Nombre: proyecto.Nombre,
-                        Descripcion: proyecto.Descripcion,
-                        Status: proyecto.Status,
-                        ID_Cliente: proyecto.ID_Proyecto_Cliente,
-                        cargabilidad: Math.floor(Math.random() * 100),
-                        ID_DeliveryLead: proyecto.ID_DeliveryLead,
-                    }));
-
-                    setProyectosActuales(mappedProyectos);
-                } else {
+                // Llama a la función RPC
+                const { data, error } = await supabase.rpc("get_active_projects_by_employee", {
+                    emp_id: empleado.ID_Empleado,
+                });
+                console.log("Current projects data:", data);
+                if (error) {
+                    console.error("Error fetching active projects:", error);
                     setProyectosActuales([]);
-                    console.error("getEmpleadosSinAutoevaluacion did not return an array:", currentProjectsResult);
+                    return;
                 }
-
+                setProyectosActuales(data ?? []);
             } catch (error) {
                 console.error("Error fetching current projects:", error);
             }
@@ -51,6 +44,50 @@ export default function CurrentProjectsColumn({
 
         fetchCurrentProjects();
     }, [empleado?.ID_Empleado]);
+
+    // Fetch postulaciones detalladas
+    useEffect(() => {
+        const fetchPostulacionesDetalladas = async () => {
+            if (!empleado?.ID_Empleado) return;
+
+            // Consulta las postulaciones y haz join con proyectos y puesto_proyecto
+            const { data, error } = await supabase
+                .from("Postulaciones")
+                .select(`
+                    ID_Proyecto,
+                    ID_Puesto,
+                    Proyecto:ID_Proyecto (
+                        Nombre,
+                        Cliente
+                    ),
+                    Puesto:ID_Puesto (
+                        Puesto
+                    )
+                `)
+                .eq("ID_empleado", empleado.ID_Empleado);
+
+            if (!error && data) {
+                setPostulacionesDetalladas(data);
+            } else {
+                setPostulacionesDetalladas([]);
+            }
+        };
+
+        fetchPostulacionesDetalladas();
+    }, [empleado?.ID_Empleado]);
+
+    // Agrupa postulaciones por proyecto
+    const postulacionesPorProyecto = postulacionesDetalladas.reduce((acc, post) => {
+        const id = post.ID_Proyecto;
+        if (!acc[id]) {
+            acc[id] = {
+                proyecto: post.Proyecto,
+                puestos: [],
+            };
+        }
+        acc[id].puestos.push(post.Puesto?.Puesto || "Puesto");
+        return acc;
+    }, {} as Record<string, { proyecto: any; puestos: string[] }>);
 
     return (
         <div className="lg:col-span-1">
@@ -62,84 +99,126 @@ export default function CurrentProjectsColumn({
                     Historial
                 </Link>
                 <div className="bg-white rounded-lg p-4 flex-1 flex flex-col min-h-0">
-                    <h3 className="text-black font-bold mb-2 h-fit">Proyectos actuales</h3>
-                    <div className="space-y-2 overflow-y-auto no-scrollbar flex-1 min-h-0">
+                    <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-black font-bold h-fit">
+                            Proyectos actuales
+                            <span className="ml-2 text-purple-600 text-base font-semibold">
+                                ({proyectosActuales.filter(
+                                    (proyecto) =>
+                                        !proyectosPostulados.map(p => p.ID_Proyecto).includes(proyecto.ID_Proyecto)
+                                ).length})
+                            </span>
+                        </h3>
+                    </div>
+                    <div className="space-y-4 overflow-y-auto no-scrollbar flex-1 min-h-0 max-h-[55vh]">
                         {proyectosActuales.length === 0 ? (
                             <p className="text-gray-600">No hay proyectos actuales por ahora.</p>
                         ) : (
                             proyectosActuales
-                            .filter(
-                                (proyecto) =>
-                                    !proyectosPostulados.map(p => p.ID_Proyecto).includes(proyecto.ID_Proyecto)
-                            )
-                            .map((proyecto, index) => (
-                                <div
-                                    key={index}
-                                    className="border-b pb-2 last:border-0 last:pb-0 flex justify-between items-center"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div
-                                            className={`w-2 h-12 rounded-xs flex items-center justify-center ${proyecto.Status === "active"
-                                                ? "bg-green-400"
+                                .filter(
+                                    (proyecto) =>
+                                        !proyectosPostulados.map(p => p.ID_Proyecto).includes(proyecto.ID_Proyecto)
+                                )
+                                .map((proyecto, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex flex-col md:flex-row md:items-center gap-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm p-4 transition hover:shadow-md cursor-pointer"
+                                        onClick={() => router.push(`/employee/proyectos/${proyecto.ID_Proyecto}`)}
+                                    >
+                                        {/* Icono de proyecto */}
+                                        <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
+                                            ${proyecto.Status === "active"
+                                                ? "bg-green-100 text-green-600"
                                                 : proyecto.Status === "done"
-                                                    ? "bg-blue-400"
-                                                    : "bg-gray-400"
-                                                }`}
-                                        >
-                                            <span className="text-white text-xs">{proyecto.ID_Cliente}</span>
+                                                    ? "bg-blue-100 text-blue-600"
+                                                    : "bg-gray-200 text-gray-500"
+                                            }`}>
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
+                                                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                                            </svg>
                                         </div>
-                                        <div>
-                                            <p className="text-black font-medium">{proyecto.Nombre}</p>
+                                        {/* Detalles del proyecto */}
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-lg font-semibold text-black truncate">{proyecto.Nombre}</p>
+                                            <p className="text-sm text-gray-500 truncate">Cliente: <span className="font-medium">{proyecto.Cliente}</span></p>
                                         </div>
-                                    </div>
-                                    {proyecto.Status === "done" ? (
-                                        <div className="mt-2 flex justify-end">
+                                        {/* Estado del proyecto */}
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold
+                                            ${proyecto.Status === "active"
+                                                ? "bg-green-200 text-green-800"
+                                                : proyecto.Status === "done"
+                                                    ? "bg-blue-200 text-blue-800"
+                                                    : "bg-gray-300 text-gray-700"
+                                            }`}>
+                                            {proyecto.Status === "active" ? "Activo" : proyecto.Status === "done" ? "Finalizado" : "Otro"}
+                                        </span>
+                                        {/* Botón de autoevaluación si aplica */}
+                                        {proyecto.Status === "done" && (
                                             <button
-                                                className="px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-all"
-                                                onClick={() => { setSelectedProject(proyecto); setSelfReviewModalOpen(true); console.log("Selected project:", proyecto); console.log("Selected ID:", empleado?.ID_Empleado); }}
+                                                className="ml-4 px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-all"
+                                                onClick={e => {
+                                                    e.stopPropagation();
+                                                    setSelectedProject(proyecto);
+                                                    setSelfReviewModalOpen(true);
+                                                }}
                                             >
                                                 Autoevaluación
                                             </button>
-                                        </div>
-                                    ) : null}
-                                </div>
-                            ))
+                                        )}
+                                    </div>
+                                ))
                         )}
                     </div>
                 </div>
                 <div className="bg-white rounded-lg p-4 flex-1 flex flex-col min-h-0">
-                    <h3 className="text-black font-bold mb-2">Proyectos postulados</h3>
+                    <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-black font-bold mb-2 flex items-center">
+                            Proyectos postulados
+                            <span className="ml-2 text-purple-600 text-base font-semibold">
+                                ({Object.keys(postulacionesPorProyecto).length})
+                            </span>
+                        </h3>
+                    </div>
                     <div className="space-y-2 overflow-y-auto no-scrollbar flex-1 min-h-0">
-                        {proyectosActuales.length === 0 ? (
-                            <p className="text-gray-600">No hay proyectos actuales por ahora.</p>
+                        {Object.keys(postulacionesPorProyecto).length === 0 ? (
+                            <p className="text-gray-600">No tienes postulaciones activas.</p>
                         ) : (
-                            proyectosActuales
-                            .filter(
-                                (proyecto) =>
-                                    proyectosPostulados.map(p => p.ID_Proyecto).includes(proyecto.ID_Proyecto)
-                            )
-                            .map((proyecto, index) => (
-                                <div
-                                    key={index}
-                                    className="border-b pb-2 last:border-0 last:pb-0 flex justify-between items-center"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div
-                                            className={`w-2 h-12 rounded-xs flex items-center justify-center ${proyecto.Status === "active"
-                                                ? "bg-green-400"
-                                                : proyecto.Status === "done"
-                                                    ? "bg-blue-400"
-                                                    : "bg-gray-400"
-                                                }`}
-                                        >
-                                            <span className="text-white text-xs">{proyecto.ID_Cliente}</span>
+                            Object.entries(postulacionesPorProyecto).map(([id, value]) => {
+                                const { proyecto, puestos } = value as { proyecto: any; puestos: string[] };
+                                return (
+                                    <div
+                                        key={id}
+                                        className="flex flex-col md:flex-row md:items-center gap-4 bg-gray-50 border border-purple-200 rounded-lg shadow-sm p-4 transition hover:shadow-md cursor-pointer"
+                                        onClick={() => { router.push(`/employee/proyectos/${id}`)
+                                        }}
+                                        // Puedes agregar un onClick si quieres navegación
+                                    >
+                                        {/* Icono de proyecto */}
+                                        <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center bg-purple-100 text-purple-600">
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
+                                                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                                            </svg>
                                         </div>
-                                        <div>
-                                            <p className="text-black font-medium">{proyecto.Nombre}</p>
+                                        {/* Detalles del proyecto */}
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-lg font-semibold text-purple-800 truncate">{proyecto?.Nombre || "Proyecto"}</p>
+                                            <p className="text-sm text-gray-500 truncate">Cliente: <span className="font-medium">{proyecto?.Cliente || "Cliente"}</span></p>
+                                            <div className="flex flex-wrap gap-2 mt-1">
+                                                {puestos.map((puesto, idx) => (
+                                                    <span
+                                                        key={idx}
+                                                        className="bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full text-xs font-semibold"
+                                                    >
+                                                        {puesto}
+                                                    </span>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))
+                                );
+                            })
                         )}
                     </div>
                 </div>

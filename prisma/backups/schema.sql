@@ -12,6 +12,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 
+CREATE EXTENSION IF NOT EXISTS "pg_cron" WITH SCHEMA "pg_catalog";
+
+
+
+
+
+
 CREATE EXTENSION IF NOT EXISTS "pgsodium";
 
 
@@ -279,23 +286,57 @@ CREATE OR REPLACE FUNCTION "public"."check_and_update_reviewed_trigger"() RETURN
     AS $$
 DECLARE
     all_reviewed boolean;
+    project_id uuid;
 BEGIN
+    -- Retrieve the ID_Proyecto based on the ID_Puesto
+    SELECT "ID_Proyecto" INTO project_id
+    FROM public."Puesto_proyecto"
+    WHERE "id" = NEW."ID_Puesto";
+
+    -- Check if all related Puesto_persona entries for the project are reviewed
     SELECT COUNT(*) = 0 INTO all_reviewed
-    FROM public."Empleado_Proyectos"
-    WHERE "ID_Proyecto" = NEW."ID_Proyecto" AND "isReviewed" = false;
+    FROM public."Puesto_persona"
+    WHERE "ID_Puesto" IN (
+        SELECT "id" FROM public."Puesto_proyecto" WHERE "ID_Proyecto" = project_id
+    )
+    AND "isReviewed" = false;
 
     IF all_reviewed THEN
+        -- Update the project to set it as reviewed
         UPDATE public."Proyectos"
         SET "isReviewed" = true
-        WHERE "ID_Proyecto" = NEW."ID_Proyecto";
+        WHERE "ID_Proyecto" = project_id;
     END IF;
 
     RETURN NEW;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Handle any exceptions that occur
+        RAISE EXCEPTION 'Error updating project review status: %', SQLERRM;
+        RETURN NULL;
 END;
 $$;
 
 
 ALTER FUNCTION "public"."check_and_update_reviewed_trigger"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."check_certificates_expiration"() RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    INSERT INTO public."Notificaciones" ("ID_Empleado", "Titulo", "Desc")
+    SELECT 
+        c."ID_Empleado", 
+        'Certificado cerca de expiración' AS "Titulo", 
+        'El certificado "' || c."Nombre" || '" va a expirar en 30 dias.' AS "Desc"
+    FROM public."Certificados" c
+    WHERE c."Fecha_caducidad" = CURRENT_DATE + INTERVAL '30 days';
+END;
+$$;
+
+
+ALTER FUNCTION "public"."check_certificates_expiration"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."crear_employee_request_con_capability_lead"("p_id_empleado" "uuid", "p_id_talent_discussion" "uuid", "p_descripcion_request" "text", "p_id_capability_lead" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id_td_employee_request" "uuid", "id_td_capability_lead" "uuid")
@@ -684,6 +725,52 @@ $_$;
 
 ALTER FUNCTION "public"."force_talent_discussion_participants"("p_talent_discussion_id" "uuid", "p_people_lead_ids_no_asignados" "uuid"[], "p_people_lead_ids_asignados" "uuid"[], "p_employee_ids" "uuid"[]) OWNER TO "postgres";
 
+SET default_tablespace = '';
+
+SET default_table_access_method = "heap";
+
+
+CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
+    "ID_Proyecto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
+    "Nombre" "text" NOT NULL,
+    "Descripcion" "text",
+    "Status" "text" DEFAULT 'inactive'::"text" NOT NULL,
+    "ID_DeliveryLead" "uuid",
+    "fecha_inicio" "date",
+    "fecha_fin" "date",
+    "isReviewed" boolean DEFAULT false NOT NULL,
+    "cargabilidad_num" smallint DEFAULT '100'::smallint NOT NULL,
+    "Cliente" "text",
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "ImagenUrl" "text",
+    CONSTRAINT "Proyectos_Status_check" CHECK (("Status" = ANY (ARRAY['active'::"text", 'inactive'::"text", 'pending'::"text", 'done'::"text"])))
+);
+
+
+ALTER TABLE "public"."Proyectos" OWNER TO "postgres";
+
+
+COMMENT ON COLUMN "public"."Proyectos"."cargabilidad_num" IS 'cargabilidad del proyecto en entero del 1 al 100, definida por el capability lead';
+
+
+
+CREATE OR REPLACE FUNCTION "public"."get_active_projects_by_employee"("emp_id" "uuid") RETURNS SETOF "public"."Proyectos"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+begin
+  return query
+  select distinct p.*
+  from "public"."Proyectos" p
+  join "public"."Puesto_proyecto" pp on pp."ID_Proyecto" = p."ID_Proyecto"
+  join "public"."Puesto_persona" pe on pe."ID_Puesto" = pp."id"
+  where pe."ID_Empleado" = emp_id
+    and p."Status" != 'done';
+end;
+$$;
+
+
+ALTER FUNCTION "public"."get_active_projects_by_employee"("emp_id" "uuid") OWNER TO "postgres";
+
 
 CREATE OR REPLACE FUNCTION "public"."get_available_delivery_leads"() RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "id_deliverylead" "uuid")
     LANGUAGE "sql"
@@ -734,6 +821,65 @@ $$;
 
 
 ALTER FUNCTION "public"."get_available_delivery_leads3"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_empleado_a_recomendar"("p_id_empleado" "uuid") RETURNS "jsonb"
+    LANGUAGE "plpgsql" STABLE
+    AS $$
+DECLARE
+    result jsonb;
+BEGIN
+    SELECT jsonb_build_object(
+        'empleado', to_jsonb(e),
+        'departamento', to_jsonb(d),
+        'people_lead', to_jsonb(pl_emp),
+        'capability_lead', to_jsonb(cl_emp),
+
+        'habilidades', (
+            SELECT jsonb_agg(jsonb_build_object(
+                'habilidad', h."Nombre",
+                'nivel', hh."nivel"
+            ))
+            FROM "public"."Historial" hist
+            JOIN "public"."Historial_Habilidades" hh ON hh."ID_Historial" = hist."id"
+            JOIN "public"."Habilidades" h ON h."ID_Habilidad" = hh."ID_Habilidad"
+            WHERE hist."ID_Empleado" = e."ID_Empleado"
+        ),
+
+        'intereses', (
+            SELECT jsonb_agg(jsonb_build_object(
+                'descripcion',i."Descripcion"
+                ))
+            FROM "public"."Intereses" i
+            WHERE i."ID_Empleado" = e."ID_Empleado"
+        ),
+
+        'metas_en_progreso', (
+            SELECT jsonb_agg(jsonb_build_object(
+                'nombre', m."Nombre",
+                'tipo', m."Tipo_Meta",
+                'Descripcion', m."Descripcion",
+                'Fecha_limite', m."Fecha_limite"
+                ))
+            FROM "public"."Metas" m
+            WHERE m."ID_Empleado" = e."ID_Empleado"
+              AND m."Estado" ILIKE 'En Progreso'
+        )
+    ) INTO result
+    FROM "public"."Empleado" e
+    LEFT JOIN "public"."Departamento" d ON e."ID_Departamento" = d."ID_Departamento"
+    LEFT JOIN "public"."People_lead" pl ON e."ID_PeopleLead" = pl."ID"
+    LEFT JOIN "public"."Empleado" pl_emp ON pl."ID_Empleado" = pl_emp."ID_Empleado"
+    LEFT JOIN "public"."Capability_Lead" cl ON d."ID_Departamento" = cl."ID_Departamento"
+    LEFT JOIN "public"."Empleado" cl_emp ON cl."ID_Empleado" = cl_emp."ID_Empleado"
+    WHERE e."ID_Empleado" = p_id_empleado;
+
+    RETURN result;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_empleado_a_recomendar"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."get_employee_skills_excluding_category"("employee_id" "uuid", "excluded_category_id" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre_habilidad" "text", "nivel" "text", "nombre_position" "text", "nombre_empresa" "text")
@@ -1071,6 +1217,87 @@ $$;
 ALTER FUNCTION "public"."get_employees_by_people_lead_and_nivel"("p_id_people_lead" "uuid", "p_nivel" "text") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_employees_by_talent_discussion"("p_id_talent_discussion" "uuid") RETURNS TABLE("id_empleado" "uuid", "nombre_empleado" "text", "rol" "text", "nivel" "text", "id_departamento" "uuid", "nombre_departamento" "text", "cargabilidad" "text", "id_people_lead" "uuid", "nombre_people_lead" "text", "id_capability_lead" "uuid", "nombre_capability_lead" "text")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    WITH employees_in_td AS (
+        SELECT 
+            te."ID_TD_Employee",
+            e."ID_Empleado",
+            e."Nombre",
+            e."Rol",
+            e."Nivel",
+            e."ID_Departamento",
+            e."Cargabilidad",
+            e."ID_PeopleLead"
+        FROM 
+            "TD_Employee" te
+        JOIN 
+            "Empleado" e ON te."ID_Empleado" = e."ID_Empleado"
+        WHERE 
+            te."ID_TalentDiscussion" = p_id_talent_discussion
+    ),
+    
+    people_leads_in_td AS (
+        SELECT DISTINCT
+            pl."ID" AS "ID_People_Lead",
+            pl_emp."Nombre" AS "Nombre_People_Lead"
+        FROM 
+            "TD_People_Lead" tpl
+        JOIN 
+            "People_lead" pl ON tpl."ID_People_Lead" = pl."ID"
+        JOIN 
+            "Empleado" pl_emp ON pl."ID_Empleado" = pl_emp."ID_Empleado"
+        WHERE 
+            tpl."ID_TalentDiscussion" = p_id_talent_discussion
+    ),
+    
+    department_capability_leads AS (
+        SELECT DISTINCT
+            d."ID_Departamento",
+            cl."ID_CapabilityLead",
+            cl_emp."Nombre" AS "Nombre_Capability_Lead"
+        FROM 
+            employees_in_td e
+        JOIN 
+            "Departamento" d ON e."ID_Departamento" = d."ID_Departamento"
+        LEFT JOIN 
+            "Capability_Lead" cl ON d."ID_Departamento" = cl."ID_Departamento"
+        LEFT JOIN 
+            "Empleado" cl_emp ON cl."ID_Empleado" = cl_emp."ID_Empleado"
+    )
+    
+    SELECT 
+        e."ID_Empleado"::uuid,
+        e."Nombre"::text,
+        e."Rol"::text,
+        e."Nivel"::text,
+        e."ID_Departamento"::uuid,
+        d."Nombre"::text,
+        e."Cargabilidad"::text,
+        pl."ID_People_Lead"::uuid,
+        pl."Nombre_People_Lead"::text,
+        dcl."ID_CapabilityLead"::uuid,
+        dcl."Nombre_Capability_Lead"::text
+    FROM 
+        employees_in_td e
+    JOIN 
+        "Departamento" d ON e."ID_Departamento" = d."ID_Departamento"
+    LEFT JOIN 
+        people_leads_in_td pl ON e."ID_PeopleLead" = pl."ID_People_Lead"
+    LEFT JOIN 
+        department_capability_leads dcl ON e."ID_Departamento" = dcl."ID_Departamento"
+    ORDER BY 
+        e."Nombre";
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employees_by_talent_discussion"("p_id_talent_discussion" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_employees_by_td_and_pl"("p_id_people_lead" "uuid", "p_id_talent_discussion" "uuid") RETURNS TABLE("id_empleado" "uuid", "nombre" character varying, "rol" character varying, "nivel" character varying, "id_departamento" "uuid", "nombre_departamento" character varying, "cargabilidad" character varying, "fecha_contratacion" "date", "fechaultinivel" "date", "id_people_lead" "uuid", "nombre_people_lead" character varying, "id_capabilitylead" "uuid", "nombre_capabilitylead" character varying, "td_employee_request" "jsonb")
     LANGUAGE "plpgsql"
     AS $$
@@ -1160,7 +1387,8 @@ BEGIN
   WITH ProyectoBase AS (
     SELECT pr.*,
     perfil."Nombre" AS nombre_delivery,
-    perfil."ID_Empleado" AS ID_Empleado_delivery
+    perfil."ID_Empleado" AS ID_Empleado_delivery,
+    perfil."Cargabilidad" AS Cargabilidad_delivery
     FROM "public"."Proyectos" pr
     JOIN "public"."Delivery_Lead" dv ON pr."ID_DeliveryLead" = dv."ID_DeliveryLead"
     JOIN "public"."Empleado" perfil ON dv."ID_Empleado" = perfil."ID_Empleado"
@@ -1201,6 +1429,42 @@ END;$$;
 
 
 ALTER FUNCTION "public"."get_full_project_data"("project_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_inactive_projects_with_skills"() RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "Descripcion" "text", "Status" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isReviewed" boolean, "cargabilidad_num" smallint, "Cliente" "text", "created_at" timestamp with time zone, "ImagenUrl" "text", "habilidades_proyecto" "json")
+    LANGUAGE "sql"
+    AS $$
+  select
+    p."ID_Proyecto",
+    p."Nombre",
+    p."Descripcion",
+    p."Status",
+    p."ID_DeliveryLead",
+    p."fecha_inicio",
+    p."fecha_fin",
+    p."isReviewed",
+    p."cargabilidad_num",
+    p."Cliente",
+    p."created_at",
+    p."ImagenUrl",
+    (
+      select json_agg(
+        json_build_object(
+          'ID_Habilidad', ph."ID_Habilidad",
+          'Nombre', h."Nombre",
+          'nivel', ph."nivel"
+        )
+      )
+      from "public"."Proyecto_Habilidades" ph
+      join "public"."Habilidades" h on h."ID_Habilidad" = ph."ID_Habilidad"
+      where ph."ID_Proyecto" = p."ID_Proyecto"
+    ) as habilidades_proyecto
+  from "public"."Proyectos" p
+  where p."Status" = 'inactive';
+$$;
+
+
+ALTER FUNCTION "public"."get_inactive_projects_with_skills"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."get_people_lead_id_for_employee"("p_employee_id" "uuid") RETURNS "uuid"
@@ -1323,6 +1587,60 @@ $$;
 ALTER FUNCTION "public"."get_proyectos_con_habilidades"() OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_proyectos_inactivos_con_habilidades"("cargabilidad_personal" integer) RETURNS SETOF "jsonb"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  RETURN QUERY
+  SELECT to_jsonb(p) || jsonb_build_object(
+    'habilidades_proyecto',
+      (
+        SELECT json_agg(
+          json_build_object(
+            'ID_Habilidad', ph."ID_Habilidad",
+            'Nombre', h."Nombre",
+            'nivel', ph."nivel"
+          )
+        )
+        FROM "public"."Proyecto_Habilidades" ph
+        JOIN "public"."Habilidades" h ON h."ID_Habilidad" = ph."ID_Habilidad"
+        WHERE ph."ID_Proyecto" = p."ID_Proyecto"
+      ),
+    'habilidades_por_puesto',
+      (
+        SELECT json_agg(
+          json_build_object(
+            'Puesto', pp."Puesto",
+            'N_puestos', pp."N_puestos",
+            'Completo', pp."Completo",
+            'habilidades', (
+              SELECT json_agg(
+                json_build_object(
+                  'ID_Habilidad', ph2."ID_Habilidad",
+                  'Nombre', h2."Nombre",
+                  'nivel', ph2."nivel"
+                )
+              )
+              FROM "public"."Proyecto_Habilidades" ph2
+              JOIN "public"."Habilidades" h2 ON h2."ID_Habilidad" = ph2."ID_Habilidad"
+              WHERE ph2."ID_Proyecto" = pp."ID_Proyecto"
+            )
+          )
+        )
+        FROM "public"."Puesto_proyecto" pp
+        WHERE pp."ID_Proyecto" = p."ID_Proyecto"
+      )
+  ) AS resultado
+  FROM "public"."Proyectos" p
+  WHERE p."Status" = 'inactive'
+    AND p."cargabilidad_num" + cargabilidad_personal <= 100;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_proyectos_inactivos_con_habilidades"("cargabilidad_personal" integer) OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_talent_discussion_by_id_and_people_lead"("p_id_talent_discussion" "uuid", "p_id_people_lead" "uuid") RETURNS TABLE("id_talent_discussion" "uuid", "discussion" "text", "id_talent_lead" "uuid", "nombre_talent_lead" "text", "nivel" "text", "fecha_inicio" "date", "fecha_final" "date", "estado" "text", "estado_td_people_lead" "text")
     LANGUAGE "plpgsql"
     AS $$
@@ -1383,8 +1701,7 @@ ALTER FUNCTION "public"."get_talent_discussions"() OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."get_talent_discussions_by_lead"("p_id_talent_lead" "uuid") RETURNS TABLE("id_talent_discussion" "uuid", "discussion" "text", "id_talent_lead" "uuid", "nombre_talent_lead" "text", "nivel" "text", "fecha_inicio" "date", "fecha_final" "date", "estado" "text")
     LANGUAGE "plpgsql"
-    AS $$
-BEGIN
+    AS $$BEGIN
     RETURN QUERY
     SELECT 
         td."ID_TalentDiscussion" AS ID_Talent_Discussion,
@@ -1404,9 +1721,8 @@ BEGIN
     WHERE 
         tl."ID_TalentLead" = p_id_talent_lead
     ORDER BY 
-        td."Fecha_Inicio" DESC;
-END;
-$$;
+        td."created_at" DESC;
+END;$$;
 
 
 ALTER FUNCTION "public"."get_talent_discussions_by_lead"("p_id_talent_lead" "uuid") OWNER TO "postgres";
@@ -1834,7 +2150,7 @@ $$;
 ALTER FUNCTION "public"."select_proyectos_sin_autoevaluacion"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."select_proyectos_terminados_empleado"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "ID_Cliente" "uuid", "Descripcion" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isAutoevaluacion" boolean, "Fortalezas" "text", "Area_Mejora" "text", "Calificacion" smallint)
+CREATE OR REPLACE FUNCTION "public"."select_proyectos_terminados_empleado"("p_id_empleado" "uuid") RETURNS TABLE("ID_Proyecto" "uuid", "Nombre" "text", "Cliente" "text", "Descripcion" "text", "ID_DeliveryLead" "uuid", "fecha_inicio" "date", "fecha_fin" "date", "isAutoevaluacion" boolean, "Fortalezas" "text", "Area_Mejora" "text", "Calificacion" smallint)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -1842,23 +2158,24 @@ BEGIN
     SELECT 
         p."ID_Proyecto", 
         p."Nombre", 
-        p."ID_Cliente", 
+        p."Cliente",  -- Changed from ID_Cliente to Cliente
         p."Descripcion", 
         p."ID_DeliveryLead", 
         p."fecha_inicio", 
         p."fecha_fin",
-        evp."esAutoevaluacion",
+        evp."esAutoevaluacion",  -- Corrected column name
         evp."Fortalezas",
         evp."Areas_Mejora",
         evp."Calificacion"
     FROM public."Proyectos" p
-    JOIN public."Empleado_Proyectos" ep ON p."ID_Proyecto" = ep."ID_Proyecto"
+    JOIN public."Puesto_proyecto" pp ON p."ID_Proyecto" = pp."ID_Proyecto"
+    JOIN public."Puesto_persona" ps ON pp."id" = ps."ID_Puesto"
     JOIN public."Evaluacion_Proyecto" evp ON p."ID_Proyecto" = evp."ID_Proyecto"
     WHERE 
-    ep."ID_Empleado" = p_id_empleado AND
-    ep."isReviewed" = true AND
-    evp."ID_Empleado" = p_id_empleado AND
-    p."isReviewed" = true;
+        ps."ID_Empleado" = p_id_empleado AND
+        ps."isReviewed" = true AND
+        evp."ID_Empleado" = p_id_empleado AND
+        p."isReviewed" = true;
 END;
 $$;
 
@@ -1892,10 +2209,15 @@ CREATE OR REPLACE FUNCTION "public"."update_is_reviewed"() RETURNS "trigger"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
-    UPDATE public."Empleado_Proyectos"
+    -- Update the isReviewed column in Puesto_persona
+    UPDATE public."Puesto_persona"
     SET "isReviewed" = true
-    WHERE "ID_Empleado" = NEW."ID_Empleado" AND "ID_Proyecto" = NEW."ID_Proyecto";
-    
+    WHERE "ID_Empleado" = NEW."ID_Empleado" 
+      AND "ID_Puesto" = (SELECT "ID_Puesto" 
+                         FROM public."Puesto_proyecto" 
+                         WHERE "ID_Proyecto" = NEW."ID_Proyecto"
+                         LIMIT 1);  -- Ensure only one row is returned
+
     RETURN NEW;
 END;
 $$;
@@ -1930,10 +2252,6 @@ $$;
 
 
 ALTER FUNCTION "public"."verificar_cargabilidad_empleados"("id_proyecto" "uuid", "cargabilidad_nueva" integer, "cargabilidad_actual_proyecto" integer) OWNER TO "postgres";
-
-SET default_tablespace = '';
-
-SET default_table_access_method = "heap";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Administrador" (
@@ -2061,20 +2379,6 @@ COMMENT ON COLUMN "public"."Empleado"."Biografia" IS 'Biografia del empleado(com
 
 
 
-CREATE TABLE IF NOT EXISTS "public"."Empleado_Habilidades" (
-    "ID_Empleado" "uuid" NOT NULL,
-    "ID_Habilidad" "uuid" NOT NULL,
-    "Estado" character varying
-);
-
-
-ALTER TABLE "public"."Empleado_Habilidades" OWNER TO "postgres";
-
-
-COMMENT ON COLUMN "public"."Empleado_Habilidades"."Estado" IS 'Estado de la habilidad(aceptada, en espera, rechazada)';
-
-
-
 CREATE TABLE IF NOT EXISTS "public"."Evaluacion_Proyecto" (
     "ID_Evaluacion" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_DeliveryLead" "uuid" DEFAULT "gen_random_uuid"(),
@@ -2089,19 +2393,6 @@ CREATE TABLE IF NOT EXISTS "public"."Evaluacion_Proyecto" (
 
 
 ALTER TABLE "public"."Evaluacion_Proyecto" OWNER TO "postgres";
-
-
-CREATE TABLE IF NOT EXISTS "public"."FeedBack" (
-    "ID_FeedBack" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "ID_People_lead" "uuid" NOT NULL,
-    "ID_Empleado" "uuid" NOT NULL,
-    "Descripcion" character varying,
-    "AreaMejora" character varying,
-    "Desempeno" character varying
-);
-
-
-ALTER TABLE "public"."FeedBack" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Habilidades" (
@@ -2123,7 +2414,8 @@ CREATE TABLE IF NOT EXISTS "public"."Historial" (
     "Fecha_final" "date",
     "Descripcion" "text",
     "Currentjob" boolean,
-    "created_at" timestamp with time zone DEFAULT "now"()
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "ID_Proyecto" "uuid"
 );
 
 
@@ -2173,6 +2465,29 @@ CREATE TABLE IF NOT EXISTS "public"."Metas" (
 ALTER TABLE "public"."Metas" OWNER TO "postgres";
 
 
+CREATE TABLE IF NOT EXISTS "public"."Notificaciones" (
+    "id" bigint NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "Titulo" "text",
+    "Desc" "text",
+    "ID_Empleado" "uuid"
+);
+
+
+ALTER TABLE "public"."Notificaciones" OWNER TO "postgres";
+
+
+ALTER TABLE "public"."Notificaciones" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME "public"."Notificaciones_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+
 CREATE TABLE IF NOT EXISTS "public"."People_lead" (
     "ID" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "ID_Empleado" "uuid"
@@ -2180,6 +2495,17 @@ CREATE TABLE IF NOT EXISTS "public"."People_lead" (
 
 
 ALTER TABLE "public"."People_lead" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."Postulaciones" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "ID_empleado" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_Proyecto" "uuid" DEFAULT "gen_random_uuid"(),
+    "ID_Puesto" "uuid" DEFAULT "gen_random_uuid"()
+);
+
+
+ALTER TABLE "public"."Postulaciones" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."Proyecto_Habilidades" (
@@ -2190,30 +2516,6 @@ CREATE TABLE IF NOT EXISTS "public"."Proyecto_Habilidades" (
 
 
 ALTER TABLE "public"."Proyecto_Habilidades" OWNER TO "postgres";
-
-
-CREATE TABLE IF NOT EXISTS "public"."Proyectos" (
-    "ID_Proyecto" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
-    "Nombre" "text" NOT NULL,
-    "Descripcion" "text",
-    "Status" "text" DEFAULT 'inactive'::"text" NOT NULL,
-    "ID_DeliveryLead" "uuid",
-    "fecha_inicio" "date",
-    "fecha_fin" "date",
-    "isReviewed" boolean DEFAULT false NOT NULL,
-    "cargabilidad_num" smallint DEFAULT '100'::smallint NOT NULL,
-    "Cliente" "text",
-    "created_at" timestamp with time zone DEFAULT "now"(),
-    "ImagenUrl" "text",
-    CONSTRAINT "Proyectos_Status_check" CHECK (("Status" = ANY (ARRAY['active'::"text", 'inactive'::"text", 'pending'::"text", 'done'::"text"])))
-);
-
-
-ALTER TABLE "public"."Proyectos" OWNER TO "postgres";
-
-
-COMMENT ON COLUMN "public"."Proyectos"."cargabilidad_num" IS 'cargabilidad del proyecto en entero del 1 al 100, definida por el capability lead';
-
 
 
 CREATE TABLE IF NOT EXISTS "public"."Puesto_habilidades" (
@@ -2230,7 +2532,8 @@ ALTER TABLE "public"."Puesto_habilidades" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."Puesto_persona" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "ID_Empleado" "uuid" DEFAULT "gen_random_uuid"(),
-    "ID_Puesto" "uuid" DEFAULT "gen_random_uuid"()
+    "ID_Puesto" "uuid" DEFAULT "gen_random_uuid"(),
+    "isReviewed" boolean DEFAULT false NOT NULL
 );
 
 
@@ -2332,7 +2635,8 @@ CREATE TABLE IF NOT EXISTS "public"."Talent_Discussion" (
     "Nivel" character varying,
     "Fecha_Inicio" "date",
     "Fecha_Final" "date",
-    "Estado" character varying DEFAULT 'Pendiente'::character varying
+    "Estado" character varying DEFAULT 'Pendiente'::character varying,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
 );
 
 
@@ -2352,6 +2656,10 @@ COMMENT ON COLUMN "public"."Talent_Discussion"."Fecha_Final" IS 'Fecha final del
 
 
 COMMENT ON COLUMN "public"."Talent_Discussion"."Estado" IS 'Estado de la talent discussion: Pendiente, En Progreso, Finalizada';
+
+
+
+COMMENT ON COLUMN "public"."Talent_Discussion"."created_at" IS 'A que fecha se creó';
 
 
 
@@ -2431,18 +2739,8 @@ ALTER TABLE ONLY "public"."Departamento"
 
 
 
-ALTER TABLE ONLY "public"."Empleado_Habilidades"
-    ADD CONSTRAINT "Empleado_Habilidades_pkey" PRIMARY KEY ("ID_Empleado", "ID_Habilidad");
-
-
-
 ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_pkey" PRIMARY KEY ("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."FeedBack"
-    ADD CONSTRAINT "FeedBack_pkey" PRIMARY KEY ("ID_FeedBack");
 
 
 
@@ -2476,6 +2774,11 @@ ALTER TABLE ONLY "public"."Metas"
 
 
 
+ALTER TABLE ONLY "public"."Notificaciones"
+    ADD CONSTRAINT "Notificaciones_pkey" PRIMARY KEY ("id");
+
+
+
 ALTER TABLE ONLY "public"."People_lead"
     ADD CONSTRAINT "People_lead_ID_Empleado_key" UNIQUE ("ID_Empleado");
 
@@ -2483,6 +2786,11 @@ ALTER TABLE ONLY "public"."People_lead"
 
 ALTER TABLE ONLY "public"."People_lead"
     ADD CONSTRAINT "People_lead_pkey" PRIMARY KEY ("ID");
+
+
+
+ALTER TABLE ONLY "public"."Postulaciones"
+    ADD CONSTRAINT "Postulaciones_pkey" PRIMARY KEY ("id");
 
 
 
@@ -2560,6 +2868,10 @@ CREATE OR REPLACE TRIGGER "after_insert_evaluacion" AFTER INSERT ON "public"."Ev
 
 
 
+CREATE OR REPLACE TRIGGER "check_and_update_reviewed" AFTER UPDATE ON "public"."Puesto_persona" FOR EACH ROW EXECUTE FUNCTION "public"."check_and_update_reviewed_trigger"();
+
+
+
 ALTER TABLE ONLY "public"."Capability_Lead"
     ADD CONSTRAINT "Capability_Lead_ID_Departamento_fkey" FOREIGN KEY ("ID_Departamento") REFERENCES "public"."Departamento"("ID_Departamento");
 
@@ -2595,16 +2907,6 @@ ALTER TABLE ONLY "public"."Delivery_Lead"
 
 
 
-ALTER TABLE ONLY "public"."Empleado_Habilidades"
-    ADD CONSTRAINT "Empleado_Habilidades_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."Empleado_Habilidades"
-    ADD CONSTRAINT "Empleado_Habilidades_ID_Habilidad_fkey" FOREIGN KEY ("ID_Habilidad") REFERENCES "public"."Habilidades"("ID_Habilidad");
-
-
-
 ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_ID_Departamento_fkey" FOREIGN KEY ("ID_Departamento") REFERENCES "public"."Departamento"("ID_Departamento");
 
@@ -2612,16 +2914,6 @@ ALTER TABLE ONLY "public"."Empleado"
 
 ALTER TABLE ONLY "public"."Empleado"
     ADD CONSTRAINT "Empleado_ID_PeopleLead_fkey" FOREIGN KEY ("ID_PeopleLead") REFERENCES "public"."People_lead"("ID");
-
-
-
-ALTER TABLE ONLY "public"."FeedBack"
-    ADD CONSTRAINT "FeedBack_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
-
-
-
-ALTER TABLE ONLY "public"."FeedBack"
-    ADD CONSTRAINT "FeedBack_ID_People_lead_fkey" FOREIGN KEY ("ID_People_lead") REFERENCES "public"."People_lead"("ID");
 
 
 
@@ -2645,6 +2937,11 @@ ALTER TABLE ONLY "public"."Historial"
 
 
 
+ALTER TABLE ONLY "public"."Historial"
+    ADD CONSTRAINT "Historial_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
+
+
+
 ALTER TABLE ONLY "public"."Intereses"
     ADD CONSTRAINT "Intereses_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
@@ -2655,8 +2952,28 @@ ALTER TABLE ONLY "public"."Metas"
 
 
 
+ALTER TABLE ONLY "public"."Notificaciones"
+    ADD CONSTRAINT "Notificaciones_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
 ALTER TABLE ONLY "public"."People_lead"
     ADD CONSTRAINT "People_lead_ID_Empleado_fkey" FOREIGN KEY ("ID_Empleado") REFERENCES "public"."Empleado"("ID_Empleado");
+
+
+
+ALTER TABLE ONLY "public"."Postulaciones"
+    ADD CONSTRAINT "Postulaciones_ID_Proyecto_fkey" FOREIGN KEY ("ID_Proyecto") REFERENCES "public"."Proyectos"("ID_Proyecto");
+
+
+
+ALTER TABLE ONLY "public"."Postulaciones"
+    ADD CONSTRAINT "Postulaciones_ID_Puesto_fkey" FOREIGN KEY ("ID_Puesto") REFERENCES "public"."Puesto_proyecto"("id");
+
+
+
+ALTER TABLE ONLY "public"."Postulaciones"
+    ADD CONSTRAINT "Postulaciones_ID_empleado_fkey" FOREIGN KEY ("ID_empleado") REFERENCES "public"."Empleado"("ID_Empleado");
 
 
 
@@ -2794,7 +3111,14 @@ ALTER PUBLICATION "supabase_realtime" OWNER TO "postgres";
 
 
 
+ALTER PUBLICATION "supabase_realtime" ADD TABLE ONLY "public"."Notificaciones";
+
+
+
 ALTER PUBLICATION "supabase_realtime" ADD TABLE ONLY "public"."Proyectos";
+
+
+
 
 
 
@@ -2996,6 +3320,38 @@ GRANT USAGE ON SCHEMA "public" TO "authenticated";
 
 
 
+
+
+
+
+
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "anon";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Administrador" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Administrador" TO "anon";
 
@@ -3046,18 +3402,8 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado" TO "anon";
 
 
 
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Empleado_Habilidades" TO "anon";
-
-
-
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Evaluacion_Proyecto" TO "anon";
-
-
-
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."FeedBack" TO "anon";
 
 
 
@@ -3086,18 +3432,23 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Metas" TO "anon";
 
 
 
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Notificaciones" TO "anon";
+GRANT SELECT,INSERT,UPDATE ON TABLE "public"."Notificaciones" TO "authenticated";
+
+
+
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."People_lead" TO "anon";
 
 
 
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Postulaciones" TO "authenticated";
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Postulaciones" TO "anon";
+
+
+
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyecto_Habilidades" TO "authenticated";
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyecto_Habilidades" TO "anon";
-
-
-
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "authenticated";
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Proyectos" TO "anon";
 
 
 

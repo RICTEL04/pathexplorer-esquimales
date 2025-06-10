@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchEmployeesByProject, insertReview } from "@/lib/delivery-lead-proyectos/apiCalls";
 import { Employee } from "@/lib/delivery-lead-proyectos/definitions";
+import { sleep } from "openai/core.mjs";
 
 export default function ReviewModal({
   onClose,
@@ -19,11 +20,16 @@ export default function ReviewModal({
 
   useEffect(() => {
     const fetchEmpleados = async () => {
+      await sleep(500);
       if (selectedProject?.ID_Proyecto) {
         try {
           const data = await fetchEmployeesByProject(selectedProject.ID_Proyecto);
           const filteredData = data.filter((empleado) => !empleado.isReviewed);
           setEmpleados(filteredData);
+          if (filteredData.length === 0) {
+            onClose();
+            window.location.reload();
+          }
         } catch (error) {
           console.error("Error fetching employees:", error);
         }

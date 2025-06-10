@@ -38,6 +38,7 @@ export default function NewProjectPage() {
   const leadsPerPage = 5;
   const [clientName, setClientName] = useState("");
   const [showNoLeadModal, setShowNoLeadModal] = useState(false);
+  const [originalDeliveryLead, setOriginalDeliveryLead] = useState<any>(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalRoleIdx, setModalRoleIdx] = useState<number | null>(null);
@@ -64,6 +65,12 @@ export default function NewProjectPage() {
   const [showCargabilidadModal, setShowCargabilidadModal] = useState(false);
   const [empleadosCargabilidad, setEmpleadosCargabilidad] = useState<any[]>([]);
   const [pendingProjectUpdate, setPendingProjectUpdate] = useState<any>(null);
+  const [showCargabilidadWarning, setShowCargabilidadWarning] = useState(false);
+  const [cargabilidadAnterior, setCargabilidadAnterior] = useState<number | null>(null);
+
+  const [incrementoCargabilidad, setIncrementoCargabilidad] = useState(0);
+  
+const sobrepasaCargabilidad = ((Number(selectedDeliveryLead?.Cargabilidad) || 0) + incrementoCargabilidad) > 100;
 
 
   const isEditDisabled =
@@ -402,7 +409,7 @@ const handleRemoveEmpleadosCargabilidad = async () => {
         Descripcion: description,
         fecha_inicio: startDate,
         fecha_fin: endDate,
-        ID_DeliveryLead: selectedDeliveryLead?.id_deliverylead || null,
+        ID_DeliveryLead: selectedDeliveryLead?.ID_DeliveryLead || null,
         cargabilidad_num: cargabilidad,
         Cliente: clientName,
         ...(imageUrl && { ImagenUrl: imageUrl }),
@@ -446,6 +453,11 @@ if (selectedSkills.length > 0) {
     e.preventDefault();
     if (!selectedDeliveryLead) {
       setShowNoLeadModal(true);
+      return;
+    }
+    // Validación de cargabilidad combinada
+    if (selectedDeliveryLead && sobrepasaCargabilidad) {
+      setShowCargabilidadWarning(true);
       return;
     }
     setIsSubmitting(true);
@@ -508,6 +520,35 @@ if (selectedSkills.length > 0) {
         imageUrl = filePath;
       }
 
+      if (
+  selectedDeliveryLead &&
+  originalDeliveryLead &&
+  selectedDeliveryLead.ID_Empleado === originalDeliveryLead.ID_Empleado
+) {
+  // Delivery Lead original: solo actualiza con incremento
+  if (incrementoCargabilidad !== 0) {
+    await supabase.rpc("aumentar_cargabilidad", {
+      id: selectedDeliveryLead.ID_Empleado,
+      incremento: incrementoCargabilidad,
+    });
+  }
+} else if (selectedDeliveryLead && originalDeliveryLead) {
+  // Nuevo Delivery Lead: suma cargabilidad del proyecto
+  if ((cargabilidad ?? 0) > 0) {
+    await supabase.rpc("aumentar_cargabilidad", {
+      id: selectedDeliveryLead.ID_Empleado,
+      incremento: cargabilidad ?? 0,
+    });
+  }
+  // Resta al original
+  if ((cargabilidadAnterior ?? 0) > 0) {
+    await supabase.rpc("aumentar_cargabilidad", {
+      id: originalDeliveryLead.ID_Empleado,
+      incremento: -(cargabilidadAnterior ?? 0),
+    });
+  }
+}
+
       // UPDATE
       const { error } = await supabase
         .from("Proyectos")
@@ -516,7 +557,7 @@ if (selectedSkills.length > 0) {
           Descripcion: description,
           fecha_inicio: startDate,
           fecha_fin: endDate,
-          ID_DeliveryLead: selectedDeliveryLead?.id_deliverylead || null,
+          ID_DeliveryLead: selectedDeliveryLead?.ID_DeliveryLead || null,
           cargabilidad_num: cargabilidad,
           Cliente: clientName,
           ...(imageUrl && { ImagenUrl: imageUrl }),
@@ -541,37 +582,37 @@ if (selectedSkills.length > 0) {
 }
 
       // Si no hubo empleados afectados, actualiza la cargabilidad de todos los empleados con rol
-if (!empleadosCargabilidad.length && projectId && cargabilidad !== cargabilidadActualProyecto) {
-  const { data: puestosRestantes } = await supabase
-    .from("Puesto_proyecto")
-    .select("id")
-    .eq("ID_Proyecto", projectId);
+      if (!empleadosCargabilidad.length && projectId && cargabilidad !== cargabilidadActualProyecto) {
+        const { data: puestosRestantes } = await supabase
+          .from("Puesto_proyecto")
+          .select("id")
+          .eq("ID_Proyecto", projectId);
 
-  if (puestosRestantes && puestosRestantes.length > 0) {
-    const puestoIds = puestosRestantes.map(p => p.id);
-    const { data: empleadosRestantes } = await supabase
-      .from("Puesto_persona")
-      .select("ID_Empleado")
-      .in("ID_Puesto", puestoIds);
+        if (puestosRestantes && puestosRestantes.length > 0) {
+          const puestoIds = puestosRestantes.map(p => p.id);
+          const { data: empleadosRestantes } = await supabase
+            .from("Puesto_persona")
+            .select("ID_Empleado")
+            .in("ID_Puesto", puestoIds);
 
-    const empleadosUnicos = [
-      ...new Set(
-        (empleadosRestantes || []).map(e => e.ID_Empleado)
-      ),
-    ];
+          const empleadosUnicos = [
+            ...new Set(
+              (empleadosRestantes || []).map(e => e.ID_Empleado)
+            ),
+          ];
 
-    const incremento = (cargabilidad ?? 0) - cargabilidadActualProyecto;
+          const incremento = (cargabilidad ?? 0) - cargabilidadActualProyecto;
 
-    for (const idEmpleado of empleadosUnicos) {
-      await supabase.rpc("aumentar_cargabilidad", {
-        id: idEmpleado,
-        incremento: incremento,
-      });
-    }
-  }
-}
+          for (const idEmpleado of empleadosUnicos) {
+            await supabase.rpc("aumentar_cargabilidad", {
+              id: idEmpleado,
+              incremento: incremento,
+            });
+          }
+        }
+      }
 
-      
+      router.back(); // <-- Aquí, después de todo el proceso exitoso
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -599,7 +640,8 @@ if (!empleadosCargabilidad.length && projectId && cargabilidad !== cargabilidadA
       // Cargar Delivery Leads usando tu consulta SQL específica
       setLoadingLeads(true);
       try {
-        const { data, error } = await supabase.rpc('get_available_delivery_leads');
+        const { data, error } = await supabase.rpc('get_available_delivery_leads2');
+        console.log('Delivery Leads fetched:', data);
         if (error) throw error;
         setDeliveryLeads(data || []);
 
@@ -607,7 +649,7 @@ if (!empleadosCargabilidad.length && projectId && cargabilidad !== cargabilidadA
         const avatarLinks: { [id: string]: string | null } = {};
         await Promise.all(
           (data || []).map(async (lead: any) => {
-            avatarLinks[lead.id_empleado] = await fetchAvatarURL(lead.id_empleado);
+            avatarLinks[lead.ID_Empleado] = await fetchAvatarURL(lead.ID_Empleado);
           })
         );
         setLeadAvatars(avatarLinks);
@@ -626,6 +668,7 @@ if (!empleadosCargabilidad.length && projectId && cargabilidad !== cargabilidadA
     if (!projectId) return;
     const fetchProjectData = async () => {
       const { data, error } = await supabase.rpc("get_full_project_data", { project_id: projectId });
+      console.log("Datos del proyecto:", data);
       if (error) {
         console.error("Error al cargar datos del proyecto:", error);
         return;
@@ -639,16 +682,31 @@ if (!empleadosCargabilidad.length && projectId && cargabilidad !== cargabilidadA
       setStartDate(proyecto?.fecha_inicio ?? "");
       setEndDate(proyecto?.fecha_fin ?? "");
       setCargabilidad(proyecto?.cargabilidad_num ?? null);
+      setCargabilidadAnterior(proyecto?.cargabilidad_num ?? null); // <-- Guarda el original
       setClientName(proyecto?.Cliente ?? "");
 
       // Delivery Lead
       if (proyecto?.id_empleado_delivery) {
-            setSelectedDeliveryLead({
-                id_empleado: proyecto.id_empleado_delivery,
-                nombre_empleado: proyecto.nombre_delivery,
-                id_deliverylead: proyecto.ID_DeliveryLead,
-            });
-            }
+  const leadObj = {
+    ID_Empleado: proyecto.id_empleado_delivery,
+    nombre_empleado: proyecto.nombre_delivery,
+    ID_DeliveryLead: proyecto.ID_DeliveryLead,
+    Cargabilidad: Number(proyecto.cargabilidad_delivery) || 0, // <-- Asegura número
+  };
+  setSelectedDeliveryLead(leadObj);
+  setOriginalDeliveryLead(leadObj);
+
+  if (!leadAvatars[leadObj.ID_Empleado]) {
+        const url = await fetchAvatarURL(leadObj.ID_Empleado);
+        setLeadAvatars(prev => ({
+          ...prev,
+          [leadObj.ID_Empleado]: url,
+        }));
+      }
+
+  
+}
+
 
       // Imagen
       if (proyecto?.ImagenUrl) {
@@ -730,13 +788,20 @@ if (!empleadosCargabilidad.length && projectId && cargabilidad !== cargabilidadA
 
   // Filtrado y paginación de delivery leads
   const filteredLeads = deliveryLeads
-    .filter(lead =>
-      (!selectedDeliveryLead || lead.id_empleado !== selectedDeliveryLead.id_empleado) &&
-      (
-        lead.nombre_empleado.toLowerCase().includes(leadSearch.toLowerCase()) ||
-        String(lead.id_empleado).includes(leadSearch)
-      )
-    );
+  .filter(lead => {
+    // No mostrar el lead ya seleccionado
+    if (selectedDeliveryLead && lead.ID_Empleado === selectedDeliveryLead.ID_Empleado) return false;
+    // Filtro por nombre o ID
+    const matchesSearch =
+      lead.nombre_empleado.toLowerCase().includes(leadSearch.toLowerCase()) ||
+      String(lead.ID_Empleado).includes(leadSearch);
+    if (!matchesSearch) return false;
+    // Filtro de cargabilidad: solo mostrar si NO excede el 100%
+    const leadCargabilidad = Number(lead.Cargabilidad) || 0;
+    const proyectoCargabilidad = Number(cargabilidad) || 0;
+    const suma = leadCargabilidad + proyectoCargabilidad;
+    return suma <= 100;
+  });
   const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);
   const paginatedLeads = filteredLeads.slice((leadPage - 1) * leadsPerPage, leadPage * leadsPerPage);
 
@@ -804,8 +869,8 @@ if (!empleadosCargabilidad.length && projectId && cargabilidad !== cargabilidadA
 
 useEffect(() => {
   const getAvatar = async () => {
-    if (selectedDeliveryLead?.id_empleado) {
-      const url = await fetchAvatarURL(selectedDeliveryLead.id_empleado);
+    if (selectedDeliveryLead?.ID_Empleado) {
+      const url = await fetchAvatarURL(selectedDeliveryLead.ID_Empleado);
       setSelectedLeadAvatar(url);
     } else {
       setSelectedLeadAvatar(null);
@@ -813,6 +878,23 @@ useEffect(() => {
   };
   getAvatar();
 }, [selectedDeliveryLead]);
+
+useEffect(() => {
+  const cargarAvatarOriginal = async () => {
+    if (
+      originalDeliveryLead &&
+      originalDeliveryLead.ID_Empleado &&
+      !leadAvatars[originalDeliveryLead.ID_Empleado]
+    ) {
+      const url = await fetchAvatarURL(originalDeliveryLead.ID_Empleado);
+      setLeadAvatars(prev => ({
+        ...prev,
+        [originalDeliveryLead.ID_Empleado]: url,
+      }));
+    }
+  };
+  cargarAvatarOriginal();
+}, [originalDeliveryLead, leadAvatars, fetchAvatarURL]);
 
   const handleDeleteImage = async () => {
     if (!imagePreview || !projectId) return;
@@ -914,6 +996,16 @@ useEffect(() => {
       setIsDeletingRole(false);
     }
   };
+
+  
+
+  // Calcula incremento y cargabilidad nueva cada vez que cambie cargabilidad o cargabilidadAnterior o selectedDeliveryLead
+useEffect(() => {
+  const anterior = Number(cargabilidadAnterior) || 0;
+  const nueva = Number(cargabilidad) || 0;
+  const incremento = nueva - anterior;
+  setIncrementoCargabilidad(incremento);
+}, [cargabilidad, cargabilidadAnterior]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -1049,30 +1141,103 @@ useEffect(() => {
                       }}
                     >
                       {selectedDeliveryLead ? (
-                        <div className="flex items-center space-x-3">
-                          <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
-                          <img
-                            src={selectedLeadAvatar || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
-                            alt={`Avatar de ${selectedDeliveryLead.nombre_empleado}`}
-                            width={60}
-                            height={60}
-                            className="object-cover w-full h-full"
-                            loading="lazy"
-                          />
-                        </div>
-                          <span className="font-medium">{selectedDeliveryLead.nombre_empleado}</span>
-                          <button
-                            type="button"
-                            className="ml-2 text-red-500 hover:text-red-700"
-                            onClick={() => setSelectedDeliveryLead(null)}
-                            title="Quitar Delivery Lead"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ) : (
-                        <span className="text-gray-400">Arrastra aquí un Delivery Lead disponible</span>
-                      )}
+                        <div className="flex items-center space-x-3 w-full">
+    <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
+      <img
+        src={selectedLeadAvatar || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+        alt={`Avatar de ${selectedDeliveryLead.nombre_empleado}`}
+        width={60}
+        height={60}
+        className="object-cover w-full h-full"
+        loading="lazy"
+      />
+    </div>
+    <div className="flex-1">
+      <span className="font-medium">{selectedDeliveryLead.nombre_empleado}</span>
+      {/* Mostrar cargabilidad real */}
+      <div className="mt-1">
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-600">Cargabilidad:</span>
+          <span className="text-xs font-semibold text-purple-700">
+            {
+              (() => {
+                if (
+                  selectedDeliveryLead &&
+                  originalDeliveryLead &&
+                  selectedDeliveryLead.ID_Empleado === originalDeliveryLead.ID_Empleado
+                ) {
+                  // Delivery Lead original: usa el cálculo con incremento
+                  const anterior = Number(cargabilidadAnterior) || 0;
+                  const nueva = Number(cargabilidad) || 0;
+                  const incremento = nueva - anterior;
+                  const cargabilidadNueva = (Number(selectedDeliveryLead.Cargabilidad) || 0) + incremento;
+                  return `${cargabilidadNueva}%`;
+                } else {
+                  // Nuevo Delivery Lead: suma cargabilidad actual + cargabilidad del proyecto
+                  const leadCargabilidad = Number(selectedDeliveryLead?.Cargabilidad) || 0;
+                  const proyectoCargabilidad = Number(cargabilidad) || 0;
+                  return `${leadCargabilidad + proyectoCargabilidad}%`;
+                }
+              })()
+            }
+          </span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+          <div
+            className={`h-2 rounded-full transition-all ${
+              (() => {
+                if (
+                  selectedDeliveryLead &&
+                  originalDeliveryLead &&
+                  selectedDeliveryLead.ID_Empleado === originalDeliveryLead.ID_Empleado
+                ) {
+                  // Delivery Lead original
+                  return ((Number(selectedDeliveryLead.Cargabilidad) || 0) + incrementoCargabilidad) > 100
+                    ? "bg-red-500"
+                    : "bg-purple-500";
+                } else {
+                  // Nuevo Delivery Lead
+                  const leadCargabilidad = Number(selectedDeliveryLead?.Cargabilidad) || 0;
+                  const proyectoCargabilidad = Number(cargabilidad) || 0;
+                  return (leadCargabilidad + proyectoCargabilidad) > 100
+                    ? "bg-red-500"
+                    : "bg-purple-500";
+                }
+              })()
+            }`}
+            style={{
+              width: (() => {
+                if (
+                  selectedDeliveryLead &&
+                  originalDeliveryLead &&
+                  selectedDeliveryLead.ID_Empleado === originalDeliveryLead.ID_Empleado
+                ) {
+                  // Delivery Lead original
+                  return `${Math.min((Number(selectedDeliveryLead.Cargabilidad) || 0) + incrementoCargabilidad, 100)}%`;
+                } else {
+                  // Nuevo Delivery Lead
+                  const leadCargabilidad = Number(selectedDeliveryLead?.Cargabilidad) || 0;
+                  const proyectoCargabilidad = Number(cargabilidad) || 0;
+                  return `${Math.min(leadCargabilidad + proyectoCargabilidad, 100)}%`;
+                }
+              })()
+            }}
+          ></div>
+        </div>
+      </div>
+    </div>
+    <button
+      type="button"
+      className="ml-2 text-red-500 hover:text-red-700"
+      onClick={() => setSelectedDeliveryLead(null)}
+      title="Quitar Delivery Lead"
+    >
+      ×
+    </button>
+  </div>
+) : (
+  <span className="text-gray-400">Arrastra aquí un Delivery Lead disponible</span>
+)}
                     </div>
                   </div>
                   <div>
@@ -1547,19 +1712,28 @@ useEffect(() => {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-              {paginatedLeads.map((lead) => (
+                          {paginatedLeads.map((lead) => {
+              const leadCargabilidad = Number(lead.Cargabilidad) || 0;
+              const proyectoCargabilidad = Number(cargabilidad) || 0;
+              const suma = leadCargabilidad + proyectoCargabilidad;
+              const excede = suma > 100;
+              return (
                 <div
-                  key={lead.id_empleado}
+                  key={lead.ID_Empleado}
                   className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-move"
                   draggable
                   onDragStart={e => {
-                    e.dataTransfer.setData("application/json", JSON.stringify(lead));
+                    const leadObj = {
+                      ...lead,
+                      Cargabilidad: Number(lead.Cargabilidad) || 0,
+                    };
+                    e.dataTransfer.setData("application/json", JSON.stringify(leadObj));
                   }}
                 >
                   <div className="flex items-start">
                     <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
                       <img
-                        src={leadAvatars[lead.id_empleado] || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+                        src={leadAvatars[lead.ID_Empleado] || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
                         alt={`Avatar de ${lead.nombre_empleado}`}
                         width={60}
                         height={60}
@@ -1567,12 +1741,66 @@ useEffect(() => {
                         loading="lazy"
                       />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 ml-3">
                       <h4 className="font-medium text-gray-900">{lead.nombre_empleado}</h4>
+                      <div className="mt-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-600">Cargabilidad:</span>
+                          <span className="text-xs font-semibold text-purple-700">{Number(lead.Cargabilidad) || 0}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                          <div
+                            className="h-2 rounded-full transition-all bg-purple-500"
+                            style={{ width: `${Math.min(Number(lead.Cargabilidad) || 0, 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-            ))}
+              );
+            })}
+                        {/* Delivery Lead original (si no está seleccionado y existe) */}
+            {originalDeliveryLead &&
+              (!selectedDeliveryLead || selectedDeliveryLead.ID_Empleado !== originalDeliveryLead.ID_Empleado) && (
+                <div className="mt-6">
+                  <h4 className="text-sm font-semibold text-purple-700 mb-2">Delivery Lead original</h4>
+                  <div
+                    className="bg-white border-2 border-dashed border-purple-300 rounded-lg p-4 hover:shadow-md transition-shadow cursor-move"
+                    draggable
+                    onDragStart={e => {
+                      e.dataTransfer.setData("application/json", JSON.stringify(originalDeliveryLead));
+                    }}
+                  >
+                    <div className="flex items-start">
+                      <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
+                        <img
+                          src={leadAvatars[originalDeliveryLead.ID_Empleado] || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+                          alt={`Avatar de ${originalDeliveryLead.nombre_empleado}`}
+                          width={60}
+                          className="object-cover w-full h-full"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="flex-1 ml-3">
+                        <h4 className="font-medium text-gray-900">{originalDeliveryLead.nombre_empleado}</h4>
+                        <div className="mt-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-gray-600">Cargabilidad actual:</span>
+                            <span className="text-xs font-semibold text-purple-700">{Number(originalDeliveryLead.Cargabilidad) || 0}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                            <div
+                              className="h-2 rounded-full transition-all bg-purple-500"
+                              style={{ width: `${Math.min(Number(originalDeliveryLead.Cargabilidad) || 0, 100)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            )}
           </div>
           </>
         )}
@@ -1904,6 +2132,35 @@ useEffect(() => {
           disabled={isSubmitting}
         >
           {isSubmitting ? "Eliminando..." : "Eliminar empleados y actualizar"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{showCargabilidadWarning && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-700/40 bg-opacity-40">
+    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+      <button
+        className="absolute top-2 right-3 text-gray-400 hover:text-gray-600 text-xl"
+        onClick={() => setShowCargabilidadWarning(false)}
+        title="Cerrar"
+      >×</button>
+      <div className="flex items-center mb-4">
+        <svg className="w-8 h-8 text-red-500 mr-2" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h2 className="text-lg font-semibold text-red-600">Cargabilidad excedida</h2>
+      </div>
+      <p className="mb-4 text-gray-700">
+        La suma de la cargabilidad actual del Delivery Lead y la cargabilidad propuesta para este proyecto es <b>{(Number(selectedDeliveryLead?.Cargabilidad) || 0) + incrementoCargabilidad}%</b>, lo cual excede el 100%.<br />
+        Por favor, ajusta la cargabilidad del proyecto o selecciona otro Delivery Lead.
+      </p>
+      <div className="flex justify-end">
+        <button
+          className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+          onClick={() => setShowCargabilidadWarning(false)}
+        >
+          Entendido
         </button>
       </div>
     </div>

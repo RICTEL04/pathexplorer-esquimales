@@ -45,10 +45,7 @@ export default function EmployeeCard({
           Nivel: {employee.Nivel}
         </span>
         <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-0.5 rounded-full">
-          Cargabilidad: {employee.cargabilidad_num} %
-        </span>
-        <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-0.5 rounded-full">
-          Ultimo ascenso: {employee.FechaUltNivel}
+          Cargabilidad: {employee.Cargabilidad} %
         </span>
       </div>
       {editing && onSwitchList && (

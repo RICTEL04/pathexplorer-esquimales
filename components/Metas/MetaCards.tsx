@@ -90,7 +90,7 @@ export default function MetaCards({ metas, tituloTipo, onEdit, onDelete }: { met
 
   if (metas.length === 0) {
     return (
-      <div className="w-full bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 cursor-pointer h-48 flex flex-col items-center justify-center">
+      <div className="w-full bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 h-48 flex flex-col items-center justify-center">
         <p className="text-gray-600 text-center px-4 text-sm">No hay metas de {tituloTipo.toLowerCase()}</p>
         <p className="text-xs text-gray-500 mt-2 text-center px-4">Crea una nueva meta para comenzar</p>
       </div>

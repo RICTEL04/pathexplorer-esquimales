@@ -10,12 +10,17 @@ import ExperienceModal from '@/components/ModalExperience';
 import ViewExperienceModal from '@/components/ViewExperienceModal';
 import EditExperienceModal from '@/components/EditExperienceModal';
 import { SkillRefreshProvider } from "@/context/SkillRefreshContext";
+import {useState} from 'react';
+import InformesModal from '@/components/profile/InformesModal';
+import { useRouter } from 'next/navigation';
 
 const UserProfilePage = () => {
   const params = useParams(); // Usar useParams en lugar de useRouter
   const id = params?.id as string | undefined; // Obtener el ID de los parámetros
+  const [openInformesModal, setOpenInformesModal] = useState(false);
+  const router = useRouter();
 
-  if (!id) {
+  if (!id ) {
     return <div>ID no encontrado en la URL</div>;
   }
 
@@ -35,17 +40,34 @@ const UserProfilePage = () => {
     handleUpdateEmployeeAvatar
   } = useEmployeeProfile(id);
 
+  console.log("Session: ", session?.user?.id)
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
   }
 
-  if (!session) {
+  if (!session ) {
     return <div className="min-h-screen flex items-center justify-center">No autenticado...</div>;
+  }
+
+  if (id !== session?.user?.id) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <div className="text-lg font-semibold text-gray-700">
+          Este perfil no es tuyo.
+        </div>
+        <button
+          className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition-colors"
+          onClick={() => router.push(`/employee/perfil/${session.user.id}`)}
+        >
+          Ir a mi perfil
+        </button>
+      </div>
+    );
   }
 
   // Preparar datos para el componente Profile
 
-  
   const SoftSkills = profileData.softSkills
 
   const HardSkills = profileData.hardSkills
@@ -75,6 +97,7 @@ const UserProfilePage = () => {
       })),
     certifications: profileData.certificados,
     goals: [],
+    informes: profileData.informes,
     SoftSkills,
     HardSkills,
     interests,
@@ -172,29 +195,20 @@ const UserProfilePage = () => {
               <h2 className="text-lg font-bold mb-4">Informes</h2>
               {profileData.informes.length > 0 ? (
                 <div className="space-y-3">
-                  {profileData.informes.map((informe) => (
-                    <Card key={informe.id} className="p-3 hover:bg-gray-50 cursor-pointer">
-                      <div className="flex items-start justify-between">
-                        <p className="text-sm font-medium break-words min-w-0 flex-1">
-                          {informe.name}
-                        </p>
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          className="h-4 w-4 text-gray-400 flex-shrink-0 ml-2" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M9 5l7 7-7 7" 
-                          />
-                        </svg>
-                      </div>
-                    </Card>
-                  ))}
+                  <>
+                    <button
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition-colors"
+                      onClick={() => setOpenInformesModal(true)}
+                      disabled={profileData.informes.length === 0}
+                    >
+                      Ver informes ({profileData.informes.length})
+                    </button>
+                    <InformesModal
+                      open={openInformesModal}
+                      onClose={() => setOpenInformesModal(false)}
+                      informes={profileData.informes}
+                    />
+                  </>
                 </div>
               ) : (
                 <Card className="p-4">

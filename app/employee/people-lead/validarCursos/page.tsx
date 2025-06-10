@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getEmpleados } from "@/lib/empleadoService";
 import { updateCertificado } from "@/lib/empleadoUpdate";
 import { Certificate } from 'crypto';
+import { supabase } from "@/lib/supabase";
 import React from 'react';
 
 interface Certificado {
@@ -32,12 +33,42 @@ export default function EmpleadosPage() {
   const [descripcion, setDescripcion] = useState<string>("");
   const [verificacion, setVerificacion] = useState<boolean>(false);
   const [denyVerification, setDenyVerification] = useState<boolean>(false);
-  const [sortOption, setSortOption] = useState<string>("option1");
+
+  const [idpeoplelead, setIdPeoplelead] = useState<string | null>(null);
+
 
   useEffect(() => {
+      const fetchCapabilityLead = async () => {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const session = sessionData?.session;
+        if (!session || !session.user) {
+          console.error("No session found, user not authenticated");
+          return null;
+        }
+        const { data, error } = await supabase
+          .from("People_lead")
+          .select("ID")
+          .eq("ID_Empleado", session.user.id)
+          .single();
+        if (error) {
+          console.error("Error fetching Capability Lead:", error);
+          return null;
+        }
+        if (data) {
+          setIdPeoplelead(data.ID);
+          return data.ID;
+        }
+        return null;
+      };
+      fetchCapabilityLead();
+    }, []);
+
+  // Este useEffect depende de idpeoplelead
+  useEffect(() => {
+    if (!idpeoplelead) return; // Solo ejecuta si ya tienes el id
     const fetchEmpleados = async () => {
       try {
-        const data: Empleado[] = await getEmpleados();
+        const data: Empleado[] = await getEmpleados(idpeoplelead);
         setEmpleados(data);
       } catch (err) {
         console.error("Error fetching empleados:", err);
@@ -45,7 +76,7 @@ export default function EmpleadosPage() {
       }
     };
     fetchEmpleados();
-  }, []);
+  }, [idpeoplelead]);
 
 
   const sortedEmpleados = [...empleados].sort((a, b) => {
@@ -124,31 +155,47 @@ export default function EmpleadosPage() {
       {error && <p className="text-red-500">{error}</p>}
 
       <div className="grid-container">
-        {sortedEmpleados
-          .filter(
-            (empleado) =>
-              empleado.Certificados.length > 0 &&
-              empleado.Certificados.some((cert) => cert.Verificacion === null)
-          )
-          .map((empleado) => (
-            <div
-              key={empleado.ID_Empleado}
-              className="card"
-              onClick={() => setSelectedEmpleado(empleado)}
-              style={{ cursor: "pointer" }}
-            >
-              <h2 className="card-title">{empleado.Nombre}</h2>
-              <p className="card-role">Rol: {empleado.Rol}</p>
-              <p className="card-certificates">
-                Certificados: 📜{" "}
-                {
-                  empleado.Certificados.filter(
-                    (cert) => cert.Verificacion === null
-                  ).length
-                }
-              </p>
+
+        {empleados.length === 0 ||
+        empleados.filter(
+          (empleado) =>
+            empleado.Certificados.length > 0 &&
+            empleado.Certificados.some((cert) => cert.Verificacion === null)
+        ).length === 0 ? (
+          <div className="flex flex-col items-center justify-center w-full py-16">
+            <div className="flex flex-col items-center justify-center w-full">
+              
+              <span className="text-lg font-semibold text-gray-500 mb-1 text-center">
+                No hay certificados por validar
+              </span>
+              <span className="text-sm text-gray-400 text-center">
+                Todos los certificados han sido revisados o aún no hay registros.
+              </span>
             </div>
-          ))}
+          </div>
+        ) : (
+          empleados
+            .filter(
+              (empleado) =>
+                empleado.Certificados.length > 0 &&
+                empleado.Certificados.some((cert) => cert.Verificacion === null)
+            )
+            .map((empleado) => (
+              <div
+                key={empleado.ID_Empleado}
+                className="card"
+                onClick={() => setSelectedEmpleado(empleado)}
+                style={{ cursor: "pointer" }}
+              >
+                <h2 className="card-title">{empleado.Nombre}</h2>
+                <p className="card-role">Rol: {empleado.Rol}</p>
+                <p className="card-certificates">
+                  Certificados: 📜{" "}
+                  {empleado.Certificados.filter((cert) => cert.Verificacion === null).length}
+                </p>
+              </div>
+            ))
+        )}
       </div>
 
       {selectedEmpleado && (

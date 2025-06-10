@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { fetchReportsForEmployee } from '@/lib/talent-discussions/talent_lead/TalendLeadAPICalls';
 import { 
   getEmployeeFullData, 
   updateEmployeePhone,
@@ -12,7 +13,8 @@ import {
   EmployeeFullData,
   updateEmployeeAvatarURL,
   Habilidad,
-  Direccion
+  Direccion,
+  Informe
 } from '@/lib/employeeService';
 import { isNull } from 'node:util';
 
@@ -56,6 +58,18 @@ export const useEmployeeProfile = (employeeId: string) => {
       try {
         // Obtener datos del empleado
         const data = await getEmployeeFullData(employeeId);
+        const reportes = await fetchReportsForEmployee(employeeId);
+
+        reportes.forEach((reporte) => {
+          const informe: Informe = {
+            id: reporte.name,
+            name: reporte.url 
+          }
+
+          data.informes.push(informe);
+        });
+
+        console.log("Reportes obtenidos:", data.informes);
         setProfileData(data);
       } catch (error) {
         console.error('Error fetching profile data:', error);

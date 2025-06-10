@@ -11,6 +11,7 @@ import ViewExperienceModal from '@/components/ViewExperienceModal';
 import EditExperienceModal from '@/components/EditExperienceModal';
 import { SkillRefreshProvider } from "@/context/SkillRefreshContext";
 import { createClient } from '@supabase/supabase-js';
+import InformesModal from '@/components/profile/InformesModal';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -20,7 +21,8 @@ const supabase = createClient(
 const UserProfilePage = () => {
   const params = useParams(); // Usar useParams en lugar de useRouter
   const id = params?.id as string | undefined; // Obtener el ID de los parámetros
-
+  const [openInformesModal, setOpenInformesModal] = useState(false);
+  
   if (!id) {
     return <div>ID no encontrado en la URL</div>;
   }
@@ -105,6 +107,7 @@ const UserProfilePage = () => {
       })),
     certifications: profileData.certificados,
     goals: [],
+    informes: profileData.informes,
     SoftSkills,
     HardSkills,
     interests,
@@ -200,36 +203,22 @@ const UserProfilePage = () => {
 
 
               <h2 className="text-lg font-bold mb-4">Informes</h2>
-              {employeeReports.length > 0 ? (
+              {profileData.informes.length > 0 ? (
                 <div className="space-y-3">
-                  {employeeReports.map((informe) => (
-                    <Card key={informe.name} className="p-3 hover:bg-gray-50 cursor-pointer">
-                      <div className="flex items-start justify-between">
-                        <a
-                          href={informe.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm font-medium break-words min-w-0 flex-1 text-blue-600 hover:underline"
-                        >
-                          {informe.name}
-                        </a>
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          className="h-4 w-4 text-gray-400 flex-shrink-0 ml-2" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M9 5l7 7-7 7" 
-                          />
-                        </svg>
-                      </div>
-                    </Card>
-                  ))}
+                  <>
+                    <button
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition-colors"
+                      onClick={() => setOpenInformesModal(true)}
+                      disabled={profileData.informes.length === 0}
+                    >
+                      Ver informes ({profileData.informes.length})
+                    </button>
+                    <InformesModal
+                      open={openInformesModal}
+                      onClose={() => setOpenInformesModal(false)}
+                      informes={profileData.informes}
+                    />
+                  </>
                 </div>
               ) : (
                 <Card className="p-4">

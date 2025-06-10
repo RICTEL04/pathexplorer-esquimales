@@ -173,7 +173,7 @@ export default function ReadOnlyExperience({ userId }: ReadOnlyExperienceProps) 
 
     // Render modal at the end of body using portal
     return createPortal(
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-700/30 bg-opacity-40">
         <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative">
           <button
             onClick={onClose}

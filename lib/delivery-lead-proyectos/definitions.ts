@@ -1,4 +1,3 @@
-
 export interface DeliveryLead {
     ID_DeliveryLead: string;
     ID_Empleado: string;
@@ -12,20 +11,18 @@ export interface Employee {
 }
 
 export interface ProjectJson {
-  ID_Proyecto: string;
-  Nombre: string;
-  Descripcion: string;
-  fecha_inicio?: string;
-  fecha_fin?: string;
-  Status: string;
-  ID_DeliveryLead: string;
-  ID_Cliente?: string;
-  isReviewed?: boolean;
-  cargabilidad?: number;
-  roles?: {
-    puesto: string;
-    cantidad: number;
-  }[];
+    ID_Proyecto: number;
+    Nombre: string;
+    Status: string;
+    // Agrega aquí las propiedades que llegan de Supabase
+    ID_DeliveryLead: string;
+    Cliente?: string;
+    ID_Cliente?: number;
+    Fecha_Inicio?: string;
+    Fecha_Fin?: string;
+    Rol?: string;
+    Descripcion?: string;
+    // ...otras propiedades si existen...
 }
 
 export interface Review {

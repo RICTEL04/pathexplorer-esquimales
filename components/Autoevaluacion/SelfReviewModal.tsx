@@ -48,7 +48,7 @@ export default function SelfReviewModal({
     }
     insertReview({
       ID_Empleado: employee.ID_Empleado,
-      ID_Proyecto: selectedProject.ID_Proyecto,
+      ID_Proyecto: String(selectedProject.ID_Proyecto),
       ID_DeliveryLead: selectedProject.ID_DeliveryLead,
       Calificacion: rating,
       Fortalezas: strengths,

@@ -45,8 +45,8 @@ export async function insertProject(projectData: ProjectJson) {
     .insert({
       Nombre: projectData.Nombre,
       Descripcion: projectData.Descripcion,
-      fecha_inicio: projectData.fecha_inicio,
-      fecha_fin: projectData.fecha_fin,
+      Fecha_Inicio: projectData.Fecha_Inicio,
+      Fecha_Fin: projectData.Fecha_Fin,
       ID_DeliveryLead: projectData.ID_DeliveryLead,
     })
     .select()
@@ -66,8 +66,8 @@ export async function updateProject(editProject: ProjectJson) {
     .update({
       Nombre: editProject.Nombre,
       Descripcion: editProject.Descripcion,
-      fecha_inicio: editProject.fecha_inicio,
-      fecha_fin: editProject.fecha_fin,
+      Fecha_Inicio: editProject.Fecha_Inicio,
+      Fecha_Fin: editProject.Fecha_Fin,
     })
     .eq('ID_Proyecto', editProject.ID_Proyecto);
   if (error) throw error;
@@ -85,40 +85,35 @@ export async function updateProjectStatus(projectId: string, status: string) {
   if (error) throw error;
 }
 
-type EmpleadoProyectoJoin = {
-  ID_Empleado: string;
-  Empleado: Employee;
-};
-
 export async function fetchEmployeesByProject(projectId: string): Promise<Employee[]> {
   const { data, error } = await supabase
-    .from('Empleado_Proyectos')
-    .select('ID_Empleado, isReviewed, Empleado (ID_Empleado, Nombre, Rol)')
-    .eq('ID_Proyecto', projectId);
+    .from('Empleado')
+    .select(`
+      ID_Empleado,
+      Nombre,
+      Rol,
+      Puesto_persona!inner(
+        ID_Puesto,
+        isReviewed,
+        Puesto_proyecto!inner(
+          ID_Proyecto,
+          Puesto,
+          N_puestos,
+          Completo
+        )
+      )
+    `)
+    .eq('Puesto_persona.Puesto_proyecto.ID_Proyecto', projectId)
+    .eq('Puesto_persona.isReviewed', false);
 
+  console.log("Fetched employees by project:", data);
   if (error) throw error;
-
-  // Type guard to validate the response
-  const isProperStructure = (item: any): item is EmpleadoProyectoJoin => 
-    item?.Empleado?.ID_Empleado !== undefined &&
-    item?.Empleado?.Nombre !== undefined &&
-    item?.Empleado?.Rol !== undefined;
-
-  // Process data with safety checks
-  const employees = (Array.isArray(data) ? data : [])
-    .filter(isProperStructure)
-    .map((item) => {
-      // If item.Empleado is an array, take the first element
-      const empleado = Array.isArray(item.Empleado) ? item.Empleado[0] : item.Empleado;
-      return {
-        ID_Empleado: empleado.ID_Empleado,
-        Nombre: empleado.Nombre,
-        Rol: empleado.Rol,
-        isReviewed: item.isReviewed,
-      };
-    });
-
-  console.log("Processed employees:", employees);
+  const employees: Employee[] = (data ?? []).map((emp: any) => ({
+    ID_Empleado: emp.ID_Empleado,
+    Nombre: emp.Nombre,
+    Rol: emp.Rol,
+    isReviewed: emp.Puesto_persona?.isReviewed || false,
+  }));
   return employees;
 }
 
