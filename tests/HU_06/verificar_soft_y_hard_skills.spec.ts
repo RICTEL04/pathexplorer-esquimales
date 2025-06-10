@@ -1,31 +1,31 @@
-// tests/auth/login.spec.ts
 import { baseTest as test, expect, configureQaseTest, attachScreenshot, handleTestError } from '../base.fixture';
 
 test.describe('Browser Suite', () => {
-  test.describe('HU_14', () => {
-    test('ID: TC-HU14.CA1 Verificacion de existencia de sugerencias para capacitacion', async ({ page, browserName }, testInfo) => {
+  test.describe('HU_06', () => {
+    test('ID: TC-HU06.CA2 Verificacion de separacion de habilidades', async ({ page, browserName }, testInfo) => {
       // Configurar metadatos para Qase
       configureQaseTest({
-        hu: 'HU_14',
-        title: 'ID: TC-HU14.CA1 Verificacion de existencia de sugerencias para capacitacion',
-        description: `**Descripción**: El path de carrera le brinda al empleado sugerencias de certificados para certificacion.
+        hu: 'HU_06',
+        title: 'ID: TC-HU06.CA2 Verificacion de separacion de habilidades',
+        description: `**Descripción**: El empleado puede tener tanto softskills como hardskills.
 
 **Precondiciones**:
-1. Usuario tiene acceso al path de carrera
+1. Usuario autenticado como empleado
+2. Usuario tiene al menos una softskill y una hardskill
 
 **Navegador**: ${browserName}`,
-        severity: 'normal',
+        severity: 'major',
         priority: 'medium',
-        layer: 'api',
+        layer: 'e2e',
         milestone: 'Sprint 3',
         parameters: {
-          'Usuario': 'A01741300@tec.mx',
+          'Usuario': 'rantonion2004@outlook.com',
           'Navegador': browserName
         }
       }, browserName);
 
       let testFailed = false;
-
+      const nombreExperiencia = 'QA ' + browserName; 
       try {
         await test.step('Navegar a la página de login', async () => {
           await page.goto('https://pathexplorer-esquimales.vercel.app/');
@@ -34,28 +34,29 @@ test.describe('Browser Suite', () => {
 
         await test.step('Ingresar credenciales válidas', async () => {
           await page.getByRole('textbox', { name: 'Email' }).click();
-          await page.getByRole('textbox', { name: 'Email' }).fill('A01741300@tec.mx');
+          await page.getByRole('textbox', { name: 'Email' }).fill('rantonion2004@outlook.com');
           await page.getByRole('textbox', { name: 'Contraseña' }).click();
-          await page.getByRole('textbox', { name: 'Contraseña' }).fill('password123');
+          await page.getByRole('textbox', { name: 'Contraseña' }).fill('password');
           await attachScreenshot(testInfo, 'Credenciales ingresadas', page);
         });
 
         await test.step('Enviar formulario de login', async () => {
           await page.getByRole('textbox', { name: 'Contraseña' }).press('Enter');
           await page.getByRole('button', { name: 'Sign in' }).click();
+          await page.getByRole('link', { name: /perfil|Profile|Mi perfil/i }).waitFor({ timeout: 10000 });
           await attachScreenshot(testInfo, 'Login enviado', page);
         });
 
-        await test.step('Verificar login exitoso', async () => {
-          // Verificar que fuimos redirigidos a la página del empleado
-          await page.goto('https://pathexplorer-esquimales.vercel.app/employee/path-de-carrera');
-          await attachScreenshot(testInfo, 'Enviar a employee', page);
+
+        await test.step('Verificar habilidades', async () => {
+          
+          await page.goto('https://pathexplorer-esquimales.vercel.app/employee/perfil/386e63ba-dc8f-4af6-9447-44f7976a4a0c');
+          await page.getByText('Habilidades técnicas').isVisible();
+          await page.getByRole('heading', { name: 'React/Next.js' }).isVisible();
+          await page.getByText('Habilidades blandas').isVisible();
+          await page.getByRole('heading', { name: 'Communication' }).isVisible();
         });
 
-        await test.step('Verificar sugerencias de capacitacion', async () => {
-          await page.getByRole('heading', { name: 'Cursos Recomendados:' }).isVisible();
-          await attachScreenshot(testInfo, 'Enviar a employee', page);
-        })
 
       } catch (error) {
         testFailed = true;

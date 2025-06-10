@@ -12,12 +12,15 @@ import EditExperienceModal from '@/components/EditExperienceModal';
 import { SkillRefreshProvider } from "@/context/SkillRefreshContext";
 import {useState} from 'react';
 import InformesModal from '@/components/profile/InformesModal';
+import { useRouter } from 'next/navigation';
 
 const UserProfilePage = () => {
   const params = useParams(); // Usar useParams en lugar de useRouter
   const id = params?.id as string | undefined; // Obtener el ID de los parámetros
   const [openInformesModal, setOpenInformesModal] = useState(false);
-  if (!id) {
+  const router = useRouter();
+
+  if (!id ) {
     return <div>ID no encontrado en la URL</div>;
   }
 
@@ -37,12 +40,30 @@ const UserProfilePage = () => {
     handleUpdateEmployeeAvatar
   } = useEmployeeProfile(id);
 
+  console.log("Session: ", session?.user?.id)
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
   }
 
-  if (!session) {
+  if (!session ) {
     return <div className="min-h-screen flex items-center justify-center">No autenticado...</div>;
+  }
+
+  if (id !== session?.user?.id) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <div className="text-lg font-semibold text-gray-700">
+          Este perfil no es tuyo.
+        </div>
+        <button
+          className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition-colors"
+          onClick={() => router.push(`/employee/perfil/${session.user.id}`)}
+        >
+          Ir a mi perfil
+        </button>
+      </div>
+    );
   }
 
   // Preparar datos para el componente Profile
