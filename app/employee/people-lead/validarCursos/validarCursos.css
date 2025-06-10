@@ -248,3 +248,34 @@
   margin-bottom: 16px;
 }
 
+.select-box {
+  position: relative; 
+  width: 8%;
+  border-radius: 10px;
+}
+
+
+.manejar-dropdown {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: white;
+}
+
+.manejar-dropdown:focus {
+  padding: 8px;
+  border-color: #8b36db; 
+  box-shadow: 0 0 4px #8b36db; 
+  outline: none; 
+}
+
+.manejar-dropdown option:hover {
+  background-color: #8b36db; 
+  color: white; 
+  
+}
