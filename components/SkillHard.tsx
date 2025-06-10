@@ -57,7 +57,7 @@ const EmployeeSkillsByCategory = ({ employeeId, categoryId }: { employeeId: stri
   const getLevelColor = (level: string) => {
     switch (level.toLowerCase()) {
       case 'expert':
-        return 'bg-green-500';
+        return 'bg-purple-600';
       case 'intermediate':
         return 'bg-yellow-500';
       case 'beginner':
@@ -114,23 +114,29 @@ const EmployeeSkillsByCategory = ({ employeeId, categoryId }: { employeeId: stri
   }
 
   // Paginación
-  const totalPages = Math.ceil(skills.length / skillsPerPage);
+  const levelOrder = { expert: 1, intermediate: 2, beginner: 3 };
+  const sortedSkills = [...skills].sort(
+    (a, b) =>
+      (levelOrder[a.nivel.toLowerCase() as keyof typeof levelOrder] ?? 99) -
+      (levelOrder[b.nivel.toLowerCase() as keyof typeof levelOrder] ?? 99)
+  );
+  const totalPages = Math.ceil(sortedSkills.length / skillsPerPage);
   const startIndex = (currentPage - 1) * skillsPerPage;
-  const paginatedSkills = skills.slice(startIndex, startIndex + skillsPerPage);
+  const paginatedSkills = sortedSkills.slice(startIndex, startIndex + skillsPerPage);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
           <span className="inline-block">Habilidades técnicas</span>
-          <span className="inline-flex items-center justify-center bg-blue-100 text-blue-700 text-base font-semibold rounded-full px-3 py-0.5">
+          <span className="inline-flex items-center justify-center bg-purple-100 text-purple-700 text-base font-semibold rounded-full px-3 py-0.5">
             {skills.length}
           </span>
         </h2>
         {totalPages > 1 && (
           <div className="flex items-center gap-2">
             <button
-              className="px-3 py-1 rounded-lg border border-gray-300 bg-white hover:bg-blue-100 transition disabled:opacity-50"
+              className="px-3 py-1 rounded-lg border border-purple-300 bg-purple hover:bg-purple-100 transition disabled:opacity-50"
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
             >
@@ -140,7 +146,7 @@ const EmployeeSkillsByCategory = ({ employeeId, categoryId }: { employeeId: stri
               {currentPage} / {totalPages}
             </span>
             <button
-              className="px-3 py-1 rounded-lg border border-gray-300 bg-white hover:bg-blue-100 transition disabled:opacity-50"
+              className="px-3 py-1 rounded-lg border border-purple-300 bg-purple hover:bg-purple-100 transition disabled:opacity-50"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
             >
@@ -154,7 +160,11 @@ const EmployeeSkillsByCategory = ({ employeeId, categoryId }: { employeeId: stri
           <div key={skill.id_habilidad} className="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-semibold text-gray-900 text-lg truncate">{skill.nombre}</h3>
-              <span className={`px-3 py-1 text-xs font-bold rounded-full shadow-sm ${getLevelColor(skill.nivel)}`}>
+              <span
+                className={`px-3 py-1 text-xs font-bold rounded-full shadow-sm ${getLevelColor(skill.nivel)} ${
+                  skill.nivel.toLowerCase() === 'expert' ? 'text-white' : 'text-white'
+                }`}
+              >
                 {getLevelText(skill.nivel)}
               </span>
             </div>

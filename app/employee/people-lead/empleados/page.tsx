@@ -21,8 +21,8 @@ export default function EmployeeProfilesPage() {
         return null;
       }
       const { data, error } = await supabase
-        .from("Capability_Lead")
-        .select("ID_Departamento")
+        .from("People_lead")
+        .select("ID")
         .eq("ID_Empleado", session.user.id)
         .single();
       if (error) {
@@ -30,8 +30,8 @@ export default function EmployeeProfilesPage() {
         return null;
       }
       if (data) {
-        setIdDepartamento(data.ID_Departamento);
-        return data.ID_Departamento;
+        setIdDepartamento(data.ID);
+        return data.ID;
       }
       return null;
     };
@@ -46,7 +46,7 @@ export default function EmployeeProfilesPage() {
       const { data, error } = await supabase
         .from("Empleado")
         .select("*")
-        .eq("ID_Departamento", departamentoId);
+        .eq("ID_PeopleLead", departamentoId);
       if (!error && data) {
         setEmployees(data);
       }

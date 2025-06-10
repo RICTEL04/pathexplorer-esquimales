@@ -189,7 +189,7 @@ const Profile: React.FC<ProfileProps> = ({
           <h2 className="text-3xl font-bold text-gray-800 break-words">
             {name || "Nombre no disponible"}
           </h2>
-          <p className="text-xl text-blue-600 break-words">
+          <p className="text-xl text-purple-600 break-words">
             {role || "Rol no especificado"}
           </p>
           

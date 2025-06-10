@@ -74,44 +74,64 @@ export interface Empleado {
   Metas: Metas[]; // Assuming Metas is defined elsewhere
 }
 
-
-
-export async function getEmpleados(): Promise<Empleado[]> {
-  const { data, error } = await supabase
+export async function getEmpleados(peopleLeadId?: string): Promise<Empleado[]> {
+  let query = supabase
     .from('Empleado')
-    .select(
-      `
-    ID_Empleado,
-    Nombre,
-    Rol,
-    Nivel,
-    FechaContratacion,
-    ID_Departamento,
-    Metas(
-      ID_meta,
+    .select(`
       ID_Empleado,
       Nombre,
-      Descripcion,
-      Tipo_Meta,
-      Plazo,
-      Fecha_limite
-    ),
-    Certificados(
-      ID_Certificado,
-      Nombre,
-      Fecha_caducidad,
-      Documento,
-      Verificacion,
-      Descripcion
-    ),
-    Puesto_persona(
-      ID_Puesto,
-      Puesto_proyecto(
-        Puesto,
-        N_puestos,
-        Completo,
-        Proyectos(
+      Rol,
+      Nivel,
+      FechaContratacion,
+      ID_Departamento,
+      Metas(
+        ID_meta,
+        ID_Empleado,
+        Nombre,
+        Descripcion,
+        Tipo_Meta,
+        Plazo,
+        Fecha_limite
+      ),
+      Certificados(
+        ID_Certificado,
+        Nombre,
+        Fecha_caducidad,
+        Documento,
+        Verificacion,
+        Descripcion
+      ),
+      Puesto_persona(
+        ID_Puesto,
+        Puesto_proyecto(
+          Puesto,
+          N_puestos,
+          Completo,
+          Proyectos(
+            ID_Proyecto,
+            fecha_inicio,
+            fecha_fin,
+            Nombre,
+            Descripcion,
+            Status
+          )
+        )
+      ),
+      Capability_Lead(
+        ID_Empleado,
+        ID_Departamento,
+        ID_CapabilityLead,
+        Departamento(
+          Nombre,
+          Descripcion
+        )
+      ),
+      Delivery_Lead(
+        ID_Empleado,
+        ID_DeliveryLead,
+        Proyectos!ID_DeliveryLead(
           ID_Proyecto,
+          ID_DeliveryLead,
           fecha_inicio,
           fecha_fin,
           Nombre,
@@ -119,31 +139,14 @@ export async function getEmpleados(): Promise<Empleado[]> {
           Status
         )
       )
-    ),
-    Capability_Lead(
-      ID_Empleado,
-      ID_Departamento,
-      ID_CapabilityLead,
-      Departamento(
-        Nombre,
-        Descripcion
-      )
-    ),
-    Delivery_Lead(
-      ID_Empleado,
-      ID_DeliveryLead,
-      Proyectos!ID_DeliveryLead(
-        ID_Proyecto,
-        ID_DeliveryLead,
-        fecha_inicio,
-        fecha_fin,
-        Nombre,
-        Descripcion,
-        Status
-      )
-    )
-    `,
-    )
+    `);
+
+  // Si se pasa el peopleLeadId, filtra por ese ID
+  if (peopleLeadId) {
+    query = query.eq('ID_PeopleLead', peopleLeadId);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error('Error al obtener los empleados:', error);

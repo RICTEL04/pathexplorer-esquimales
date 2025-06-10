@@ -86,7 +86,7 @@ export default function CertificacionesPage() {
                     <div className="relative w-20 h-10 bg-gray-200 rounded-full cursor-pointer"
                         onClick={() => setViewMode(viewMode === "table" ? "cards" : "table")}
                     >
-                        <div className={`absolute top-0 left-0 w-10 h-10 bg-blue-500 rounded-full transition-transform duration-300 ${viewMode === "table" ? "translate-x-0" : "translate-x-10"}`}>
+                        <div className={`absolute top-0 left-0 w-10 h-10 bg-purple-500 rounded-full transition-transform duration-300 ${viewMode === "table" ? "translate-x-0" : "translate-x-10"}`}>
                             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-bold">
                                 {viewMode === "table" ? <Menu /> : <LayoutGrid />}
                             </div>
@@ -94,7 +94,7 @@ export default function CertificacionesPage() {
                     </div>
                 </div>
                 <button
-                    className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    className="mb-4 px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600"
                     onClick={() => { setModalOpen(true); setModalType("upload"); }}
                 >
                     Upload

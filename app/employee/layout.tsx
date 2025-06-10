@@ -56,7 +56,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
         { href: "/employee/proyectos", label: "Proyectos", Icon: Briefcase },
         { href: "/employee/certificaciones", label: "Certificaciones", Icon: Award },
         { href: "/employee/path-de-carrera", label: "Path de Carrera", Icon: TrendingUp },
-        { href: "/employee/objetivos", label: "Objetivos", Icon: Target },
+        { href: "/employee/objetivos", label: "Metas", Icon: Target },
       ];
 
       // Rutas específicas por rol
@@ -94,6 +94,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
           subRoutes: [
             { href: "/employee/people-lead/validarCursos", label: "Validar certificados", Icon: Folder },
             { href: "/employee/people-lead/talent-discussions", label: "Talent Discussions", Icon: MessageCircle },
+            { href: "/employee/people-lead/empleados", label: "Counselee", Icon: Users },
           ]
         });
       }

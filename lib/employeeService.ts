@@ -469,7 +469,8 @@ const fetchCertificados = async (employeeId: string): Promise<Certificado[]> =>{
   const {data, error}  =await supabase
   .from('Certificados')
   .select('ID_Certificado, Nombre, Fecha_caducidad, Verificacion, Descripcion')
-  .eq('ID_Empleado',employeeId);
+  .eq('ID_Empleado',employeeId)
+  .eq('Verificacion',true);
 
   return error ? [] : data || [];
 }

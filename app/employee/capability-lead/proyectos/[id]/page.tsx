@@ -57,6 +57,7 @@ export default function ProyectoDetalle() {
   const [postulados, setPostulados] = useState<any[]>([]);
   // Agrega este estado antes del return principal
   const [empleadoTab, setEmpleadoTab] = useState<"todos" | "postulados" | "ia">("todos");
+  const [iaMode, setIaMode] = useState<"mejor" | "capacitar">("mejor"); // <--- NUEVO
   const [detallesEmpleados, setDetallesEmpleados] = useState<any[]>([]); // Nuevo estado para detalles de empleados
   const [ranking, setRanking] = useState<any[]>([]);
   const [loadingRanking, setLoadingRanking] = useState(false);
@@ -671,18 +672,9 @@ export default function ProyectoDetalle() {
                 Revisado
               </Tag>
             ) : proyecto.Status === "done" ? (
-              <div>
-                <Tag icon={<ClockCircleOutlined />} color="warning" className="font-medium text-sm py-1 px-3">
-                  Revisión al finalizar
-                </Tag>
-                <Button
-                  type="primary"
-                  className="mt-2 w-full"
-                  onClick={() => setOpenReviewModal(true)}
-                >
-                  Dar retroalimentación
-                </Button>
-              </div>
+              <Tag icon={<ClockCircleOutlined />} color="warning" className="font-medium text-sm py-1 px-3">
+                Revisión al finalizar
+              </Tag>
             ) : (
               <Tag icon={<ClockCircleOutlined />} color="warning" className="font-medium text-sm py-1 px-3">
                 Revisión al finalizar
@@ -1021,30 +1013,46 @@ export default function ProyectoDetalle() {
                       })()
                     ) : (
                       // IA TAB
-                      loadingRanking ? (
-                        <div className="text-center text-gray-500 py-8">Cargando ranking...</div>
-                      ) : ranking.length === 0 ? (
-                        <div className="text-center text-gray-400 py-8">No hay ranking disponible.</div>
-                      ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
-                          {ranking
-                            .filter(emp =>
-                              emp.nombre.toLowerCase().includes(searchEmpleado.toLowerCase()) ||
-                              String(emp.id_empleado).toLowerCase().includes(searchEmpleado.toLowerCase())
-                            )
-                            .filter(emp => !asignados.some(a => a && a.id_empleado === emp.id_empleado))
-                            .filter(emp => emp.id_empleado !== proyecto.id_empleado_delivery)
-                            .map(emp => (
-                              <EmpleadoCard
-                                key={emp.id_empleado}
-                                empleado={emp}
-                                fetchAvatarURL={fetchAvatarURL}
-                                // No pongas draggable={false}, así es drag & drop
-                                // showCargabilidad es true por default
-                              />
-                            ))}
+                      <>
+                        <div className="flex gap-2 mb-3">
+                          <Button
+                            type={iaMode === "mejor" ? "primary" : "default"}
+                            onClick={() => setIaMode("mejor")}
+                            size="small"
+                          >
+                            Personal mejor capacitado
+                          </Button>
+                          <Button
+                            type={iaMode === "capacitar" ? "primary" : "default"}
+                            onClick={() => setIaMode("capacitar")}
+                            size="small"
+                          >
+                            Personal a capacitar
+                          </Button>
                         </div>
-                      )
+                        {loadingRanking ? (
+                          <div className="text-center text-gray-500 py-8">Cargando ranking...</div>
+                        ) : ranking.length === 0 ? (
+                          <div className="text-center text-gray-400 py-8">No hay ranking disponible.</div>
+                        ) : (
+                          <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
+                            {(iaMode === "mejor" ? ranking : [...ranking].reverse())
+                              .filter(emp =>
+                                emp.nombre.toLowerCase().includes(searchEmpleado.toLowerCase()) ||
+                                String(emp.id_empleado).toLowerCase().includes(searchEmpleado.toLowerCase())
+                              )
+                              .filter(emp => !asignados.some(a => a && a.id_empleado === emp.id_empleado))
+                              .filter(emp => emp.id_empleado !== proyecto.id_empleado_delivery)
+                              .map(emp => (
+                                <EmpleadoCard
+                                  key={emp.id_empleado}
+                                  empleado={emp}
+                                  fetchAvatarURL={fetchAvatarURL}
+                                />
+                              ))}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -1354,37 +1362,7 @@ export default function ProyectoDetalle() {
         </div>
       </Modal>
 
-      {/* Ranking de empleados sugeridos por IA */}
-      <Card
-        title={
-          <div className="flex items-center gap-2">
-            <StarOutlined className="text-primary-500" />
-            <span className="text-gray-800">Ranking de empleados sugeridos</span>
-          </div>
-        }
-        className="shadow-sm my-8"
-      >
-        {loadingRanking ? (
-          <div className="text-center text-gray-500 py-8">Cargando ranking...</div>
-        ) : ranking.length === 0 ? (
-          <div className="text-center text-gray-400 py-8">No hay ranking disponible.</div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {ranking.map((emp: any, idx: number) => (
-              <div key={emp.id_empleado} className="mb-2">
-                <EmpleadoCard empleado={emp} fetchAvatarURL={fetchAvatarURL} draggable={false} />
-                <div className="text-xs text-gray-500 ml-2 mt-1">
-                  <span className="font-semibold">#{idx + 1}</span>
-                  {emp.puesto?.Puesto && <span> &middot; Puesto: {emp.puesto.Puesto}</span>}
-                  {emp.score !== undefined && (
-                    <span> &middot; Score: <b>{emp.score}</b></span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
+      
     </div>
   );
 }

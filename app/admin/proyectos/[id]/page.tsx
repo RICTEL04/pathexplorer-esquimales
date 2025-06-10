@@ -556,7 +556,7 @@ export default function ProyectoDetalle() {
       {/* Botón de regreso con mejor contraste */}
       <button
         className="mb-6 px-4 py-2 bg-white border border-purple-200 text-purple-600 hover:bg-purple-50 rounded-lg transition-all duration-200 flex items-center gap-1 shadow-xs"
-        onClick={() => router.push("/employee/delivery-lead/proyectos")}
+        onClick={() => router.push("/admin/proyectos")}
       >
         <ArrowLeftOutlined className="text-sm" />
         <span>Regresar</span>
@@ -573,7 +573,7 @@ export default function ProyectoDetalle() {
             {proyecto.Status === "inactive" && (
               <button
                 className="ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all text-sm"
-                onClick={() => router.push(`/employee/delivery-lead/proyectos/${proyecto.ID_Proyecto}/edit`)}
+                onClick={() => router.push(`/admin/proyectos/${proyecto.ID_Proyecto}/edit`)}
                 type="button"
               >
                 Editar proyecto
