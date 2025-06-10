@@ -4362,6 +4362,21 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	60826a41-9117-43f7-9382-58aa6851886a	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 22:01:50.513107+00	
 00000000-0000-0000-0000-000000000000	fc05108f-7d43-4cba-a8cb-0c88115602aa	{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"rikytellez04@gmail.com","user_id":"12c0a362-e239-47b4-930c-9899253e23a6","user_phone":""}}	2025-06-10 22:05:57.041377+00	
 00000000-0000-0000-0000-000000000000	1600b4d5-6bb0-4fa1-b0ed-5ebd4aaadcc4	{"action":"logout","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account"}	2025-06-10 22:11:05.6497+00	
+00000000-0000-0000-0000-000000000000	c970fd89-87bd-4312-95a5-d96775ad6007	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 22:13:23.015705+00	
+00000000-0000-0000-0000-000000000000	5b4ddc25-a91d-415f-9683-0515bb051d32	{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"rikytellez04@gmail.com","user_id":"12c0a362-e239-47b4-930c-9899253e23a6","user_phone":""}}	2025-06-10 22:14:10.999146+00	
+00000000-0000-0000-0000-000000000000	2264cc9a-bed7-4352-97e9-5b57ec78b921	{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"rikytellez04@gmail.com","user_id":"d838f413-7ebb-4881-93e9-71b71918180e","user_phone":""}}	2025-06-10 22:15:08.296715+00	
+00000000-0000-0000-0000-000000000000	54ab64ca-03bb-4aa6-90ee-58e2d2510140	{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"rikytellez04@gmail.com","user_id":"d838f413-7ebb-4881-93e9-71b71918180e","user_phone":""}}	2025-06-10 22:17:09.557627+00	
+00000000-0000-0000-0000-000000000000	aa37ccfc-da95-446c-8721-795ef5d6192a	{"action":"login","actor_id":"36abc818-b3a6-440f-933a-79ff41fe5b67","actor_username":"a01722728@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 22:20:36.152474+00	
+00000000-0000-0000-0000-000000000000	36fe3f56-d7ff-43c7-88dc-4f0733941c4e	{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"rikytellez04@gmail.com","user_id":"ce40b8ef-93d7-4445-aa23-d0f5ac989bb3","user_phone":""}}	2025-06-10 22:32:52.822123+00	
+00000000-0000-0000-0000-000000000000	851a2922-530f-4be6-a916-5717484bfbb2	{"action":"logout","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account"}	2025-06-10 22:38:46.246021+00	
+00000000-0000-0000-0000-000000000000	f294f517-a1c6-4d34-8bf4-cb9f43a4375f	{"action":"login","actor_id":"1fbfe562-cea4-4b33-b830-0c9f5f301251","actor_username":"m@g.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 22:39:08.357837+00	
+00000000-0000-0000-0000-000000000000	677d77f5-18a4-411c-af99-9873848fcc0e	{"action":"logout","actor_id":"1fbfe562-cea4-4b33-b830-0c9f5f301251","actor_username":"m@g.com","actor_via_sso":false,"log_type":"account"}	2025-06-10 22:40:33.113604+00	
+00000000-0000-0000-0000-000000000000	55aaaa52-fbeb-4185-bdee-4ca73e6bb6ce	{"action":"token_refreshed","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"token"}	2025-06-10 22:44:27.725544+00	
+00000000-0000-0000-0000-000000000000	4fe6bfdf-0867-41fc-94c4-67193463bd31	{"action":"token_revoked","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"token"}	2025-06-10 22:44:27.729273+00	
+00000000-0000-0000-0000-000000000000	82af321c-0295-4daf-9e93-d1286b86f9c7	{"action":"logout","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account"}	2025-06-10 22:44:37.931419+00	
+00000000-0000-0000-0000-000000000000	eecc9fe2-6cbb-4ae0-9dc1-24fdd502a4b0	{"action":"login","actor_id":"b5c684f0-24d7-436f-b752-71cd9e361c8f","actor_username":"a00836530@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 22:44:44.077849+00	
+00000000-0000-0000-0000-000000000000	bb981f25-57b1-4d15-8658-0b8e13f089bb	{"action":"logout","actor_id":"b5c684f0-24d7-436f-b752-71cd9e361c8f","actor_username":"a00836530@tec.mx","actor_via_sso":false,"log_type":"account"}	2025-06-10 22:45:12.560944+00	
+00000000-0000-0000-0000-000000000000	12842c7c-3007-4e0b-852b-119a0ec0e6be	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 22:45:18.790798+00	
 \.
 
 
@@ -4378,19 +4393,19 @@ COPY "auth"."flow_state" ("id", "user_id", "auth_code", "code_challenge_method",
 --
 
 COPY "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at", "is_anonymous") FROM stdin;
-00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-06-10 22:01:50.513766+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-06-10 22:01:50.515421+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	36abc818-b3a6-440f-933a-79ff41fe5b67	authenticated	authenticated	a01722728@tec.mx	$2a$10$5K/odDwK9GopcT3HEMMJJuKobGM0rnAcC/vvgwCYP8UajOWsAjQVG	2025-04-25 20:53:07.523904+00	\N		\N		\N			\N	2025-06-10 21:33:19.411402+00	{"provider": "email", "providers": ["email"]}	{"sub": "36abc818-b3a6-440f-933a-79ff41fe5b67", "name": "David", "role": "employee", "email": "a01722728@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 20:53:07.512718+00	2025-06-10 21:33:19.418777+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-06-10 22:13:23.019574+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-06-10 22:13:23.029338+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	3912d459-b96e-4150-9a2a-fb9135ebc374	authenticated	authenticated	jose@gmail.com	$2a$10$Su9b0KFAIjFbPVqxuJc1MeFTCaAxjPLMYTUZOMLwZVVkyxjQ7b9a6	2025-04-25 21:31:52.222825+00	\N		\N		\N			\N	2025-04-28 22:35:45.159374+00	{"provider": "email", "providers": ["email"]}	{"sub": "3912d459-b96e-4150-9a2a-fb9135ebc374", "name": "Jose", "role": "employee", "email": "jose@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-04-25 21:31:52.206193+00	2025-05-02 21:39:53.81215+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	36abc818-b3a6-440f-933a-79ff41fe5b67	authenticated	authenticated	a01722728@tec.mx	$2a$10$5K/odDwK9GopcT3HEMMJJuKobGM0rnAcC/vvgwCYP8UajOWsAjQVG	2025-04-25 20:53:07.523904+00	\N		\N		\N			\N	2025-06-10 22:20:36.160667+00	{"provider": "email", "providers": ["email"]}	{"sub": "36abc818-b3a6-440f-933a-79ff41fe5b67", "name": "David", "role": "employee", "email": "a01722728@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 20:53:07.512718+00	2025-06-10 22:20:36.173642+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	1fbfe562-cea4-4b33-b830-0c9f5f301251	authenticated	authenticated	m@g.com	$2a$10$4TUs/5wybxnEEZO.IV9MU.z81EZy8W0nrrIxD0gTQAz8UAXax17CO	2025-06-03 05:09:32.073283+00	\N		\N		\N			\N	2025-06-10 22:39:08.36865+00	{"provider": "email", "providers": ["email"]}	{"sub": "1fbfe562-cea4-4b33-b830-0c9f5f301251", "name": "Mauricio", "role": "employee", "email": "m@g.com", "email_verified": true, "phone_verified": false}	\N	2025-06-03 05:09:32.040179+00	2025-06-10 22:39:08.395699+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	authenticated	authenticated	a01198327@tec.mx	$2a$10$ueSBFtwb9q3qHGb/TJwm/eGMSm6w1n/FFpodX.nhj9AdZkO9vabIi	2025-04-25 20:16:55.202133+00	\N		\N		\N			\N	2025-06-10 21:40:51.363559+00	{"provider": "email", "providers": ["email"]}	{"sub": "5ad0bb87-f4fc-413c-adba-ef4b0b9402d1", "name": "Isaac Francisco Sánchez Veloquio", "role": "employee", "email": "a01198327@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 20:16:55.172692+00	2025-06-10 21:40:51.371017+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	86315508-992d-4200-a53d-3a2a99f47329	authenticated	authenticated	jorgebcarriles@gmail.com	$2a$10$5ipZpnt5akunghGtnBuMP.bf7Fv9AqWkdGDSkPwSDeIbGZ3CarEUa	2025-05-15 16:12:55.211954+00	\N		\N		2025-05-15 16:13:19.002788+00			\N	2025-05-15 16:13:39.385793+00	{"provider": "email", "providers": ["email"]}	{"sub": "86315508-992d-4200-a53d-3a2a99f47329", "name": "Ricardo", "role": "employee", "email": "jorgebcarriles@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-05-15 16:12:55.19837+00	2025-05-15 16:13:39.387896+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	authenticated	authenticated	a01198676@tec.mx	$2a$10$mPLtUg5XxGz50BwDIVi08uxNbc3.FzhmLBb/oFnWs5EtOMbUl6L12	2025-05-15 16:05:38.264036+00	\N		\N		\N			\N	2025-05-18 14:02:19.350306+00	{"provider": "email", "providers": ["email"]}	{"sub": "7b23b8a4-8f26-40a9-86c0-c591b423ea6a", "name": "Jorge Beyanzo", "role": "employee", "email": "a01198676@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-05-15 16:05:38.246257+00	2025-05-18 14:02:19.354589+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	b5c684f0-24d7-436f-b752-71cd9e361c8f	authenticated	authenticated	a00836530@tec.mx	$2a$10$IwbJ.1g0IghP77boZCh9aekgc0uhTMhxsbm.1GaIwJtWu9HF0ukaC	2025-05-13 21:04:34.712327+00	\N		\N		\N			\N	2025-06-10 14:56:09.026445+00	{"provider": "email", "providers": ["email"]}	{"sub": "b5c684f0-24d7-436f-b752-71cd9e361c8f", "name": "Ramón Antonio Naranjo Sarmiento", "role": "employee", "email": "a00836530@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-05-13 21:04:34.668475+00	2025-06-10 14:56:09.029807+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	authenticated	authenticated	yolanda@gmail.com	$2a$10$4WMbSk8TuL5hDHP0/l0SFu4Ciq0fLOL0k1k/syMHDTAKZzw9jOfae	2025-04-29 22:01:27.153296+00	\N		\N		\N			\N	2025-05-21 20:43:48.563267+00	{"provider": "email", "providers": ["email"]}	{"sub": "fc1276e7-efc6-4ec5-b2cd-bfab2005930e", "name": "Yolanda", "role": "employee", "email": "yolanda@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-04-29 22:01:27.119897+00	2025-05-21 20:43:48.567201+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	54bb3bab-94a3-420a-99da-57717c1c075a	authenticated	authenticated	emirpuente31@gmail.com	$2a$10$PzOl9jD1EN9CtFZT45Io/OZOI2Cm54gf55dAeR.fT4QFn/ZnOxkee	2025-05-16 22:01:19.685203+00	\N		\N		\N			\N	2025-06-06 20:53:17.745074+00	{"provider": "email", "providers": ["email"]}	{"sub": "54bb3bab-94a3-420a-99da-57717c1c075a", "name": "Alfredo Emir Puente Medrano", "role": "employee", "email": "emirpuente31@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-05-16 22:01:19.660294+00	2025-06-06 22:54:28.606723+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	1fbfe562-cea4-4b33-b830-0c9f5f301251	authenticated	authenticated	m@g.com	$2a$10$4TUs/5wybxnEEZO.IV9MU.z81EZy8W0nrrIxD0gTQAz8UAXax17CO	2025-06-03 05:09:32.073283+00	\N		\N		\N			\N	2025-06-10 21:59:42.67547+00	{"provider": "email", "providers": ["email"]}	{"sub": "1fbfe562-cea4-4b33-b830-0c9f5f301251", "name": "Mauricio", "role": "employee", "email": "m@g.com", "email_verified": true, "phone_verified": false}	\N	2025-06-03 05:09:32.040179+00	2025-06-10 21:59:42.682319+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	b5c684f0-24d7-436f-b752-71cd9e361c8f	authenticated	authenticated	a00836530@tec.mx	$2a$10$IwbJ.1g0IghP77boZCh9aekgc0uhTMhxsbm.1GaIwJtWu9HF0ukaC	2025-05-13 21:04:34.712327+00	\N		\N		\N			\N	2025-06-10 22:44:44.080224+00	{"provider": "email", "providers": ["email"]}	{"sub": "b5c684f0-24d7-436f-b752-71cd9e361c8f", "name": "Ramón Antonio Naranjo Sarmiento", "role": "employee", "email": "a00836530@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-05-13 21:04:34.668475+00	2025-06-10 22:44:44.083733+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	76db1355-d074-41ef-ab95-5701689639ae	authenticated	authenticated	nu@g.com	$2a$10$zeeks8OdNZssnxYDDCvS.exfEa41SLK.bKsB9XctFPeEghpd1.FES	\N	\N		\N		\N			\N	\N	{"provider": "email", "providers": ["email"]}	{"name": "New User", "role": "employee"}	\N	2025-06-10 17:13:18.719883+00	2025-06-10 17:13:18.741279+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	386e63ba-dc8f-4af6-9447-44f7976a4a0c	authenticated	authenticated	rantonion2004@outlook.com	$2a$10$byiaH6lkQcFmADcXhS1GguYlepFrWKGQCLS6.9E02pWJES6S8pwO6	2025-05-13 21:07:21.650898+00	\N		\N		2025-05-13 21:14:04.888808+00			\N	2025-06-10 16:09:43.436348+00	{"provider": "email", "providers": ["email"]}	{"sub": "386e63ba-dc8f-4af6-9447-44f7976a4a0c", "name": "Pancho", "role": "employee", "email": "rantonion2004@outlook.com", "email_verified": true, "phone_verified": false}	\N	2025-05-13 21:07:21.637344+00	2025-06-10 21:32:16.550274+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	12c0a362-e239-47b4-930c-9899253e23a6	authenticated	authenticated	rikytellez04@gmail.com	$2a$10$.y5wclkZH/KPwOHzQ.pl9.Astt47zK.q3ZsM/hNXTuq2IhUagoIVO	\N	\N		\N		\N			\N	\N	{"provider": "email", "providers": ["email"]}	{"name": "Richy", "role": "employee"}	\N	2025-06-10 22:05:57.019978+00	2025-06-10 22:05:57.047785+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	ce40b8ef-93d7-4445-aa23-d0f5ac989bb3	authenticated	authenticated	rikytellez04@gmail.com	$2a$10$CHLkAFj739ftAfVB0HB3du/irMkG5RsxnsWRMZ8Bpr6HXsiMkb7Qq	\N	\N		\N		\N			\N	\N	{"provider": "email", "providers": ["email"]}	{"name": "Richie", "role": "employee"}	\N	2025-06-10 22:32:52.792331+00	2025-06-10 22:32:52.825987+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	386e63ba-dc8f-4af6-9447-44f7976a4a0c	authenticated	authenticated	rantonion2004@outlook.com	$2a$10$byiaH6lkQcFmADcXhS1GguYlepFrWKGQCLS6.9E02pWJES6S8pwO6	2025-05-13 21:07:21.650898+00	\N		\N		2025-05-13 21:14:04.888808+00			\N	2025-06-10 22:45:18.794872+00	{"provider": "email", "providers": ["email"]}	{"sub": "386e63ba-dc8f-4af6-9447-44f7976a4a0c", "name": "Pancho", "role": "employee", "email": "rantonion2004@outlook.com", "email_verified": true, "phone_verified": false}	\N	2025-05-13 21:07:21.637344+00	2025-06-10 22:45:18.796744+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	a43a15f8-8eb5-4051-9cb7-e6137ea2a006	authenticated	authenticated	felix@g.com	$2a$10$IpjP14Oz.KtkY6RU8WMGCuz6q1IT9p2/1f39Wj142/2KiqAiFe0i.	\N	\N		\N		\N			\N	\N	{"provider": "email", "providers": ["email"]}	{"name": "Felix", "role": "employee"}	\N	2025-06-10 17:07:02.277061+00	2025-06-10 17:07:02.31975+00	\N	\N			\N		0	\N		\N	f	\N	f
 \.
 
@@ -4406,7 +4421,7 @@ fc1276e7-efc6-4ec5-b2cd-bfab2005930e	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	{"sub"
 7b23b8a4-8f26-40a9-86c0-c591b423ea6a	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	{"sub": "7b23b8a4-8f26-40a9-86c0-c591b423ea6a", "name": "Jorge Beyanzo", "role": "employee", "email": "a01198676@tec.mx", "email_verified": false, "phone_verified": false}	email	2025-05-15 16:05:38.256508+00	2025-05-15 16:05:38.256566+00	2025-05-15 16:05:38.256566+00	990ad43b-f1e9-45ba-a956-ac9f4972ac88
 54bb3bab-94a3-420a-99da-57717c1c075a	54bb3bab-94a3-420a-99da-57717c1c075a	{"sub": "54bb3bab-94a3-420a-99da-57717c1c075a", "name": "Alfredo Emir Puente Medrano", "role": "employee", "email": "emirpuente31@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-05-16 22:01:19.676576+00	2025-05-16 22:01:19.676628+00	2025-05-16 22:01:19.676628+00	8736db8d-a85d-4ecc-b32b-a4f13c01605f
 a43a15f8-8eb5-4051-9cb7-e6137ea2a006	a43a15f8-8eb5-4051-9cb7-e6137ea2a006	{"sub": "a43a15f8-8eb5-4051-9cb7-e6137ea2a006", "email": "felix@g.com", "email_verified": false, "phone_verified": false}	email	2025-06-10 17:07:02.306515+00	2025-06-10 17:07:02.306602+00	2025-06-10 17:07:02.306602+00	c5adcee4-1e65-4735-aca5-14a049f369c9
-12c0a362-e239-47b4-930c-9899253e23a6	12c0a362-e239-47b4-930c-9899253e23a6	{"sub": "12c0a362-e239-47b4-930c-9899253e23a6", "email": "rikytellez04@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-06-10 22:05:57.033422+00	2025-06-10 22:05:57.033497+00	2025-06-10 22:05:57.033497+00	f6a697f6-b8fe-4442-bdf3-01ee8c858038
+ce40b8ef-93d7-4445-aa23-d0f5ac989bb3	ce40b8ef-93d7-4445-aa23-d0f5ac989bb3	{"sub": "ce40b8ef-93d7-4445-aa23-d0f5ac989bb3", "email": "rikytellez04@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-06-10 22:32:52.818954+00	2025-06-10 22:32:52.819013+00	2025-06-10 22:32:52.819013+00	0e9b898e-bd37-455b-9cf6-f922d27f533f
 3912d459-b96e-4150-9a2a-fb9135ebc374	3912d459-b96e-4150-9a2a-fb9135ebc374	{"sub": "3912d459-b96e-4150-9a2a-fb9135ebc374", "name": "Jose", "role": "employee", "email": "jose@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-04-25 21:31:52.215625+00	2025-04-25 21:31:52.215675+00	2025-04-25 21:31:52.215675+00	28e7f8e2-8d3c-44bd-83a9-699c4cf6db79
 b5c684f0-24d7-436f-b752-71cd9e361c8f	b5c684f0-24d7-436f-b752-71cd9e361c8f	{"sub": "b5c684f0-24d7-436f-b752-71cd9e361c8f", "name": "Ramón Antonio Naranjo Sarmiento", "role": "employee", "email": "a00836530@tec.mx", "email_verified": false, "phone_verified": false}	email	2025-05-13 21:04:34.688839+00	2025-05-13 21:04:34.688888+00	2025-05-13 21:04:34.688888+00	34a7b09b-9bbc-4cf7-9fbf-2709a0fffa2e
 86315508-992d-4200-a53d-3a2a99f47329	86315508-992d-4200-a53d-3a2a99f47329	{"sub": "86315508-992d-4200-a53d-3a2a99f47329", "name": "Ricardo", "role": "employee", "email": "jorgebcarriles@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-05-15 16:12:55.205751+00	2025-05-15 16:12:55.205801+00	2025-05-15 16:12:55.205801+00	af7da728-bb81-47a9-b77a-d8ba7b350602
@@ -4430,68 +4445,28 @@ COPY "auth"."instances" ("id", "uuid", "raw_base_config", "created_at", "updated
 --
 
 COPY "auth"."sessions" ("id", "user_id", "created_at", "updated_at", "factor_id", "aal", "not_after", "refreshed_at", "user_agent", "ip", "tag") FROM stdin;
+5bd2ffe9-cc55-42ec-8eda-e933920e1bfe	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 22:45:18.794967+00	2025-06-10 22:45:18.794967+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0	131.178.102.216	\N
 38b585e9-9268-42d3-a0ac-88a035a8d5b7	86315508-992d-4200-a53d-3a2a99f47329	2025-05-15 16:12:55.215747+00	2025-05-15 16:12:55.215747+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	187.209.144.77	\N
 4d6029a6-9e04-4b70-b168-79d77c684559	86315508-992d-4200-a53d-3a2a99f47329	2025-05-15 16:13:39.385863+00	2025-05-15 16:13:39.385863+00	\N	aal1	\N	\N	Mozilla/5.0 (iPhone; CPU iPhone OS 17_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Mobile/15E148 Safari/604.1	187.161.118.143	\N
 4ec60657-5f2c-4759-a834-509a35f140f6	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-15 16:14:29.404177+00	2025-05-15 16:14:29.404177+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0	187.209.144.77	\N
 9ff90124-5412-4cc1-89ab-455384f45348	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-05 20:34:09.999251+00	2025-06-06 19:52:29.692802+00	\N	aal1	\N	2025-06-06 19:52:29.692732	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	131.178.102.148	\N
-ec6a3c18-82e1-4a6c-a0e2-8ca770c439b2	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:04:50.365476+00	2025-06-10 16:04:50.365476+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
+235961dd-b49d-44e1-bc51-cad2295664be	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-10 22:20:36.160825+00	2025-06-10 22:20:36.160825+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	131.178.102.128	\N
 851ff9fd-c7c1-41d0-ab53-677a34b2d691	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-15 16:15:04.632374+00	2025-05-16 23:04:22.946081+00	\N	aal1	\N	2025-05-16 23:04:22.945967	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	131.178.102.136	\N
-7f24078e-6811-4980-a6b0-992f0fc2cc70	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:04:50.374611+00	2025-06-10 16:04:50.374611+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 f4f1ce21-bf22-41cb-8f22-ea708994782d	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-06 20:53:17.747224+00	2025-06-06 22:54:29.682329+00	\N	aal1	\N	2025-06-06 22:54:29.681526	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	131.178.102.148	\N
 bfd59fca-362e-4e20-84f3-973ba1b0201e	3912d459-b96e-4150-9a2a-fb9135ebc374	2025-04-28 22:35:45.159456+00	2025-04-29 20:45:55.77718+00	\N	aal1	\N	2025-04-29 20:45:55.777094	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.204	\N
 ceb1528c-4e8e-4055-b627-7d826dc44790	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-03 21:33:15.52221+00	2025-06-05 04:36:41.537967+00	\N	aal1	\N	2025-06-05 04:36:41.537885	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	201.173.64.100	\N
 6e9e8735-0c14-45f5-92ed-c1bb97218c6c	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-18 13:19:34.208968+00	2025-05-18 13:19:34.208968+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	187.209.144.77	\N
 ba9531ef-629b-4893-915c-76caca99774a	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-05 04:36:44.630134+00	2025-06-05 20:24:34.57748+00	\N	aal1	\N	2025-06-05 20:24:34.577396	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	131.178.102.148	\N
 5190ee94-aebd-4c95-b127-bd9175b424e0	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-16 23:54:12.413181+00	2025-05-16 23:54:12.413181+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	131.178.102.136	\N
-b83503ac-4dc0-407b-843e-5df814adbc9a	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:04:50.383114+00	2025-06-10 16:04:50.383114+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-a45ddf2a-caa8-4147-acc8-7239112d2a58	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:04:52.125217+00	2025-06-10 16:04:52.125217+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
 15514312-f649-469d-96e7-49281ba9f0ce	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-18 13:26:53.48004+00	2025-05-18 13:26:53.48004+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	187.209.144.77	\N
-7f565367-89f4-4cc9-988a-fd75e3c1ad25	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:04:52.137096+00	2025-06-10 16:04:52.137096+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-c5bf5bf1-60f4-4475-a614-4eb22ece321b	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:07:52.413772+00	2025-06-10 16:07:52.413772+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-d8715912-89a3-4b53-83e2-2c678dfdc470	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:07:52.422799+00	2025-06-10 16:07:52.422799+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-79552974-e063-4104-8369-ab035f09a415	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:07:52.714895+00	2025-06-10 16:07:52.714895+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 1481ca6d-30ca-4e06-ab63-ca1a3bc49199	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-06 19:53:31.883817+00	2025-06-06 19:53:31.883817+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	131.178.102.148	\N
 422ae626-497f-4e14-b7e2-57f7e28226f2	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-16 23:56:29.473262+00	2025-05-18 13:17:13.584372+00	\N	aal1	\N	2025-05-18 13:17:13.584293	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	187.209.144.77	\N
 e7bba15f-89f5-4806-9c48-fb42e6f7ea6d	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-18 14:02:19.350394+00	2025-05-18 14:02:19.350394+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	187.209.144.77	\N
 2348789b-4a7c-4539-8a08-847f2186e7f1	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-06 20:25:33.373016+00	2025-06-06 20:25:33.373016+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	131.178.102.148	\N
 48a3d712-1cc8-4106-8032-64f26bd53628	3912d459-b96e-4150-9a2a-fb9135ebc374	2025-04-25 21:31:52.232059+00	2025-05-02 21:39:53.824573+00	\N	aal1	\N	2025-05-02 21:39:53.824477	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36	131.178.102.156	\N
 b4b82c60-ac9b-45ac-819e-5d1c7e52e1e4	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-05 20:24:35.631553+00	2025-06-05 20:24:35.631553+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0 (Edition ASUS)	131.178.102.148	\N
-d1751966-ea51-4496-9df0-5700a3bf5524	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:07:52.714532+00	2025-06-10 16:07:52.714532+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-f6924300-144f-456f-9997-ff2d344124a3	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:07:53.839987+00	2025-06-10 16:07:53.839987+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-b3c402c9-f41d-4523-909b-59a7d12b9aca	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:07:53.869272+00	2025-06-10 16:07:53.869272+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-b4f1fc5d-6baa-4652-8bcc-8a9295e334dc	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:07:54.552675+00	2025-06-10 16:07:54.552675+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-901161a3-bcac-441f-9ebd-ccbf524049a8	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:07:54.575402+00	2025-06-10 16:07:54.575402+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-89ac395e-0351-4e0b-9ca8-d1bf521c4417	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:22:28.453641+00	2025-06-10 21:32:16.551603+00	\N	aal1	\N	2025-06-10 21:32:16.551534	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0	131.178.102.216	\N
 c7ebc51f-0145-41a1-9f06-d343228e87f6	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-10 21:33:19.411475+00	2025-06-10 21:33:19.411475+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0	131.178.102.208	\N
-a5d67cc7-ca49-4a16-a15e-126073a9e8e3	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:43:31.787244+00	2025-06-10 15:43:31.787244+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-aab00d07-9230-4990-9cea-064464b5d6e3	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:08:58.295338+00	2025-06-10 16:08:58.295338+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-9c1e88e0-afa6-4335-aff7-bf4668d02fc0	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:08:58.482556+00	2025-06-10 16:08:58.482556+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-15e43fa9-89bc-4202-826d-ebae0eb1b4fd	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:08:59.353368+00	2025-06-10 16:08:59.353368+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-45b245da-e12e-4347-92e8-3e4b89358691	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:08:59.370602+00	2025-06-10 16:08:59.370602+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-73c3b270-2bce-4785-b999-fad9e7641664	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:00.184233+00	2025-06-10 16:09:00.184233+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-048f0a17-afff-4d11-9f05-52d5df689700	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:00.201463+00	2025-06-10 16:09:00.201463+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-3ddf4b9b-df79-4327-9c43-d81bb0fc16af	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:41.076464+00	2025-06-10 16:09:41.076464+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 2ad30e04-b408-4bfc-938b-8f5541ff0af6	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	2025-06-10 21:40:51.363638+00	2025-06-10 21:40:51.363638+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	131.178.102.140	\N
-360eb596-c96f-45f8-a9a6-5eda3d714c66	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:55:37.179484+00	2025-06-10 15:55:37.179484+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-d5a7da54-d559-415c-91cd-c570c847d22f	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:55:37.364937+00	2025-06-10 15:55:37.364937+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-13ef4c42-d433-4282-a2da-fc16fbdc3654	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:55:38.539462+00	2025-06-10 15:55:38.539462+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-c14679ab-e7ca-4eab-9b33-9e629eadd848	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:56:03.84105+00	2025-06-10 15:56:03.84105+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-34c0f5f0-7493-4589-ac23-3122f7773cd0	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:56:04.822201+00	2025-06-10 15:56:04.822201+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-16ea88d2-d7bc-4b42-ae25-2148bcdc024c	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:08:58.295338+00	2025-06-10 16:08:58.295338+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-043c10f5-da51-4eb9-869e-f70170dd7182	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:08:58.48276+00	2025-06-10 16:08:58.48276+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-5021e796-59c2-485e-89ff-16275a5b62f7	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:41.075232+00	2025-06-10 16:09:41.075232+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-185a2b3d-9219-467e-942f-09e5c008c6a2	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:43.436427+00	2025-06-10 16:09:43.436427+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-ef7197d2-cfd2-47ca-a95e-5756428d4751	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:55:38.551441+00	2025-06-10 15:55:38.551441+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-7b9bcf73-aab2-49bb-ac4f-a078e18b8ef5	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:56:03.837943+00	2025-06-10 15:56:03.837943+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-f31e3132-89a8-4335-85bd-fbe2d3a7ce6c	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:56:04.821277+00	2025-06-10 15:56:04.821277+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-29ea8aaa-e0d0-4b88-b3e8-454f246bb939	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:41.110147+00	2025-06-10 16:09:41.110147+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-d16d8edf-8d2e-4d8f-ba75-5051789c8f00	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:41.147673+00	2025-06-10 16:09:41.147673+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-15b23bce-7aa0-426e-911d-863753261481	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:43.117612+00	2025-06-10 16:09:43.117612+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-ee7ad870-18ea-47bd-8463-e690436f28a0	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:43.151353+00	2025-06-10 16:09:43.151353+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-b0f64692-0731-48fa-b686-2a8fd8502625	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:09:43.435026+00	2025-06-10 16:09:43.435026+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-6f69dbdf-c58a-4334-8fed-cdacc68d52e8	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:04:50.364549+00	2025-06-10 16:04:50.364549+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
-4073d394-3c24-4f16-a5ad-47b892fbba8e	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:04:51.337644+00	2025-06-10 16:04:51.337644+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
-3e46bdfc-c794-424c-a25e-4033ac461e93	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 16:04:51.363703+00	2025-06-10 16:04:51.363703+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
 \.
 
 
@@ -4500,67 +4475,27 @@ b0f64692-0731-48fa-b686-2a8fd8502625	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-0
 --
 
 COPY "auth"."mfa_amr_claims" ("session_id", "created_at", "updated_at", "authentication_method", "id") FROM stdin;
+5bd2ffe9-cc55-42ec-8eda-e933920e1bfe	2025-06-10 22:45:18.797053+00	2025-06-10 22:45:18.797053+00	password	f1b291cf-77cb-400c-bfbd-fc26f1b3b668
 ceb1528c-4e8e-4055-b627-7d826dc44790	2025-06-03 21:33:15.532908+00	2025-06-03 21:33:15.532908+00	password	0f6ada86-1424-4ed5-b161-847dadf1ad83
 38b585e9-9268-42d3-a0ac-88a035a8d5b7	2025-05-15 16:12:55.21821+00	2025-05-15 16:12:55.21821+00	password	4a792fd0-2cc3-4662-ae68-d0943e7a26c6
-89ac395e-0351-4e0b-9ca8-d1bf521c4417	2025-06-10 15:22:28.461513+00	2025-06-10 15:22:28.461513+00	password	77084c06-3a61-4488-a1d7-f3e74c547efc
-360eb596-c96f-45f8-a9a6-5eda3d714c66	2025-06-10 15:55:37.186088+00	2025-06-10 15:55:37.186088+00	password	7bb5164d-95d9-4e3b-8270-46f5efffdbdb
-d5a7da54-d559-415c-91cd-c570c847d22f	2025-06-10 15:55:37.367598+00	2025-06-10 15:55:37.367598+00	password	901915cc-92c0-4f71-b60e-3d0ca7753080
-13ef4c42-d433-4282-a2da-fc16fbdc3654	2025-06-10 15:55:38.542179+00	2025-06-10 15:55:38.542179+00	password	2f06eb3c-e197-41a2-b1fe-6dcdea429850
-c14679ab-e7ca-4eab-9b33-9e629eadd848	2025-06-10 15:56:03.846036+00	2025-06-10 15:56:03.846036+00	password	a1125664-d146-4301-a75d-51cd0f1b5bd4
-34c0f5f0-7493-4589-ac23-3122f7773cd0	2025-06-10 15:56:04.823979+00	2025-06-10 15:56:04.823979+00	password	316efd21-f84d-4599-8e53-45568960b0a3
-ec6a3c18-82e1-4a6c-a0e2-8ca770c439b2	2025-06-10 16:04:50.381712+00	2025-06-10 16:04:50.381712+00	password	aeae46f6-2572-4288-bbc6-7ee4d9aa28b1
-b83503ac-4dc0-407b-843e-5df814adbc9a	2025-06-10 16:04:50.402585+00	2025-06-10 16:04:50.402585+00	password	1b9263f9-81b5-4292-aba7-81c885ee537b
 bfd59fca-362e-4e20-84f3-973ba1b0201e	2025-04-28 22:35:45.164898+00	2025-04-28 22:35:45.164898+00	password	7b420fd3-a001-4039-bb81-4cd01f021c1f
-a45ddf2a-caa8-4147-acc8-7239112d2a58	2025-06-10 16:04:52.127597+00	2025-06-10 16:04:52.127597+00	password	6108bf30-53d0-4954-a904-c907ce80a990
 5190ee94-aebd-4c95-b127-bd9175b424e0	2025-05-16 23:54:12.416403+00	2025-05-16 23:54:12.416403+00	password	288b1103-7392-4849-811a-7c7672e6aece
-7f565367-89f4-4cc9-988a-fd75e3c1ad25	2025-06-10 16:04:52.139645+00	2025-06-10 16:04:52.139645+00	password	dd3b3197-98a7-45f1-b49c-6e1c21f0126f
-c5bf5bf1-60f4-4475-a614-4eb22ece321b	2025-06-10 16:07:52.417469+00	2025-06-10 16:07:52.417469+00	password	48706d89-aa5a-4e1f-82b8-e0aaeb38d2b9
-d8715912-89a3-4b53-83e2-2c678dfdc470	2025-06-10 16:07:52.425046+00	2025-06-10 16:07:52.425046+00	password	1a7d2950-c161-4a11-a4e5-71770e7f67a6
-79552974-e063-4104-8369-ab035f09a415	2025-06-10 16:07:52.719366+00	2025-06-10 16:07:52.719366+00	password	ce8a75f3-a749-41a5-b203-5b5111ed8b00
-aab00d07-9230-4990-9cea-064464b5d6e3	2025-06-10 16:08:58.304442+00	2025-06-10 16:08:58.304442+00	password	fc012de9-2385-4fe3-8b84-daec28497f27
-9c1e88e0-afa6-4335-aff7-bf4668d02fc0	2025-06-10 16:08:58.488897+00	2025-06-10 16:08:58.488897+00	password	9fb10ebb-f4a1-47b4-b0c1-28132872fd91
-15e43fa9-89bc-4202-826d-ebae0eb1b4fd	2025-06-10 16:08:59.356163+00	2025-06-10 16:08:59.356163+00	password	db1e7e3f-8baf-42cd-8a4e-4aa38f232453
-45b245da-e12e-4347-92e8-3e4b89358691	2025-06-10 16:08:59.375192+00	2025-06-10 16:08:59.375192+00	password	034a3764-b2fb-44dc-8691-f8357906e883
 15514312-f649-469d-96e7-49281ba9f0ce	2025-05-18 13:26:53.487991+00	2025-05-18 13:26:53.487991+00	password	0b76ab2c-df55-4443-994f-12e73fed72c9
-73c3b270-2bce-4785-b999-fad9e7641664	2025-06-10 16:09:00.190127+00	2025-06-10 16:09:00.190127+00	password	5767c512-2271-4e70-b880-672380fd3cc5
-048f0a17-afff-4d11-9f05-52d5df689700	2025-06-10 16:09:00.204498+00	2025-06-10 16:09:00.204498+00	password	83f6a4e6-09fa-4cb1-a98c-b66e710d09a6
-3ddf4b9b-df79-4327-9c43-d81bb0fc16af	2025-06-10 16:09:41.078707+00	2025-06-10 16:09:41.078707+00	password	0ba12e3c-8616-46ab-83dd-18c5ac6b9a4a
 ba9531ef-629b-4893-915c-76caca99774a	2025-06-05 04:36:44.64354+00	2025-06-05 04:36:44.64354+00	password	ed722a8b-c566-4908-af0c-ee399d61aaa3
-29ea8aaa-e0d0-4b88-b3e8-454f246bb939	2025-06-10 16:09:41.11516+00	2025-06-10 16:09:41.11516+00	password	e720adef-8444-4ce3-824b-55a38b5f8b8c
-d16d8edf-8d2e-4d8f-ba75-5051789c8f00	2025-06-10 16:09:41.151322+00	2025-06-10 16:09:41.151322+00	password	d4ff6607-ed85-4e7c-a3a3-b2fd6ac2fceb
-15b23bce-7aa0-426e-911d-863753261481	2025-06-10 16:09:43.120229+00	2025-06-10 16:09:43.120229+00	password	828a6206-8556-4d41-8306-aa561ea5cdc5
 b4b82c60-ac9b-45ac-819e-5d1c7e52e1e4	2025-06-05 20:24:35.64079+00	2025-06-05 20:24:35.64079+00	password	ea66099e-0953-459c-a61e-9c8a012ba2b8
-ee7ad870-18ea-47bd-8463-e690436f28a0	2025-06-10 16:09:43.153387+00	2025-06-10 16:09:43.153387+00	password	ae91e563-c826-446e-a63b-48c114bf4ae2
 1481ca6d-30ca-4e06-ab63-ca1a3bc49199	2025-06-06 19:53:31.893553+00	2025-06-06 19:53:31.893553+00	password	7f39efd5-d2bb-4702-a083-6b1dc86b0178
-b0f64692-0731-48fa-b686-2a8fd8502625	2025-06-10 16:09:43.437695+00	2025-06-10 16:09:43.437695+00	password	b00de7cc-0a24-4964-aef0-2a3bc89d90e2
 2348789b-4a7c-4539-8a08-847f2186e7f1	2025-06-06 20:25:33.384156+00	2025-06-06 20:25:33.384156+00	password	95481bbf-dc36-4ed5-be55-c84b4a7f5bd9
 f4f1ce21-bf22-41cb-8f22-ea708994782d	2025-06-06 20:53:17.769711+00	2025-06-06 20:53:17.769711+00	password	9b594885-a967-487c-88f4-a8936229498b
 c7ebc51f-0145-41a1-9f06-d343228e87f6	2025-06-10 21:33:19.419364+00	2025-06-10 21:33:19.419364+00	password	4a5cd6cd-6c5d-470e-b022-733b1048c1c1
 4d6029a6-9e04-4b70-b168-79d77c684559	2025-05-15 16:13:39.388166+00	2025-05-15 16:13:39.388166+00	otp	5358c447-cec3-467c-851a-65996e5c4283
 4ec60657-5f2c-4759-a834-509a35f140f6	2025-05-15 16:14:29.409282+00	2025-05-15 16:14:29.409282+00	otp	889fc1c9-511d-43c1-bb26-f50457c5e835
 851ff9fd-c7c1-41d0-ab53-677a34b2d691	2025-05-15 16:15:04.63491+00	2025-05-15 16:15:04.63491+00	password	f2aebb97-db77-4112-b997-6334bb6124c6
-a5d67cc7-ca49-4a16-a15e-126073a9e8e3	2025-06-10 15:43:31.797958+00	2025-06-10 15:43:31.797958+00	password	1cba74dd-c210-4155-a26f-0015ff51dd58
-ef7197d2-cfd2-47ca-a95e-5756428d4751	2025-06-10 15:55:38.555639+00	2025-06-10 15:55:38.555639+00	password	5c32011e-ae8a-4feb-9867-06cae959cdeb
-7b9bcf73-aab2-49bb-ac4f-a078e18b8ef5	2025-06-10 15:56:03.840722+00	2025-06-10 15:56:03.840722+00	password	1497e81e-e44d-4406-bdb9-90826da72511
 422ae626-497f-4e14-b7e2-57f7e28226f2	2025-05-16 23:56:29.478879+00	2025-05-16 23:56:29.478879+00	password	d2fa7000-e93d-4624-9753-7436d9f29982
-f31e3132-89a8-4335-85bd-fbe2d3a7ce6c	2025-06-10 15:56:04.830563+00	2025-06-10 15:56:04.830563+00	password	6d3bcccd-ec76-4468-9eae-5270d274f122
-7f24078e-6811-4980-a6b0-992f0fc2cc70	2025-06-10 16:04:50.3986+00	2025-06-10 16:04:50.3986+00	password	a312fe04-7f7f-4354-ab1b-36059646e6a1
 48a3d712-1cc8-4106-8032-64f26bd53628	2025-04-25 21:31:52.237265+00	2025-04-25 21:31:52.237265+00	password	a89eff4a-0269-4240-a79d-f27b3738f73c
-6f69dbdf-c58a-4334-8fed-cdacc68d52e8	2025-06-10 16:04:50.406087+00	2025-06-10 16:04:50.406087+00	password	ad1aecbf-10cc-4a77-9467-39c661db550f
 6e9e8735-0c14-45f5-92ed-c1bb97218c6c	2025-05-18 13:19:34.214035+00	2025-05-18 13:19:34.214035+00	password	015c4db8-b932-4cc7-b51e-6e20eff6013d
 e7bba15f-89f5-4806-9c48-fb42e6f7ea6d	2025-05-18 14:02:19.355264+00	2025-05-18 14:02:19.355264+00	password	eaa52ddd-a73b-4a40-a0d3-2989ccc4d5fd
-4073d394-3c24-4f16-a5ad-47b892fbba8e	2025-06-10 16:04:51.34197+00	2025-06-10 16:04:51.34197+00	password	2c856279-e4bc-47f6-81ec-b2c953234e79
-3e46bdfc-c794-424c-a25e-4033ac461e93	2025-06-10 16:04:51.365657+00	2025-06-10 16:04:51.365657+00	password	892a5301-3bdd-4a70-a328-88040354bf28
-d1751966-ea51-4496-9df0-5700a3bf5524	2025-06-10 16:07:52.723287+00	2025-06-10 16:07:52.723287+00	password	27785b37-fa4c-4623-acec-15d46e530236
-f6924300-144f-456f-9997-ff2d344124a3	2025-06-10 16:07:53.842209+00	2025-06-10 16:07:53.842209+00	password	238e2fdc-4449-4761-8d92-35dc990e648a
-b3c402c9-f41d-4523-909b-59a7d12b9aca	2025-06-10 16:07:53.871176+00	2025-06-10 16:07:53.871176+00	password	704be919-9518-4c08-917d-c06f0edea91d
-b4f1fc5d-6baa-4652-8bcc-8a9295e334dc	2025-06-10 16:07:54.557196+00	2025-06-10 16:07:54.557196+00	password	2446d479-c8dc-4622-9cca-d1b4dedbc9c9
-901161a3-bcac-441f-9ebd-ccbf524049a8	2025-06-10 16:07:54.577237+00	2025-06-10 16:07:54.577237+00	password	8cd98089-dd08-4c62-939c-40124838df51
-16ea88d2-d7bc-4b42-ae25-2148bcdc024c	2025-06-10 16:08:58.30937+00	2025-06-10 16:08:58.30937+00	password	e162b3d8-ffd6-41bf-b8dd-c3db425f643b
-043c10f5-da51-4eb9-869e-f70170dd7182	2025-06-10 16:08:58.486283+00	2025-06-10 16:08:58.486283+00	password	3e135daa-3c59-4f2d-ba0d-41c6c31dc16a
-5021e796-59c2-485e-89ff-16275a5b62f7	2025-06-10 16:09:41.098121+00	2025-06-10 16:09:41.098121+00	password	e304f558-1e0c-42c0-bd11-68ab09daeee3
-185a2b3d-9219-467e-942f-09e5c008c6a2	2025-06-10 16:09:43.440873+00	2025-06-10 16:09:43.440873+00	password	0741f0df-8a58-46aa-a942-d7a36fca64fe
 2ad30e04-b408-4bfc-938b-8f5541ff0af6	2025-06-10 21:40:51.37165+00	2025-06-10 21:40:51.37165+00	password	64f3b084-579a-4521-a4ff-97186431c063
+235961dd-b49d-44e1-bc51-cad2295664be	2025-06-10 22:20:36.175153+00	2025-06-10 22:20:36.175153+00	password	4b929292-ddfd-4bfa-9c50-64c704a2b362
 9ff90124-5412-4cc1-89ab-455384f45348	2025-06-05 20:34:10.015947+00	2025-06-05 20:34:10.015947+00	password	8573fc24-f193-4e2b-bd73-0aacf45b5c02
 \.
 
@@ -4597,7 +4532,6 @@ COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked"
 00000000-0000-0000-0000-000000000000	2867	ls6qyfy6bnbv	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	f	2025-06-10 21:40:51.368281+00	2025-06-10 21:40:51.368281+00	\N	2ad30e04-b408-4bfc-938b-8f5541ff0af6
 00000000-0000-0000-0000-000000000000	408	KL05RTpevT_wvr86tAJ0Hg	3912d459-b96e-4150-9a2a-fb9135ebc374	t	2025-04-25 21:31:52.23328+00	2025-05-02 21:39:53.797127+00	\N	48a3d712-1cc8-4106-8032-64f26bd53628
 00000000-0000-0000-0000-000000000000	435	hVSTMrRq1vVPt4o5dFQcZQ	3912d459-b96e-4150-9a2a-fb9135ebc374	f	2025-05-02 21:39:53.80581+00	2025-05-02 21:39:53.80581+00	KL05RTpevT_wvr86tAJ0Hg	48a3d712-1cc8-4106-8032-64f26bd53628
-00000000-0000-0000-0000-000000000000	2822	tigea3banz4z	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:04:50.374499+00	2025-06-10 16:04:50.374499+00	\N	ec6a3c18-82e1-4a6c-a0e2-8ca770c439b2
 00000000-0000-0000-0000-000000000000	1613	7njmwwftpxzn	54bb3bab-94a3-420a-99da-57717c1c075a	t	2025-06-06 21:55:35.429062+00	2025-06-06 22:54:28.597828+00	nr56wziul62v	f4f1ce21-bf22-41cb-8f22-ea708994782d
 00000000-0000-0000-0000-000000000000	1382	v3geph7mqxsq	54bb3bab-94a3-420a-99da-57717c1c075a	t	2025-06-03 21:33:15.529839+00	2025-06-05 04:36:41.517242+00	\N	ceb1528c-4e8e-4055-b627-7d826dc44790
 00000000-0000-0000-0000-000000000000	1508	doqfhecyvqya	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-05 04:36:41.526754+00	2025-06-05 04:36:41.526754+00	v3geph7mqxsq	ceb1528c-4e8e-4055-b627-7d826dc44790
@@ -4605,22 +4539,14 @@ COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked"
 00000000-0000-0000-0000-000000000000	1516	5zkvarwdov7j	54bb3bab-94a3-420a-99da-57717c1c075a	t	2025-06-05 05:35:10.31932+00	2025-06-05 20:24:34.549362+00	wezypknnqnxc	ba9531ef-629b-4893-915c-76caca99774a
 00000000-0000-0000-0000-000000000000	1545	dn3c5bmccvdw	54bb3bab-94a3-420a-99da-57717c1c075a	t	2025-06-05 20:34:10.005807+00	2025-06-05 21:33:38.87783+00	\N	9ff90124-5412-4cc1-89ab-455384f45348
 00000000-0000-0000-0000-000000000000	420	Nu8EZtt0foJLFSc1geS7uA	3912d459-b96e-4150-9a2a-fb9135ebc374	t	2025-04-28 22:35:45.162409+00	2025-04-28 23:55:23.168618+00	\N	bfd59fca-362e-4e20-84f3-973ba1b0201e
-00000000-0000-0000-0000-000000000000	2823	oyko4qc5hcdr	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:04:50.379584+00	2025-06-10 16:04:50.379584+00	\N	7f24078e-6811-4980-a6b0-992f0fc2cc70
 00000000-0000-0000-0000-000000000000	421	4au7IEyFLOWgx05eYcv2Kw	3912d459-b96e-4150-9a2a-fb9135ebc374	t	2025-04-28 23:55:23.170627+00	2025-04-29 20:45:55.753093+00	Nu8EZtt0foJLFSc1geS7uA	bfd59fca-362e-4e20-84f3-973ba1b0201e
-00000000-0000-0000-0000-000000000000	2824	7vkkcuig2qjx	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:04:50.385546+00	2025-06-10 16:04:50.385546+00	\N	b83503ac-4dc0-407b-843e-5df814adbc9a
 00000000-0000-0000-0000-000000000000	1624	r2wdxjb7wdle	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-06 22:54:28.604248+00	2025-06-06 22:54:28.604248+00	7njmwwftpxzn	f4f1ce21-bf22-41cb-8f22-ea708994782d
-00000000-0000-0000-0000-000000000000	2827	hoyoprhlzxqr	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:04:52.125854+00	2025-06-10 16:04:52.125854+00	\N	a45ddf2a-caa8-4147-acc8-7239112d2a58
-00000000-0000-0000-0000-000000000000	2828	wrxojh3sk6wv	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:04:52.138496+00	2025-06-10 16:04:52.138496+00	\N	7f565367-89f4-4cc9-988a-fd75e3c1ad25
 00000000-0000-0000-0000-000000000000	814	lmqjouio7yhx	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	t	2025-05-15 20:31:43.722309+00	2025-05-15 21:30:09.76022+00	lxxwskjnawro	851ff9fd-c7c1-41d0-ab53-677a34b2d691
-00000000-0000-0000-0000-000000000000	2865	famkxjtqknea	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 21:32:16.548134+00	2025-06-10 21:32:16.548134+00	tzdyxqqyvayk	89ac395e-0351-4e0b-9ca8-d1bf521c4417
 00000000-0000-0000-0000-000000000000	893	r2gyhryilyq7	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f	2025-05-18 13:17:13.575753+00	2025-05-18 13:17:13.575753+00	moeoopt6sqfu	422ae626-497f-4e14-b7e2-57f7e28226f2
 00000000-0000-0000-0000-000000000000	422	AQ4vBylU7Hpgu9Bi1c184g	3912d459-b96e-4150-9a2a-fb9135ebc374	f	2025-04-29 20:45:55.759681+00	2025-04-29 20:45:55.759681+00	4au7IEyFLOWgx05eYcv2Kw	bfd59fca-362e-4e20-84f3-973ba1b0201e
-00000000-0000-0000-0000-000000000000	2829	jcvmpxzlgjmg	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:07:52.414971+00	2025-06-10 16:07:52.414971+00	\N	c5bf5bf1-60f4-4475-a614-4eb22ece321b
-00000000-0000-0000-0000-000000000000	2830	3aehak2sowu4	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:07:52.423438+00	2025-06-10 16:07:52.423438+00	\N	d8715912-89a3-4b53-83e2-2c678dfdc470
 00000000-0000-0000-0000-000000000000	807	dvjsgtc4jevk	86315508-992d-4200-a53d-3a2a99f47329	f	2025-05-15 16:12:55.216458+00	2025-05-15 16:12:55.216458+00	\N	38b585e9-9268-42d3-a0ac-88a035a8d5b7
 00000000-0000-0000-0000-000000000000	808	yu57nwopzeel	86315508-992d-4200-a53d-3a2a99f47329	f	2025-05-15 16:13:39.38657+00	2025-05-15 16:13:39.38657+00	\N	4d6029a6-9e04-4b70-b168-79d77c684559
 00000000-0000-0000-0000-000000000000	809	2ziged6kjejm	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f	2025-05-15 16:14:29.405415+00	2025-05-15 16:14:29.405415+00	\N	4ec60657-5f2c-4759-a834-509a35f140f6
-00000000-0000-0000-0000-000000000000	2832	ch3utppfefhy	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:07:52.716629+00	2025-06-10 16:07:52.716629+00	\N	79552974-e063-4104-8369-ab035f09a415
 00000000-0000-0000-0000-000000000000	810	zxhfs6ptw7ty	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	t	2025-05-15 16:15:04.63326+00	2025-05-15 17:13:25.119886+00	\N	851ff9fd-c7c1-41d0-ab53-677a34b2d691
 00000000-0000-0000-0000-000000000000	2866	a7w477oxphmv	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-10 21:33:19.41689+00	2025-06-10 21:33:19.41689+00	\N	c7ebc51f-0145-41a1-9f06-d343228e87f6
 00000000-0000-0000-0000-000000000000	895	ja23muo26wgh	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f	2025-05-18 13:19:34.211219+00	2025-05-18 13:19:34.211219+00	\N	6e9e8735-0c14-45f5-92ed-c1bb97218c6c
@@ -4629,53 +4555,20 @@ COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked"
 00000000-0000-0000-0000-000000000000	849	qsav5ctiy52l	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f	2025-05-16 23:04:22.94276+00	2025-05-16 23:04:22.94276+00	p3pf3phyf2nd	851ff9fd-c7c1-41d0-ab53-677a34b2d691
 00000000-0000-0000-0000-000000000000	1586	mpetwapsmefw	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-06 19:52:29.68873+00	2025-06-06 19:52:29.68873+00	njgiffsvdr6w	9ff90124-5412-4cc1-89ab-455384f45348
 00000000-0000-0000-0000-000000000000	1596	jl6dflz6rq7x	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-06 20:25:33.377105+00	2025-06-06 20:25:33.377105+00	\N	2348789b-4a7c-4539-8a08-847f2186e7f1
-00000000-0000-0000-0000-000000000000	2831	2xuozloc22av	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:07:52.716218+00	2025-06-10 16:07:52.716218+00	\N	d1751966-ea51-4496-9df0-5700a3bf5524
-00000000-0000-0000-0000-000000000000	2833	aqsr6qctdhr3	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:07:53.840625+00	2025-06-10 16:07:53.840625+00	\N	f6924300-144f-456f-9997-ff2d344124a3
+00000000-0000-0000-0000-000000000000	2872	xyj6mfjx4qid	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-10 22:20:36.165867+00	2025-06-10 22:20:36.165867+00	\N	235961dd-b49d-44e1-bc51-cad2295664be
 00000000-0000-0000-0000-000000000000	811	qbegqgwowbvy	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	t	2025-05-15 17:13:25.128457+00	2025-05-15 19:15:20.334359+00	zxhfs6ptw7ty	851ff9fd-c7c1-41d0-ab53-677a34b2d691
-00000000-0000-0000-0000-000000000000	2834	ensdeopvqdnv	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:07:53.86996+00	2025-06-10 16:07:53.86996+00	\N	b3c402c9-f41d-4523-909b-59a7d12b9aca
-00000000-0000-0000-0000-000000000000	2835	4rom7fa7k3wp	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:07:54.553969+00	2025-06-10 16:07:54.553969+00	\N	b4f1fc5d-6baa-4652-8bcc-8a9295e334dc
-00000000-0000-0000-0000-000000000000	2836	zrvo5kiz3xll	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:07:54.576094+00	2025-06-10 16:07:54.576094+00	\N	901161a3-bcac-441f-9ebd-ccbf524049a8
 00000000-0000-0000-0000-000000000000	896	pzmyc5w74d3p	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f	2025-05-18 13:26:53.482266+00	2025-05-18 13:26:53.482266+00	\N	15514312-f649-469d-96e7-49281ba9f0ce
-00000000-0000-0000-0000-000000000000	2811	fleghovvpqno	386e63ba-dc8f-4af6-9447-44f7976a4a0c	t	2025-06-10 15:22:28.455885+00	2025-06-10 20:13:38.316573+00	\N	89ac395e-0351-4e0b-9ca8-d1bf521c4417
 00000000-0000-0000-0000-000000000000	856	p5oyal32btdp	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f	2025-05-16 23:54:12.414341+00	2025-05-16 23:54:12.414341+00	\N	5190ee94-aebd-4c95-b127-bd9175b424e0
 00000000-0000-0000-0000-000000000000	1587	xzsttn53fvof	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-06 19:53:31.886366+00	2025-06-06 19:53:31.886366+00	\N	1481ca6d-30ca-4e06-ab63-ca1a3bc49199
 00000000-0000-0000-0000-000000000000	1598	nr56wziul62v	54bb3bab-94a3-420a-99da-57717c1c075a	t	2025-06-06 20:53:17.756773+00	2025-06-06 21:55:35.425972+00	\N	f4f1ce21-bf22-41cb-8f22-ea708994782d
-00000000-0000-0000-0000-000000000000	2812	oywswerynuhk	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 15:43:31.790939+00	2025-06-10 15:43:31.790939+00	\N	a5d67cc7-ca49-4a16-a15e-126073a9e8e3
 00000000-0000-0000-0000-000000000000	812	lxxwskjnawro	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	t	2025-05-15 19:15:20.338696+00	2025-05-15 20:31:43.720131+00	qbegqgwowbvy	851ff9fd-c7c1-41d0-ab53-677a34b2d691
-00000000-0000-0000-0000-000000000000	2837	kex6ecfjdgq4	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:08:58.29854+00	2025-06-10 16:08:58.29854+00	\N	16ea88d2-d7bc-4b42-ae25-2148bcdc024c
 00000000-0000-0000-0000-000000000000	857	moeoopt6sqfu	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	t	2025-05-16 23:56:29.475559+00	2025-05-18 13:17:13.572423+00	\N	422ae626-497f-4e14-b7e2-57f7e28226f2
 00000000-0000-0000-0000-000000000000	817	wyxli35dejlc	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	t	2025-05-15 21:30:09.765457+00	2025-05-15 22:29:01.625859+00	lmqjouio7yhx	851ff9fd-c7c1-41d0-ab53-677a34b2d691
 00000000-0000-0000-0000-000000000000	897	45ho76bzryai	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f	2025-05-18 14:02:19.351822+00	2025-05-18 14:02:19.351822+00	\N	e7bba15f-89f5-4806-9c48-fb42e6f7ea6d
-00000000-0000-0000-0000-000000000000	2839	ka6nhfsbjqbm	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:08:58.483871+00	2025-06-10 16:08:58.483871+00	\N	043c10f5-da51-4eb9-869e-f70170dd7182
-00000000-0000-0000-0000-000000000000	2845	6acv3awkjssr	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:41.075857+00	2025-06-10 16:09:41.075857+00	\N	5021e796-59c2-485e-89ff-16275a5b62f7
-00000000-0000-0000-0000-000000000000	2852	n3aprtnafrpa	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:43.43778+00	2025-06-10 16:09:43.43778+00	\N	185a2b3d-9219-467e-942f-09e5c008c6a2
 00000000-0000-0000-0000-000000000000	1551	njgiffsvdr6w	54bb3bab-94a3-420a-99da-57717c1c075a	t	2025-06-05 21:33:38.883976+00	2025-06-06 19:52:29.687922+00	dn3c5bmccvdw	9ff90124-5412-4cc1-89ab-455384f45348
 00000000-0000-0000-0000-000000000000	1543	xu6k4fdetkfn	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-05 20:24:34.562645+00	2025-06-05 20:24:34.562645+00	5zkvarwdov7j	ba9531ef-629b-4893-915c-76caca99774a
 00000000-0000-0000-0000-000000000000	1544	c2u6vslckrwa	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-05 20:24:35.638818+00	2025-06-05 20:24:35.638818+00	\N	b4b82c60-ac9b-45ac-819e-5d1c7e52e1e4
-00000000-0000-0000-0000-000000000000	2813	abe72gmnpd5w	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 15:55:37.182496+00	2025-06-10 15:55:37.182496+00	\N	360eb596-c96f-45f8-a9a6-5eda3d714c66
-00000000-0000-0000-0000-000000000000	2814	gxegopnikf2h	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 15:55:37.36575+00	2025-06-10 15:55:37.36575+00	\N	d5a7da54-d559-415c-91cd-c570c847d22f
-00000000-0000-0000-0000-000000000000	2815	axmvtrtzpx63	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 15:55:38.540612+00	2025-06-10 15:55:38.540612+00	\N	13ef4c42-d433-4282-a2da-fc16fbdc3654
-00000000-0000-0000-0000-000000000000	2818	2xt4cd3f5pwt	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 15:56:03.842876+00	2025-06-10 15:56:03.842876+00	\N	c14679ab-e7ca-4eab-9b33-9e629eadd848
-00000000-0000-0000-0000-000000000000	2819	ii32wcjmiw5x	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 15:56:04.822846+00	2025-06-10 15:56:04.822846+00	\N	34c0f5f0-7493-4589-ac23-3122f7773cd0
-00000000-0000-0000-0000-000000000000	2838	vznkofpgvgkv	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:08:58.298601+00	2025-06-10 16:08:58.298601+00	\N	aab00d07-9230-4990-9cea-064464b5d6e3
-00000000-0000-0000-0000-000000000000	2840	j6qm74qr4wv4	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:08:58.484031+00	2025-06-10 16:08:58.484031+00	\N	9c1e88e0-afa6-4335-aff7-bf4668d02fc0
-00000000-0000-0000-0000-000000000000	2841	noafddf7lbkq	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:08:59.354078+00	2025-06-10 16:08:59.354078+00	\N	15e43fa9-89bc-4202-826d-ebae0eb1b4fd
-00000000-0000-0000-0000-000000000000	2842	taummx67hwdn	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:08:59.373695+00	2025-06-10 16:08:59.373695+00	\N	45b245da-e12e-4347-92e8-3e4b89358691
-00000000-0000-0000-0000-000000000000	2843	bgwwezdtcfv6	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:00.185792+00	2025-06-10 16:09:00.185792+00	\N	73c3b270-2bce-4785-b999-fad9e7641664
-00000000-0000-0000-0000-000000000000	2844	6r7t5sludhg7	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:00.203105+00	2025-06-10 16:09:00.203105+00	\N	048f0a17-afff-4d11-9f05-52d5df689700
-00000000-0000-0000-0000-000000000000	2846	rgzph6ahgv5s	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:41.077181+00	2025-06-10 16:09:41.077181+00	\N	3ddf4b9b-df79-4327-9c43-d81bb0fc16af
-00000000-0000-0000-0000-000000000000	2816	ausahc4kic7j	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 15:55:38.553541+00	2025-06-10 15:55:38.553541+00	\N	ef7197d2-cfd2-47ca-a95e-5756428d4751
-00000000-0000-0000-0000-000000000000	2817	gtiuaus2tpvh	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 15:56:03.839358+00	2025-06-10 15:56:03.839358+00	\N	7b9bcf73-aab2-49bb-ac4f-a078e18b8ef5
-00000000-0000-0000-0000-000000000000	2820	hric6t2vzcoo	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 15:56:04.827258+00	2025-06-10 15:56:04.827258+00	\N	f31e3132-89a8-4335-85bd-fbe2d3a7ce6c
-00000000-0000-0000-0000-000000000000	2847	ips723okbumg	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:41.112929+00	2025-06-10 16:09:41.112929+00	\N	29ea8aaa-e0d0-4b88-b3e8-454f246bb939
-00000000-0000-0000-0000-000000000000	2848	65fnzl4on2gi	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:41.148442+00	2025-06-10 16:09:41.148442+00	\N	d16d8edf-8d2e-4d8f-ba75-5051789c8f00
-00000000-0000-0000-0000-000000000000	2849	pbt6ihse73xu	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:43.118267+00	2025-06-10 16:09:43.118267+00	\N	15b23bce-7aa0-426e-911d-863753261481
-00000000-0000-0000-0000-000000000000	2850	3hwxgkz5dcby	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:43.152187+00	2025-06-10 16:09:43.152187+00	\N	ee7ad870-18ea-47bd-8463-e690436f28a0
-00000000-0000-0000-0000-000000000000	2851	k2p6g57fnjz5	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:09:43.436521+00	2025-06-10 16:09:43.436521+00	\N	b0f64692-0731-48fa-b686-2a8fd8502625
-00000000-0000-0000-0000-000000000000	2821	tpexe7sf4mur	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:04:50.37439+00	2025-06-10 16:04:50.37439+00	\N	6f69dbdf-c58a-4334-8fed-cdacc68d52e8
-00000000-0000-0000-0000-000000000000	2825	46olf3xejmkj	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:04:51.339303+00	2025-06-10 16:04:51.339303+00	\N	4073d394-3c24-4f16-a5ad-47b892fbba8e
-00000000-0000-0000-0000-000000000000	2826	afdvsj6p5x4i	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 16:04:51.364474+00	2025-06-10 16:04:51.364474+00	\N	3e46bdfc-c794-424c-a25e-4033ac461e93
-00000000-0000-0000-0000-000000000000	2862	tzdyxqqyvayk	386e63ba-dc8f-4af6-9447-44f7976a4a0c	t	2025-06-10 20:13:38.317774+00	2025-06-10 21:32:16.54538+00	fleghovvpqno	89ac395e-0351-4e0b-9ca8-d1bf521c4417
+00000000-0000-0000-0000-000000000000	2876	incazon7tp26	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-10 22:45:18.795796+00	2025-06-10 22:45:18.795796+00	\N	5bd2ffe9-cc55-42ec-8eda-e933920e1bfe
 \.
 
 
@@ -4718,6 +4611,7 @@ COPY "auth"."sso_domains" ("id", "sso_provider_id", "domain", "created_at", "upd
 COPY "public"."Administrador" ("id") FROM stdin;
 5f096705-11c3-49b1-b42c-d7bd17a75439
 54bb3bab-94a3-420a-99da-57717c1c075a
+386e63ba-dc8f-4af6-9447-44f7976a4a0c
 \.
 
 
@@ -4741,7 +4635,7 @@ ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	N	db
 COPY "public"."Empleado" ("ID_Empleado", "Nombre", "Rol", "ID_Departamento", "Nivel", "Cargabilidad", "FechaContratacion", "FechaUltNivel", "ID_PeopleLead", "Biografia") FROM stdin;
 7b23b8a4-8f26-40a9-86c0-c591b423ea6a	Jorge Beyanzo	QA	d85d9ef9-0288-4462-bb3b-13c1d86cdf68	10	31	2025-05-15	2025-05-15	4fde1b00-e11e-41c5-88c8-9e38d71facce	\N
 76db1355-d074-41ef-ab95-5701689639ae	New User	NU	cf57cc7b-7d64-473a-b31e-97fc5736d380	10	0	2025-06-10	2025-06-10	\N	\N
-12c0a362-e239-47b4-930c-9899253e23a6	Richy	Empleado	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	9	0	2025-06-10	2025-06-10	\N	\N
+ce40b8ef-93d7-4445-aa23-d0f5ac989bb3	Richie	a	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	11	0	2025-06-10	2025-06-10	\N	\N
 386e63ba-dc8f-4af6-9447-44f7976a4a0c	Pancho	Admin	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	1	30	2025-05-13	2025-05-13	4fde1b00-e11e-41c5-88c8-9e38d71facce	Biografía
 fc1276e7-efc6-4ec5-b2cd-bfab2005930e	Yolanda	Dev	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	11	0	2025-04-29	2025-04-29	66d20503-e75f-43d9-9572-54fa189dfb95	ksd
 3912d459-b96e-4150-9a2a-fb9135ebc374	Jose	Dev	cf57cc7b-7d64-473a-b31e-97fc5736d380	6	0	2025-04-25	2025-04-25	3cb8081b-1a2b-4e32-a007-fae5c77735ba	\N
@@ -4845,7 +4739,7 @@ b3d269ef-67ae-4246-8ea6-e796534973da	a01198676@tec.mx	\N	7b23b8a4-8f26-40a9-86c0
 614c20c8-989a-40bb-92f0-0d44da39dcf0	emirpuente31@gmail.com	\N	54bb3bab-94a3-420a-99da-57717c1c075a	\N	\N
 d9b557fe-1024-479a-a913-f4311f1b03b1	M@g.com	\N	1fbfe562-cea4-4b33-b830-0c9f5f301251	\N	\N
 ffd1244b-842b-4299-b8a4-9043460917f8	NU@g.com	\N	76db1355-d074-41ef-ab95-5701689639ae	\N	\N
-257a143a-0493-4903-aad3-f35d642c5a98	rikytellez04@gmail.com	\N	12c0a362-e239-47b4-930c-9899253e23a6	\N	\N
+30f91285-95cf-43c4-9b3d-a3586f7a0f49	rikytellez04@gmail.com	\N	ce40b8ef-93d7-4445-aa23-d0f5ac989bb3	\N	\N
 \.
 
 
@@ -5151,11 +5045,11 @@ c7adc339-e954-456d-b091-97b647d85fe0	7b23b8a4-8f26-40a9-86c0-c591b423ea6a
 
 COPY "public"."Proyectos" ("ID_Proyecto", "Nombre", "Descripcion", "Status", "ID_DeliveryLead", "fecha_inicio", "fecha_fin", "isReviewed", "cargabilidad_num", "Cliente", "created_at", "ImagenUrl") FROM stdin;
 2ad6a956-8754-4859-9c6c-785f419fb205	yippie	yippie	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-06	2025-06-06	t	25	a	2025-06-05 22:52:28.884056+00	\N
-fe159399-861c-4192-8fcc-0a0ce22d8d7c	Testing 2	-	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-10	2025-06-10	f	40	woah	2025-06-09 10:21:42.87976+00	\N
 31f3912a-ad69-44f5-9176-13702c2bdda3	Test	Este proyecto busca testear diferentes sistemas de IA 	inactive	82df9561-0f01-4836-b07e-d4f365ea5776	2025-06-09	2025-06-30	f	30	Testing	2025-06-09 09:11:52.212593+00	proyectos/31f3912a-ad69-44f5-9176-13702c2bdda3/imagen.png
-62653857-76fa-488e-858b-2c8e68779d34	EduPlus LMS	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-09	2025-06-09	t	25	Instituto Educativo Nuevo Horizonte	2025-06-06 20:16:16.40067+00	proyectos/62653857-76fa-488e-858b-2c8e68779d34/imagen.png
-b154888b-5599-4ff1-b3a6-182d406b4f79	Aplicación web para un restaurante	Una aplicación para mostrar el menú.	done	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	2025-06-05	2025-06-06	t	38	Cafetería café	2025-06-05 20:50:24.60286+00	proyectos/b154888b-5599-4ff1-b3a6-182d406b4f79/imagen.jpg
 639ebe39-4ccb-48ae-a87c-7f706ebf0c18	AgroTrack	Desarrollo de una plataforma web y móvil para el monitoreo en tiempo real de cultivos agrícolas utilizando sensores IoT y visualización con mapas	done	82df9561-0f01-4836-b07e-d4f365ea5776	2025-06-08	2025-06-08	t	30	AgroSolutions S.A	2025-06-06 20:10:45.088796+00	proyectos/639ebe39-4ccb-48ae-a87c-7f706ebf0c18/imagen.png
+62653857-76fa-488e-858b-2c8e68779d34	EduPlus LMS	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-09	2025-06-09	t	25	Instituto Educativo Nuevo Horizonte	2025-06-06 20:16:16.40067+00	proyectos/62653857-76fa-488e-858b-2c8e68779d34/imagen.png
+fe159399-861c-4192-8fcc-0a0ce22d8d7c	Testing 2	-	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-10	2025-06-10	t	40	woah	2025-06-09 10:21:42.87976+00	\N
+b154888b-5599-4ff1-b3a6-182d406b4f79	Aplicación web para un restaurante	Una aplicación para mostrar el menú.	done	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	2025-06-05	2025-06-06	t	38	Cafetería café	2025-06-05 20:50:24.60286+00	proyectos/b154888b-5599-4ff1-b3a6-182d406b4f79/imagen.jpg
 4c0b4238-9d6b-4008-a677-96fe61d97f21	Proyecto B.A.L	B.A.L es un proyecto de desarollo web	done	82df9561-0f01-4836-b07e-d4f365ea5776	2025-06-05	2025-06-05	t	24	Atro	2025-06-05 09:54:02.360794+00	proyectos/4c0b4238-9d6b-4008-a677-96fe61d97f21/imagen.jpeg
 89c59da6-027e-40e9-b150-0a8a61ad8310	Proyecto de prueba de activos	Prueba para ver que funciona los proyectos activos	done	82df9561-0f01-4836-b07e-d4f365ea5776	2025-06-06	2025-06-06	t	10	Tec	2025-06-06 08:51:45.653792+00	\N
 1b58ea3b-478d-433f-b11b-89ec6268f5e8	Proyecto 2	yuppi	done	8583e274-0063-44f3-a6c9-314d3263d285	2025-06-06	2025-06-06	t	40	supa	2025-06-06 11:02:41.930187+00	proyectos/1b58ea3b-478d-433f-b11b-89ec6268f5e8/imagen.png
@@ -5183,6 +5077,7 @@ ac2e2201-9705-44e0-bec8-ee2406b14215	82df9561-0f01-4836-b07e-d4f365ea5776	b5c684
 eb2c03e8-fa81-4bf9-a190-ac7fb3a48f22	82df9561-0f01-4836-b07e-d4f365ea5776	54bb3bab-94a3-420a-99da-57717c1c075a	4c0b4238-9d6b-4008-a677-96fe61d97f21	4	si	si	f
 db0e95e8-7110-481c-96c8-9b1a500b5519	b4bcad2d-9e33-42c7-b844-0ba90e44392e	386e63ba-dc8f-4af6-9447-44f7976a4a0c	62653857-76fa-488e-858b-2c8e68779d34	5	Tuvo un gran desempeño	nah	f
 b55f8a6b-b365-41b2-b305-cfd4b7d52321	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	5f096705-11c3-49b1-b42c-d7bd17a75439	d16a497a-ae1d-4867-9d41-0b5a90430c80	5	Gran desempeño	No hay	f
+d82d6759-ba41-4890-9468-9a10fa1f7e82	b4bcad2d-9e33-42c7-b844-0ba90e44392e	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	fe159399-861c-4192-8fcc-0a0ce22d8d7c	5	Gran trabajo	No hay	f
 \.
 
 
@@ -5639,8 +5534,6 @@ d23c95d4-65d8-4886-a416-b463cf95bd0a	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	d859a3
 d11c09a8-1496-4156-b52b-55dfb9566029	86315508-992d-4200-a53d-3a2a99f47329	2d1010f1-7361-4381-be28-b0e61e05c511	t
 cf68b4b8-ffa4-4cc4-94a3-724248604448	36abc818-b3a6-440f-933a-79ff41fe5b67	5eb4d05c-173d-4f9a-b190-2321323fa0a6	t
 f36b3754-0906-4306-bbe1-451c622556aa	36abc818-b3a6-440f-933a-79ff41fe5b67	537dfc38-4f92-4a74-a711-d7c25deb0d47	t
-1e9da994-7cac-4803-b12d-a01e5d2c7d8f	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	1cc7aac2-ae44-4952-b1de-345116f2a722	t
-47d12198-cae5-47cb-8c74-3aba84658688	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	68061735-9d53-45bf-bf36-2061873976d0	t
 b8ad3d1d-7a77-42eb-97cb-8a46cc4bc37b	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	bb34bf1d-2adc-46dd-acba-8771da8c45f6	t
 217a3eae-2290-4fba-9c5e-7fa037e4687e	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	68061735-9d53-45bf-bf36-2061873976d0	t
 7459e1fe-0a2c-443a-b6b9-4eb745279b6b	b5c684f0-24d7-436f-b752-71cd9e361c8f	9de9fd25-0b84-47df-92a5-945d66ae4585	t
@@ -5653,8 +5546,10 @@ bb8b8279-a334-41ae-9317-ee3897189a30	5f096705-11c3-49b1-b42c-d7bd17a75439	39e7d7
 b242529a-1fb6-48fd-bb5f-496cb393da48	5f096705-11c3-49b1-b42c-d7bd17a75439	0ae75bee-eb40-4f37-b743-bb4ef9603619	t
 f22f5ff9-a91c-4749-82bb-91b4d9b64c5c	5f096705-11c3-49b1-b42c-d7bd17a75439	029d3b27-5ba8-4d12-83c9-77fbfc4c5777	t
 8452b0df-575c-43a6-96e5-d8efb09f160d	5f096705-11c3-49b1-b42c-d7bd17a75439	795e8aed-1b28-497d-93f6-6c82d556b95a	t
-4735bddf-239f-4a3c-87f5-35cd006d44bf	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	31821d07-ef4a-4b4b-b2e3-a3ef9a80f640	f
 cd65722b-f489-4226-b683-67d04837809c	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	fe27ad50-22f0-40a5-864a-926204e28453	f
+1e9da994-7cac-4803-b12d-a01e5d2c7d8f	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	1cc7aac2-ae44-4952-b1de-345116f2a722	t
+47d12198-cae5-47cb-8c74-3aba84658688	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	68061735-9d53-45bf-bf36-2061873976d0	t
+4735bddf-239f-4a3c-87f5-35cd006d44bf	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	31821d07-ef4a-4b4b-b2e3-a3ef9a80f640	t
 \.
 
 
@@ -6220,7 +6115,7 @@ COPY "storage"."s3_multipart_uploads_parts" ("id", "upload_id", "size", "part_nu
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 2870, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 2876, true);
 
 
 --
