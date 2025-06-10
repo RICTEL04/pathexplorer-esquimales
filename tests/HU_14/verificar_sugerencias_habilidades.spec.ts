@@ -17,7 +17,7 @@ test.describe('Browser Suite', () => {
         severity: 'normal',
         priority: 'medium',
         layer: 'api',
-        milestone: 'Sprint 1',
+        milestone: 'Sprint 3',
         parameters: {
           'Usuario': 'A01741300@tec.mx',
           'Navegador': browserName

@@ -122,17 +122,113 @@ export function configureQaseTest(metadata: TestMetadata, browserName: string) {
   }
 }
 
-// Helper para adjuntar screenshots con contexto
+// Helper mejorado para adjuntar screenshots con contexto garantizando formato PNG
 export async function attachScreenshot(testInfo: any, name: string, page: any) {
   try {
     if (!page.isClosed()) {
-      await testInfo.attach(name, { 
-        body: await page.screenshot({ fullPage: true }), 
-        contentType: 'image/png' 
+      // Asegurar que el nombre termine con .png
+      const screenshotName = name.endsWith('.png') ? name : `${name}.png`;
+      
+      // Capturar screenshot con configuración específica para PNG
+      const screenshot = await page.screenshot({ 
+        fullPage: true,
+        type: 'png', // Forzar formato PNG explícitamente
+        quality: 90   // Solo aplica para JPEG, pero es buena práctica incluirlo
       });
+      
+      await testInfo.attach(screenshotName, { 
+        body: screenshot, 
+        contentType: 'image/png' // Especificar explícitamente el MIME type
+      });
+      
+      console.log(`Screenshot capturado: ${screenshotName}`);
     }
   } catch (error) {
-    console.warn(`No se pudo capturar screenshot: ${error}`);
+    console.warn(`No se pudo capturar screenshot ${name}: ${error}`);
+  }
+}
+
+// Versión alternativa con validación adicional
+export async function attachScreenshotWithValidation(testInfo: any, name: string, page: any) {
+  try {
+    if (!page.isClosed()) {
+      // Limpiar nombre para evitar caracteres problemáticos
+      const cleanName = name.replace(/[^a-zA-Z0-9_-]/g, '_');
+      const screenshotName = `${cleanName}.png`;
+      
+      // Capturar screenshot
+      const screenshot = await page.screenshot({ 
+        fullPage: true,
+        type: 'png',
+        animations: 'disabled' // Evitar animaciones que puedan causar problemas
+      });
+      
+      // Validar que el buffer no esté vacío
+      if (screenshot && screenshot.length > 0) {
+        await testInfo.attach(screenshotName, { 
+          body: screenshot, 
+          contentType: 'image/png'
+        });
+        
+        console.log(`✓ Screenshot capturado exitosamente: ${screenshotName} (${screenshot.length} bytes)`);
+      } else {
+        console.warn(`⚠ Screenshot vacío para: ${screenshotName}`);
+      }
+    } else {
+      console.warn(`⚠ La página está cerrada, no se puede capturar: ${name}`);
+    }
+  } catch (error) {
+    console.error(`✗ Error al capturar screenshot ${name}:`, error);
+    
+    // Intentar capturar información adicional del error
+    await testInfo.attach(`Error_${name}.txt`, { 
+      body: Buffer.from(`Error capturando screenshot: ${error}`), 
+      contentType: 'text/plain' 
+    });
+  }
+}
+
+// Helper adicional para casos especiales donde necesites mayor control
+export async function attachScreenshotWithMetadata(
+  testInfo: any, 
+  name: string, 
+  page: any, 
+  options: {
+    fullPage?: boolean;
+    clip?: { x: number; y: number; width: number; height: number };
+    timeout?: number;
+  } = {}
+) {
+  try {
+    const { fullPage = true, clip, timeout = 5000 } = options;
+    
+    if (!page.isClosed()) {
+      const screenshotName = `${name}.png`;
+      
+      const screenshotOptions: any = {
+        type: 'png',
+        fullPage,
+        timeout
+      };
+      
+      if (clip) {
+        screenshotOptions.clip = clip;
+        screenshotOptions.fullPage = false; // clip requiere fullPage: false
+      }
+      
+      const screenshot = await page.screenshot(screenshotOptions);
+      
+      await testInfo.attach(screenshotName, { 
+        body: screenshot, 
+        contentType: 'image/png',
+        // Metadatos adicionales para Qase
+        path: screenshotName
+      });
+      
+      console.log(`📸 Screenshot: ${screenshotName}`);
+    }
+  } catch (error) {
+    console.error(`📸 Error en screenshot ${name}:`, error);
   }
 }
 
