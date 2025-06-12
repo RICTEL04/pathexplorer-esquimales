@@ -882,6 +882,43 @@ $$;
 ALTER FUNCTION "public"."get_empleado_a_recomendar"("p_id_empleado" "uuid") OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."get_employee_history_with_evaluations"("employee_id" "uuid") RETURNS TABLE("id" "uuid", "descripcion" "text", "fecha_inicio" "date", "fecha_final" "date", "nombre_position" "text", "nombre_empresa" "text", "currentjob" boolean, "created_at" timestamp with time zone, "id_proyecto" "uuid", "evaluaciones" "json")
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  RETURN QUERY
+    SELECT 
+    h."id",
+    h."Descripcion",
+    h."Fecha_inicio",
+    h."Fecha_final",
+    h."NombrePosition",
+    h."NombreEmpresa",
+    h."Currentjob",
+    h."created_at",
+    h."ID_Proyecto",
+    (
+      SELECT json_agg(json_build_object(
+        'id_evaluacion', ep."ID_Evaluacion",
+        'id_deliverylead', ep."ID_DeliveryLead",
+        'calificacion', ep."Calificacion",
+        'fortalezas', ep."Fortalezas",
+        'areas_mejora', ep."Areas_Mejora"
+      ))
+      FROM "public"."Evaluacion_Proyecto" ep
+      WHERE ep."ID_Empleado" = employee_id
+      AND ep."ID_Proyecto" = h."ID_Proyecto"
+    ) as evaluaciones
+  FROM "public"."Historial" h
+  WHERE h."ID_Empleado" = employee_id
+  ORDER BY h."Fecha_inicio" DESC;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_employee_history_with_evaluations"("employee_id" "uuid") OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."get_employee_skills_excluding_category"("employee_id" "uuid", "excluded_category_id" "uuid") RETURNS TABLE("id_habilidad" "uuid", "nombre_habilidad" "text", "nivel" "text", "nombre_position" "text", "nombre_empresa" "text")
     LANGUAGE "plpgsql" STABLE
     AS $$
