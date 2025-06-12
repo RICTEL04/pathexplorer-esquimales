@@ -14,6 +14,9 @@ const openai = new OpenAI({
 // Esquema de respuesta: solo un reporte textual
 const EmployeeReportSchema = z.object({
   reporte: z.string(),
+  retroalimentacion_revisores: z.object({
+    detalle: z.string(),
+  }),
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -31,6 +34,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // --- NUEVO: Obtener metas del empleado ---
     const metas = await fetchMetas(empleado.ID_Empleado, () => {});
     empleado.metas = metas || [];
+
+    // --- DEBUG: Mostrar meta, revisor y retroalimentación ---
+    empleado.metas.forEach((m: any, idx: number) => {
+      if (m.Revisores?.length) {
+        m.Revisores.forEach((r: any) => {
+          console.log(`Meta #${idx + 1}: ${m.Nombre} | Revisor: ${r.Nombre || 'Sin nombre'} | Retro: ${r.Retroalimentacion || 'Sin retroalimentación'}`);
+        });
+      } else {
+        console.log(`Meta #${idx + 1}: ${m.Nombre} | Sin revisores`);
+      }
+    });
 
     // Construir string detallado de metas
     const metasDetalle = empleado.metas.length
@@ -56,6 +70,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }).join('\n')
       : 'N/A';
 
+    // --- NUEVO: Construir retroalimentación de revisores por meta ---
+    const retroalimentacionDetalle = empleado.metas.length
+      ? empleado.metas.map((m: any, idx: number) => {
+          if (!m.Revisores?.length) return `Meta #${idx + 1}: Sin revisores`;
+          return `Meta #${idx + 1}:\n` +
+            m.Revisores.map((r: any) =>
+              `- ${r.Nombre || 'Sin nombre'}: ${r.Retroalimentacion || 'Sin retroalimentación'}`
+            ).join('\n');
+        }).join('\n\n')
+      : 'N/A';
+
     const prompt = `
 Eres un experto en gestión de talento y recursos humanos. 
 Con base en la siguiente información del empleado, genera un reporte profesional y persuasivo que resuma sus fortalezas, logros, habilidades y potencial, con el objetivo de defender su caso para un ascenso, aumento de salario o asignación a un mejor puesto durante una talent discussion. 
@@ -76,9 +101,15 @@ ${metasDetalle}
 - Soft Skills: ${empleado.softSkills?.length ? empleado.softSkills.map((s: any) => s.nombre_habilidad || s.nombre).join(", ") : 'N/A'}
 
 El reporte debe estar orientado a resaltar el valor del empleado para la organización y su potencial de crecimiento.
-Devuelve el resultado en el siguiente formato JSON, el reporte debe incluir una seccion al final detallando las metas del empleado y su progreso y todos los detalles:
+
+Devuelve el resultado en el siguiente formato JSON. 
+**IMPORTANTE:** Al final del campo "reporte", incluye una sección titulada "Retroalimentación de revisores por meta" y coloca ahí la retroalimentación de cada revisor para cada meta.
+
 {
-  "reporte": "Texto del reporte aquí"
+  "reporte": "Texto del reporte aquí. ... Al final: Retroalimentación de revisores por meta:\n${retroalimentacionDetalle}",
+  "retroalimentacion_revisores": {
+    "detalle": "Retroalimentación de revisores por meta:\n${retroalimentacionDetalle}"
+  }
 }
     `;
 
