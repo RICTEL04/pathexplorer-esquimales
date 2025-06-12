@@ -21,7 +21,7 @@ export default function CertificationsTable({
 
     return (
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 rounded-md shadow-md overflow-hidden">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-300">
+            <thead className="text-xs text-gray-700 uppercase bg-purple-300">
                 <tr>
                     <th className="px-6 py-3">Nombre</th>
                     <th className="px-6 py-3">Fecha Caducidad</th>

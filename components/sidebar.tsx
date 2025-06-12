@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, ChevronDown, ChevronRight, LogOut, User } from "lucide-react";
+import { Menu, ChevronDown, ChevronRight, LogOut, User, Waypoints } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Modal, Button } from "antd"; // Agrega esto si usas Ant Design
@@ -23,6 +23,7 @@ export default function Sidebar({ routes, isSidebarOpen, setIsSidebarOpen }: Sid
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const [userId, setUserId] = useState<string | null>(null);
   const [sessionExpired, setSessionExpired] = useState(false); // Nuevo estado
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -52,6 +53,24 @@ export default function Sidebar({ routes, isSidebarOpen, setIsSidebarOpen }: Sid
     return () => {
       listener?.subscription.unsubscribe();
     };
+  }, []);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        setIsAdmin(false);
+        return;
+      }
+      const userId = session.user.id;
+      const { data: adminData } = await supabase
+        .from("Administrador")
+        .select("*")
+        .eq("id", userId)
+        .single();
+      setIsAdmin(!!adminData);
+    };
+    checkAdmin();
   }, []);
 
   const toggleDropdown = (label: string) => {
@@ -129,20 +148,46 @@ export default function Sidebar({ routes, isSidebarOpen, setIsSidebarOpen }: Sid
         onMouseLeave={() => setIsSidebarOpen(false)}
       >
         <div>
-          <div className="flex items-center gap-2 mt-16">
+          <div className="flex items-center gap-2 mt-17">
             <button
               className="p-2 rounded-md text-black bg-purple-600 hover:bg-purple-700 transition-colors"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             >
               <Menu className="w-5 h-5" color="white" />
             </button>
-
             {isSidebarOpen && (
-              <img
-                src="/imagenes/Accenture-logo.png"
-                alt="Accenture"
-                className="h-10 w-auto ml-4"
-              />
+              <>
+                <span className="ml-4 text-lg font-bold bg-gradient-to-r from-violet-800 to-fuchsia-700 bg-clip-text text-transparent">
+                  {(() => {
+                    if (pathname?.startsWith("/employee/capability-lead")) return "Capability Lead";
+                    if (pathname?.startsWith("/employee/delivery-lead")) return "Delivery Lead";
+                    if (pathname?.startsWith("/employee/people-lead")) return "People Lead";
+                    if (pathname?.startsWith("/employee/talent-lead")) return "Talent Lead";
+                    if (pathname?.startsWith("/employee")) return "Empleado";
+                    if (pathname?.startsWith("/admin")) return "Administrador";
+                    return "";
+                  })()}
+                </span>
+                {isAdmin && (
+                  <button
+                    className="ml-2 p-1 rounded-full bg-gradient-to-r from-fuchsia-100 to-violet-100 hover:from-fuchsia-200 hover:to-violet-200 transition"
+                    onClick={() => {
+                      if (pathname?.startsWith("/admin")) {
+                        router.push("/employee");
+                      } else {
+                        router.push("/admin");
+                      }
+                    }}
+                    title={
+                      pathname?.startsWith("/admin")
+                        ? "Cambiar a vista de empleado"
+                        : "Cambiar a vista de administrador"
+                    }
+                  >
+                    <Waypoints className="w-5 h-5 text-fuchsia-700" />
+                  </button>
+                )}
+              </>
             )}
           </div>
 
@@ -239,7 +284,11 @@ export default function Sidebar({ routes, isSidebarOpen, setIsSidebarOpen }: Sid
         <div className="mt-4 border-t pt-4 space-y-2 bg-white">
           {userId && (
             <Link
-              href={`/employee/perfil/${userId}`}
+              href={
+                pathname && pathname.startsWith("/admin")
+                  ? `/admin/perfil/${userId}`
+                  : `/employee/perfil/${userId}`
+              }
               className="flex items-center gap-2 p-2 rounded-md text-gray-700 hover:bg-gray-200"
             >
               <User className="w-5 h-5" /> {isSidebarOpen && "Ver perfil"}

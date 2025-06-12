@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Card, Badge, Progress, Divider, Tag, List, Typography, Avatar, Button, Modal, Input } from "antd";
+import EmployeeProfile from "@/components/CapabilityLead/EmployeeProfile";
 import {
   CalendarOutlined,
   UserOutlined,
@@ -62,7 +63,10 @@ export default function ProyectoDetalle() {
   const [ranking, setRanking] = useState<any[]>([]);
   const [loadingRanking, setLoadingRanking] = useState(false);
   const [openReviewModal, setOpenReviewModal] = useState(false);
-
+  const [perfilEmpleadoVisible, setPerfilEmpleadoVisible] = useState(false);
+  const [empleadoPerfil, setEmpleadoPerfil] = useState<any>(null);
+  const [rolIncompletoModal, setRolIncompletoModal] = useState(false);
+  
   // Mueve fetchData fuera del useEffect para poder reutilizarla
   const fetchData = async () => {
     setLoading(true);
@@ -193,10 +197,10 @@ export default function ProyectoDetalle() {
 
   // Reset asignados cuando cambie el puesto seleccionado
   useEffect(() => {
-    if (selectedPuesto) {
-      setAsignados(Array(selectedPuesto.N_puestos).fill(null));
-    }
-  }, [selectedPuesto]);
+  if (selectedPuesto) {
+    setAsignados(Array(selectedPuesto.N_puestos).fill(null));
+  }
+}, [selectedPuesto]);
 
   // Llama fetchPostulados cuando se selecciona un puesto
   useEffect(() => {
@@ -208,22 +212,18 @@ export default function ProyectoDetalle() {
 
   // Handler para drop
   const handleDropEmpleado = (empleado: any, index: number) => {
-    setAsignados(prev => {
-      // Evita duplicados
-      if (prev.some(e => e && e.id_empleado === empleado.id_empleado)) return prev;
-      const nuevo = [...prev];
-      // Si el empleado es postulado, calcula total_propuesta
-      if (empleado.cargabilidad !== undefined && empleado.total_propuesta === undefined) {
-        nuevo[index] = {
-          ...empleado,
-          total_propuesta: (empleado.cargabilidad ?? 0) + (proyecto?.cargabilidad_num ?? 0),
-        };
-      } else {
-        nuevo[index] = empleado;
-      }
-      return nuevo;
-    });
-  };
+  setAsignados(prev => {
+    // Evita duplicados
+    if (prev.some(e => e && e.id_empleado === empleado.id_empleado)) return prev;
+    const nuevo = [...prev];
+    // Siempre recalcula la suma de cargabilidad
+    nuevo[index] = {
+      ...empleado,
+      total_propuesta: Number(empleado.cargabilidad ?? 0) + Number(proyecto?.cargabilidad_num ?? 0),
+    };
+    return nuevo;
+  });
+};
 
   // Nueva función para obtener el conteo de asignados por puesto
   const fetchAsignadosPorPuesto = async () => {
@@ -459,29 +459,38 @@ export default function ProyectoDetalle() {
 
   // Nueva función para obtener el ranking de empleados
   const fetchEmployeeRanking = async () => {
-    setLoadingRanking(true);
-    try {
-      // Prepara los datos (puedes ajustar según tu estructura)
-      const empleados = bodies.filter(Boolean); // bodies ya tiene la info de cada empleado
-      const proyectoData = {
-        ...proyecto,
-        puestos,
-        habilidades_proyecto: habilidadesGenerales?.map((h: any) => h.nombre_habilidad) || [],
-      };
+  setLoadingRanking(true);
+  try {
+    const empleados = bodies.filter(Boolean);
+    const proyectoData = {
+      ...proyecto,
+      puestos,
+      habilidades_proyecto: habilidadesGenerales?.map((h: any) => h.nombre_habilidad) || [],
+    };
 
-      const response = await fetch("/api/EmployeeRanking", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ empleados, proyecto: proyectoData }),
-      });
-      const data = await response.json();
-      setRanking(data.rankedEmployees || []);
-    } catch (error) {
-      console.error("Error al obtener ranking:", error);
-      setRanking([]);
-    }
-    setLoadingRanking(false);
-  };
+    const response = await fetch("/api/EmployeeRanking", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ empleados, proyecto: proyectoData }),
+    });
+    const data = await response.json();
+
+    // Mezcla la cargabilidad actual de los empleados originales
+    const rankingConCargabilidad = (data.rankedEmployees || []).map((empIA: any) => {
+      const original = empleadosDisponibles.find(e => e.id_empleado === empIA.id_empleado);
+      return {
+        ...empIA,
+        cargabilidad: original?.cargabilidad ?? 0, // agrega la cargabilidad actual
+      };
+    });
+
+    setRanking(rankingConCargabilidad);
+  } catch (error) {
+    console.error("Error al obtener ranking:", error);
+    setRanking([]);
+  }
+  setLoadingRanking(false);
+};
 
   useEffect(() => {
     if (bodies && bodies.length > 0) {
@@ -543,6 +552,18 @@ export default function ProyectoDetalle() {
     }
     return data;
   };
+
+  function actualizarCompletoEnPuestos(puestoId: string, completo: boolean) {
+    setData((prev: any) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        puestos: prev.puestos.map((p: any) =>
+          p.id === puestoId ? { ...p, Completo: completo } : p
+        ),
+      };
+    });
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-sm">
@@ -666,30 +687,30 @@ export default function ProyectoDetalle() {
           </div>
 
           <div>
-            <Title level={5} className="mb-3 text-gray-700">Estado de Revisión</Title>
-            {proyecto.isReviewed ? (
-              <Tag icon={<CheckCircleOutlined />} color="success" className="font-medium text-sm py-1 px-3">
-                Revisado
-              </Tag>
-            ) : proyecto.Status === "done" ? (
-              <div>
-                <Tag icon={<ClockCircleOutlined />} color="warning" className="font-medium text-sm py-1 px-3">
-                  Revisión al finalizar
-                </Tag>
-                <Button
-                  type="primary"
-                  className="mt-2 w-full"
-                  onClick={() => setOpenReviewModal(true)}
-                >
-                  Dar retroalimentación
-                </Button>
-              </div>
-            ) : (
-              <Tag icon={<ClockCircleOutlined />} color="warning" className="font-medium text-sm py-1 px-3">
-                Revisión al finalizar
-              </Tag>
-            )}
-          </div>
+                      <Title level={5} className="mb-3 text-gray-700">Estado de Revisión</Title>
+                      {proyecto.isReviewed ? (
+                        <Tag icon={<CheckCircleOutlined />} color="success" className="font-medium text-sm py-1 px-3">
+                          Revisado
+                        </Tag>
+                      ) : proyecto.Status === "done" ? (
+                        <div>
+                          <Tag icon={<ClockCircleOutlined />} color="warning" className="font-medium text-sm py-1 px-3">
+                            Revisión al finalizar
+                          </Tag>
+                          <Button
+                            type="primary"
+                            className="mt-2 w-full"
+                            onClick={() => setOpenReviewModal(true)}
+                          >
+                            Dar retroalimentación
+                          </Button>
+                        </div>
+                      ) : (
+                        <Tag icon={<ClockCircleOutlined />} color="warning" className="font-medium text-sm py-1 px-3">
+                          Revisión al finalizar
+                        </Tag>
+                      )}
+                    </div>
         </div>
       </Card>
 
@@ -800,16 +821,22 @@ export default function ProyectoDetalle() {
 
       {/* Modal para mostrar detalles del puesto */}
       <Modal
-        open={modalVisible}
-        title={selectedPuesto ? selectedPuesto.Puesto : ""}
-        onCancel={async () => {
-          setModalVisible(false);
-          await fetchAsignadosPorPuesto();
-        }}
-        width={1200}
-        footer={null}
-        styles={{ body: { padding: 0, borderRadius: 12, overflow: "hidden" } }}
-      >
+  open={modalVisible}
+  title={selectedPuesto ? selectedPuesto.Puesto : ""}
+  onCancel={async () => {
+    // Si el rol no está completo, muestra confirmación antes de cerrar
+    if (selectedPuesto && !asignados.every(a => !!a)) {
+      setExitConfirmVisible(true); // <-- muestra el modal de confirmación
+      // NO cierres el modal aquí
+      return;
+    }
+    setModalVisible(false);
+    await fetchAsignadosPorPuesto();
+  }}
+  width={1200}
+  footer={null}
+  styles={{ body: { padding: 0, borderRadius: 12, overflow: "hidden" } }}
+>
         {selectedPuesto && (
           <DndProvider backend={HTML5Backend}>
             <div className="flex flex-col md:flex-row">
@@ -837,6 +864,10 @@ export default function ProyectoDetalle() {
                           empleado={empleado}
                           fetchAvatarURL={fetchAvatarURL}
                           showCargabilidad={false} // <--- Nuevo prop para ocultar cargabilidad
+                          onShowProfile={() => {
+                          setEmpleadoPerfil(empleado);
+                          setPerfilEmpleadoVisible(true);
+                        }}
                         />
                       ) : (
                         <div key={idx} className="text-gray-400 border border-dashed rounded-lg p-3 text-center">
@@ -915,9 +946,11 @@ export default function ProyectoDetalle() {
                             await supabase
                               .from("Puesto_proyecto")
                               .update({
-                                Completo: asignados.every(a => a)
+                                Completo: asignados.every(a => !!a)
                               })
                               .eq("id", selectedPuesto.id);
+
+                            actualizarCompletoEnPuestos(selectedPuesto.id, asignados.every(a => !!a));
 
                             Modal.success({
                               title: "Asignaciones guardadas",
@@ -997,7 +1030,15 @@ export default function ProyectoDetalle() {
                             .filter(emp => !asignados.some(a => a && a.id_empleado === emp.id_empleado))
                             .filter(emp => emp.id_empleado !== proyecto.id_empleado_delivery)
                             .map(emp => (
-                              <EmpleadoCard key={emp.id_empleado} empleado={emp} fetchAvatarURL={fetchAvatarURL} />
+                              <EmpleadoCard 
+                              key={emp.id_empleado} 
+                              empleado={emp} 
+                              fetchAvatarURL={fetchAvatarURL}
+                              onShowProfile={() => {
+                                    setEmpleadoPerfil(emp);
+                                    setPerfilEmpleadoVisible(true);
+                                  }}
+                               />
                             ))}
                         </div>
                       )
@@ -1015,7 +1056,14 @@ export default function ProyectoDetalle() {
                         ) : (
                           <div className="grid grid-cols-1 sm:grid-cols-1 gap-3">
                             {postuladosFiltrados.map(emp => (
-                              <EmpleadoCard key={emp.id_empleado} empleado={emp} fetchAvatarURL={fetchAvatarURL} />
+                              <EmpleadoCard 
+                              key={emp.id_empleado} 
+                              empleado={emp} 
+                              fetchAvatarURL={fetchAvatarURL} 
+                              onShowProfile={() => {
+                                setEmpleadoPerfil(emp);
+                                setPerfilEmpleadoVisible(true);
+                              }}/>
                             ))}
                           </div>
                         );
@@ -1057,6 +1105,10 @@ export default function ProyectoDetalle() {
                                   key={emp.id_empleado}
                                   empleado={emp}
                                   fetchAvatarURL={fetchAvatarURL}
+                                  onShowProfile={() => {
+                                  setEmpleadoPerfil(emp);
+                                  setPerfilEmpleadoVisible(true);
+                                }}
                                 />
                               ))}
                           </div>
@@ -1138,14 +1190,15 @@ export default function ProyectoDetalle() {
         onCancel={() => setExitConfirmVisible(false)}
         onOk={async () => {
           if (selectedPuesto) {
+            // Si falta algún empleado, marca como incompleto
             await supabase
               .from("Puesto_proyecto")
-              .update({ Completo: false })
+              .update({ Completo: asignados.every(a => !!a) })
               .eq("id", selectedPuesto.id);
           }
           setExitConfirmVisible(false);
           setModalVisible(false);
-          await fetchData(); // Opcional: recarga los datos
+          await fetchData();
         }}
         okText="Sí, salir"
         cancelText="Cancelar"
@@ -1295,6 +1348,42 @@ export default function ProyectoDetalle() {
         )}
       </Modal>
 
+      <Modal
+  open={exitConfirmVisible}
+  title="El rol se marcará como incompleto"
+  onCancel={() => setExitConfirmVisible(false)}
+  footer={[
+    <Button key="volver" onClick={() => setExitConfirmVisible(false)}>
+      Volver al modal
+    </Button>,
+    <Button
+      key="confirmar"
+      type="primary"
+      danger
+      onClick={async () => {
+        if (selectedPuesto) {
+          // Marca como incompleto
+          await supabase
+            .from("Puesto_proyecto")
+            .update({ Completo: false })
+            .eq("id", selectedPuesto.id);
+          actualizarCompletoEnPuestos(selectedPuesto.id, false);
+        }
+        setExitConfirmVisible(false);
+        setModalVisible(false);
+        await fetchAsignadosPorPuesto();
+      }}
+    >
+      Sí, salir y marcar como incompleto
+    </Button>,
+  ]}
+>
+  <p>
+    No has asignado todos los empleados requeridos para este rol. Si sales ahora, el rol se marcará como incompleto.<br />
+    ¿Deseas salir y marcar el rol como incompleto o volver a completar las asignaciones?
+  </p>
+</Modal>
+
       {/* Modal para finalizar proyecto con contador */}
       <Modal
         open={finishProjectModal}
@@ -1370,6 +1459,20 @@ export default function ProyectoDetalle() {
           )}
         </div>
       </Modal>
+      <Modal
+  open={perfilEmpleadoVisible}
+  title="Perfil del empleado"
+  onCancel={() => setPerfilEmpleadoVisible(false)}
+  footer={null}
+  width={900}
+  styles={{ body: { padding: 0 } }}
+>
+  {empleadoPerfil && (
+    // Usa el mismo componente que en perfiles-de-empleados/page.tsx
+    <EmployeeProfile id={empleadoPerfil.id_empleado || empleadoPerfil.ID_Empleado} />
+  )}
+</Modal>
+      
     </div>
   );
 }
@@ -1382,7 +1485,8 @@ function EmpleadoCard({
   showRemove = false,
   onRemove,
   showCargabilidad = true,
-  draggable = true
+  draggable = true,
+  onShowProfile // <--- NUEVO
 }: {
   empleado: any,
   fetchAvatarURL: (id: string) => Promise<string | null>,
@@ -1391,7 +1495,8 @@ function EmpleadoCard({
   showRemove?: boolean,
   onRemove?: () => void,
   showCargabilidad?: boolean,
-  draggable?: boolean
+  draggable?: boolean,
+  onShowProfile?: () => void // <--- NUEVO
 }) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
@@ -1420,69 +1525,86 @@ function EmpleadoCard({
   const { isDragging } = dragCollected;
 
   return (
-    <div
-      ref={draggable ? (node) => { if (node) drag(node); } : undefined}
-      className={`flex items-center bg-white rounded-2xl shadow-lg p-3 border border-gray-200 hover:shadow-2xl transition-shadow duration-200 min-h-0 ${isDragging ? "opacity-50" : ""}`}
-      style={{
-        minHeight: 50,
-        maxHeight: 70,
-        cursor: draggable ? "grab" : "default",
-        position: "relative",
-        width: "100%",
-      }}
-    >
-      {showRemove && (
-        <button
-          onClick={onRemove}
-          className="absolute top-2 right-2 text-gray-400 hover:text-red-500 bg-white rounded-full p-2 shadow"
-          style={{ zIndex: 2, fontSize: 18, lineHeight: 1 }}
-          type="button"
-        >
-          ×
-        </button>
+  <div
+    ref={draggable ? (node) => { if (node) drag(node); } : undefined}
+    className={`flex items-center bg-white rounded-2xl shadow-lg p-3 border border-gray-200 hover:shadow-2xl transition-shadow duration-200 min-h-0 ${isDragging ? "opacity-50" : ""}`}
+    style={{
+      minHeight: 50,
+      maxHeight: 70,
+      cursor: draggable ? "grab" : "default",
+      position: "relative",
+      width: "100%",
+      overflow: "hidden",
+    }}
+  >
+    {showRemove && (
+      <button
+        onClick={onRemove}
+        className="absolute top-2 right-2 text-gray-400 hover:text-red-500 bg-white rounded-full p-2 shadow"
+        style={{ zIndex: 2, fontSize: 18, lineHeight: 1 }}
+        type="button"
+      >
+        ×
+      </button>
+    )}
+    <Avatar
+      size={40}
+      src={avatarUrl || undefined}
+      icon={!avatarUrl ? <UserOutlined /> : undefined}
+      className="bg-gray-100 text-gray-500 mr-3 flex-shrink-0"
+    />
+    <div className="flex-1 flex flex-col justify-center min-w-0">
+      <span className="font-semibold text-gray-800 text-base truncate block max-w-full" style={{ lineHeight: 1.2 }}>
+        {empleado.nombre}
+      </span>
+      {showCargabilidad && (
+        (() => {
+          let porcentaje = 0;
+          if (useTotalPropuesta && empleado.total_propuesta !== undefined) {
+            porcentaje = Number(empleado.total_propuesta);
+          } else if (empleado.cargabilidad !== undefined) {
+            porcentaje = Number(empleado.cargabilidad);
+          }
+          return (
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-sm text-gray-600 font-semibold ml-1 whitespace-nowrap">
+                {porcentaje}%
+              </span>
+              <div className="flex-1 min-w-0">
+                <Progress
+                  percent={porcentaje}
+                  size="small"
+                  showInfo={false}
+                  strokeColor={
+                    porcentaje > 70 ? "#f5222d"
+                      : porcentaje > 40 ? "#fa8c16"
+                        : "#52c41a"
+                  }
+                  className="mx-auto"
+                  style={{ minWidth: 0 }}
+                />
+              </div>
+            </div>
+          );
+        })()
       )}
-      <Avatar
-        size={40}
-        src={avatarUrl || undefined}
-        icon={!avatarUrl ? <UserOutlined /> : undefined}
-        className="bg-gray-100 text-gray-500 mr-3"
-      />
-      <div className="flex-1 flex flex-col justify-center">
-        <span className="font-semibold text-gray-800 text-base">{empleado.nombre}</span>
-        {showCargabilidad && (
-          (() => {
-            // Calcula el porcentaje de cargabilidad
-            let porcentaje = 0;
-            if (useTotalPropuesta && empleado.total_propuesta !== undefined) {
-              porcentaje = Number(empleado.total_propuesta);
-            } else if (empleado.cargabilidad !== undefined) {
-              porcentaje = Number(empleado.cargabilidad);
-            }
-            return (
-              <>
-                <span className="text-sm text-gray-600 font-semibold ml-1">
-                  {porcentaje}%
-                </span>
-                <div className="w-full mt-1">
-                  <Progress
-                    percent={porcentaje}
-                    size="small"
-                    showInfo={false}
-                    strokeColor={
-                      porcentaje > 70 ? "#f5222d"
-                        : porcentaje > 40 ? "#fa8c16"
-                          : "#52c41a"
-                    }
-                    className="mx-auto"
-                  />
-                </div>
-              </>
-            );
-          })()
-        )}
-      </div>
     </div>
-  );
+    {onShowProfile && (
+      <Button
+        type="default"
+        className="ml-2 flex items-center gap-1 border-purple-500 text-purple-700 hover:bg-purple-50 hover:border-purple-700 transition-all"
+        style={{ borderWidth: 1, fontWeight: 500, whiteSpace: "nowrap" }}
+        icon={<UserOutlined />}
+        onClick={e => {
+          e.stopPropagation();
+          onShowProfile();
+        }}
+      >
+        Ver perfil
+      </Button>
+    )}
+  </div>
+);
 }
 
 // Drop zone para asignar empleados
@@ -1520,12 +1642,14 @@ function DropZone({ index, assignedEmpleado, originalEmpleado, onDrop, fetchAvat
     >
       {assignedEmpleado ? (
         <EmpleadoCard
-          empleado={assignedEmpleado}
-          fetchAvatarURL={fetchAvatarURL}
-          useTotalPropuesta={isNuevoIngreso}
-          showRemove
-          onRemove={() => onRemove(index)}
-        />
+  empleado={assignedEmpleado}
+  fetchAvatarURL={fetchAvatarURL}
+  useTotalPropuesta={assignedEmpleado?.total_propuesta !== undefined}
+  showRemove
+  onRemove={() => onRemove(index)}
+  
+  
+/>
       ) : (
         <span className="text-gray-400">Arrastra un empleado aquí</span>
       )}

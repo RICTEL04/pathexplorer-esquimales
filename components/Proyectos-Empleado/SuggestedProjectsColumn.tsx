@@ -102,6 +102,7 @@ export default function SuggestedProjectsColumn() {
       setHayProyectosDisponibles(true); // reset
 
       const { data: proyectos, error } = await supabase.rpc("get_inactive_projects_with_skills");
+      console.log("Proyectos obtenidos para sugerencias:", proyectos);
       if (error) {
         console.error("Error obteniendo proyectos para sugerencias:", error);
         setLoading(false);
@@ -238,13 +239,13 @@ export default function SuggestedProjectsColumn() {
       <h2 className="text-2xl text-black font-bold">Proyectos</h2>
       <div className="flex gap-2 mt-2">
         <button
-          className={`px-3 py-1 rounded ${viewType === "sugeridos" ? "bg-purple-600 text-white" : "bg-gray-200 text-black"}`}
+          className={`px-3 py-1 rounded ${viewType === "sugeridos" ? "bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 text-white" : "bg-gray-200 text-black"}`}
           onClick={() => setViewType("sugeridos")}
         >
           Proyectos sugeridos
         </button>
         <button
-          className={`px-3 py-1 rounded ${viewType === "disponibles" ? "bg-purple-600 text-white" : "bg-gray-200 text-black"}`}
+          className={`px-3 py-1 rounded ${viewType === "disponibles" ? "bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 text-white" : "bg-gray-200 text-black"}`}
           onClick={() => setViewType("disponibles")}
         >
           Proyectos disponibles
@@ -254,22 +255,22 @@ export default function SuggestedProjectsColumn() {
         <>
           <div className="flex gap-2 mt-4">
             <button
-              className={`px-3 py-1 rounded ${candidatoFilter === "todos" ? "bg-purple-600 text-white" : "bg-gray-200 text-black"}`}
+              className={`px-3 py-1 rounded ${candidatoFilter === "todos" ? "bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 text-white" : "bg-gray-200 text-black"}`}
               onClick={() => setCandidatoFilter("todos")}
             >
               Todos
             </button>
             <button
-              className={`px-3 py-1 rounded ${candidatoFilter === "candidato" ? "bg-green-600 text-white" : "bg-gray-200 text-black"}`}
+              className={`px-3 py-1 rounded ${candidatoFilter === "candidato" ? "bg-gradient-to-r from-green-700 to-yellow-700 hover:from-green-800 hover:to-yellow-800 text-white" : "bg-gray-200 text-black"}`}
               onClick={() => setCandidatoFilter("candidato")}
             >
-              Aplicas
+              Puedes postularte
             </button>
             <button
-              className={`px-3 py-1 rounded ${candidatoFilter === "no-candidato" ? "bg-red-600 text-white" : "bg-gray-200 text-black"}`}
+              className={`px-3 py-1 rounded ${candidatoFilter === "no-candidato" ? "bg-gradient-to-r from-red-700 to-orange-600 hover:from-red-800 hover:to-orange-700 text-white" : "bg-gray-200 text-black"}`}
               onClick={() => setCandidatoFilter("no-candidato")}
             >
-              No aplicas
+              No puedes postularte
             </button>
           </div>
           <input

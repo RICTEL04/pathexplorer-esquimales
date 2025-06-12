@@ -62,11 +62,11 @@ export default function CertificacionesPage() {
 
 
     return (
-        <div className="container h-3/4">
+        <div className="container h-3/4 mt-4">
             {modalOpen && (
                 <div className="fixed inset-0 z-10 w-screen flex justify-center items-center">
                     <div className="bg-zinc-300 rounded-lg shadow-lg p-6 w-3/4 h-3/4">
-                        <button className="text-blue-500 hover:underline" onClick={() => setModalOpen(false)}>Cerrar</button>
+                        <button className="text-purple-500 hover:underline" onClick={() => setModalOpen(false)}>Cerrar</button>
                         {modalType === "upload" && session && (
                             <UploadCertificadoForm
                                 ID_Empleado={session.user.id}
@@ -86,7 +86,7 @@ export default function CertificacionesPage() {
                     <div className="relative w-20 h-10 bg-gray-200 rounded-full cursor-pointer"
                         onClick={() => setViewMode(viewMode === "table" ? "cards" : "table")}
                     >
-                        <div className={`absolute top-0 left-0 w-10 h-10 bg-purple-500 rounded-full transition-transform duration-300 ${viewMode === "table" ? "translate-x-0" : "translate-x-10"}`}>
+                        <div className={`absolute top-0 left-0 w-10 h-10 bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 rounded-full transition-transform duration-300 ${viewMode === "table" ? "translate-x-0" : "translate-x-10"}`}>
                             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-bold">
                                 {viewMode === "table" ? <Menu /> : <LayoutGrid />}
                             </div>
@@ -94,7 +94,7 @@ export default function CertificacionesPage() {
                     </div>
                 </div>
                 <button
-                    className="mb-4 px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600"
+                    className="mb-4 px-4 py-2  text-white rounded-md bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700"
                     onClick={() => { setModalOpen(true); setModalType("upload"); }}
                 >
                     Upload

@@ -142,17 +142,20 @@ export default function ObjetivosPage() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="mb-6">
-        <h1 className="text-gray-800 text-2xl font-bold mb-2">Metas</h1>
-        <p className="text-gray-600">Aquí puedes gestionar tus metas.</p>
-        <div className="flex justify-between items-center">
-          <button 
-            onClick={() => setMostrarFormulario(true)}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-          >
-            Agregar Meta
-          </button>
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-gray-800 text-2xl font-bold mb-1">Metas</h1>
+          <p className="text-gray-600">Aquí puedes gestionar tus metas.</p>
         </div>
+        <button
+          onClick={() => setMostrarFormulario(true)}
+          className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-violet-700 to-fuchsia-600 text-white rounded-lg shadow-md hover:from-violet-800 hover:to-fuchsia-700 transition-all font-semibold"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Agregar Meta
+        </button>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">

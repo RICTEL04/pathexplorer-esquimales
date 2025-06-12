@@ -87,7 +87,7 @@ export default function ProyectosPage() {
         </div>
         <button
           onClick={() => router.push("./proyectos/new")}
-          className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg"
+          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 text-white font-bold rounded-lg"
         >
           <Plus className="w-5 h-5" />
           <span>Nuevo Proyecto</span>

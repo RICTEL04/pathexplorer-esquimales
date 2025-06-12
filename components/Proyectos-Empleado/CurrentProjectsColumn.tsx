@@ -93,7 +93,7 @@ export default function CurrentProjectsColumn({
         <div className="lg:col-span-1">
             <div className="h-[80vh] mt-12 flex flex-col gap-y-2 min-h-0">
                 <Link
-                    className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded transition-all"
+                    className="px-4 py-1 bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 text-white rounded transition-all"
                     href={`/employee/proyectos/historial`}
                 >
                     Historial

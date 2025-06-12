@@ -238,38 +238,35 @@ export default function SkillsManager() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 relative">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Gestión de Habilidades</h1>
-        </div>
+    <div className="max-w-5xl mx-auto p-6 relative">
+      <div className="flex justify-between items-center mb-10">
+        <h1 className="text-3xl font-bold text-gray-800">Gestión de Habilidades</h1>
         <button
           onClick={() => setShowAddCategoriaModal(true)}
-          className="bg-violet-800 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
+          className="bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 text-white px-5 py-2 rounded-lg flex items-center shadow-lg transition-all"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
           </svg>
-          Nueva Categoria
+          Nueva Categoría
         </button>
       </div>
 
       {/* Barra de búsqueda */}
-      <div className="mb-6">
+      <div className="mb-8">
         <div className="relative">
           <input
             type="text"
             placeholder="Buscar categorías o habilidades..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pl-10"
+            className="w-full px-5 py-3 border-2 border-violet-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 pl-12 shadow-sm"
           />
           <svg
-            className="absolute left-3 top-3 h-5 w-5 text-gray-400"
+            className="absolute left-4 top-3.5 h-5 w-5 text-violet-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
           >
             <path
               strokeLinecap="round"
@@ -281,31 +278,20 @@ export default function SkillsManager() {
           {searchTerm && (
             <button
               onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+              className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600"
             >
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
           )}
         </div>
       </div>
-      {/* Resultados de búsqueda - MODIFICADO */}
+
+      {/* Resultados de búsqueda */}
       {isSearching && (
-        <div className="mb-8 bg-white rounded-lg shadow p-4">
-          <h2 className="text-xl font-semibold mb-4">Resultados de búsqueda para "{searchTerm}"</h2>
-          
+        <div className="mb-10 bg-white rounded-2xl shadow-lg p-6 border border-violet-100">
+          <h2 className="text-2xl font-bold mb-4 text-violet-700">Resultados de búsqueda para "<span className="font-mono">{searchTerm}</span>"</h2>
           {searchResults.categorias.length === 0 && searchResults.habilidades.length === 0 ? (
             <p className="text-gray-500">No se encontraron resultados</p>
           ) : (
@@ -313,22 +299,21 @@ export default function SkillsManager() {
               {/* Categorías encontradas */}
               {searchResults.categorias.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-medium mb-2">Categorías encontradas ({searchResults.categorias.length})</h3>
+                  <h3 className="text-lg font-semibold mb-2 text-violet-600">Categorías encontradas ({searchResults.categorias.length})</h3>
                   <div className="space-y-4">
                     {searchResults.categorias.map(categoria => {
                       const habilidadesDeCategoria = habilidades.filter(h => h.ID_Categoria === categoria.id);
                       return (
-                        <div key={categoria.id} className="border rounded-lg overflow-hidden">
-                          <div className="flex justify-between items-center p-3 bg-gray-50 border-b">
-                            <h4 className="font-medium">{categoria.Nombre_categoria}</h4>
+                        <div key={categoria.id} className="border rounded-xl overflow-hidden shadow-sm bg-violet-50/30">
+                          <div className="flex justify-between items-center p-3 bg-violet-50 border-b">
+                            <h4 className="font-medium text-violet-800">{categoria.Nombre_categoria}</h4>
                             <button
                               onClick={() => confirmarEliminacion('categoria', categoria.id, categoria.Nombre_categoria)}
-                              className="px-2 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
+                              className="px-3 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors font-semibold"
                             >
                               Eliminar categoría
                             </button>
                           </div>
-                          
                           <div className="p-3">
                             {habilidadesDeCategoria.length === 0 ? (
                               <p className="text-gray-500 text-sm">No hay habilidades en esta categoría</p>
@@ -337,8 +322,8 @@ export default function SkillsManager() {
                                 <p className="text-sm text-gray-600 mb-2">Habilidades en esta categoría:</p>
                                 <ul className="space-y-2">
                                   {habilidadesDeCategoria.map(habilidad => (
-                                    <li key={habilidad.ID_Habilidad} className="flex justify-between items-center p-2 hover:bg-gray-50 rounded">
-                                      <span>{habilidad.Nombre}</span>
+                                    <li key={habilidad.ID_Habilidad} className="flex justify-between items-center p-2 hover:bg-violet-100 rounded">
+                                      <span className="font-medium">{habilidad.Nombre}</span>
                                       <button
                                         onClick={() => confirmarEliminacion('habilidad', habilidad.ID_Habilidad, habilidad.Nombre)}
                                         className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
@@ -358,22 +343,21 @@ export default function SkillsManager() {
                 </div>
               )}
               
-              {/* Habilidades encontradas (que no pertenecen a categorías encontradas) */}
+              {/* Habilidades encontradas */}
               {searchResults.habilidades.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-medium mb-2">
+                  <h3 className="text-lg font-semibold mb-2 text-violet-600">
                     Habilidades encontradas ({searchResults.habilidades.length})
                   </h3>
                   <ul className="space-y-2">
                     {searchResults.habilidades.map(habilidad => {
-                      // Solo mostrar habilidades cuyas categorías no aparecieron en los resultados
                       if (searchResults.categorias.some(c => c.id === habilidad.ID_Categoria)) {
                         return null;
                       }
                       return (
-                        <li key={habilidad.ID_Habilidad} className="p-2 hover:bg-gray-50 rounded flex justify-between items-center">
+                        <li key={habilidad.ID_Habilidad} className="p-2 hover:bg-violet-100 rounded flex justify-between items-center">
                           <div>
-                            <span>{habilidad.Nombre}</span>
+                            <span className="font-medium">{habilidad.Nombre}</span>
                             <span className="text-xs text-gray-500 ml-2">
                               ({categorias.find(c => c.id === habilidad.ID_Categoria)?.Nombre_categoria})
                             </span>
@@ -394,42 +378,42 @@ export default function SkillsManager() {
           )}
         </div>
       )}
-      {/* Lista de categorías y habilidades (solo se muestra cuando no hay búsqueda) */}
+
+      {/* Lista de categorías y habilidades */}
       {!isSearching && (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {categorias.length === 0 ? (
-            <p className="text-center text-gray-500 py-8">No hay categorías creadas aún</p>
+            <p className="text-center text-gray-400 py-12 text-lg">No hay categorías creadas aún</p>
           ) : (
             categorias.map(categoria => (
-              <div key={categoria.id} className="border rounded-lg overflow-hidden">
-                <div className="flex justify-between items-center p-4 bg-gray-100 border-b">
-                  <h3 className="text-lg font-medium">{categoria.Nombre_categoria}</h3>
+              <div key={categoria.id} className="border rounded-2xl overflow-hidden shadow bg-white">
+                <div className="flex justify-between items-center p-5 bg-violet-50 border-b">
+                  <h3 className="text-xl font-bold text-violet-800">{categoria.Nombre_categoria}</h3>
                   <div className="flex gap-2">
                     <button
                       onClick={() => abrirAgregarHabilidadModal(categoria.id)}
-                      className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                      className="px-4 py-1 bg-gradient-to-r from-violet-700 to-fuchsia-600 text-white rounded hover:from-violet-800 hover:to-fuchsia-700 transition-colors shadow"
                     >
                       + Habilidad
                     </button>
                     <button
                       onClick={() => confirmarEliminacion('categoria', categoria.id, categoria.Nombre_categoria)}
-                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                      className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors shadow"
                     >
                       Eliminar
                     </button>
                   </div>
                 </div>
-                
-                <div className="p-4">
+                <div className="p-5">
                   {habilidades.filter(h => h.ID_Categoria === categoria.id).length === 0 ? (
-                    <p className="text-gray-500">No hay habilidades en esta categoría</p>
+                    <p className="text-gray-400">No hay habilidades en esta categoría</p>
                   ) : (
                     <ul className="space-y-2">
                       {habilidades
                         .filter(h => h.ID_Categoria === categoria.id)
                         .map(habilidad => (
-                          <li key={habilidad.ID_Habilidad} className="flex justify-between items-center p-2 hover:bg-gray-50">
-                            <span>{habilidad.Nombre}</span>
+                          <li key={habilidad.ID_Habilidad} className="flex justify-between items-center p-2 hover:bg-violet-50 rounded">
+                            <span className="font-medium">{habilidad.Nombre}</span>
                             <button
                               onClick={() => confirmarEliminacion('habilidad', habilidad.ID_Habilidad, habilidad.Nombre)}
                               className="px-2 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
@@ -449,16 +433,16 @@ export default function SkillsManager() {
 
       {/* Modal para agregar categorías */}
       {showAddCategoriaModal && (
-        <div className="fixed inset-0 bg-gray-700/40 bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-semibold mb-4">Agregar Nueva Categoría</h3>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-violet-200">
+            <h3 className="text-2xl font-bold mb-4 text-violet-800">Agregar Nueva Categoría</h3>
             <div className="mb-4">
               <input
                 type="text"
                 value={nuevaCategoriaNombre}
                 onChange={(e) => setNuevaCategoriaNombre(e.target.value)}
                 placeholder="Nombre de la categoría"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border-2 border-violet-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
                 onKeyDown={(e) => e.key === 'Enter' && agregarCategoria()}
               />
             </div>
@@ -477,7 +461,7 @@ export default function SkillsManager() {
                 disabled={!nuevaCategoriaNombre.trim()}
                 className={`px-4 py-2 rounded-lg transition-colors ${
                   nuevaCategoriaNombre.trim()
-                    ? 'bg-purple-600 text-white hover:bg-purple-700'
+                    ? 'bg-gradient-to-r from-violet-700 to-fuchsia-600 text-white hover:from-violet-800 hover:to-fuchsia-700'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
@@ -490,10 +474,10 @@ export default function SkillsManager() {
 
       {/* Modal para agregar habilidades */}
       {showAddHabilidadModal && (
-        <div className="fixed inset-0 bg-gray-700/40 bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-semibold mb-4">
-              Agregar habilidad a: {categorias.find(c => c.id === currentCategoriaId)?.Nombre_categoria}
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-violet-200">
+            <h3 className="text-2xl font-bold mb-4 text-violet-800">
+              Agregar habilidad a: <span className="text-fuchsia-700">{categorias.find(c => c.id === currentCategoriaId)?.Nombre_categoria}</span>
             </h3>
             <div className="mb-4">
               <input
@@ -501,7 +485,7 @@ export default function SkillsManager() {
                 value={nuevaHabilidadNombre}
                 onChange={(e) => setNuevaHabilidadNombre(e.target.value)}
                 placeholder="Nombre de la habilidad"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border-2 border-violet-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
                 onKeyDown={(e) => e.key === 'Enter' && agregarHabilidad()}
               />
             </div>
@@ -517,7 +501,7 @@ export default function SkillsManager() {
                 disabled={!nuevaHabilidadNombre.trim()}
                 className={`px-4 py-2 rounded-lg transition-colors ${
                   nuevaHabilidadNombre.trim()
-                    ? 'bg-purple-600 text-white hover:bg-purple-700'
+                    ? 'bg-gradient-to-r from-violet-700 to-fuchsia-600 text-white hover:from-violet-800 hover:to-fuchsia-700'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
@@ -530,12 +514,12 @@ export default function SkillsManager() {
 
       {/* Modal de confirmación para eliminar */}
       {showConfirmModal && itemToDelete && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-semibold mb-4">Confirmar eliminación</h3>
-            <p className="mb-6">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-red-200">
+            <h3 className="text-2xl font-bold mb-4 text-red-700">Confirmar eliminación</h3>
+            <p className="mb-6 text-gray-700">
               ¿Estás seguro que deseas eliminar {itemToDelete.type === 'categoria' ? 'la categoría' : 'la habilidad'}{' '}
-              <span className="font-bold">"{itemToDelete.name}"</span>?
+              <span className="font-bold text-red-700">"{itemToDelete.name}"</span>?
               {itemToDelete.type === 'categoria' && (
                 <span className="block mt-2 text-red-500">
                   ¡Esto también eliminará todas las habilidades asociadas a esta categoría!

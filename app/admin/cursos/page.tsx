@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { createCursoWithHabilidades, getCursos } from "@/lib/cursosManager";
-
+import { createCursoWithHabilidades } from "@/lib/cursosManager";
+import { getCursos } from "@/lib/cursosManager";
 
 interface Curso {
   ID_Curso: string;
@@ -43,7 +43,7 @@ const CursosPage: React.FC = () => {
         ]);
         
         setCursos(cursosData);
-        setHabilidades(habilidadesData.data ?? []);
+        setHabilidades(habilidadesData.data || []);
       } catch (error) {
         console.error("Error al obtener datos:", error);
       } finally {
@@ -106,7 +106,7 @@ const CursosPage: React.FC = () => {
   const handleEditCurso = (curso: Curso) => {
     setCursoToEdit({
       ...curso,
-      Descripcion: curso.Descripcion ?? "", // Asegúrate de que la descripción no sea `undefined`
+      Descripcion: curso.Descripcion || "", // Asegúrate de que la descripción no sea `undefined`
     });
     setShowEditCursoForm(true);
   };
@@ -148,7 +148,7 @@ const CursosPage: React.FC = () => {
 
   const filteredCursos = cursos.filter(curso =>
     curso.Nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    curso.Descripcion?.toLowerCase().includes(searchTerm.toLowerCase())
+    (curso.Descripcion && curso.Descripcion.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
@@ -187,7 +187,7 @@ const CursosPage: React.FC = () => {
             </div>
             <button
               onClick={() => setShowCreateCursoForm(true)}
-              className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
             >
               <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -262,7 +262,7 @@ const CursosPage: React.FC = () => {
 
       {/* Modal para crear nuevo curso */}
       {showCreateCursoForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-gray-700/30 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">

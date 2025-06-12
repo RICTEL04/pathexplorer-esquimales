@@ -36,13 +36,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     // Construir el prompt para el modelo
     const prompt = `
-      Basándote en las siguientes metas profesionales, habilidades e intereses del empleado, ordena los proyectos existentes según su relevancia para el empleado. 
+      Basándote en las siguientes metas profesionales, habilidades e intereses del empleado, 
+      y considerando también las habilidades requeridas por cada proyecto (incluyendo el nivel), 
+      ordena los proyectos existentes según su relevancia para el empleado (Siempre debe ordenarlos siempre y cuando haya proyectos existentes). 
       Devuelve únicamente los proyectos que ya están en la lista proporcionada.
 
       Metas:
       ${metas.join(", ")}
 
-      Habilidades:
+      Habilidades del empleado:
       ${habilidades.join(", ")}
 
       Intereses:
@@ -52,9 +54,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ${proyectos
         .map(
           (p: any) =>
-            `- ID: ${p.ID_Proyecto}, Nombre: ${p.Nombre}, Descripción: ${p.Descripcion}, Estado: ${p.Status}, Fecha de inicio: ${p.fecha_inicio || "N/A"}, Fecha de fin: ${p.fecha_fin || "N/A"}`
+            `- ID: ${p.ID_Proyecto}, Nombre: ${p.Nombre}, Descripción: ${p.Descripcion}, Estado: ${p.Status}, Fecha de inicio: ${p.fecha_inicio || "N/A"}, Fecha de fin: ${p.fecha_fin || "N/A"}, Habilidades requeridas: ${
+              Array.isArray(p.habilidades_proyecto) && p.habilidades_proyecto.length > 0
+                ? p.habilidades_proyecto.map((h: any) => `${h.Nombre} (${h.nivel})`).join(", ")
+                : "Ninguna"
+            }`
         )
         .join("\n")}
+
+      Considera especialmente la coincidencia entre las habilidades del empleado y las habilidades requeridas por el proyecto (incluyendo el nivel).
 
       Devuelve los proyectos en el siguiente formato JSON:
       {

@@ -15,7 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { data, error } = await supabaseAdmin.auth.admin.createUser({
     email,
     password,
-    user_metadata: { name, role }
+    user_metadata: { name, role },
+    email_confirm: true // Importante: false para que se mande el correo de confirmación
   });
 
   if (error) return res.status(400).json({ error: error.message });

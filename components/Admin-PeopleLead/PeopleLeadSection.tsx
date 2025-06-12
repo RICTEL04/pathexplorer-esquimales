@@ -107,13 +107,13 @@ export default function PeopleLeadsSection({
               <div
                 key={lead.ID_Empleado}
                 className={`border rounded-lg p-4 cursor-pointer transition-all duration-200 ${selectedPeopleLead?.ID_Empleado === lead.ID_Empleado
-                    ? "border-blue-500 bg-blue-50"
+                    ? "border-purple-500 bg-purple-50"
                     : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
                   }`}
                 onClick={() => setSelectedPeopleLead(lead)}
               >
                 <div className="flex items-center mb-2">
-                  <div className="bg-blue-100 text-blue-800 rounded-full p-2 mr-3">
+                  <div className="bg-purple-100 text-purple-800 rounded-full p-2 mr-3">
                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                     </svg>
@@ -138,46 +138,58 @@ export default function PeopleLeadsSection({
       {/* Right: Details and associated employees */}
       <div className="flex flex-col w-2/3 pl-2">
         {selectedPeopleLead ? (
-          <div className="h-full flex flex-col justify-center items-center">
-            <h2 className="text-2xl font-bold mb-2 text-gray-800">{selectedPeopleLead.Nombre}</h2>
-            <p className="text-lg text-gray-600 mb-2">{selectedPeopleLead.Rol}</p>
-            <p className="text-md text-gray-500 mb-2">
-              Departamento: {selectedPeopleLead.Departamento?.Nombre || "Sin departamento"}
-            </p>
-            <p className="text-sm text-gray-500 mb-2">
-              ID People Lead: {selectedPeopleLead.ID_PeopleLead}
-            </p>
-            <p className="text-sm text-gray-500">
-              ID Empleado: {selectedPeopleLead.ID_Empleado}
-            </p>
-            {/* Always show empleados assigned to this People Lead */}
-            <div className="w-full mt-6">
+          <div className="h-full flex flex-col items-center justify-start bg-gradient-to-br from-white via-purple-50 to-fuchsia-50 rounded-2xl shadow-lg p-8 w-full">
+            {/* Avatar grande */}
+            <div className="w-24 h-24 rounded-full bg-purple-200 flex items-center justify-center text-purple-700 text-4xl font-bold shadow-lg mb-4 border-4 border-white">
+              {selectedPeopleLead.Nombre ? selectedPeopleLead.Nombre[0] : "?"}
+            </div>
+            {/* Info principal */}
+            <h2 className="text-2xl font-bold mb-1 text-gray-800">{selectedPeopleLead.Nombre}</h2>
+            <span className="inline-block bg-purple-100 text-purple-800 text-sm px-3 py-1 rounded-full mb-2 font-medium">
+              {selectedPeopleLead.Rol}
+            </span>
+            <span className="inline-block bg-fuchsia-100 text-fuchsia-800 text-xs px-2 py-0.5 rounded mb-4">
+              {selectedPeopleLead.Departamento?.Nombre || "Sin departamento"}
+            </span>
+            {/* IDs */}
+            <div className="flex flex-col items-center mb-4">
+              <span className="text-xs text-gray-400">ID People Lead: <span className="font-mono">{selectedPeopleLead.ID_PeopleLead}</span></span>
+              <span className="text-xs text-gray-400">ID Empleado: <span className="font-mono">{selectedPeopleLead.ID_Empleado}</span></span>
+            </div>
+            {/* Empleados asignados */}
+            <div className="w-full mt-4">
               <h3 className="text-lg font-semibold mb-2 text-gray-700">Empleados asignados</h3>
               {empleadosLoading ? (
                 <div className="text-gray-500">Cargando empleados...</div>
               ) : empleados.length > 0 ? (
-                <ul className="w-full max-h-48 overflow-y-scroll">
+                <ul className="w-full max-h-48 overflow-y-auto custom-scrollbar space-y-2">
                   {empleados.map((emp) => (
-                    <div className="flex items-center justify-between" key={emp.ID_Empleado}>
-                      <li key={emp.ID_Empleado} className="border-b py-1 text-gray-700">
-                        {emp.Nombre} - {emp.Rol}
-                      </li>
+                    <li key={emp.ID_Empleado} className="flex items-center justify-between bg-white rounded-lg shadow-sm px-3 py-2 border border-gray-100 hover:border-purple-200 transition">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-lg border-2 border-purple-200">
+                          {emp.Nombre ? emp.Nombre[0] : "?"}
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-800">{emp.Nombre}</span>
+                          <span className="block text-xs text-gray-500">{emp.Rol}</span>
+                        </div>
+                      </div>
                       <button
-                        className="text-red-500 hover:text-red-700 pl-2"
+                        className="text-xs px-3 py-1 rounded-full bg-red-100 text-red-700 hover:bg-red-200 transition ml-2"
                         onClick={() => unassignEmpleado(emp.ID_Empleado)}
                       >
                         Desasignar
                       </button>
-                    </div>
+                    </li>
                   ))}
                 </ul>
               ) : (
                 <div className="text-gray-400">No hay empleados asignados.</div>
               )}
             </div>
-            {/* Existing button for modal */}
+            {/* Botón para asignar */}
             <button
-              className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              className="mt-6 px-5 py-2 text-white rounded-lg shadow bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 transition"
               onClick={onOpenEmployeeModal}
             >
               Asignar Empleados a People Lead

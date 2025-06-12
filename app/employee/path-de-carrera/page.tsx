@@ -153,7 +153,7 @@ export default function PathDeCarreraPage() {
     ) || [];
 
   return (
-    <div>
+    <div className="mt-4">
       <h1 className="text-gray-800 text-2xl font-bold mb-4">Path de Carrera</h1>
       <p className="text-gray-600 mb-4">Aquí podrás ver cursos disponibles y tu path de carrera sugerido.</p>
 
@@ -162,7 +162,7 @@ export default function PathDeCarreraPage() {
         <button
           onClick={() => handleSectionChange("careerPath")}
           className={`px-4 py-2 rounded ${
-            activeSection === "careerPath" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
+            activeSection === "careerPath" ? "bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 text-white" : "bg-gray-200 text-gray-800"
           }`}
         >
           Path de Carrera
@@ -170,7 +170,7 @@ export default function PathDeCarreraPage() {
         <button
           onClick={() => handleSectionChange("employeeData")}
           className={`px-4 py-2 rounded ${
-            activeSection === "employeeData" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
+            activeSection === "employeeData" ? "bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 text-white" : "bg-gray-200 text-gray-800"
           }`}
         >
           Cursos Disponibles
@@ -216,7 +216,7 @@ export default function PathDeCarreraPage() {
                           onClick={() => handlePageChange(index + 1)}
                           className={`px-3 py-1 mx-1 rounded ${
                             currentPage === index + 1
-                              ? "bg-blue-500 text-white"
+                              ? "bg-purple-500 text-white"
                               : "bg-gray-200 text-gray-800"
                           }`}
                         >

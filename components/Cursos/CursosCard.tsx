@@ -11,8 +11,8 @@ export default function CoursesCard({
 }: CoursesCardProps) {
     return (
         <div className="flex flex-row bg-white text-gray-500 rounded-lg shadow-md p-4 items-center justify-between">
-            <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mr-4">
-                <BookOpenIcon className="w-6 h-6 text-blue-700" />
+            <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mr-4">
+                <BookOpenIcon className="w-6 h-6 text-purple-800" />
             </div>
             <div className="flex-grow flex flex-col">
                 <h3 className="text-lg font-bold text-gray-800">{course.Nombre}</h3>
@@ -41,7 +41,7 @@ export default function CoursesCard({
                 </div>
             </div>
             <button
-                className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex-shrink-0"
+                className="p-2 bg-gradient-to-r from-violet-700 to-fuchsia-600 hover:from-violet-800 hover:to-fuchsia-700 text-white rounded flex-shrink-0"
                 onClick={() => {
                     window.open(course.link, "_blank");
                 }}

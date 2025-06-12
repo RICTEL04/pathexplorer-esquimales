@@ -112,7 +112,7 @@ export default function EmployeeProfilesPage() {
           onChange={e => setSearch(e.target.value)}
           className="mb-4 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200"
         />
-        <div className="overflow-y-scroll overflow-x-hidden no-scrollbar">
+        <div className="overflow-y-scroll overflow-x-hidden no-scrollbar rounded-xl bg-white/60 shadow-inner p-2">
           {projectsWithEmployees.length === 0 ? (
             <p className="text-gray-600">No hay proyectos registrados.</p>
           ) : (
@@ -132,38 +132,39 @@ export default function EmployeeProfilesPage() {
                 return (
                   <div
                     key={proyecto.ID_Proyecto}
-                    className={`mb-4 border rounded-lg shadow-sm transition-all
-                      ${esActual ? "border-blue-500 ring-2 ring-blue-200" : ""}
+                    className={`mb-5 border rounded-2xl shadow-lg transition-all bg-white/90
+                      ${esActual ? "border-blue-400 ring-2 ring-blue-100" : "border-gray-200"}
                     `}
                   >
                     <button
-                      className={`w-full flex flex-col items-start justify-between px-4 py-2 font-semibold bg-gray-100 hover:bg-blue-100 rounded-t-lg transition-colors
+                      className={`w-full flex flex-col items-start justify-between px-5 py-4 font-semibold bg-gradient-to-r from-blue-50 via-white to-blue-100 hover:bg-blue-100 rounded-t-2xl transition-colors
                         ${esActual ? "bg-blue-50" : ""}
                       `}
                       onClick={() => setOpenProject(openProject === proyecto.ID_Proyecto ? null : proyecto.ID_Proyecto)}
                     >
-                      {/* Letrero de estado */}
-                      <span className={`mb-1 text-xs font-bold px-2 py-0.5 rounded 
+                      <span className={`mb-2 text-xs font-bold px-2 py-0.5 rounded 
                         ${esActual ? "bg-blue-100 text-blue-700" : "bg-gray-200 text-gray-600"}`}>
                         {esActual ? "Proyecto actual" : "Proyecto finalizado"}
                       </span>
                       <span className="flex items-center gap-2 w-full">
                         {esActual && (
-                          <span title="Proyecto actual" className="text-blue-600">
+                          <span title="Proyecto actual" className="text-blue-600 animate-pulse">
                             ●
                           </span>
                         )}
-                        <span className="truncate">{proyecto.Nombre}</span>
+                        <span className="truncate font-medium text-blue-900">{proyecto.Nombre}</span>
                         <span className="ml-2 text-xs bg-blue-200 text-blue-800 rounded-full px-2 py-0.5">{proyecto.empleados.length}</span>
                       </span>
                     </button>
                     <div
-                      className={`transition-all duration-300 overflow-hidden ${openProject === proyecto.ID_Proyecto ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}
+                      className={`transition-all duration-300 overflow-hidden bg-white rounded-b-2xl border-t
+                        ${openProject === proyecto.ID_Proyecto ? "max-h-[1000px] opacity-100 py-3 px-2" : "max-h-0 opacity-0 p-0"}
+                      `}
                     >
                       {openProject === proyecto.ID_Proyecto && (
-                        <div className="p-2 bg-white rounded-b-lg border-t">
+                        <div>
                           {proyecto.empleados.length === 0 ? (
-                            <p className="text-gray-500">No hay empleados en este proyecto.</p>
+                            <p className="text-gray-500 px-2 py-4">No hay empleados en este proyecto.</p>
                           ) : (
                             proyecto.empleados
                               .filter((empleado: any) => {
@@ -179,22 +180,22 @@ export default function EmployeeProfilesPage() {
                               .map((empleado: any, idx: number) => (
                                 <div
                                   key={empleado.ID_Empleado}
-                                  className={`flex items-center gap-3 border-b last:border-b-0 py-2 px-2 cursor-pointer transition-all duration-200 rounded-lg
+                                  className={`flex items-center gap-4 border-b last:border-b-0 py-3 px-2 cursor-pointer transition-all duration-200 rounded-lg
                                     ${selectedEmployee?.ID_Empleado === empleado.ID_Empleado
-                                      ? "border-blue-500 bg-blue-50"
-                                      : "border-transparent hover:border-blue-300 hover:bg-blue-50"
+                                      ? "border-blue-400 bg-blue-50"
+                                      : "border-transparent hover:border-blue-200 hover:bg-blue-50"
                                     }`}
                                   onClick={() => setSelectedEmployee(empleado)}
                                 >
                                   {empleado.Foto ? (
-                                    <img src={empleado.Foto} alt={empleado.Nombre} className="w-8 h-8 rounded-full object-cover border" />
+                                    <img src={empleado.Foto} alt={empleado.Nombre} className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 shadow" />
                                   ) : (
-                                    <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold border">
+                                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold border-2 border-blue-200 shadow text-lg">
                                       {empleado.Nombre ? empleado.Nombre[0] : "?"}
                                     </div>
                                   )}
                                   <div className="flex flex-col">
-                                    <span className="font-medium">{empleado.Nombre}</span>
+                                    <span className="font-semibold text-gray-900">{empleado.Nombre}</span>
                                   </div>
                                 </div>
                               ))

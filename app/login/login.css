@@ -1,30 +1,86 @@
-.login{
-    position:fixed;
-    padding:0;
-    margin:0;
-    top:0;
-    left:0;
-    height: 100%;
-    width: 100%;
-    background-image: linear-gradient(#832ab7, black);
-    margin: auto;
-}
-
-.fondo {
+.login {
     position: fixed;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    opacity: 0.1; 
-    filter: saturate(0.1);
-    background-image: url('/imagenes/milad.jpg');
-    background-size: cover;
-    background-position: center;
-    z-index: -1; 
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Alinea el login a la derecha */
+    z-index: 1;
+    padding-right: 6vw;
+    padding-left: 0;
+    box-sizing: border-box;
 }
 
-.contenedor{
+/* Imagen de fondo a la izquierda, más grande y visible */
+.fondo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 60vw;
+    opacity: 1;
+    filter: none;
+    overflow: hidden;
+    z-index: -2;
+    transition: width 0.4s cubic-bezier(.39,.575,.565,1);
+    border-top-right-radius: 60px;
+    border-bottom-right-radius: 60px;
+    box-shadow: 12px 0 48px 0 #832ab733;
+    background: linear-gradient(120deg, rgba(184,0,230,0.35) 0%, rgba(139,54,219,0.25) 60%, rgba(45,11,78,0.3) 100%),
+        url('/imagenes/milad.jpg') no-repeat center center;
+    background-size: cover;
+    animation: fondoMove 20s linear infinite;
+}
+
+/* Elimina la capa de estrellas si ya no la necesitas */
+.fondo__estrellas {
+    display: none;
+}
+
+/* Nueva animación para mover el fondo de izquierda a derecha */
+@keyframes fondoMove {
+    0% {
+        background-position: center left;
+    }
+    50% {
+        background-position: 110% 50%;
+    }
+    100% {
+        background-position: center left;
+    }
+}
+
+/* Logo Accentuation: más grande y centrado en la zona izquierda */
+.fondo::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 28%;
+    transform: translate(-50%, -50%) scale(1);
+    width: 400px;
+    height: 400px;
+    background: url('/imagenes/Accenture-Logo-PNG-Photo.png') no-repeat center/contain;
+    opacity: 1;
+    filter: none;
+    animation: logoPulse 1.5s infinite alternate, logoBreathe 3s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+    transition: width 0.4s, height 0.4s, top 0.4s, left 0.4s;
+}
+
+/* Pulso y brillo para el logo */
+@keyframes logoPulse {
+    0% { filter: drop-shadow(0 0 30px #8b36db) brightness(1.1);}
+    100% { filter: drop-shadow(0 0 80px #8b36db) brightness(1.3);}
+}
+@keyframes logoBreathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1);}
+    50% { transform: translate(-50%, -50%) scale(1.08);}
+}
+
+.contenedor {
     position: relative;
     z-index: 1;
     float: right;
@@ -35,45 +91,43 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
 }
 
-.thick{
+.thick {
     font-weight: bold;
 }
 
-.icon{
+.icon {
     color: #8b36db;
     font-size: 16px;
     translate: 130% 160%;
     position: absolute;
-
 }
 
 .form {
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    gap: 10px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .formButton {
-    background-image: linear-gradient(#8b36db, rgb(169, 109, 214));
-    color: rgb(224, 224, 224); 
-    cursor: pointer; 
+    background-image: linear-gradient(to right, #6d28d9, #c026d3); /* from-violet-700 to-fuchsia-600 */
+    color: rgb(224, 224, 224);
+    cursor: pointer;
     border-color: #ababab;
     border-radius: 15px;
     padding: 12px 120px;
 }
 
 .formButton:hover {
-    background-color: #9a9a9a;
+    background-image: linear-gradient(to right, #5b21b6, #a21caf); /* hover:from-violet-800 hover:to-fuchsia-700 */
 }
 
 .formInput {
-    background-color: #e7ebf8; 
-    color: rgb(48, 48, 48); 
-    cursor: pointer; 
+    background-color: #e7ebf8;
+    color: rgb(48, 48, 48);
+    cursor: pointer;
     box-sizing: border-box;
     border-radius: 10px;
     width: 300px;
@@ -82,8 +136,8 @@
 }
 
 .formInput::placeholder {
-    color: #8b36db; 
-    opacity: 0.7; 
+    color: #8b36db;
+    opacity: 0.7;
     font-size: 14px;
     text-align: center;
     position: absolute;
@@ -91,28 +145,28 @@
 }
 
 .formInput:focus {
-    outline: none; 
-    border-color: #8b36db; 
-    box-shadow: 0 0 5px rgba(139, 54, 219, 0.5); 
+    outline: none;
+    border-color: #8b36db;
+    box-shadow: 0 0 5px rgba(139, 54, 219, 0.5);
 }
 
 .formButton:hover {
     background-color: #9a9a9a;
 }
 
-.cubo1{
+.cubo1 {
     position: absolute;
-    top: 0%; 
+    top: 0%;
     left: 48%;
     z-index: 2;
     width: 5%;
     height: 100%;
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgb(255, 255, 255));  
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgb(255, 255, 255));
 }
 
-.cubo2{
+.cubo2 {
     position: absolute;
-    top: 0%; 
+    top: 0%;
     left: 43%;
     z-index: 2;
     width: 3%;
@@ -120,9 +174,9 @@
     background-image: linear-gradient(to left, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.505));
 }
 
-.cubo3{
+.cubo3 {
     position: absolute;
-    top: 0%; 
+    top: 0%;
     left: 40%;
     z-index: 2;
     width: 1%;

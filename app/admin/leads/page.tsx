@@ -188,7 +188,7 @@ const AdminEmpleadosLeadPage: React.FC = () => {
       />
       {/* Modal for empleados sin People Lead */}
       {showEmployeeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-700/30 bg-opacity-40">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl relative">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -212,7 +212,7 @@ const AdminEmpleadosLeadPage: React.FC = () => {
                 disabled={selectedEmpleados.length === 0 || !selectedPeopleLead || loading.asignando}
                 className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${selectedEmpleados.length === 0 || !selectedPeopleLead
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  : "bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   }`}
               >
                 {loading.asignando ? (

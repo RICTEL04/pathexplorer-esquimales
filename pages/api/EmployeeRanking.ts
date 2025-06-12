@@ -15,8 +15,8 @@ const EmployeeRankingSchema = z.object({
       id_empleado: z.string(),
       nombre: z.string(),
       puesto: z.any(),
-      score: z.number().optional(), // Puedes pedirle a la IA que asigne un score opcional
-      // Puedes agregar más campos si lo deseas
+      score: z.number().optional(),
+      total_propuesta: z.number().optional(), // <--- Agrega esto
     })
   ),
 });
@@ -35,13 +35,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     // Construir el prompt para el modelo
     const prompt = `
-      Tienes la siguiente información de un proyecto y una lista de empleados con sus habilidades, metas, intereses y puesto asignado.
+      Tienes la siguiente información de un proyecto y una lista de empleados con sus habilidades, metas, intereses, puesto asignado y su cargabilidad actual.
       Ordena a los empleados del más capacitado al menos capacitado para el proyecto, considerando la relevancia de sus habilidades, metas e intereses respecto a los requerimientos del proyecto y el puesto asignado.
-      Devuelve el resultado en formato JSON con el id_empleado, nombre, puesto y un score de afinidad (opcional).
+      Para cada empleado, calcula y devuelve el porcentaje de cargabilidad que tendría si se le asigna este proyecto (suma su cargabilidad actual más la cargabilidad del proyecto).
+      Devuelve el resultado en formato JSON con el id_empleado, nombre, puesto, score de afinidad (opcional) y el campo total_propuesta (cargabilidad propuesta tras asignar el proyecto, de 0 a 100).
 
       Proyecto:
       Nombre: ${proyecto.Nombre}
       Descripción: ${proyecto.Descripcion}
+      Cargabilidad del proyecto: ${proyecto.cargabilidad_num}
       Habilidades requeridas: ${(proyecto.habilidades_proyecto || []).join(", ")}
       Puestos requeridos: 
       ${Array.isArray(proyecto.puestos) ? proyecto.puestos.map((p: any) => `- ${p.Puesto} (${p.N_puestos})`).join("\n") : ""}
@@ -52,6 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         Nombre: ${e.nombre}
         ID: ${e.id_empleado}
         Puesto: ${e.puesto?.Puesto || ""}
+        Cargabilidad actual: ${e.cargabilidad ?? 0}
         Habilidades: ${(e.habilidades || []).map((h: any) => h.nombre || h.nombre_habilidad || h).join(", ")}
         Metas: ${(e.metas || []).map((m: any) => m.Nombre || m.nombre || m).join(", ")}
         Intereses: ${(e.intereses || []).map((i: any) => i.Descripcion || i.descripcion || i).join(", ")}
@@ -64,7 +67,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             "id_empleado": "string",
             "nombre": "string",
             "puesto": { ... },
-            "score": 0 // opcional, de 0 a 100
+            "score": 0, // opcional, de 0 a 100
+            "total_propuesta": 0 // porcentaje de cargabilidad tras asignar el proyecto
           }
         ]
       }
