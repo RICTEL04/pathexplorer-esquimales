@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { createCursoWithHabilidades } from "@/lib/cursosManager";
-import { getCursos } from "@/lib/cursosManager";
+import { createCursoWithHabilidades, getCursos } from "@/lib/cursosManager";
+
 
 interface Curso {
   ID_Curso: string;
@@ -43,7 +43,7 @@ const CursosPage: React.FC = () => {
         ]);
         
         setCursos(cursosData);
-        setHabilidades(habilidadesData.data || []);
+        setHabilidades(habilidadesData.data ?? []);
       } catch (error) {
         console.error("Error al obtener datos:", error);
       } finally {
@@ -106,7 +106,7 @@ const CursosPage: React.FC = () => {
   const handleEditCurso = (curso: Curso) => {
     setCursoToEdit({
       ...curso,
-      Descripcion: curso.Descripcion || "", // Asegúrate de que la descripción no sea `undefined`
+      Descripcion: curso.Descripcion ?? "", // Asegúrate de que la descripción no sea `undefined`
     });
     setShowEditCursoForm(true);
   };
@@ -148,7 +148,7 @@ const CursosPage: React.FC = () => {
 
   const filteredCursos = cursos.filter(curso =>
     curso.Nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (curso.Descripcion && curso.Descripcion.toLowerCase().includes(searchTerm.toLowerCase()))
+    curso.Descripcion?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
