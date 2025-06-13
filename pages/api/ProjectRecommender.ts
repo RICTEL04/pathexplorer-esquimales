@@ -36,18 +36,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     // Construir el prompt para el modelo
     const prompt = `
-      Basándote en las siguientes metas profesionales, habilidades e intereses del empleado, 
-      y considerando también las habilidades requeridas por cada proyecto (incluyendo el nivel), 
-      ordena los proyectos existentes según su relevancia para el empleado (Siempre debe ordenarlos siempre y cuando haya proyectos existentes). 
-      Devuelve únicamente los proyectos que ya están en la lista proporcionada.
+      Eres un asistente experto en desarrollo profesional. 
+      Analiza cuidadosamente las metas profesionales, habilidades actuales e intereses del empleado.
+      Considera también las habilidades requeridas por cada proyecto.
 
-      Metas:
+      Tu objetivo es recomendar y ordenar los proyectos existentes que mejor se alineen con los intereses y habilidades actuales del empleado, 
+      priorizando aquellos que le permitan desarrollarse profesionalmente, aprender nuevas competencias relevantes y avanzar hacia sus metas.
+
+      Siempre debes devolver una lista ordenada de proyectos de la lista proporcionada, aunque no todos sean ideales. No omitas proyectos, solo ordénalos según su relevancia para el desarrollo profesional del empleado o proyectos del mas complejo al menos complejo.
+
+      Metas del empleado:
       ${metas.join(", ")}
 
-      Habilidades del empleado:
+      Habilidades actuales del empleado:
       ${habilidades.join(", ")}
 
-      Intereses:
+      Intereses del empleado:
       ${intereses.join(", ")}
 
       Proyectos existentes:
@@ -62,9 +66,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         )
         .join("\n")}
 
-      Considera especialmente la coincidencia entre las habilidades del empleado y las habilidades requeridas por el proyecto (incluyendo el nivel).
+      Analiza qué proyectos ayudarán más al empleado a crecer profesionalmente, considerando tanto sus intereses como las oportunidades de aprendizaje y mejora de habilidades. Siempre devuelve la lista ordenada de todos los proyectos.
 
-      Devuelve los proyectos en el siguiente formato JSON:
+      Devuelve los proyectos recomendados en el siguiente formato JSON:
       {
         "suggestedProjects": [
           {
