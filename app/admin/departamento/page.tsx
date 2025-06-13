@@ -147,7 +147,7 @@ const [departmentToDelete, setDepartmentToDelete] = useState<DepartamentoConLead
 
       setMessage({ 
         type: 'success', 
-        content: 'Departamento creado exitosamente' 
+        content: 'Capability creado exitosamente' 
       });
       
       // Resetear formulario
@@ -162,7 +162,7 @@ const [departmentToDelete, setDepartmentToDelete] = useState<DepartamentoConLead
     } catch (error: any) {
       setMessage({ 
         type: 'error', 
-        content: error.message || 'Error al crear departamento' 
+        content: error.message || 'Error al crear Capability' 
       });
     } finally {
       setLoading(false);
@@ -276,7 +276,7 @@ const handleUpdate = async (e: React.FormEvent) => {
 
     setMessage({ 
       type: 'success', 
-      content: 'Departamento actualizado exitosamente' 
+      content: 'Capability actualizado exitosamente' 
     });
     
     setTimeout(() => {
@@ -287,7 +287,7 @@ const handleUpdate = async (e: React.FormEvent) => {
   } catch (error: any) {
     setMessage({ 
       type: 'error', 
-      content: error.message || 'Error al actualizar departamento' 
+      content: error.message || 'Error al actualizar Capability' 
     });
   } finally {
     setLoading(false);
@@ -310,7 +310,7 @@ const handleUpdate = async (e: React.FormEvent) => {
       if (countError) throw countError;
   
       if (count && count > 0) {
-        throw new Error('No se puede eliminar el departamento porque tiene empleados asignados.');
+        throw new Error('No se puede eliminar el capability porque tiene empleados asignados.');
       }
   
       // If no employees, proceed with deletion
@@ -328,7 +328,7 @@ const handleUpdate = async (e: React.FormEvent) => {
   
       setMessage({ 
         type: 'success', 
-        content: 'Departamento eliminado exitosamente' 
+        content: 'Capability eliminado exitosamente' 
       });
   
       setTimeout(() => {
@@ -339,7 +339,7 @@ const handleUpdate = async (e: React.FormEvent) => {
     } catch (error: any) {
       setMessage({ 
         type: 'error', 
-        content: error.message || 'Error al eliminar departamento' 
+        content: error.message || 'Error al eliminar capability' 
       });
     } finally {
       setLoading(false);
@@ -400,7 +400,7 @@ const handleUpdate = async (e: React.FormEvent) => {
             <div className="p-8 text-center text-gray-500">Cargando capabilities...</div>
           ) : departamentosFiltrados.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
-              {departamentos.length === 0 ? 'No hay departamentos registrados' : 'No se encontraron departamentos que coincidan con la búsqueda.'}
+              {departamentos.length === 0 ? 'No hay capabilities registrados' : 'No se encontraron capabilities que coincidan con la búsqueda.'}
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -457,7 +457,7 @@ const handleUpdate = async (e: React.FormEvent) => {
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">Crear Nuevo Departamento</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Crear Nuevo Capability</h2>
                 <button 
                   onClick={() => setShowModal(false)}
                   className="text-gray-500 hover:text-gray-700"
@@ -471,7 +471,7 @@ const handleUpdate = async (e: React.FormEvent) => {
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="Nombre">
-                    Nombre del Departamento*
+                    Nombre del Capability*
                   </label>
                   <input
                     type="text"
@@ -519,7 +519,7 @@ const handleUpdate = async (e: React.FormEvent) => {
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
                     disabled={loading}
                   >
-                    {loading ? 'Creando...' : 'Crear Departamento'}
+                    {loading ? 'Creando...' : 'Crear Capability'}
                   </button>
                 </div>
               </form>
@@ -534,7 +534,7 @@ const handleUpdate = async (e: React.FormEvent) => {
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">Editar Departamento</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Editar Capability</h2>
                 <button 
                   onClick={() => setEditModalOpen(false)}
                   className="text-gray-500 hover:text-gray-700"
@@ -548,7 +548,7 @@ const handleUpdate = async (e: React.FormEvent) => {
               <form onSubmit={handleUpdate}>
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="edit-Nombre">
-                    Nombre del Departamento*
+                    Nombre del Capability*
                   </label>
                   <input
                     type="text"
@@ -615,7 +615,7 @@ const handleUpdate = async (e: React.FormEvent) => {
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
                     disabled={loading || !hasChanges()}
                   >
-                    {loading ? 'Actualizando...' : 'Actualizar Departamento'}
+                    {loading ? 'Actualizando...' : 'Actualizar Capability'}
                   </button>
                 </div>
               </form>
@@ -645,12 +645,12 @@ const handleUpdate = async (e: React.FormEvent) => {
 
         <div className="mb-6">
           <p className="text-gray-700">
-            ¿Estás seguro que deseas eliminar el departamento <span className="font-semibold">"{departmentToDelete.Nombre}"</span>?
+            ¿Estás seguro que deseas eliminar el capability <span className="font-semibold">"{departmentToDelete.Nombre}"</span>?
           </p>
           {departmentToDelete.Empleado_Encargado && (
             <p className="text-red-600 mt-2">
-              Advertencia: Este departamento tiene asignado un Capability Lead ({departmentToDelete.Empleado_Encargado}). 
-              El empleado quedará sin departamento asignado.
+              Advertencia: Este capability tiene asignado un Capability Lead ({departmentToDelete.Empleado_Encargado}). 
+              El empleado quedará sin capability asignado.
             </p>
           )}
         </div>

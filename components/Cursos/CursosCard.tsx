@@ -18,9 +18,9 @@ export default function CoursesCard({
                 <h3 className="text-lg font-bold text-gray-800">{course.Nombre}</h3>
                 <div className="flex flex-row gap-4 mt-2">
                     <div>
-                        <p className="text-sm text-gray-600">Fecha Fin: {course.Fecha_fin_curso}</p>
+                        <p className="text-sm text-gray-600">Descripcion: {course.Fecha_fin_curso}</p>
                         <p className="text-sm text-gray-600">
-                            Descripción: {course ? course.Descripcion : "No description available"}
+                            {course ? course.Descripcion : "No description available"}
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-2">

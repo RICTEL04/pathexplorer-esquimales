@@ -70,7 +70,7 @@ export default function NewProjectPage() {
 
   const [incrementoCargabilidad, setIncrementoCargabilidad] = useState(0);
   
-  const sobrepasaCargabilidad = ((Number(selectedDeliveryLead?.Cargabilidad) || 0) + incrementoCargabilidad) > 100;
+const sobrepasaCargabilidad = ((Number(selectedDeliveryLead?.Cargabilidad) || 0) + incrementoCargabilidad) > 100;
 
 
   const isEditDisabled =
@@ -1125,7 +1125,7 @@ useEffect(() => {
                     </label>
                     {/* Área para soltar el Delivery Lead seleccionado */}
                     <div
-                      className={`mb-6 border-2 border-dashed rounded-lg p-4 flex items-center min-h-[56px] transition-colores ${
+                      className={`mb-6 border-2 border-dashed rounded-lg p-4 flex items-center min-h-[56px] transition-colors ${
                         isDraggingOver ? "border-purple-500 bg-purple-50" : "border-gray-300 bg-white"
                       }`}
                       onDragOver={e => {
@@ -1226,7 +1226,14 @@ useEffect(() => {
         </div>
       </div>
     </div>
-    {/* Botón de quitar Delivery Lead eliminado */}
+    <button
+      type="button"
+      className="ml-2 text-red-500 hover:text-red-700"
+      onClick={() => setSelectedDeliveryLead(null)}
+      title="Quitar Delivery Lead"
+    >
+      ×
+    </button>
   </div>
 ) : (
   <span className="text-gray-400">Arrastra aquí un Delivery Lead disponible</span>
@@ -1643,11 +1650,162 @@ useEffect(() => {
           </div>
         </div>
         {/* Columna derecha */}
-        {/* 
         <div className="lg:col-span-3 space-y-6">
-          ...TODA LA SECCIÓN DE DELIVERY LEADS DISPONIBLES Y DELIVERY LEAD ORIGINAL ELIMINADA...
-        </div>
-        */}
+      
+      
+      {/* Tarjeta de Delivery Leads con tu consulta SQL */}
+      <div className="bg-purple-50 rounded-xl shadow-md p-6">
+        <h3 className="font-semibold text-lg mb-4 text-purple-700">Delivery Leads Disponibles</h3>
+        {loadingLeads ? (
+          <div className="flex items-center justify-center py-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-700"></div>
+            <span className="ml-3">Cargando delivery leads...</span>
+          </div>
+        ) : deliveryLeads.length === 0 ? (
+          <div className="text-center py-4">
+            <p className="text-gray-500">No hay delivery leads disponibles actualmente.</p>
+          </div>
+        ) : (
+          <>
+          
+            {/* Barra de búsqueda y paginación */}
+            <div className="mb-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Buscar por nombre o ID..."
+                  value={leadSearch}
+                  onChange={(e) => setLeadSearch(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 pl-2"
+                />
+                {leadSearch && (
+                  <button
+                    type="button"
+                    onClick={() => setLeadSearch('')}
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            </div>
+            {/* Paginación */}
+            <div className="mt-4 flex justify-between items-center">
+              <span className="text-sm text-gray-500">
+                {leadPage} / {totalPages}
+              </span>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setLeadPage(prev => Math.max(prev - 1, 1))}
+                  className="px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 disabled:opacity-50"
+                  disabled={leadPage === 1}
+                >
+                  ←
+                </button>
+                <button
+                  onClick={() => setLeadPage(prev => Math.min(prev + 1, totalPages))}
+                  className="px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 disabled:opacity-50"
+                  disabled={leadPage === totalPages}
+                >
+                  →
+                </button>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+                          {paginatedLeads.map((lead) => {
+              const leadCargabilidad = Number(lead.Cargabilidad) || 0;
+              const proyectoCargabilidad = Number(cargabilidad) || 0;
+              const suma = leadCargabilidad + proyectoCargabilidad;
+              const excede = suma > 100;
+              return (
+                <div
+                  key={lead.ID_Empleado}
+                  className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-move"
+                  draggable
+                  onDragStart={e => {
+                    const leadObj = {
+                      ...lead,
+                      Cargabilidad: Number(lead.Cargabilidad) || 0,
+                    };
+                    e.dataTransfer.setData("application/json", JSON.stringify(leadObj));
+                  }}
+                >
+                  <div className="flex items-start">
+                    <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
+                      <img
+                        src={leadAvatars[lead.ID_Empleado] || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+                        alt={`Avatar de ${lead.nombre_empleado}`}
+                        width={60}
+                        height={60}
+                        className="object-cover w-full h-full"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="flex-1 ml-3">
+                      <h4 className="font-medium text-gray-900">{lead.nombre_empleado}</h4>
+                      <div className="mt-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-600">Cargabilidad:</span>
+                          <span className="text-xs font-semibold text-purple-700">{Number(lead.Cargabilidad) || 0}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                          <div
+                            className="h-2 rounded-full transition-all bg-purple-500"
+                            style={{ width: `${Math.min(Number(lead.Cargabilidad) || 0, 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+                        {/* Delivery Lead original (si no está seleccionado y existe) */}
+            {originalDeliveryLead &&
+              (!selectedDeliveryLead || selectedDeliveryLead.ID_Empleado !== originalDeliveryLead.ID_Empleado) && (
+                <div className="mt-6">
+                  <h4 className="text-sm font-semibold text-purple-700 mb-2">Delivery Lead original</h4>
+                  <div
+                    className="bg-white border-2 border-dashed border-purple-300 rounded-lg p-4 hover:shadow-md transition-shadow cursor-move"
+                    draggable
+                    onDragStart={e => {
+                      e.dataTransfer.setData("application/json", JSON.stringify(originalDeliveryLead));
+                    }}
+                  >
+                    <div className="flex items-start">
+                      <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex-shrink-0">
+                        <img
+                          src={leadAvatars[originalDeliveryLead.ID_Empleado] || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"}
+                          alt={`Avatar de ${originalDeliveryLead.nombre_empleado}`}
+                          width={60}
+                          className="object-cover w-full h-full"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="flex-1 ml-3">
+                        <h4 className="font-medium text-gray-900">{originalDeliveryLead.nombre_empleado}</h4>
+                        <div className="mt-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-gray-600">Cargabilidad actual:</span>
+                            <span className="text-xs font-semibold text-purple-700">{Number(originalDeliveryLead.Cargabilidad) || 0}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                            <div
+                              className="h-2 rounded-full transition-all bg-purple-500"
+                              style={{ width: `${Math.min(Number(originalDeliveryLead.Cargabilidad) || 0, 100)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            )}
+          </div>
+          </>
+        )}
+      </div>
+    </div>
       </div>
                         {modalOpen && modalRoleIdx !== null && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-700/30 bg-opacity-40">

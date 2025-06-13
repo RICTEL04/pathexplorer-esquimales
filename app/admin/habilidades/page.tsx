@@ -113,7 +113,7 @@ export default function SkillsManager() {
       .select();
     
     if (!error && data) {
-      setCategorias([...categorias, data[0]]);
+      setCategorias([data[0], ...categorias]);
       setNuevaCategoriaNombre('');
       setShowAddCategoriaModal(false);
     }

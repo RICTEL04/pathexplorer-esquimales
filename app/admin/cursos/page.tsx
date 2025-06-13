@@ -326,61 +326,7 @@ const CursosPage: React.FC = () => {
                   />
                 </div>
 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Habilidades asociadas
-                    </label>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="border border-gray-200 rounded-lg p-4">
-                        <h3 className="text-sm font-medium text-gray-700 mb-3">Disponibles</h3>
-                        {habilidades.length === 0 ? (
-                          <p className="text-sm text-gray-500">No hay habilidades disponibles</p>
-                        ) : (
-                          <div className="flex flex-wrap gap-2">
-                            {habilidades.map((habilidad) => (
-                              <button
-                                key={habilidad.ID_Habilidad}
-                                type="button"
-                                onClick={() => handleAddHabilidad(habilidad)}
-                                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors duration-150"
-                              >
-                                {habilidad.Descripcion}
-                                <svg className="ml-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="border border-gray-200 rounded-lg p-4">
-                        <h3 className="text-sm font-medium text-gray-700 mb-3">Seleccionadas</h3>
-                        {selectedHabilidades.length === 0 ? (
-                          <p className="text-sm text-gray-500">No hay habilidades seleccionadas</p>
-                        ) : (
-                          <div className="flex flex-wrap gap-2">
-                            {selectedHabilidades.map((habilidad) => (
-                              <button
-                                key={habilidad.ID_Habilidad}
-                                type="button"
-                                onClick={() => handleRemoveHabilidad(habilidad)}
-                                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 hover:bg-green-200 transition-colors duration-150"
-                              >
-                                {habilidad.Descripcion}
-                                <svg className="ml-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
 
                 <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
                   <button

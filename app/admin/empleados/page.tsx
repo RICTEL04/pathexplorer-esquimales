@@ -400,9 +400,24 @@ const handleSaveRoles = async () => {
     // 2. Obtener metas
     const { data: metas } = await supabase
       .from('Metas')
-      .select('Descripcion')
+      .select('*')
       .eq('ID_Empleado', employeeId);
 
+    // 2.1. Obtener retroalimentación de revisores para cada meta
+    let metasConRetro = [];
+    if (metas && metas.length > 0) {
+      for (const meta of metas) {
+        const { data: revisores } = await supabase
+          .from('Revisor_Meta')
+          .select('Retroalimentacion, ID_EmpleadoRevisor')
+          .eq('ID_meta', meta.ID_meta);
+
+        metasConRetro.push({
+          ...meta,
+          revisores: revisores || []
+        });
+      }
+    }
     // 3. Obtener intereses
     const { data: intereses } = await supabase
       .from('Intereses')
@@ -433,7 +448,7 @@ const handleSaveRoles = async () => {
 
     return {
       ...empleado,
-      metas: metas?.map(m => m.Descripcion) || [],
+      metas: metasConRetro,
       intereses: intereses || [],
       hardSkills: hardSkills || [],
       softSkills: softSkills || [],
@@ -526,13 +541,46 @@ const handleSaveRoles = async () => {
       y = printMultiline(doc, `Fecha de Contratación: ${employeeProfile.FechaContratacion ? new Date(employeeProfile.FechaContratacion).toLocaleDateString() : 'N/A'}`, 40, y, 500, 18);
       y = printMultiline(doc, `Nivel: ${employeeProfile.Nivel}`, 40, y, 500, 18);
 
+      // Metas detalladas
       y += 10;
       doc.setFontSize(14);
       doc.setTextColor(60, 60, 120);
       y = printMultiline(doc, "Metas:", 40, y, 500, 18);
-      doc.setFontSize(12);
+      doc.setFontSize(11);
       doc.setTextColor(30, 30, 30);
-      y = printMultiline(doc, employeeProfile.metas?.length ? employeeProfile.metas.join(", ") : 'N/A', 60, y, 480, 16);
+
+      if (employeeProfile.metas?.length) {
+        employeeProfile.metas.forEach((meta: any, idx: number) => {
+          y += 8;
+          doc.setFont("helvetica", "bold");
+          y = printMultiline(doc, `Meta #${idx + 1}: ${meta.Nombre}`, 50, y, 470, 14);
+          doc.setFont("helvetica", "normal");
+          y = printMultiline(doc, `Tipo: ${meta.Tipo_Meta || 'N/A'}`, 60, y, 460, 13);
+          y = printMultiline(doc, `Plazo: ${meta.Plazo || 'N/A'}`, 60, y, 460, 13);
+          y = printMultiline(doc, `Descripción: ${meta.Descripcion || 'N/A'}`, 60, y, 460, 13);
+          y = printMultiline(doc, `Fecha inicio: ${meta.Fecha_Inicio ? new Date(meta.Fecha_Inicio).toLocaleDateString() : 'N/A'}`, 60, y, 460, 13);
+          y = printMultiline(doc, `Fecha límite: ${meta.Fecha_limite ? new Date(meta.Fecha_limite).toLocaleDateString() : 'N/A'}`, 60, y, 460, 13);
+          y = printMultiline(doc, `Estado: ${meta.Estado || 'N/A'}`, 60, y, 460, 13);
+          y = printMultiline(doc, `Self-Reflection: ${meta.Self_Reflection || 'N/A'}`, 60, y, 460, 13);
+
+          // Retroalimentación de revisores
+          if (meta.revisores && meta.revisores.length > 0) {
+            meta.revisores.forEach((rev: any, ridx: number) => {
+              y = printMultiline(doc, `Revisor #${ridx + 1}: ${rev.ID_EmpleadoRevisor || ''}`, 70, y, 440, 12);
+              y = printMultiline(doc, `Retroalimentación: ${rev.Retroalimentacion || 'N/A'}`, 80, y, 430, 12);
+            });
+          } else {
+            y = printMultiline(doc, `Sin retroalimentación de revisores.`, 70, y, 440, 12);
+          }
+
+          y += 4;
+          doc.setDrawColor(220, 220, 220);
+          doc.line(60, y, 540, y);
+          y += 4;
+        });
+      } else {
+        y = printMultiline(doc, "Sin metas registradas.", 60, y, 480, 16);
+      }
 
       y += 6;
       doc.setFontSize(14);
@@ -1118,27 +1166,65 @@ const handleSaveRoles = async () => {
               </button>
             </div>
             <div ref={reportRef} className="flex-1 overflow-y-auto space-y-2 pr-2" style={{ background: "#fff", color: "#222" }} >
-              <div><span className="font-semibold">ID:</span> {employeeProfile.ID_Empleado}</div>
-              <div><span className="font-semibold">Nombre:</span> {employeeProfile.Nombre}</div>
-              <div><span className="font-semibold">Email:</span> {employeeProfile.Contacto?.[0]?.Email || 'N/A'}</div>
-              <div><span className="font-semibold">Rol:</span> {employeeProfile.Rol}</div>
-              <div><span className="font-semibold">Departamento:</span> {employeeProfile.Departamento?.Nombre || 'N/A'}</div>
-              <div><span className="font-semibold">Fecha de Contratación:</span> {employeeProfile.FechaContratacion ? new Date(employeeProfile.FechaContratacion).toLocaleDateString() : 'N/A'}</div>
-              <div><span className="font-semibold">Nivel:</span> {employeeProfile.Nivel}</div>
+              <div><span className="font-bold">ID:</span> {employeeProfile.ID_Empleado}</div>
+              <div><span className="font-bold">Nombre:</span> {employeeProfile.Nombre}</div>
+              <div><span className="font-bold">Email:</span> {employeeProfile.Contacto?.[0]?.Email || 'N/A'}</div>
+              <div><span className="font-bold">Rol:</span> {employeeProfile.Rol}</div>
+              <div><span className="font-bold">Departamento:</span> {employeeProfile.Departamento?.Nombre || 'N/A'}</div>
+              <div><span className="font-bold">Fecha de Contratación:</span> {employeeProfile.FechaContratacion ? new Date(employeeProfile.FechaContratacion).toLocaleDateString() : 'N/A'}</div>
+              <div><span className="font-bold">Nivel:</span> {employeeProfile.Nivel}</div>
               <div>
-                <span className="font-semibold">Metas:</span> {employeeProfile.metas?.length ? employeeProfile.metas.join(", ") : 'N/A'}
+                <span className="font-bold">Metas:</span>
+                {employeeProfile.metas?.length ? (
+                  <div className="space-y-6 mt-2">
+                    {employeeProfile.metas.map((meta: any, idx: number) => (
+                      <div key={meta.ID_meta} className="p-4">
+                        <div className="font-bold mb-2">Meta #{idx + 1}: {meta.Nombre}</div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1 text-sm">
+                          <div><span className="font-semibold">Tipo:</span> {meta.Tipo_Meta || 'N/A'}</div>
+                          <div><span className="font-semibold">Plazo:</span> {meta.Plazo || 'N/A'}</div>
+                          <div><span className="font-semibold">Estado:</span> {meta.Estado || 'N/A'}</div>
+                          <div><span className="font-semibold">Registrada:</span> {meta.Registrada ? 'Sí' : 'No'}</div>
+                          <div><span className="font-semibold">Fecha inicio:</span> {meta.Fecha_Inicio ? new Date(meta.Fecha_Inicio).toLocaleDateString() : 'N/A'}</div>
+                          <div><span className="font-semibold">Fecha límite:</span> {meta.Fecha_limite ? new Date(meta.Fecha_limite).toLocaleDateString() : 'N/A'}</div>
+                          <div className="md:col-span-2"><span className="font-semibold">Descripción:</span> {meta.Descripcion || 'N/A'}</div>
+                          <div className="md:col-span-2"><span className="font-semibold">Self-Reflection:</span> {meta.Self_Reflection || 'N/A'}</div>
+                        </div>
+                        <div className="mt-2">
+                          <span className="font-semibold">Retroalimentación de Revisores:</span>
+                          {meta.revisores && meta.revisores.length > 0 ? (
+                            <ul className="list-disc ml-6 mt-1 space-y-1">
+                              {meta.revisores.map((rev: any, ridx: number) => (
+                                <li key={ridx}>
+                                  <span className="font-semibold">Revisor #{ridx + 1}:</span> {rev.ID_EmpleadoRevisor || 'N/A'}
+                                  <div className="ml-2 text-gray-700">
+                                    <span className="font-semibold">Retroalimentación:</span> {rev.Retroalimentacion || 'N/A'}
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <div className="ml-2 text-gray-500">Sin retroalimentación de revisores.</div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="ml-2 text-gray-500">Sin metas registradas.</span>
+                )}
               </div>
               <div>
-                <span className="font-semibold">Intereses:</span> {employeeProfile.intereses?.length ? employeeProfile.intereses.map((i: { Descripcion: string }) => i.Descripcion).join(", ") : 'N/A'}
+                <span className="font-bold">Intereses:</span> {employeeProfile.intereses?.length ? employeeProfile.intereses.map((i: { Descripcion: string }) => i.Descripcion).join(", ") : 'N/A'}
               </div>
               <div>
-                <span className="font-semibold">Hard Skills:</span> {employeeProfile.hardSkills?.length ? employeeProfile.hardSkills.map((h: { nombre: string }) => h.nombre).join(", ") : 'N/A'}
+                <span className="font-bold">Hard Skills:</span> {employeeProfile.hardSkills?.length ? employeeProfile.hardSkills.map((h: { nombre: string }) => h.nombre).join(", ") : 'N/A'}
               </div>
               <div>
-                <span className="font-semibold">Soft Skills:</span> {employeeProfile.softSkills?.length ? employeeProfile.softSkills.map((s: { nombre_habilidad: string }) => s.nombre_habilidad).join(", ") : 'N/A'}
+                <span className="font-bold">Soft Skills:</span> {employeeProfile.softSkills?.length ? employeeProfile.softSkills.map((s: { nombre_habilidad: string }) => s.nombre_habilidad).join(", ") : 'N/A'}
               </div>
               <div>
-                <span className="font-semibold">Experiencia Laboral:</span>
+                <span className="font-bold">Experiencia Laboral:</span>
                 {experienciaLaboral.length === 0 ? (
                   <div className="text-gray-500">Sin experiencia registrada.</div>
                 ) : (
@@ -1172,7 +1258,7 @@ const handleSaveRoles = async () => {
                 )}
               </div>
               <div>
-                <span className="font-semibold">Reporte IA:</span>
+                <span className="font-bold">Reporte IA:</span>
                 {reportLoading && <div className="text-blue-600">Generando reporte...</div>}
                 {reportError && <div className="text-red-600">{reportError}</div>}
                 {reportText && (
