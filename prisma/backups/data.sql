@@ -3733,6 +3733,7 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	8c2496e1-f9b0-454f-abfc-6aeccc02647b	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:17:51.096271+00	
 00000000-0000-0000-0000-000000000000	7eef9785-a19f-400a-b1a7-587cca096886	{"action":"login","actor_id":"54bb3bab-94a3-420a-99da-57717c1c075a","actor_username":"emirpuente31@gmail.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 05:55:24.548779+00	
 00000000-0000-0000-0000-000000000000	b8bf384e-e7c3-4238-904d-744a4baf2eb5	{"action":"login","actor_id":"54bb3bab-94a3-420a-99da-57717c1c075a","actor_username":"emirpuente31@gmail.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 05:55:25.930345+00	
+00000000-0000-0000-0000-000000000000	e4abd8c8-8c4d-49d0-b17e-bbb51784e6d8	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-13 02:55:20.59078+00	
 00000000-0000-0000-0000-000000000000	47c46c98-9f6e-406d-aa7d-5977a93114a8	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 06:49:25.879456+00	
 00000000-0000-0000-0000-000000000000	1a760df5-b04a-467b-91cf-f625679eed83	{"action":"token_refreshed","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-10 06:52:03.341513+00	
 00000000-0000-0000-0000-000000000000	393c61bb-1ceb-43f9-960f-8d4042d11ac3	{"action":"token_revoked","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-10 06:52:03.342343+00	
@@ -3812,6 +3813,7 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	8162635d-d151-4b0a-8315-30a05473dbf2	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-11 23:42:46.162693+00	
 00000000-0000-0000-0000-000000000000	b43cae73-47a4-426e-ad1e-5c5596f07504	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:17:51.042642+00	
 00000000-0000-0000-0000-000000000000	64c0c505-0066-4e3a-9733-74aa5f1a8bc3	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 06:06:47.066818+00	
+00000000-0000-0000-0000-000000000000	9773721c-2cac-44e4-82c7-993c97d3e2bc	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-13 03:31:04.121008+00	
 00000000-0000-0000-0000-000000000000	5bc385da-0ae7-43dd-8eed-532e218c6c94	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 07:31:02.007042+00	
 00000000-0000-0000-0000-000000000000	70f0880a-c23c-4656-8d94-17a6633c5fd9	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 07:31:02.032561+00	
 00000000-0000-0000-0000-000000000000	9d1521b0-a0d4-46d5-ba40-bb17bb4c4dc7	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 07:31:03.734172+00	
@@ -3859,6 +3861,7 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	ea092d8a-4b73-45c3-83b5-597b5c7aa0d7	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 06:08:51.323021+00	
 00000000-0000-0000-0000-000000000000	58daf52c-05f5-457c-96f3-a46c8dd901e4	{"action":"logout","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account"}	2025-06-12 06:09:28.624731+00	
 00000000-0000-0000-0000-000000000000	ceeeb6ac-7909-46e3-97d5-2b8da45ce647	{"action":"login","actor_id":"54bb3bab-94a3-420a-99da-57717c1c075a","actor_username":"emirpuente31@gmail.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 06:09:35.62431+00	
+00000000-0000-0000-0000-000000000000	7492b30e-9a39-40eb-98b8-e8664466ec40	{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"jorgebcarriles@gmail.com","user_id":"86315508-992d-4200-a53d-3a2a99f47329","user_phone":""}}	2025-06-13 03:50:16.598433+00	
 00000000-0000-0000-0000-000000000000	ea5e6fc3-2ff3-433f-b941-ec1e07e600e5	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 08:46:14.90462+00	
 00000000-0000-0000-0000-000000000000	4c4b1219-19a6-4338-95b8-a0fe636b431c	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 08:46:14.928099+00	
 00000000-0000-0000-0000-000000000000	d0c2c143-fdfb-4250-bcdb-5be100896dd6	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 08:46:15.013421+00	
@@ -4025,6 +4028,7 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	7081abf5-8ede-42d0-abe0-5edfcd4a278d	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:17:51.14614+00	
 00000000-0000-0000-0000-000000000000	13efc85d-91fa-4e72-9f2e-85ac5f662d9b	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:17:51.179496+00	
 00000000-0000-0000-0000-000000000000	3d6d2d57-3c92-490c-98ca-8a0ad027b4cb	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 09:25:05.23001+00	
+00000000-0000-0000-0000-000000000000	ffc00754-3c2d-4160-9320-fa65d535d732	{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"nu@g.com","user_id":"76db1355-d074-41ef-ab95-5701689639ae","user_phone":""}}	2025-06-13 03:50:16.59843+00	
 00000000-0000-0000-0000-000000000000	fc5a36b6-9fd6-44d0-85f4-5d034bd58e06	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 09:16:46.646911+00	
 00000000-0000-0000-0000-000000000000	76dc2c7f-7a62-45c6-bbb4-fc7cff596ec5	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 09:16:51.103807+00	
 00000000-0000-0000-0000-000000000000	b62bbae5-c1b9-4933-8f81-ae25cda32596	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 09:16:51.236613+00	
@@ -4108,6 +4112,7 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	fe927605-0121-4093-805f-850b023a1dc8	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:17:51.153567+00	
 00000000-0000-0000-0000-000000000000	83760f8b-84c7-4e6b-9b81-06530302fe4a	{"action":"logout","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account"}	2025-06-12 09:35:32.040473+00	
 00000000-0000-0000-0000-000000000000	bbc80a2a-b827-41de-aa3d-fe4d23427d81	{"action":"login","actor_id":"1fbfe562-cea4-4b33-b830-0c9f5f301251","actor_username":"m@g.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 09:35:44.207433+00	
+00000000-0000-0000-0000-000000000000	1bdd2973-5461-42e3-a0c9-b217b99eac1d	{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"rantonion2004@outlook.com","user_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","user_phone":""}}	2025-06-13 04:06:55.511489+00	
 00000000-0000-0000-0000-000000000000	8f4c2756-2321-4177-9833-98d6371c8d50	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 09:24:07.245984+00	
 00000000-0000-0000-0000-000000000000	3ffe6d89-8c1c-4186-bf08-9b7f2e88c6c1	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 09:24:07.294806+00	
 00000000-0000-0000-0000-000000000000	20e27961-de2f-4056-800b-3c9fecc9e35e	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 09:24:07.477397+00	
@@ -4280,6 +4285,8 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	54c8fe3c-0a7c-4a9f-8ab0-d21a891268cc	{"action":"token_refreshed","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-12 00:23:16.922016+00	
 00000000-0000-0000-0000-000000000000	d41c53b0-c5c1-42a8-979a-24a3507bbf34	{"action":"token_revoked","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-12 00:23:16.936647+00	
 00000000-0000-0000-0000-000000000000	3c228eb2-b290-4d9e-b34c-059407885092	{"action":"logout","actor_id":"1fbfe562-cea4-4b33-b830-0c9f5f301251","actor_username":"m@g.com","actor_via_sso":false,"log_type":"account"}	2025-06-12 09:39:05.252838+00	
+00000000-0000-0000-0000-000000000000	51c199b1-d95f-4c73-93a0-dd9307a99b50	{"action":"token_refreshed","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-13 04:29:28.055613+00	
+00000000-0000-0000-0000-000000000000	fd02a68c-2658-412f-862a-8b0afe413c6b	{"action":"token_revoked","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-13 04:29:28.071062+00	
 00000000-0000-0000-0000-000000000000	d50f4049-8713-4e06-b659-49ff6a834a8e	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 10:23:53.42465+00	
 00000000-0000-0000-0000-000000000000	10fc446e-f8c3-418d-9771-09d011df2ef5	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 10:23:54.309328+00	
 00000000-0000-0000-0000-000000000000	6dcf8872-ec77-46fa-a56a-7e11870e5205	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 10:23:54.365249+00	
@@ -4354,6 +4361,8 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	58966263-43e7-4033-a0b6-870d2a154625	{"action":"logout","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account"}	2025-06-12 00:38:42.076327+00	
 00000000-0000-0000-0000-000000000000	9df16ef5-5dc8-41cb-aa77-06aabd81a47b	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:38:54.971379+00	
 00000000-0000-0000-0000-000000000000	7d1427ab-a54a-48a2-a1c8-23b10bfe4661	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 10:07:34.050423+00	
+00000000-0000-0000-0000-000000000000	8dd2e0a3-7a32-4196-b789-7a3e30f276c6	{"action":"token_refreshed","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-13 05:27:39.402698+00	
+00000000-0000-0000-0000-000000000000	d6b4b2a9-2ce0-4402-b351-30cb9cc354c1	{"action":"token_revoked","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-13 05:27:39.428565+00	
 00000000-0000-0000-0000-000000000000	03c179a0-b0b5-40bd-a513-da4552f36bb8	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 12:41:04.63778+00	
 00000000-0000-0000-0000-000000000000	e2069742-b450-440c-ad8e-9ecdddb41cbf	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 12:41:04.647544+00	
 00000000-0000-0000-0000-000000000000	a8dfcbc1-dbc7-484b-9019-f45a52dcf828	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 12:41:06.76435+00	
@@ -4498,6 +4507,7 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	6ee805fb-ede2-4e6e-a878-1c4df29289a9	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-11 23:56:23.32431+00	
 00000000-0000-0000-0000-000000000000	93c97bf6-ca9c-4feb-bccd-0e6b3a6912fc	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:50:02.796963+00	
 00000000-0000-0000-0000-000000000000	4760cfb3-85b4-49a7-b707-251c98507c1e	{"action":"logout","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account"}	2025-06-12 10:11:34.433412+00	
+00000000-0000-0000-0000-000000000000	5bc9d026-70cf-4fa1-9df0-b5b099222ed4	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-13 05:59:09.091697+00	
 00000000-0000-0000-0000-000000000000	0e4d0da0-1814-418d-bd7f-7073cdb160c3	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 16:04:51.335797+00	
 00000000-0000-0000-0000-000000000000	3373121b-37b4-4fa5-b8a8-39e1e77085c4	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 16:04:51.360009+00	
 00000000-0000-0000-0000-000000000000	d7449fb5-73f0-4e70-8146-5b5dae5b77f8	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-10 16:07:52.412749+00	
@@ -4677,6 +4687,7 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	6dd73a72-8fd8-4f3f-b57c-856596bd581a	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:55:29.413629+00	
 00000000-0000-0000-0000-000000000000	f1b993b1-da0d-452a-9577-24dd6b4c740e	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:55:59.280437+00	
 00000000-0000-0000-0000-000000000000	03d9c620-e12a-40da-a632-6029240d9a15	{"action":"logout","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account"}	2025-06-12 10:16:44.954538+00	
+00000000-0000-0000-0000-000000000000	3ee6874b-4ec6-45af-b223-87c5021c26ae	{"action":"login","actor_id":"1fbfe562-cea4-4b33-b830-0c9f5f301251","actor_username":"m@g.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-13 06:07:21.891779+00	
 00000000-0000-0000-0000-000000000000	bd243c42-ac19-4603-bca9-7c9394333d75	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-11 09:13:25.627075+00	
 00000000-0000-0000-0000-000000000000	1684b2f9-fefe-402f-8e43-a5b28d269066	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-11 09:13:26.653197+00	
 00000000-0000-0000-0000-000000000000	6d469647-c93e-4c75-9cd5-fb81d3d9f74e	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-11 09:45:15.886845+00	
@@ -4726,6 +4737,9 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 00000000-0000-0000-0000-000000000000	c27f6dba-5294-4cf7-af87-b298043b1e9c	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:01:02.109364+00	
 00000000-0000-0000-0000-000000000000	c08cfff6-9761-4bda-b075-97d76d340210	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 00:55:59.305032+00	
 00000000-0000-0000-0000-000000000000	1a4effe0-30f2-437b-b21f-ecf437c1e54c	{"action":"login","actor_id":"36abc818-b3a6-440f-933a-79ff41fe5b67","actor_username":"a01722728@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-12 16:09:37.439363+00	
+00000000-0000-0000-0000-000000000000	579e3a47-ebfa-46a8-b97a-dcfe02db2ecd	{"action":"token_refreshed","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-13 06:35:05.547945+00	
+00000000-0000-0000-0000-000000000000	d9f568cc-f6f1-490a-9fa0-cf1e7eb54144	{"action":"token_revoked","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"token"}	2025-06-13 06:35:05.561849+00	
+00000000-0000-0000-0000-000000000000	2783f02b-74a1-484b-88b0-42e3dc46931b	{"action":"login","actor_id":"5f096705-11c3-49b1-b42c-d7bd17a75439","actor_username":"a01741300@tec.mx","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-13 06:35:15.394793+00	
 00000000-0000-0000-0000-000000000000	8218ed5c-5e41-4d57-8c8f-a90cb89ae705	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-11 09:16:41.071833+00	
 00000000-0000-0000-0000-000000000000	8f076dc0-c63f-49ef-a83d-9a6a043eaac4	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-11 09:16:42.518998+00	
 00000000-0000-0000-0000-000000000000	ab739ea7-f3c2-42a2-85e0-d274647763c5	{"action":"login","actor_id":"386e63ba-dc8f-4af6-9447-44f7976a4a0c","actor_username":"rantonion2004@outlook.com","actor_via_sso":false,"log_type":"account","traits":{"provider":"email"}}	2025-06-11 09:17:27.78157+00	
@@ -5228,18 +5242,15 @@ COPY "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_pas
 00000000-0000-0000-0000-000000000000	36abc818-b3a6-440f-933a-79ff41fe5b67	authenticated	authenticated	a01722728@tec.mx	$2a$10$5K/odDwK9GopcT3HEMMJJuKobGM0rnAcC/vvgwCYP8UajOWsAjQVG	2025-04-25 20:53:07.523904+00	\N		\N		\N			\N	2025-06-12 23:47:21.653064+00	{"provider": "email", "providers": ["email"]}	{"sub": "36abc818-b3a6-440f-933a-79ff41fe5b67", "name": "David", "role": "employee", "email": "a01722728@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 20:53:07.512718+00	2025-06-12 23:47:21.655465+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	3912d459-b96e-4150-9a2a-fb9135ebc374	authenticated	authenticated	jose@gmail.com	$2a$10$Su9b0KFAIjFbPVqxuJc1MeFTCaAxjPLMYTUZOMLwZVVkyxjQ7b9a6	2025-04-25 21:31:52.222825+00	\N		\N		\N			\N	2025-04-28 22:35:45.159374+00	{"provider": "email", "providers": ["email"]}	{"sub": "3912d459-b96e-4150-9a2a-fb9135ebc374", "name": "Jose", "role": "employee", "email": "jose@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-04-25 21:31:52.206193+00	2025-05-02 21:39:53.81215+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	54bb3bab-94a3-420a-99da-57717c1c075a	authenticated	authenticated	emirpuente31@gmail.com	$2a$10$PzOl9jD1EN9CtFZT45Io/OZOI2Cm54gf55dAeR.fT4QFn/ZnOxkee	2025-05-16 22:01:19.685203+00	\N		\N		\N			\N	2025-06-12 06:09:35.627746+00	{"provider": "email", "providers": ["email"]}	{"sub": "54bb3bab-94a3-420a-99da-57717c1c075a", "name": "Alfredo Emir Puente Medrano", "role": "employee", "email": "emirpuente31@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-05-16 22:01:19.660294+00	2025-06-12 06:09:35.638811+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	1fbfe562-cea4-4b33-b830-0c9f5f301251	authenticated	authenticated	m@g.com	$2a$10$4TUs/5wybxnEEZO.IV9MU.z81EZy8W0nrrIxD0gTQAz8UAXax17CO	2025-06-03 05:09:32.073283+00	\N		\N		\N			\N	2025-06-13 06:07:21.907736+00	{"provider": "email", "providers": ["email"]}	{"sub": "1fbfe562-cea4-4b33-b830-0c9f5f301251", "name": "Mauricio", "role": "employee", "email": "m@g.com", "email_verified": true, "phone_verified": false}	\N	2025-06-03 05:09:32.040179+00	2025-06-13 06:07:21.928827+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	b5c684f0-24d7-436f-b752-71cd9e361c8f	authenticated	authenticated	a00836530@tec.mx	$2a$10$IwbJ.1g0IghP77boZCh9aekgc0uhTMhxsbm.1GaIwJtWu9HF0ukaC	2025-05-13 21:04:34.712327+00	\N		\N		\N			\N	2025-06-12 00:59:45.174912+00	{"provider": "email", "providers": ["email"]}	{"sub": "b5c684f0-24d7-436f-b752-71cd9e361c8f", "name": "Ramón Antonio Naranjo Sarmiento", "role": "employee", "email": "a00836530@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-05-13 21:04:34.668475+00	2025-06-12 00:59:45.177171+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	86315508-992d-4200-a53d-3a2a99f47329	authenticated	authenticated	jorgebcarriles@gmail.com	$2a$10$5ipZpnt5akunghGtnBuMP.bf7Fv9AqWkdGDSkPwSDeIbGZ3CarEUa	2025-05-15 16:12:55.211954+00	\N		\N		2025-05-15 16:13:19.002788+00			\N	2025-05-15 16:13:39.385793+00	{"provider": "email", "providers": ["email"]}	{"sub": "86315508-992d-4200-a53d-3a2a99f47329", "name": "Ricardo", "role": "employee", "email": "jorgebcarriles@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-05-15 16:12:55.19837+00	2025-05-15 16:13:39.387896+00	\N	\N			\N		0	\N		\N	f	\N	f
+00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-06-13 06:35:15.401223+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-06-13 06:35:15.413043+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	authenticated	authenticated	a01198676@tec.mx	$2a$10$mPLtUg5XxGz50BwDIVi08uxNbc3.FzhmLBb/oFnWs5EtOMbUl6L12	2025-05-15 16:05:38.264036+00	\N		\N		\N			\N	2025-05-18 14:02:19.350306+00	{"provider": "email", "providers": ["email"]}	{"sub": "7b23b8a4-8f26-40a9-86c0-c591b423ea6a", "name": "Jorge Beyanzo", "role": "employee", "email": "a01198676@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-05-15 16:05:38.246257+00	2025-05-18 14:02:19.354589+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	authenticated	authenticated	a01198327@tec.mx	$2a$10$ueSBFtwb9q3qHGb/TJwm/eGMSm6w1n/FFpodX.nhj9AdZkO9vabIi	2025-04-25 20:16:55.202133+00	\N		\N		\N			\N	2025-06-12 21:00:00.939902+00	{"provider": "email", "providers": ["email"]}	{"sub": "5ad0bb87-f4fc-413c-adba-ef4b0b9402d1", "name": "Isaac Francisco Sánchez Veloquio", "role": "employee", "email": "a01198327@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 20:16:55.172692+00	2025-06-12 21:00:00.942301+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	authenticated	authenticated	yolanda@gmail.com	$2a$10$4WMbSk8TuL5hDHP0/l0SFu4Ciq0fLOL0k1k/syMHDTAKZzw9jOfae	2025-04-29 22:01:27.153296+00	\N		\N		\N			\N	2025-05-21 20:43:48.563267+00	{"provider": "email", "providers": ["email"]}	{"sub": "fc1276e7-efc6-4ec5-b2cd-bfab2005930e", "name": "Yolanda", "role": "employee", "email": "yolanda@gmail.com", "email_verified": true, "phone_verified": false}	\N	2025-04-29 22:01:27.119897+00	2025-05-21 20:43:48.567201+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	5f096705-11c3-49b1-b42c-d7bd17a75439	authenticated	authenticated	a01741300@tec.mx	$2a$10$m.4NE4AbrUfdj2u8qVPON.NRLet7oUH8USUY3JZVkQsNHBvbJPGvK	2025-04-25 18:07:22.173589+00	\N		\N		\N			\N	2025-06-12 23:35:11.124223+00	{"provider": "email", "providers": ["email"]}	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": true, "phone_verified": false}	\N	2025-04-25 18:07:22.161449+00	2025-06-12 23:35:11.126779+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	1fbfe562-cea4-4b33-b830-0c9f5f301251	authenticated	authenticated	m@g.com	$2a$10$4TUs/5wybxnEEZO.IV9MU.z81EZy8W0nrrIxD0gTQAz8UAXax17CO	2025-06-03 05:09:32.073283+00	\N		\N		\N			\N	2025-06-12 09:35:44.216048+00	{"provider": "email", "providers": ["email"]}	{"sub": "1fbfe562-cea4-4b33-b830-0c9f5f301251", "name": "Mauricio", "role": "employee", "email": "m@g.com", "email_verified": true, "phone_verified": false}	\N	2025-06-03 05:09:32.040179+00	2025-06-12 09:35:44.237712+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	76db1355-d074-41ef-ab95-5701689639ae	authenticated	authenticated	nu@g.com	$2a$10$zeeks8OdNZssnxYDDCvS.exfEa41SLK.bKsB9XctFPeEghpd1.FES	\N	\N		\N		\N			\N	\N	{"provider": "email", "providers": ["email"]}	{"name": "New User", "role": "employee"}	\N	2025-06-10 17:13:18.719883+00	2025-06-10 17:13:18.741279+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	a43a15f8-8eb5-4051-9cb7-e6137ea2a006	authenticated	authenticated	felix@g.com	$2a$10$IpjP14Oz.KtkY6RU8WMGCuz6q1IT9p2/1f39Wj142/2KiqAiFe0i.	\N	\N		\N		\N			\N	\N	{"provider": "email", "providers": ["email"]}	{"name": "Felix", "role": "employee"}	\N	2025-06-10 17:07:02.277061+00	2025-06-10 17:07:02.31975+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	30258a1f-f307-4728-8f1c-045e56548153	authenticated	authenticated	rikytellez04@gmail.com	$2a$10$hqKdg1yMYH.FEIx2sY5Xu.Yd5sG0POvEry7v9rtkDTzWcPwTIWMAa	2025-06-10 23:08:08.576744+00	\N		\N		\N			\N	2025-06-10 23:08:28.114191+00	{"provider": "email", "providers": ["email"]}	{"name": "Richie", "role": "employee", "email_verified": true}	\N	2025-06-10 23:08:08.553796+00	2025-06-10 23:08:28.11647+00	\N	\N			\N		0	\N		\N	f	\N	f
 00000000-0000-0000-0000-000000000000	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	authenticated	authenticated	lizethdzg@gmail.com	$2a$10$D7Y3kVoDNh4Tko3o9E7gt.qTgwkHvY.cXj8RaczgqNW05qiOsKNni	2025-06-12 22:01:29.489383+00	\N		\N		\N			\N	\N	{"provider": "email", "providers": ["email"]}	{"name": "Edgar Alan López Herrera", "role": "employee", "email_verified": true}	\N	2025-06-12 22:01:29.433938+00	2025-06-12 22:01:29.497114+00	\N	\N			\N		0	\N		\N	f	\N	f
-00000000-0000-0000-0000-000000000000	386e63ba-dc8f-4af6-9447-44f7976a4a0c	authenticated	authenticated	rantonion2004@outlook.com	$2a$10$byiaH6lkQcFmADcXhS1GguYlepFrWKGQCLS6.9E02pWJES6S8pwO6	2025-05-13 21:07:21.650898+00	\N		\N		2025-05-13 21:14:04.888808+00			\N	2025-06-12 21:05:13.165575+00	{"provider": "email", "providers": ["email"]}	{"sub": "386e63ba-dc8f-4af6-9447-44f7976a4a0c", "name": "Pancho", "role": "employee", "email": "rantonion2004@outlook.com", "email_verified": true, "phone_verified": false}	\N	2025-05-13 21:07:21.637344+00	2025-06-12 21:05:13.173444+00	\N	\N			\N		0	\N		\N	f	\N	f
 \.
 
 
@@ -5250,16 +5261,13 @@ COPY "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_pas
 COPY "auth"."identities" ("provider_id", "user_id", "identity_data", "provider", "last_sign_in_at", "created_at", "updated_at", "id") FROM stdin;
 36abc818-b3a6-440f-933a-79ff41fe5b67	36abc818-b3a6-440f-933a-79ff41fe5b67	{"sub": "36abc818-b3a6-440f-933a-79ff41fe5b67", "name": "David", "role": "employee", "email": "a01722728@tec.mx", "email_verified": false, "phone_verified": false}	email	2025-04-25 20:53:07.518554+00	2025-04-25 20:53:07.518619+00	2025-04-25 20:53:07.518619+00	301621da-20f8-4b30-859f-6a20c96cd501
 fc1276e7-efc6-4ec5-b2cd-bfab2005930e	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	{"sub": "fc1276e7-efc6-4ec5-b2cd-bfab2005930e", "name": "Yolanda", "role": "employee", "email": "yolanda@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-04-29 22:01:27.137616+00	2025-04-29 22:01:27.142545+00	2025-04-29 22:01:27.142545+00	602f7f2d-e46a-48cf-a67e-4c4f2aa256cc
-386e63ba-dc8f-4af6-9447-44f7976a4a0c	386e63ba-dc8f-4af6-9447-44f7976a4a0c	{"sub": "386e63ba-dc8f-4af6-9447-44f7976a4a0c", "name": "Pancho", "role": "employee", "email": "rantonion2004@outlook.com", "email_verified": false, "phone_verified": false}	email	2025-05-13 21:07:21.644374+00	2025-05-13 21:07:21.644425+00	2025-05-13 21:07:21.644425+00	f47248ec-025b-486f-8143-3ce4e3f2b3fa
 7b23b8a4-8f26-40a9-86c0-c591b423ea6a	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	{"sub": "7b23b8a4-8f26-40a9-86c0-c591b423ea6a", "name": "Jorge Beyanzo", "role": "employee", "email": "a01198676@tec.mx", "email_verified": false, "phone_verified": false}	email	2025-05-15 16:05:38.256508+00	2025-05-15 16:05:38.256566+00	2025-05-15 16:05:38.256566+00	990ad43b-f1e9-45ba-a956-ac9f4972ac88
 54bb3bab-94a3-420a-99da-57717c1c075a	54bb3bab-94a3-420a-99da-57717c1c075a	{"sub": "54bb3bab-94a3-420a-99da-57717c1c075a", "name": "Alfredo Emir Puente Medrano", "role": "employee", "email": "emirpuente31@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-05-16 22:01:19.676576+00	2025-05-16 22:01:19.676628+00	2025-05-16 22:01:19.676628+00	8736db8d-a85d-4ecc-b32b-a4f13c01605f
 a43a15f8-8eb5-4051-9cb7-e6137ea2a006	a43a15f8-8eb5-4051-9cb7-e6137ea2a006	{"sub": "a43a15f8-8eb5-4051-9cb7-e6137ea2a006", "email": "felix@g.com", "email_verified": false, "phone_verified": false}	email	2025-06-10 17:07:02.306515+00	2025-06-10 17:07:02.306602+00	2025-06-10 17:07:02.306602+00	c5adcee4-1e65-4735-aca5-14a049f369c9
 bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	{"sub": "bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04", "email": "lizethdzg@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-06-12 22:01:29.469274+00	2025-06-12 22:01:29.469356+00	2025-06-12 22:01:29.469356+00	8ec74c1e-c330-4880-8903-bb7192abaead
 3912d459-b96e-4150-9a2a-fb9135ebc374	3912d459-b96e-4150-9a2a-fb9135ebc374	{"sub": "3912d459-b96e-4150-9a2a-fb9135ebc374", "name": "Jose", "role": "employee", "email": "jose@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-04-25 21:31:52.215625+00	2025-04-25 21:31:52.215675+00	2025-04-25 21:31:52.215675+00	28e7f8e2-8d3c-44bd-83a9-699c4cf6db79
 b5c684f0-24d7-436f-b752-71cd9e361c8f	b5c684f0-24d7-436f-b752-71cd9e361c8f	{"sub": "b5c684f0-24d7-436f-b752-71cd9e361c8f", "name": "Ramón Antonio Naranjo Sarmiento", "role": "employee", "email": "a00836530@tec.mx", "email_verified": false, "phone_verified": false}	email	2025-05-13 21:04:34.688839+00	2025-05-13 21:04:34.688888+00	2025-05-13 21:04:34.688888+00	34a7b09b-9bbc-4cf7-9fbf-2709a0fffa2e
-86315508-992d-4200-a53d-3a2a99f47329	86315508-992d-4200-a53d-3a2a99f47329	{"sub": "86315508-992d-4200-a53d-3a2a99f47329", "name": "Ricardo", "role": "employee", "email": "jorgebcarriles@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-05-15 16:12:55.205751+00	2025-05-15 16:12:55.205801+00	2025-05-15 16:12:55.205801+00	af7da728-bb81-47a9-b77a-d8ba7b350602
 1fbfe562-cea4-4b33-b830-0c9f5f301251	1fbfe562-cea4-4b33-b830-0c9f5f301251	{"sub": "1fbfe562-cea4-4b33-b830-0c9f5f301251", "name": "Mauricio", "role": "employee", "email": "m@g.com", "email_verified": false, "phone_verified": false}	email	2025-06-03 05:09:32.063113+00	2025-06-03 05:09:32.063184+00	2025-06-03 05:09:32.063184+00	224c2215-d87d-4ebf-b552-0aba9556c780
-76db1355-d074-41ef-ab95-5701689639ae	76db1355-d074-41ef-ab95-5701689639ae	{"sub": "76db1355-d074-41ef-ab95-5701689639ae", "email": "nu@g.com", "email_verified": false, "phone_verified": false}	email	2025-06-10 17:13:18.733857+00	2025-06-10 17:13:18.733912+00	2025-06-10 17:13:18.733912+00	6cde72f4-b780-44c8-9228-5fb5cf8017ac
 30258a1f-f307-4728-8f1c-045e56548153	30258a1f-f307-4728-8f1c-045e56548153	{"sub": "30258a1f-f307-4728-8f1c-045e56548153", "email": "rikytellez04@gmail.com", "email_verified": false, "phone_verified": false}	email	2025-06-10 23:08:08.570053+00	2025-06-10 23:08:08.570118+00	2025-06-10 23:08:08.570118+00	99b099f2-23a2-4136-bd09-4ba4098ed0d8
 5f096705-11c3-49b1-b42c-d7bd17a75439	5f096705-11c3-49b1-b42c-d7bd17a75439	{"sub": "5f096705-11c3-49b1-b42c-d7bd17a75439", "name": "Sergio Ricardo Tellez Loaiza", "role": "employee", "email": "a01741300@tec.mx", "email_verified": false, "phone_verified": false}	email	2025-04-25 18:07:22.16918+00	2025-04-25 18:07:22.169228+00	2025-04-25 18:07:22.169228+00	e316eb14-bcf8-4de2-a77c-7d13a0b7bab4
 5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	{"sub": "5ad0bb87-f4fc-413c-adba-ef4b0b9402d1", "name": "Isaac Francisco Sánchez Veloquio", "role": "employee", "email": "a01198327@tec.mx", "email_verified": false, "phone_verified": false}	email	2025-04-25 20:16:55.191896+00	2025-04-25 20:16:55.191961+00	2025-04-25 20:16:55.191961+00	9d5480e7-0bce-4e58-8231-618a2148f0d6
@@ -5279,13 +5287,11 @@ COPY "auth"."instances" ("id", "uuid", "raw_base_config", "created_at", "updated
 --
 
 COPY "auth"."sessions" ("id", "user_id", "created_at", "updated_at", "factor_id", "aal", "not_after", "refreshed_at", "user_agent", "ip", "tag") FROM stdin;
-2327386c-a762-457a-ac95-368fd115296e	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-12 21:05:13.165669+00	2025-06-12 21:05:13.165669+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0	131.178.102.208	\N
-38b585e9-9268-42d3-a0ac-88a035a8d5b7	86315508-992d-4200-a53d-3a2a99f47329	2025-05-15 16:12:55.215747+00	2025-05-15 16:12:55.215747+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	187.209.144.77	\N
-4d6029a6-9e04-4b70-b168-79d77c684559	86315508-992d-4200-a53d-3a2a99f47329	2025-05-15 16:13:39.385863+00	2025-05-15 16:13:39.385863+00	\N	aal1	\N	\N	Mozilla/5.0 (iPhone; CPU iPhone OS 17_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Mobile/15E148 Safari/604.1	187.161.118.143	\N
 73843c54-3dfb-437a-9d56-8acf9b60a5b0	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-12 00:59:43.100477+00	2025-06-12 00:59:43.100477+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 4ec60657-5f2c-4759-a834-509a35f140f6	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-15 16:14:29.404177+00	2025-05-15 16:14:29.404177+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0	187.209.144.77	\N
 20d1b6ab-7acf-4e48-bf9d-3341187fb958	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-12 00:59:44.472625+00	2025-06-12 00:59:44.472625+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
 dd69eeca-7657-4788-98bd-0f74ed2a6f22	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-12 00:59:44.540248+00	2025-06-12 00:59:44.540248+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
+21d6c76b-a276-4a6f-b3b6-8d8d090e0ae7	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 03:31:04.141712+00	2025-06-13 06:35:05.589975+00	\N	aal1	\N	2025-06-13 06:35:05.589885	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	187.190.180.172	\N
 18ed9c97-0ad3-4da9-91b8-86db046436f3	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:53:04.049689+00	2025-06-11 22:53:04.049689+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 fb7fecc9-cfb4-477a-b2e0-06717a891f5b	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:53:05.391417+00	2025-06-11 22:53:05.391417+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
 3def5bb2-d997-444b-bb93-a6b0cfbbb86c	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:53:05.40241+00	2025-06-11 22:53:05.40241+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
@@ -5293,6 +5299,7 @@ f4112c05-b4b4-41a7-ba3c-691d986ee6ac	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-0
 cd9966f4-221b-4b43-a312-e355c16f59ba	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 23:27:12.061825+00	2025-06-11 23:27:12.061825+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 851ff9fd-c7c1-41d0-ab53-677a34b2d691	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-15 16:15:04.632374+00	2025-05-16 23:04:22.946081+00	\N	aal1	\N	2025-05-16 23:04:22.945967	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	131.178.102.136	\N
 11e4cbcb-a333-4a71-aff0-8652172dd129	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 23:28:02.912303+00	2025-06-11 23:28:02.912303+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
+e92b0949-2a5c-4d88-a35f-76481d88405a	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 05:59:09.105133+00	2025-06-13 05:59:09.105133+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	187.190.180.172	\N
 27fb5e44-c98c-42df-b888-462aadae5ad2	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:55:13.998349+00	2025-06-11 22:55:13.998349+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 bfd59fca-362e-4e20-84f3-973ba1b0201e	3912d459-b96e-4150-9a2a-fb9135ebc374	2025-04-28 22:35:45.159456+00	2025-04-29 20:45:55.77718+00	\N	aal1	\N	2025-04-29 20:45:55.777094	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36	131.178.102.204	\N
 16510977-520e-42d1-b8d1-3dd4f5456e0b	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 23:28:06.764185+00	2025-06-11 23:28:06.764185+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
@@ -5303,6 +5310,7 @@ e951c953-e028-4028-bb47-c7ae164bffb2	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-0
 ef14d8c3-c14e-4373-881d-2d6601b0159c	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 23:41:16.082019+00	2025-06-11 23:41:16.082019+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 61409118-6737-4707-99ef-1a4c59171431	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 23:41:17.033826+00	2025-06-11 23:41:17.033826+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
 5190ee94-aebd-4c95-b127-bd9175b424e0	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-16 23:54:12.413181+00	2025-05-16 23:54:12.413181+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	131.178.102.136	\N
+5071427b-f0a7-4129-a95b-8e38c4d37d09	1fbfe562-cea4-4b33-b830-0c9f5f301251	2025-06-13 06:07:21.907834+00	2025-06-13 06:07:21.907834+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	187.190.180.172	\N
 82fed09c-ea88-4ba1-afd6-927e4105fd61	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:55:13.999646+00	2025-06-11 22:55:13.999646+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 157af009-b840-44e6-9cf7-1577dd604a1f	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:55:15.156136+00	2025-06-11 22:55:15.156136+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
 e8b3b067-8182-44aa-b712-89b591246a70	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:55:15.182274+00	2025-06-11 22:55:15.182274+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
@@ -5323,6 +5331,7 @@ b464a92d-865b-42c9-bce1-3f379396247a	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-0
 5a61617e-64ff-4b8b-bbbd-30dbc76b2c8d	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:39:39.626412+00	2025-06-12 20:59:26.903808+00	\N	aal1	\N	2025-06-12 20:59:26.903657	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0	131.178.102.208	\N
 f1b6f993-bd55-4b5c-9876-0f58250df2c2	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	2025-06-12 21:00:00.939988+00	2025-06-12 21:00:00.939988+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	131.178.102.156	\N
 61a7bdd7-f60e-4f0f-b6ea-633a3ebc0b3a	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-12 23:26:07.606111+00	2025-06-12 23:26:07.606111+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0	131.178.102.216	\N
+184ba362-0142-4902-980d-fc646cc73347	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 06:35:15.402286+00	2025-06-13 06:35:15.402286+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	187.190.180.172	\N
 3b55989d-d1cf-43db-b49f-724a33cad8a4	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:50:34.293556+00	2025-06-11 22:50:34.293556+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
 d73ed68c-faec-46d4-b31d-98d754355009	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 22:56:35.962609+00	2025-06-11 22:56:35.962609+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 422ae626-497f-4e14-b7e2-57f7e28226f2	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	2025-05-16 23:56:29.473262+00	2025-05-18 13:17:13.584372+00	\N	aal1	\N	2025-05-18 13:17:13.584293	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36	187.209.144.77	\N
@@ -5358,6 +5367,7 @@ d5c0c61a-c270-46a8-943d-d52d4dc4a01a	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-0
 ec762ced-cb7b-4ac8-84a8-fa73b0e7ff6d	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 23:27:12.065876+00	2025-06-11 23:27:12.065876+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 80b61ba3-9c6f-4e0c-a6ed-fa7c9acd4944	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 23:40:19.514762+00	2025-06-11 23:40:19.514762+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
 30ce7ba7-7298-4bc3-8fa0-2901bbeed889	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-11 23:41:16.082101+00	2025-06-11 23:41:16.082101+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
+6996d633-a1c2-4c49-a28b-3d656c571ef5	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 02:55:20.602494+00	2025-06-13 02:55:20.602494+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	187.190.180.172	\N
 f4c2fc3b-03b5-4a9f-816f-25e9b5457523	b5c684f0-24d7-436f-b752-71cd9e361c8f	2025-06-12 00:59:45.067575+00	2025-06-12 00:59:45.067575+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
 d6f6b80b-bc24-4a5d-ac64-48d1391bea2f	b5c684f0-24d7-436f-b752-71cd9e361c8f	2025-06-12 00:59:45.175036+00	2025-06-12 00:59:45.175036+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0	187.190.180.172	\N
 a43fffd4-158b-41f8-bf7d-67733aaef598	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-12 01:00:10.246841+00	2025-06-12 01:00:10.246841+00	\N	aal1	\N	\N	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.7103.25 Safari/537.36	187.190.180.172	\N
@@ -5371,14 +5381,13 @@ ac9b8455-371b-4bc0-96b0-baef2b010183	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-0
 --
 
 COPY "auth"."mfa_amr_claims" ("session_id", "created_at", "updated_at", "authentication_method", "id") FROM stdin;
-2327386c-a762-457a-ac95-368fd115296e	2025-06-12 21:05:13.174237+00	2025-06-12 21:05:13.174237+00	password	cf27c858-b622-47f5-869b-a8c7cce01122
 73843c54-3dfb-437a-9d56-8acf9b60a5b0	2025-06-12 00:59:43.152967+00	2025-06-12 00:59:43.152967+00	password	4452aa2f-a571-40f2-b32c-b4e14f19b934
 d626803d-8ba0-410b-90da-fc6e965faaee	2025-06-10 23:06:37.589622+00	2025-06-10 23:06:37.589622+00	password	dca70f32-7fd1-4278-b2da-d384680ce3df
 20d1b6ab-7acf-4e48-bf9d-3341187fb958	2025-06-12 00:59:44.476099+00	2025-06-12 00:59:44.476099+00	password	deedb7de-4608-4f77-ad61-95e27c266cc5
 dd69eeca-7657-4788-98bd-0f74ed2a6f22	2025-06-12 00:59:44.544734+00	2025-06-12 00:59:44.544734+00	password	d88126b2-eb36-4b69-a564-bd25ecba6fd4
+e92b0949-2a5c-4d88-a35f-76481d88405a	2025-06-13 05:59:09.142572+00	2025-06-13 05:59:09.142572+00	password	0ea4c065-86fb-43cf-afd8-6c0f6fdad51f
 f4c2fc3b-03b5-4a9f-816f-25e9b5457523	2025-06-12 00:59:45.10978+00	2025-06-12 00:59:45.10978+00	password	9ddf6d19-d591-429c-bfe7-76815cd83cf4
 d6f6b80b-bc24-4a5d-ac64-48d1391bea2f	2025-06-12 00:59:45.177592+00	2025-06-12 00:59:45.177592+00	password	e5046ddf-806e-42e2-a24f-820179a10d87
-38b585e9-9268-42d3-a0ac-88a035a8d5b7	2025-05-15 16:12:55.21821+00	2025-05-15 16:12:55.21821+00	password	4a792fd0-2cc3-4662-ae68-d0943e7a26c6
 bfd59fca-362e-4e20-84f3-973ba1b0201e	2025-04-28 22:35:45.164898+00	2025-04-28 22:35:45.164898+00	password	7b420fd3-a001-4039-bb81-4cd01f021c1f
 5190ee94-aebd-4c95-b127-bd9175b424e0	2025-05-16 23:54:12.416403+00	2025-05-16 23:54:12.416403+00	password	288b1103-7392-4849-811a-7c7672e6aece
 5a61617e-64ff-4b8b-bbbd-30dbc76b2c8d	2025-06-11 22:39:39.63277+00	2025-06-11 22:39:39.63277+00	password	808ec0d4-8321-45ea-8c5f-56acecbc70b2
@@ -5408,7 +5417,7 @@ d5c0c61a-c270-46a8-943d-d52d4dc4a01a	2025-06-11 23:39:27.922944+00	2025-06-11 23
 313346f0-ff28-40ec-a9b9-f369ea2aa0dc	2025-06-11 23:39:27.946672+00	2025-06-11 23:39:27.946672+00	password	3f1b3dfc-f3bb-4ad4-9c1e-727a1d7ab4cf
 9b8b8ad4-9a9a-4c39-af08-a76bdbc61c05	2025-06-11 23:39:29.575312+00	2025-06-11 23:39:29.575312+00	password	07541e0d-c465-4049-885f-6cb6fc9b44f8
 e951c953-e028-4028-bb47-c7ae164bffb2	2025-06-11 23:40:19.531441+00	2025-06-11 23:40:19.531441+00	password	113d73b9-c9f8-4016-97c3-85982fbbb5cc
-4d6029a6-9e04-4b70-b168-79d77c684559	2025-05-15 16:13:39.388166+00	2025-05-15 16:13:39.388166+00	otp	5358c447-cec3-467c-851a-65996e5c4283
+5071427b-f0a7-4129-a95b-8e38c4d37d09	2025-06-13 06:07:21.929557+00	2025-06-13 06:07:21.929557+00	password	66cdc438-391c-4cfe-b1ff-711e0c875f85
 4ec60657-5f2c-4759-a834-509a35f140f6	2025-05-15 16:14:29.409282+00	2025-05-15 16:14:29.409282+00	otp	889fc1c9-511d-43c1-bb26-f50457c5e835
 851ff9fd-c7c1-41d0-ab53-677a34b2d691	2025-05-15 16:15:04.63491+00	2025-05-15 16:15:04.63491+00	password	f2aebb97-db77-4112-b997-6334bb6124c6
 422ae626-497f-4e14-b7e2-57f7e28226f2	2025-05-16 23:56:29.478879+00	2025-05-16 23:56:29.478879+00	password	d2fa7000-e93d-4624-9753-7436d9f29982
@@ -5435,6 +5444,7 @@ ef14d8c3-c14e-4373-881d-2d6601b0159c	2025-06-11 23:41:16.08472+00	2025-06-11 23:
 30ce7ba7-7298-4bc3-8fa0-2901bbeed889	2025-06-11 23:41:16.08814+00	2025-06-11 23:41:16.08814+00	password	35c1bc64-ba23-4a5c-880e-0a5939371091
 a3dca15a-48d4-48f6-8344-d58b3364eeeb	2025-06-11 23:41:17.032963+00	2025-06-11 23:41:17.032963+00	password	5ad02d49-a3ef-4030-9cc6-a1cf4b860de4
 61409118-6737-4707-99ef-1a4c59171431	2025-06-11 23:41:17.044989+00	2025-06-11 23:41:17.044989+00	password	c67330ba-2e46-441d-b8d7-dffb77d75a24
+184ba362-0142-4902-980d-fc646cc73347	2025-06-13 06:35:15.41346+00	2025-06-13 06:35:15.41346+00	password	436e6b86-8f47-4f7a-90bb-a07b7ed31068
 a43fffd4-158b-41f8-bf7d-67733aaef598	2025-06-12 01:00:10.249366+00	2025-06-12 01:00:10.249366+00	password	242c3d07-f335-4ceb-9085-56268642856c
 c654ba9a-29a5-46a6-a1e4-865099ba6e4e	2025-06-12 01:00:39.399721+00	2025-06-12 01:00:39.399721+00	password	04579be5-83d8-4f50-8dc0-ed70c18bc2fe
 ac9b8455-371b-4bc0-96b0-baef2b010183	2025-06-12 01:00:40.427757+00	2025-06-12 01:00:40.427757+00	password	905abb72-ea69-4327-89c8-e80cf4953b9f
@@ -5446,9 +5456,11 @@ ac9b8455-371b-4bc0-96b0-baef2b010183	2025-06-12 01:00:40.427757+00	2025-06-12 01
 3dc44f59-81ca-4332-a819-466f5cb02527	2025-06-12 23:47:21.65615+00	2025-06-12 23:47:21.65615+00	password	0bcb9df9-7c8c-4aa9-b0d8-0114b3efb53e
 7d3192a4-46fc-49fc-a7d3-5e0710f4225b	2025-06-12 06:09:35.639175+00	2025-06-12 06:09:35.639175+00	password	35fd7410-dbac-46b4-b4f5-19d89ac71b4f
 4217b9c8-91d1-4276-a6be-eaa2204c3182	2025-06-12 16:09:37.467478+00	2025-06-12 16:09:37.467478+00	password	de718992-b799-4876-8c9f-20a3eb0f803b
+6996d633-a1c2-4c49-a28b-3d656c571ef5	2025-06-13 02:55:20.632543+00	2025-06-13 02:55:20.632543+00	password	492ecbc2-7083-46fb-8761-21fb18753b7c
 1c63f054-45ee-49c5-b300-6b634b9a619f	2025-06-12 00:59:43.135637+00	2025-06-12 00:59:43.135637+00	password	a9bbce4e-52ec-4620-9a84-9c3d62ce3487
 b4dd6b10-f85e-4596-a1e5-3cbaf21570c4	2025-06-12 00:59:43.134093+00	2025-06-12 00:59:43.134093+00	password	60bcdf0a-a6da-4638-8a8d-f75f46b0b037
 f1b6f993-bd55-4b5c-9876-0f58250df2c2	2025-06-12 21:00:00.942824+00	2025-06-12 21:00:00.942824+00	password	d601f275-41b6-45aa-9651-713e32273a0d
+21d6c76b-a276-4a6f-b3b6-8d8d090e0ae7	2025-06-13 03:31:04.162044+00	2025-06-13 03:31:04.162044+00	password	c4038b1d-b75e-4387-b748-da66d64bb543
 8029aa1c-fa53-4f55-baf6-b202af505913	2025-06-12 00:59:43.151931+00	2025-06-12 00:59:43.151931+00	password	ac0bcd72-5d5e-4bc8-86f6-c8edc20dddc0
 1bb6d178-6a82-468c-9fb1-e4b7353ba34c	2025-06-12 01:00:10.254761+00	2025-06-12 01:00:10.254761+00	password	06ce5446-cc91-4101-b530-42766449bd4e
 093697c4-b23f-44d7-9875-aff5033e3f8f	2025-06-12 01:00:11.566855+00	2025-06-12 01:00:11.566855+00	password	b74707bf-4346-465a-ab69-8632089f9b46
@@ -5487,7 +5499,6 @@ COPY "auth"."one_time_tokens" ("id", "user_id", "token_type", "token_hash", "rel
 --
 
 COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked", "created_at", "updated_at", "parent", "session_id") FROM stdin;
-00000000-0000-0000-0000-000000000000	3621	nvp7ev6csco2	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	2025-06-12 21:05:13.169438+00	2025-06-12 21:05:13.169438+00	\N	2327386c-a762-457a-ac95-368fd115296e
 00000000-0000-0000-0000-000000000000	408	KL05RTpevT_wvr86tAJ0Hg	3912d459-b96e-4150-9a2a-fb9135ebc374	t	2025-04-25 21:31:52.23328+00	2025-05-02 21:39:53.797127+00	\N	48a3d712-1cc8-4106-8032-64f26bd53628
 00000000-0000-0000-0000-000000000000	2867	ls6qyfy6bnbv	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	t	2025-06-10 21:40:51.368281+00	2025-06-10 23:07:13.998261+00	\N	2ad30e04-b408-4bfc-938b-8f5541ff0af6
 00000000-0000-0000-0000-000000000000	435	hVSTMrRq1vVPt4o5dFQcZQ	3912d459-b96e-4150-9a2a-fb9135ebc374	f	2025-05-02 21:39:53.80581+00	2025-05-02 21:39:53.80581+00	KL05RTpevT_wvr86tAJ0Hg	48a3d712-1cc8-4106-8032-64f26bd53628
@@ -5522,8 +5533,6 @@ COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked"
 00000000-0000-0000-0000-000000000000	422	AQ4vBylU7Hpgu9Bi1c184g	3912d459-b96e-4150-9a2a-fb9135ebc374	f	2025-04-29 20:45:55.759681+00	2025-04-29 20:45:55.759681+00	4au7IEyFLOWgx05eYcv2Kw	bfd59fca-362e-4e20-84f3-973ba1b0201e
 00000000-0000-0000-0000-000000000000	3624	ttlpm7arijyr	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 23:26:06.590127+00	2025-06-12 23:26:06.590127+00	o7jbnvadjvhe	4217b9c8-91d1-4276-a6be-eaa2204c3182
 00000000-0000-0000-0000-000000000000	3625	je5yrzz3ur3q	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 23:26:07.614235+00	2025-06-12 23:26:07.614235+00	\N	61a7bdd7-f60e-4f0f-b6ea-633a3ebc0b3a
-00000000-0000-0000-0000-000000000000	807	dvjsgtc4jevk	86315508-992d-4200-a53d-3a2a99f47329	f	2025-05-15 16:12:55.216458+00	2025-05-15 16:12:55.216458+00	\N	38b585e9-9268-42d3-a0ac-88a035a8d5b7
-00000000-0000-0000-0000-000000000000	808	yu57nwopzeel	86315508-992d-4200-a53d-3a2a99f47329	f	2025-05-15 16:13:39.38657+00	2025-05-15 16:13:39.38657+00	\N	4d6029a6-9e04-4b70-b168-79d77c684559
 00000000-0000-0000-0000-000000000000	809	2ziged6kjejm	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f	2025-05-15 16:14:29.405415+00	2025-05-15 16:14:29.405415+00	\N	4ec60657-5f2c-4759-a834-509a35f140f6
 00000000-0000-0000-0000-000000000000	3269	nuvljartaury	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-11 22:50:34.296496+00	2025-06-11 22:50:34.296496+00	\N	3b55989d-d1cf-43db-b49f-724a33cad8a4
 00000000-0000-0000-0000-000000000000	810	zxhfs6ptw7ty	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	t	2025-05-15 16:15:04.63326+00	2025-05-15 17:13:25.119886+00	\N	851ff9fd-c7c1-41d0-ab53-677a34b2d691
@@ -5565,14 +5574,19 @@ COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked"
 00000000-0000-0000-0000-000000000000	897	45ho76bzryai	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f	2025-05-18 14:02:19.351822+00	2025-05-18 14:02:19.351822+00	\N	e7bba15f-89f5-4806-9c48-fb42e6f7ea6d
 00000000-0000-0000-0000-000000000000	3419	n7t34xpxrzc7	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-11 23:39:27.908952+00	2025-06-11 23:39:27.908952+00	\N	313346f0-ff28-40ec-a9b9-f369ea2aa0dc
 00000000-0000-0000-0000-000000000000	3424	qjtzlglp4taf	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-11 23:39:29.545352+00	2025-06-11 23:39:29.545352+00	\N	9b8b8ad4-9a9a-4c39-af08-a76bdbc61c05
+00000000-0000-0000-0000-000000000000	3630	obc5d7eg56so	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-06-13 02:55:20.611148+00	2025-06-13 02:55:20.611148+00	\N	6996d633-a1c2-4c49-a28b-3d656c571ef5
 00000000-0000-0000-0000-000000000000	3579	z6aegpl5wfb5	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 00:59:43.113442+00	2025-06-12 00:59:43.113442+00	\N	b4dd6b10-f85e-4596-a1e5-3cbaf21570c4
+00000000-0000-0000-0000-000000000000	3631	37eiolqa2qsp	5f096705-11c3-49b1-b42c-d7bd17a75439	t	2025-06-13 03:31:04.148487+00	2025-06-13 04:29:28.071716+00	\N	21d6c76b-a276-4a6f-b3b6-8d8d090e0ae7
 00000000-0000-0000-0000-000000000000	3581	gukql7w4wrgv	b5c684f0-24d7-436f-b752-71cd9e361c8f	f	2025-06-12 00:59:43.115013+00	2025-06-12 00:59:43.115013+00	\N	1c63f054-45ee-49c5-b300-6b634b9a619f
+00000000-0000-0000-0000-000000000000	3632	r6setv7pqhwy	5f096705-11c3-49b1-b42c-d7bd17a75439	t	2025-06-13 04:29:28.090279+00	2025-06-13 05:27:39.431354+00	37eiolqa2qsp	21d6c76b-a276-4a6f-b3b6-8d8d090e0ae7
 00000000-0000-0000-0000-000000000000	3580	fqpzxmz67p5g	b5c684f0-24d7-436f-b752-71cd9e361c8f	f	2025-06-12 00:59:43.114284+00	2025-06-12 00:59:43.114284+00	\N	8029aa1c-fa53-4f55-baf6-b202af505913
 00000000-0000-0000-0000-000000000000	3588	2ko5nbt6oxlc	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 01:00:10.251627+00	2025-06-12 01:00:10.251627+00	\N	1bb6d178-6a82-468c-9fb1-e4b7353ba34c
 00000000-0000-0000-0000-000000000000	3589	lz5adk4pjfcz	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 01:00:11.564362+00	2025-06-12 01:00:11.564362+00	\N	093697c4-b23f-44d7-9875-aff5033e3f8f
 00000000-0000-0000-0000-000000000000	3590	ssdhpmbhiaqv	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 01:00:11.585703+00	2025-06-12 01:00:11.585703+00	\N	92f872c1-ec35-4048-a28d-f0b319f7fb22
 00000000-0000-0000-0000-000000000000	3591	bownqfgzhba4	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 01:00:39.390655+00	2025-06-12 01:00:39.390655+00	\N	b8d3ab9f-0428-4102-97c4-c4f48c72f105
 00000000-0000-0000-0000-000000000000	3594	6p562frxxkdq	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 01:00:40.43211+00	2025-06-12 01:00:40.43211+00	\N	b464a92d-865b-42c9-bce1-3f379396247a
+00000000-0000-0000-0000-000000000000	3633	raoq64itdgdk	5f096705-11c3-49b1-b42c-d7bd17a75439	t	2025-06-13 05:27:39.448367+00	2025-06-13 06:35:05.564565+00	r6setv7pqhwy	21d6c76b-a276-4a6f-b3b6-8d8d090e0ae7
+00000000-0000-0000-0000-000000000000	3634	neto4zlmhzzj	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-06-13 05:59:09.124673+00	2025-06-13 05:59:09.124673+00	\N	e92b0949-2a5c-4d88-a35f-76481d88405a
 00000000-0000-0000-0000-000000000000	3582	osxmg6gnelbr	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 00:59:43.113372+00	2025-06-12 00:59:43.113372+00	\N	73843c54-3dfb-437a-9d56-8acf9b60a5b0
 00000000-0000-0000-0000-000000000000	3583	uauy6en3twbl	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 00:59:44.473251+00	2025-06-12 00:59:44.473251+00	\N	20d1b6ab-7acf-4e48-bf9d-3341187fb958
 00000000-0000-0000-0000-000000000000	3584	desqbtmfjbxd	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 00:59:44.541944+00	2025-06-12 00:59:44.541944+00	\N	dd69eeca-7657-4788-98bd-0f74ed2a6f22
@@ -5581,6 +5595,9 @@ COPY "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked"
 00000000-0000-0000-0000-000000000000	3587	wegpm4qzlq62	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 01:00:10.247451+00	2025-06-12 01:00:10.247451+00	\N	a43fffd4-158b-41f8-bf7d-67733aaef598
 00000000-0000-0000-0000-000000000000	3592	26h5epffxinu	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 01:00:39.393925+00	2025-06-12 01:00:39.393925+00	\N	c654ba9a-29a5-46a6-a1e4-865099ba6e4e
 00000000-0000-0000-0000-000000000000	3593	irabfy4sri2y	36abc818-b3a6-440f-933a-79ff41fe5b67	f	2025-06-12 01:00:40.426409+00	2025-06-12 01:00:40.426409+00	\N	ac9b8455-371b-4bc0-96b0-baef2b010183
+00000000-0000-0000-0000-000000000000	3635	ymadfgancnur	1fbfe562-cea4-4b33-b830-0c9f5f301251	f	2025-06-13 06:07:21.917327+00	2025-06-13 06:07:21.917327+00	\N	5071427b-f0a7-4129-a95b-8e38c4d37d09
+00000000-0000-0000-0000-000000000000	3636	wlm2ejdfsa3k	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-06-13 06:35:05.577382+00	2025-06-13 06:35:05.577382+00	raoq64itdgdk	21d6c76b-a276-4a6f-b3b6-8d8d090e0ae7
+00000000-0000-0000-0000-000000000000	3637	3y5iagrb2dmv	5f096705-11c3-49b1-b42c-d7bd17a75439	f	2025-06-13 06:35:15.406356+00	2025-06-13 06:35:15.406356+00	\N	184ba362-0142-4902-980d-fc646cc73347
 00000000-0000-0000-0000-000000000000	3599	j4trmfyxqv4k	36abc818-b3a6-440f-933a-79ff41fe5b67	t	2025-06-12 04:41:48.010531+00	2025-06-12 20:59:26.899162+00	x5zsksr4bbs6	5a61617e-64ff-4b8b-bbbd-30dbc76b2c8d
 00000000-0000-0000-0000-000000000000	3601	g7jtghhkdd56	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	f	2025-06-12 05:02:21.893627+00	2025-06-12 05:02:21.893627+00	mjunvxdrr2fi	2ad30e04-b408-4bfc-938b-8f5541ff0af6
 00000000-0000-0000-0000-000000000000	3608	vf5smcebfoet	54bb3bab-94a3-420a-99da-57717c1c075a	f	2025-06-12 06:09:35.634778+00	2025-06-12 06:09:35.634778+00	\N	7d3192a4-46fc-49fc-a7d3-5e0710f4225b
@@ -5644,8 +5661,8 @@ dd6c79f7-80fd-48b3-97f6-119551d3d2c3	TI	Tecnologias de la informacion
 cf57cc7b-7d64-473a-b31e-97fc5736d380	HR	Recursos Humanos
 d85d9ef9-0288-4462-bb3b-13c1d86cdf68	UX/UI	Diseño
 e4661077-c41c-4f4b-ad46-c5a29baf229a	IA	Inteligencia Artificial
-ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	N	db
 98644a4f-8780-476b-9ae5-8286cc2febb7	Business Analysis	Capability de Análisis de Negocios implementando metodologías ágiles
+ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	Mobile	Mobile development
 \.
 
 
@@ -5654,21 +5671,17 @@ ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	N	db
 --
 
 COPY "public"."Empleado" ("ID_Empleado", "Nombre", "Rol", "ID_Departamento", "Nivel", "Cargabilidad", "FechaContratacion", "FechaUltNivel", "ID_PeopleLead", "Biografia") FROM stdin;
-54bb3bab-94a3-420a-99da-57717c1c075a	Alfredo Emir Puente Medrano	dev	ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	1	0	2005-10-26	2005-10-26	3cb8081b-1a2b-4e32-a007-fae5c77735ba	\N
-5f096705-11c3-49b1-b42c-d7bd17a75439	Sergio Ricardo Tellez Loaiza	Admin	cf57cc7b-7d64-473a-b31e-97fc5736d380	1	40	2025-04-25	2025-04-25	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Estudiante de ITC en el tecnologico de Monterrey
-bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	Edgar Alan López Herrera	Business Analyst Sr.	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	10	0	2025-06-12	2025-06-12	\N	\N
-5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Isaac Francisco Sánchez Veloquio	Developer	ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	5	100	2023-03-10	2023-03-10	e88f17d8-ef2c-4dfd-aa68-3aa0a60e9b46	\N
-386e63ba-dc8f-4af6-9447-44f7976a4a0c	Pancho	Admin	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	1	30	2025-05-13	2025-05-13	\N	Biografía
-30258a1f-f307-4728-8f1c-045e56548153	Richie	a	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	11	0	2025-06-10	2025-06-10	4fde1b00-e11e-41c5-88c8-9e38d71facce	\N
-b5c684f0-24d7-436f-b752-71cd9e361c8f	Ramón Antonio Naranjo Sarmiento	Admin	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	1	40	2004-10-17	2004-10-17	66d20503-e75f-43d9-9572-54fa189dfb95	\N
-3912d459-b96e-4150-9a2a-fb9135ebc374	Jose	Dev	cf57cc7b-7d64-473a-b31e-97fc5736d380	6	0	2025-04-25	2025-04-25	3cb8081b-1a2b-4e32-a007-fae5c77735ba	\N
-86315508-992d-4200-a53d-3a2a99f47329	Ricardo	Admin	cf57cc7b-7d64-473a-b31e-97fc5736d380	1	40	2025-05-15	2025-05-15	4fde1b00-e11e-41c5-88c8-9e38d71facce	\N
-76db1355-d074-41ef-ab95-5701689639ae	New User	NU	cf57cc7b-7d64-473a-b31e-97fc5736d380	10	40	2025-06-10	2025-06-10	\N	\N
-fc1276e7-efc6-4ec5-b2cd-bfab2005930e	Yolanda	Dev	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	11	0	2025-04-29	2025-04-29	66d20503-e75f-43d9-9572-54fa189dfb95	ksd
-900fdfaf-7517-4876-8d20-b83da73a8347	Jorge Betanzo	Developer	d85d9ef9-0288-4462-bb3b-13c1d86cdf68	10	0	2025-04-25	2025-04-25	66d20503-e75f-43d9-9572-54fa189dfb95	ITC 6° Semestre
-36abc818-b3a6-440f-933a-79ff41fe5b67	David	dev	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	1	0	2025-04-25	2025-04-25	66d20503-e75f-43d9-9572-54fa189dfb95	\N
-1fbfe562-cea4-4b33-b830-0c9f5f301251	Mauricio	Zy	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	12	0	2025-06-02	2025-06-02	92360b89-f39a-4a6a-9401-8e0aa6420b12	\N
-7b23b8a4-8f26-40a9-86c0-c591b423ea6a	Jorge Beyanzo	QA	d85d9ef9-0288-4462-bb3b-13c1d86cdf68	10	51	2025-05-15	2025-05-15	4fde1b00-e11e-41c5-88c8-9e38d71facce	\N
+36abc818-b3a6-440f-933a-79ff41fe5b67	David	Developer	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	1	0	2025-04-25	2025-04-25	66d20503-e75f-43d9-9572-54fa189dfb95	\N
+bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	Edgar Alan López Herrera	Business Analyst Sr.	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	10	0	2025-06-12	2025-06-12	66d20503-e75f-43d9-9572-54fa189dfb95	\N
+3912d459-b96e-4150-9a2a-fb9135ebc374	Jose	Developer	cf57cc7b-7d64-473a-b31e-97fc5736d380	6	0	2025-04-25	2025-04-25	e88f17d8-ef2c-4dfd-aa68-3aa0a60e9b46	\N
+b5c684f0-24d7-436f-b752-71cd9e361c8f	Francisco Antonelo	Developer	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	1	0	2004-10-17	2004-10-17	4fde1b00-e11e-41c5-88c8-9e38d71facce	\N
+5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Isaac Francisco Sánchez Veloquio	Developer	ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	5	0	2023-03-10	2023-03-10	4fde1b00-e11e-41c5-88c8-9e38d71facce	\N
+5f096705-11c3-49b1-b42c-d7bd17a75439	Sergio Ricardo Tellez Loaiza	Admin	cf57cc7b-7d64-473a-b31e-97fc5736d380	1	0	2025-04-25	2025-04-25	\N	Estudiante de ITC en el tecnologico de Monterrey
+7b23b8a4-8f26-40a9-86c0-c591b423ea6a	Jorge Betanzo	QA	d85d9ef9-0288-4462-bb3b-13c1d86cdf68	10	0	2025-05-15	2025-05-15	e88f17d8-ef2c-4dfd-aa68-3aa0a60e9b46	\N
+30258a1f-f307-4728-8f1c-045e56548153	Richie	Business Analyst Sr.	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	11	0	2025-06-10	2025-06-10	92360b89-f39a-4a6a-9401-8e0aa6420b12	\N
+54bb3bab-94a3-420a-99da-57717c1c075a	Alfredo Emir Puente Medrano	Developer	ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	1	0	2005-10-26	2005-10-26	66d20503-e75f-43d9-9572-54fa189dfb95	\N
+fc1276e7-efc6-4ec5-b2cd-bfab2005930e	Yolanda	Developer	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	11	0	2025-04-29	2025-04-29	a1802e13-17ee-428d-8cce-c464ea140559	ksd
+1fbfe562-cea4-4b33-b830-0c9f5f301251	Mauricio	QA	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	12	0	2025-06-02	2025-06-02	92360b89-f39a-4a6a-9401-8e0aa6420b12	\N
 \.
 
 
@@ -5683,7 +5696,6 @@ d12c4151-1b84-4db0-8de2-c14bc7dffd13	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	5f0967
 544d651e-e128-4450-bc92-3be631a52790	cf57cc7b-7d64-473a-b31e-97fc5736d380	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1
 5b9ea871-5bb5-478e-9d9f-18e14218bf6d	e4661077-c41c-4f4b-ad46-c5a29baf229a	fc1276e7-efc6-4ec5-b2cd-bfab2005930e
 9ec7047f-8e70-4742-af18-1b3304fe1056	ba0ef5df-4b1e-4262-a8c5-b9b9fa1b9dc0	b5c684f0-24d7-436f-b752-71cd9e361c8f
-6c3fca34-fa24-410e-9793-3d723d369d3e	\N	386e63ba-dc8f-4af6-9447-44f7976a4a0c
 \.
 
 
@@ -5692,7 +5704,6 @@ d12c4151-1b84-4db0-8de2-c14bc7dffd13	dd6c79f7-80fd-48b3-97f6-119551d3d2c3	5f0967
 --
 
 COPY "public"."Categorias_habilidades" ("id", "Nombre_categoria") FROM stdin;
-458c8cbf-f319-4479-8f4a-9dbcf83a01ab	Agile
 e2ba3a1c-c04c-4ba0-b3c3-fa806b7017d2	Core CS Foundations
 1acef4be-af44-48c1-b561-3e092d83ae3e	Multi-language Fluency
 c7389ba3-7a55-4c71-8e57-3c0c9790d83f	Software Design & Architecture
@@ -5755,18 +5766,14 @@ cd29ab60-7cab-4119-a8d7-8a25e46db0c5	arch.pdf	2025-05-21	https://nuyfnqiodjynfku
 
 COPY "public"."Contacto" ("PK_Contacto", "Email", "Num_Telefono", "ID_empleado", "Estado", "Pais") FROM stdin;
 42cd3f7d-f5d6-4ec0-8f45-dea51996909f	a01198327@tec.mx	\N	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	\N	\N
-122ae824-f15d-4b41-81c5-7cc4c79cdf6a	correoProfesional@gmail.com	81892983740	900fdfaf-7517-4876-8d20-b83da73a8347	Monterrey	Mexico
 df0b063b-0d8f-4424-94fa-f09911dfa6a7	a01722728@tec.mx	\N	36abc818-b3a6-440f-933a-79ff41fe5b67	\N	\N
 1a6e52e7-2b97-4332-b51c-c27c36095ace	Jose@gmail.com	\N	3912d459-b96e-4150-9a2a-fb9135ebc374	\N	\N
 5fc4d1a4-5ff2-49cd-99fc-32739838dc5b	A01741300@tec.mx	6672640278	5f096705-11c3-49b1-b42c-d7bd17a75439	Sinaloa	Mexico
 054d8314-cf55-4879-8bcb-5c6e86b6d9be	Yolanda@gmail.com	66748465859	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	monterrey	Mexico
 fbcc9523-b9d6-48a9-98d0-3cf0395bc3cc	a00836530@tec.mx	\N	b5c684f0-24d7-436f-b752-71cd9e361c8f	\N	\N
-08e30d4c-aeac-463f-8ec8-90357ddaad7a	rantonion2004@outlook.com	\N	386e63ba-dc8f-4af6-9447-44f7976a4a0c	\N	\N
 b3d269ef-67ae-4246-8ea6-e796534973da	a01198676@tec.mx	\N	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	\N	\N
-71feba02-37b8-4909-9999-9206ea791586	jorgebcarriles@gmail.com	\N	86315508-992d-4200-a53d-3a2a99f47329	\N	\N
 614c20c8-989a-40bb-92f0-0d44da39dcf0	emirpuente31@gmail.com	\N	54bb3bab-94a3-420a-99da-57717c1c075a	\N	\N
 d9b557fe-1024-479a-a913-f4311f1b03b1	M@g.com	\N	1fbfe562-cea4-4b33-b830-0c9f5f301251	\N	\N
-ffd1244b-842b-4299-b8a4-9043460917f8	NU@g.com	\N	76db1355-d074-41ef-ab95-5701689639ae	\N	\N
 d721d4fe-3c08-4086-a248-aa3570413a8b	rikytellez04@gmail.com	\N	30258a1f-f307-4728-8f1c-045e56548153	\N	\N
 0b04da5b-d591-4401-b357-7cb235e670b4	lizethdzg@gmail.com	\N	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	\N	\N
 \.
@@ -5777,17 +5784,24 @@ d721d4fe-3c08-4086-a248-aa3570413a8b	rikytellez04@gmail.com	\N	30258a1f-f307-472
 --
 
 COPY "public"."Cursos" ("ID_Curso", "Nombre", "Fecha_fin_curso", "link", "Descripcion") FROM stdin;
-b855f167-1544-4b59-b7df-0b6cc9e771c0	Leadership Training	2025-03-01	https://www.scrum.org/courses/professional-agile-leadership-essentials-training	\N
-008549c6-44fd-4c33-b12c-5509dbe5be02	Linux for Servers	2025-06-13	https://www.netacad.com/courses/linux-essentials?courseLang=en-US	A course to learn linux basics for system administration.
-5851613a-0116-4c81-acf2-b669b477a8c0	React Development	\N	https://www.google.com/search?q=never+gonna+give+you+up&sca_esv=178908ee291956e1&sxsrf=AHTn8zrFLIYrpVip5Yamqb7EzRwcUPn-9A%3A1745580309874&ei=FXELaJqfNZmRur8Pjuz46A0&gs_ssp=eJzj4tVP1zc0TEmriK8wSDcxYPQSz0stSy1SSM_Py0tUSM8sS1WozC9VKC0AAANTDVU&oq=never&gs_lp=Egxnd3Mtd2l6LXNlcnAiBW5ldmVyKgIIADIKEC4YgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTINEC4YgAQYsQMYQxiKBTIFEC4YgAQyCxAuGIAEGLEDGNQCMggQLhiABBixAzIFEAAYgAQyCBAuGIAEGLEDMhkQLhiABBhDGIoFGJcFGNwEGN4EGOAE2AEBSN4cUJAEWOgRcAJ4AZABBZgB8QGgAdIMqgEFMC45LjK4AQPIAQD4AQGYAgigAqAPqAISwgIKEAAYsAMY1gQYR8ICDRAAGIAEGLADGEMYigXCAg4QABiwAxjkAhjWBNgBAcICExAuGIAEGLADGEMYyAMYigXYAQHCAhkQLhiABBiwAxjRAxhDGMcBGMgDGIoF2AEBwgIIEAAYgAQYsQPCAggQABiABBjLAcICBxAuGIAEGArCAgcQIxgnGOoCwgITEAAYgAQYQxi0AhiKBRjqAtgBAcICFhAuGIAEGEMYtAIYyAMYigUY6gLYAQHCAhwQLhiABBjRAxhDGLQCGMcBGMgDGIoFGOoC2AEBwgIMECMYgAQYExgnGIoFwgIKECMYgAQYJxiKBcICBBAjGCfCAhEQLhiABBixAxjRAxiDARjHAcICCxAuGIAEGLEDGIMBwgIOEAAYgAQYsQMYgwEYigXCAgsQABiABBixAxiDAcICDhAuGIAEGLEDGNEDGMcBmAMG8QVRqv3Gjf9Cd4gGAZAGEroGBggBEAEYCZIHBzIuNS43LTGgB4-YArIHBzAuNS43LTG4B5EP&sclient=gws-wiz-serp	Curso react
-fe3d17f4-b04f-43ff-960f-10ae65ecffef	Curso de Administración Municipal	\N	https://maestriasydiplomados.tec.mx/programas/curso-administracion-municipal-programa-en-linea	Curso para aprender administración
-a6933529-e7b5-4c46-9c09-42deed11e379	Curso de analisis de estados financieros	\N	https://maestriasydiplomados.tec.mx/programas/curso-analisis-de-los-estados-financieros-programa-en-linea	Curso para análisis de estados financieros
-94d16417-4d6d-4893-989b-fa6aa3ac2a97	Administracion de costos	\N	https://maestriasydiplomados.tec.mx/programas/administracion-de-costos-virtual	Administracion de costos en linea
-66d6cc25-fd94-41bd-b9cf-74560555d85b	Trust course	\N	https://matias.me/nsfw/	Mejora tu confianza
-1a6ca356-9275-4141-a0d9-f26a6c73a433	Curso python	\N	https://pathexplorer-esquimales.vercel.app/admin/cursos	AM
-0533c687-e8d3-47a7-8e8c-b7eca13022e8	Simulacion digital	\N	https://phet.colorado.edu/es/	Curso para aprender a manejar simulaciones
-5f5bbec7-f37a-4d7a-83a3-3e2b6780e700	React Development update 	2025-05-15	https://www.freecodecamp.org/news/learn-javascript-free-js-courses-for-beginners/#heading-learn-javascript-full-course-for-beginners	asd
-4235c4d3-45ed-4dc8-9ca7-d5917cb4b138	C++	\N	https://pathexplorer-esquimales.vercel.app/admin/cursos	d
+0df6b0f9-ea46-4a9f-8056-be2f7ea94b1e	Programa especializado: Habilidades de Excel para los negocios	\N	https://www.coursera.org/specializations/excel	Aprenda Excel para los negocios. Domine Excel para añadir un activo de gran valor a su cartera de posibilidades de empleo.
+b4dab613-180f-4a59-8d8a-c9f8c7a795c2	Certificado profesional de Ciberseguridad de Google	\N	https://www.coursera.org/professional-certificates/google-cybersecurity	Acceda por la vía rápida a una carrera en ciberseguridad. En este programa de certificación, aprenderás las habilidades más demandadas y recibirás formación en IA de la mano de expertos de Google. Aprenda a su propio ritmo, sin necesidad de título o experiencia.
+7c945370-5d42-4bab-aac8-8f98fef17d50	Programa especializado: Diseño gráfico	\N	https://www.coursera.org/specializations/graphic-design	Hacer un diseño convincente. Aprenda y aplique los principios del diseño gráfico a un proyecto integral de creación de marca.
+0880e012-bfe0-4244-9d6a-df50d3246add	Programa especializado: Mejore su capacidad de comunicación en inglés	\N	https://www.coursera.org/specializations/improve-english	Mejore su capacidad de comunicación en inglés. Escriba y hable más profesionalmente en inglés para aumentar su éxito empresarial.
+737011e8-f6f1-4111-a336-620bc0ec09c2	Certificado profesional de Diseño de experiencia del usuario (UX) de Google	\N	https://www.coursera.org/professional-certificates/google-ux-design	Póngase en la vía rápida hacia una carrera en diseño de UX. En este programa de certificación, aprenderás las habilidades más demandadas y recibirás formación en IA de la mano de expertos de Google. Aprenda a su propio ritmo, sin necesidad de título o experiencia.
+05f69aa5-eb45-43d9-b6d6-a60066cd9602	Certificado profesional de Preparing for Google Cloud Certification: Cloud Engineer	\N	https://www.coursera.org/professional-certificates/cloud-engineering-gcp	Learn the skills needed to be successful in a cloud engineering role, Learn about the infrastructure and platform services provided by Google Cloud Platform, Prepare for the Associate Cloud Engineer certification
+126651c2-1890-4ba0-bd47-b62b99626c15	Programa especializado: Python para todos	\N	https://www.coursera.org/specializations/python	Aprenda a programar y analizar datos con Python. Desarrolle programas para recopilar, limpiar, analizar y visualizar datos.
+9985dc2d-0fe4-430e-858e-f0eb9663c34e	Programa especializado: Prompt Engineering	\N	https://www.coursera.org/specializations/prompt-engineering	Conviértase en un experto en ingeniería Prompt. Domine los patrones, técnicas y enfoques de ingeniería rápida para aprovechar eficazmente la IA Generativa
+55ee6029-9c8e-499a-8cc7-bb7f5da931fe	Certificado profesional de Ciencia de datos de IBM	\N	https://www.coursera.org/professional-certificates/ibm-data-science	Prepárese para una carrera como científico de datos. Desarrolle las habilidades necesarias para el puesto de trabajo (y las habilidades de IA imprescindibles) para una carrera profesional en demanda. Obtenga una credencial de IBM. No se requiere experiencia previa.
+028e2e2e-b9e7-4d3d-a5a1-888cc975057d	Certificado profesional de Gestión de proyectos de Google:	\N	https://www.coursera.org/professional-certificates/google-project-management	Acceda rápidamente a una carrera en gestión de proyectos. En este programa de certificación, aprenderás las habilidades más demandadas y recibirás formación en IA de la mano de expertos de Google. Aprenda a su propio ritmo, sin necesidad de título o experiencia.
+e78c6f1c-0c1d-4445-9d32-d7becddb6c5d	Programa especializado: Bases de datos para científicos de datos	\N	https://www.coursera.org/specializations/databases-for-data-scientists	Todo sobre bases de datos para científicos de datos. Aprenda a diseñar y crear bases de datos relacionales eficientes y eficaces, a llenarlas de datos y a trabajar con ellas utilizando SQL.
+0d94815a-d615-4adb-ac48-a0b8a2f6d5b3	Certificado profesional de Analista de ciberseguridad de Microsoft	\N	https://www.coursera.org/professional-certificates/microsoft-cybersecurity-analyst	Lance su carrera como analista de ciberseguridad. Adquiera las habilidades necesarias para el puesto de trabajo (y las habilidades de IA imprescindibles) para una carrera profesional en demanda. Obtenga una credencial de Microsoft. No se requiere experiencia previa.
+ef507bcc-9e34-42d9-9fc6-09549cc773b5	Programa especializado: Fundamentos de la IA Generativa	\N	https://www.coursera.org/specializations/generative-ai-for-everyone	Desbloquee y aproveche el potencial de la IA generativa. Aprenda cómo puede utilizar las capacidades de la IA generativa para mejorar su trabajo y su vida cotidiana.
+fa51477d-228d-4ff6-9806-9583f03afd60	Programa especializado: Introducción a la programación con Python y Java	\N	https://www.coursera.org/specializations/programming-python-java	Aumente sus conocimientos de programación informática. Con una exposición previa mínima, aprenda dos lenguajes de programación populares a un ritmo acelerado.
+59a79173-f761-4372-a1e5-f3d75637e869	Programa especializado: Programación en Python 3	\N	https://www.coursera.org/specializations/python-3-programming	Conviértase en un programador fluido de Python. Aprenda los fundamentos y conviértase en un programador independiente.
+4839719d-d0bb-4a03-8c88-818cd6dd2d51	Android y Kotlin Desde Cero	\N	https://www.udemy.com/course/curso-android-kotlin/?utm_source=adwords&utm_medium=udemyads&utm_campaign=Search_DSA_Beta_Prof_la.ES_cc.MX&campaigntype=Search&portfolio=Mexico&language=ES&product=Course&test=&audience=DSA&topic=&priority=Beta&utm_content=deal4584&utm_term=_._ag_162849008134_._ad_704564284725_._kw__._de_c_._dm__._pl__._ti_dsa-2061826749537_._li_1010130_._pd__._&matchtype=&gad_source=1&gad_campaignid=21438024700&gbraid=0AAAAADROdO0hUP6i9icVvsIyC4VBXNbK4&gclid=CjwKCAjw9anCBhAWEiwAqBJ-c8mvYchO2kRhJHZGunKu6AL59PwCRzSt10o-cyV8-N4t7pqOMo3-BBoCtBEQAvD_BwE&couponCode=PMNVD2525	Aprendizaje y manejo del lenguaje de programación Kotlin en su ultima versión de 2021. Diseño, creación y desarrollo de aplicaciones Android en su última versión de 2021. Manejar profesionalmente el IDE Android Studio en su versión mas reciente. Aprender paso a paso todo el proceso para publicar apps Android a la Google PlayStore.
+d01396e1-c846-4712-ba47-48f3be294bd6	iOS y Swift : Curso Completo de Cero a Profesional	\N	https://www.udemy.com/course/swift-4-ios-11/?utm_source=adwords&utm_medium=udemyads&utm_campaign=Search_DSA_Beta_Prof_la.ES_cc.MX&campaigntype=Search&portfolio=Mexico&language=ES&product=Course&test=&audience=DSA&topic=&priority=Beta&utm_content=deal4584&utm_term=_._ag_162849008134_._ad_704564284725_._kw__._de_c_._dm__._pl__._ti_dsa-2061826749537_._li_1010130_._pd__._&matchtype=&gad_source=1&gad_campaignid=21438024700&gbraid=0AAAAADROdO0hUP6i9icVvsIyC4VBXNbK4&gclid=CjwKCAjw9anCBhAWEiwAqBJ-czeKbgm5yRnwMuJvPFoeJIV1eJ7yatuLTk2MIe3WzlhsPURpQobCcxoCj7sQAvD_BwE&couponCode=PMNVD2525	Aprende a Desarrollar Apps Móviles para iPhone y iPad en Swift Desde Cero con el Mejor Curso de iOS y Swift en Español. Aprenderás programar desde cero, dominar swift, entender y aprender a programar. Sí, desde cero. Aprenderás a desarrollar aplicaciones nativas iOS, comprendiendo no copiando. Aprenderás a documentarte y aumentar tus conocimientos con frameworks avanzados como Core Data, SpriteKit, ARKit ,Core ML, etc.
+91e277bf-287b-40fa-b622-4a9e9e31048a	Maestría en Desarrollo y Operaciones de Software (DevOps)	\N	https://estudiar.unir.net/mx/mx-esp-ma-ing-maestria-desarrollo-operaciones-software/?utm_source=GOOGLE-BUSQ&utm_medium=Search&utm_campaign=UNIRMX_LT_MX_FIG_IG_MO_X_MaestriaDevOps-510363_NOMAR_X_LWEB_GLOB_MX_PROD_AO_GOOGLE-BUS_BUS_ESP_X_DEVOPS-AMPLIA&utm_content=MX_MX_FIG_IG_MO_X_MaestriaDevOps-510363_NOMAR_BUSQ_MasterDevops_TXT_CPC_GOOGLE-BUS_BR_X_X_X&bi_campaignid=22014597775&bi_adgroupid=177181597652&gad_source=1&gad_campaignid=22014597775&gbraid=0AAAAADvi6Q8sYsTWlvKndniJ8Whqe00mF&gclid=CjwKCAjw9anCBhAWEiwAqBJ-czZpdnv5XrFY3jt2QGUB_a-Ai5VF8VRLfglXCrlGXQt3-4zCqdy_phoCmnwQAvD_BwE	Especialízate en DevOps y sé el profesionista experto en entornos altamente automatizados. Poseerás los conocimientos necesarios para dirigir, implantar y mantener entornos de Desarrollo y Operaciones de Software altamente automatizados, centrados en la producción de software con técnicas de integración y entrega continua sobre entornos de nube, dando soporte a instituciones y empresas altamente tecnificadas. Define, diseño y gestiona proyectos tecnológicos empresariales con las herramientas, tecnologías y metodologías de desarrollo de vanguardia comoÑ ANSIBLE, puppet labs, CHEF, DOCKER, Terraform, Packer, aws.
 \.
 
 
@@ -6042,9 +6056,6 @@ dad34d29-35d9-49a4-a2e0-55b8996d56b1	Growth Mindset	6a8ab048-2033-4a16-a9fa-e200
 8491f166-9b33-4ca4-9286-a2be7549369f	Facilitation	6a8ab048-2033-4a16-a9fa-e2006952af4e
 50ad3f12-b375-4cea-b450-a877bb353ca2	Networking	6a8ab048-2033-4a16-a9fa-e2006952af4e
 8fce50e5-eea2-4871-a5ad-43c24c58d554	Cultural Awareness	6a8ab048-2033-4a16-a9fa-e2006952af4e
-1140c183-a3a0-48f5-a35a-51cfe6fe5434	Business Analysis	458c8cbf-f319-4479-8f4a-9dbcf83a01ab
-87f29071-5a9f-48a7-9f2a-ddab08f4875d	Scrum	458c8cbf-f319-4479-8f4a-9dbcf83a01ab
-16b3ea47-6a1a-4812-b28e-1483f6052d92	Kanban	458c8cbf-f319-4479-8f4a-9dbcf83a01ab
 \.
 
 
@@ -6064,9 +6075,7 @@ COPY "public"."Delivery_Lead" ("ID_DeliveryLead", "ID_Empleado") FROM stdin;
 b4bcad2d-9e33-42c7-b844-0ba90e44392e	5f096705-11c3-49b1-b42c-d7bd17a75439
 8583e274-0063-44f3-a6c9-314d3263d285	36abc818-b3a6-440f-933a-79ff41fe5b67
 adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1
-82df9561-0f01-4836-b07e-d4f365ea5776	386e63ba-dc8f-4af6-9447-44f7976a4a0c
 c7adc339-e954-456d-b091-97b647d85fe0	7b23b8a4-8f26-40a9-86c0-c591b423ea6a
-050a9fda-e11b-4023-83e2-25655481d507	86315508-992d-4200-a53d-3a2a99f47329
 3d38bf85-9e8b-4fc3-8192-7adbb5d9884f	b5c684f0-24d7-436f-b752-71cd9e361c8f
 7cfbdedb-b93e-47d5-b586-9df297039186	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04
 \.
@@ -6077,23 +6086,9 @@ c7adc339-e954-456d-b091-97b647d85fe0	7b23b8a4-8f26-40a9-86c0-c591b423ea6a
 --
 
 COPY "public"."Proyectos" ("ID_Proyecto", "Nombre", "Descripcion", "Status", "ID_DeliveryLead", "fecha_inicio", "fecha_fin", "isReviewed", "cargabilidad_num", "Cliente", "created_at", "ImagenUrl") FROM stdin;
-eb9096c3-293a-4a13-97e2-aa8738a95ff3	Proyecto software evaluativo	Evaluacion de proyectos de software mediante estrategias	inactive	8583e274-0063-44f3-a6c9-314d3263d285	2025-06-11	2025-06-11	f	10	Balatro Balatrez	2025-06-11 22:07:53.718838+00	proyectos/eb9096c3-293a-4a13-97e2-aa8738a95ff3/imagen.jpg
-70978aae-596c-4196-9df6-53b77dea2ee0	Business Analysis Project	Este proyecto es de la compañía de BA consulting donde se contratarán analistas de negocios	inactive	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	2025-06-12	2026-06-12	f	100	BA Consulting	2025-06-12 22:15:41.826265+00	proyectos/70978aae-596c-4196-9df6-53b77dea2ee0/imagen.png
-2ad6a956-8754-4859-9c6c-785f419fb205	yippie	yippie	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-06	2025-06-06	t	25	a	2025-06-05 22:52:28.884056+00	\N
-31f3912a-ad69-44f5-9176-13702c2bdda3	Test	Este proyecto busca testear diferentes sistemas de IA 	inactive	82df9561-0f01-4836-b07e-d4f365ea5776	2025-06-09	2025-06-30	f	30	Testing	2025-06-09 09:11:52.212593+00	proyectos/31f3912a-ad69-44f5-9176-13702c2bdda3/imagen.png
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	AgroTrack	Desarrollo de una plataforma web y móvil para el monitoreo en tiempo real de cultivos agrícolas utilizando sensores IoT y visualización con mapas	done	82df9561-0f01-4836-b07e-d4f365ea5776	2025-06-08	2025-06-08	t	30	AgroSolutions S.A	2025-06-06 20:10:45.088796+00	proyectos/639ebe39-4ccb-48ae-a87c-7f706ebf0c18/imagen.png
-62653857-76fa-488e-858b-2c8e68779d34	EduPlus LMS	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-09	2025-06-09	t	25	Instituto Educativo Nuevo Horizonte	2025-06-06 20:16:16.40067+00	proyectos/62653857-76fa-488e-858b-2c8e68779d34/imagen.png
-fe159399-861c-4192-8fcc-0a0ce22d8d7c	Testing 2	-	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-10	2025-06-10	t	40	woah	2025-06-09 10:21:42.87976+00	\N
-b154888b-5599-4ff1-b3a6-182d406b4f79	Aplicación web para un restaurante	Una aplicación para mostrar el menú.	done	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	2025-06-05	2025-06-06	t	38	Cafetería café	2025-06-05 20:50:24.60286+00	proyectos/b154888b-5599-4ff1-b3a6-182d406b4f79/imagen.jpg
-4c0b4238-9d6b-4008-a677-96fe61d97f21	Proyecto B.A.L	B.A.L es un proyecto de desarollo web	done	82df9561-0f01-4836-b07e-d4f365ea5776	2025-06-05	2025-06-05	t	24	Atro	2025-06-05 09:54:02.360794+00	proyectos/4c0b4238-9d6b-4008-a677-96fe61d97f21/imagen.jpeg
-89c59da6-027e-40e9-b150-0a8a61ad8310	Proyecto de prueba de activos	Prueba para ver que funciona los proyectos activos	done	82df9561-0f01-4836-b07e-d4f365ea5776	2025-06-06	2025-06-06	t	10	Tec	2025-06-06 08:51:45.653792+00	\N
-1b58ea3b-478d-433f-b11b-89ec6268f5e8	Proyecto 2	yuppi	done	8583e274-0063-44f3-a6c9-314d3263d285	2025-06-06	2025-06-06	t	40	supa	2025-06-06 11:02:41.930187+00	proyectos/1b58ea3b-478d-433f-b11b-89ec6268f5e8/imagen.png
-517daacf-9119-4054-aafe-1238518e20d0	Proyecto chromium	proyeco de desarrollo de aplicacion con chromium	inactive	3d38bf85-9e8b-4fc3-8192-7adbb5d9884f	2025-02-10	2025-06-14	f	40	chromium	2025-06-11 19:49:37.905738+00	proyectos/517daacf-9119-4054-aafe-1238518e20d0/imagen.jpg
-d16a497a-ae1d-4867-9d41-0b5a90430c80	Autonomia vehicular	Se planea implementar una app a un vehiculo para poder dirigirlo a una direccion y rastrear el vehiculo.	done	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	2025-06-09	2025-06-09	t	60	Industrias autonomas	2025-06-09 06:19:12.742551+00	proyectos/d16a497a-ae1d-4867-9d41-0b5a90430c80/imagen.png
-616ec85c-8418-4809-b255-424848c2079e	SafeCity App	Aplicación ciudadana para reportar incidentes urbanos (seguridad, baches, alumbrado) con geolocalización y seguimiento de casos.	done	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	2025-06-08	2025-06-08	t	80	Gobierno Municipal de Monterrey	2025-06-06 20:36:46.502469+00	\N
-d22d7fde-59cc-4feb-b8a7-8c9dd0565ef0	Nada	n.a	inactive	c7adc339-e954-456d-b091-97b647d85fe0	2025-06-06	2025-06-06	f	90	0	2025-06-06 20:44:51.846579+00	\N
-def6f4fa-1e79-49fc-a1af-f78ebbf25a21	Check de Proyecto	Verificar que los puestos se esten asignando	inactive	050a9fda-e11b-4023-83e2-25655481d507	2025-06-11	2025-06-11	f	40	Pro	2025-06-12 00:38:02.992119+00	\N
-4f58c7ed-7eab-40f4-97fd-58c9028782a1	Proyecto firefox	Proyecto de aplicacion nativa para firefox	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-12	2025-06-12	f	40	firefox	2025-06-11 19:56:39.671956+00	proyectos/4f58c7ed-7eab-40f4-97fd-58c9028782a1/imagen.jpg
+2537aedd-2585-4e1f-973d-fb1a007d7d3e	Plataforma de Gestión de Talento	Desarrollo de una plataforma web interna para la gestión del talento humano, orientada a la administración de perfiles profesionales, asignación de empleados a proyectos según sus capacidades, y seguimiento del desarrollo profesional a través de cursos, certificaciones e intereses personales. El sistema incluye dashboards personalizados por rol (empleado, Capability Lead, Talent Lead, administrador), autenticación con múltiples niveles de permisos, y generación de reportes de cargabilidad y desempeño. Se buscó optimizar la trazabilidad del talento, reducir tiempos de asignación y mejorar la retención del personal.	done	b4bcad2d-9e33-42c7-b844-0ba90e44392e	2025-06-13	2025-06-13	t	50	Accenture	2025-06-13 03:23:16.770485+00	proyectos/2537aedd-2585-4e1f-973d-fb1a007d7d3e/imagen.png
+af95e861-067b-45eb-b929-d67a5dd1358a	Chatbot de Atención a Clientes	Implementación de un asistente conversacional inteligente para responder preguntas frecuentes de usuarios en canales web y móvil. Utiliza modelos de procesamiento de lenguaje natural para interpretar intenciones, gestionar diálogos complejos y derivar a humanos si es necesario. Se integró con la base de datos de productos financieros, calendario de pagos, historial de cliente y mecanismos de verificación de identidad para evitar fraudes. La solución se desplegó en la nube y cumple con estándares bancarios de seguridad.	done	8583e274-0063-44f3-a6c9-314d3263d285	2025-06-13	2025-06-13	t	60	BBVA	2025-06-13 05:08:21.461993+00	proyectos/af95e861-067b-45eb-b929-d67a5dd1358a/imagen.png
+5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	Aplicación Móvil de Pedidos para Restaurantes	Aplicación móvil para clientes finales que permite realizar pedidos, pagar desde la app, seleccionar sucursales cercanas, y hacer seguimiento en tiempo real del pedido. Incluye un módulo de promociones personalizadas basado en historial de compras, sistema de recompensas y notificaciones push. Soporta múltiples marcas del grupo (Domino's, Starbucks, Vips) con una arquitectura modular por marca. También se desarrolló una consola de administración para restaurantes y soporte en tiempo real vía chat.	done	3d38bf85-9e8b-4fc3-8192-7adbb5d9884f	2025-06-13	2025-06-13	t	20	Grupo Alsea	2025-06-13 05:19:00.934577+00	proyectos/5b0cf129-c25c-4548-a68e-a6af4b6b5c6e/imagen.jpg
 \.
 
 
@@ -6102,20 +6097,17 @@ def6f4fa-1e79-49fc-a1af-f78ebbf25a21	Check de Proyecto	Verificar que los puestos
 --
 
 COPY "public"."Evaluacion_Proyecto" ("ID_Evaluacion", "ID_DeliveryLead", "ID_Empleado", "ID_Proyecto", "Calificacion", "Fortalezas", "Areas_Mejora", "esAutoevaluacion") FROM stdin;
-f3f6bbf2-53e1-49a2-931e-6e60305d0a92	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	b154888b-5599-4ff1-b3a6-182d406b4f79	4	fasf	asf	f
-1151e0b8-2ae5-401c-9bd3-cce11e49cd92	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	b154888b-5599-4ff1-b3a6-182d406b4f79	4	ijlijpjpi	jjppjoojppjo	f
-09b8955a-3f45-4afa-92d9-79687fe1937a	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	b154888b-5599-4ff1-b3a6-182d406b4f79	5	lñsak	lañsfk	f
-a3f58539-c56e-442d-bfce-c6345854b080	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	1fbfe562-cea4-4b33-b830-0c9f5f301251	616ec85c-8418-4809-b255-424848c2079e	4	jknl	vhjbl	f
-6f3c312e-74d7-4338-822b-374feba65067	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	86315508-992d-4200-a53d-3a2a99f47329	616ec85c-8418-4809-b255-424848c2079e	4	wefwef	gwefwef	f
-876eb412-03a7-4d02-8040-157c135715be	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	36abc818-b3a6-440f-933a-79ff41fe5b67	616ec85c-8418-4809-b255-424848c2079e	4	sghgw	wegewfw	f
-fa68cc5f-0a4d-4860-9c5c-640b7bd9775e	82df9561-0f01-4836-b07e-d4f365ea5776	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	639ebe39-4ccb-48ae-a87c-7f706ebf0c18	4	hhjjhhj	kbjjkkkjñ	f
-9ac190e4-d076-42df-b2c9-acec64a1084d	82df9561-0f01-4836-b07e-d4f365ea5776	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	639ebe39-4ccb-48ae-a87c-7f706ebf0c18	4	hhooinni	ctukvyt	f
-8ba57eb4-98df-4957-a2b0-20c83065aafe	82df9561-0f01-4836-b07e-d4f365ea5776	5f096705-11c3-49b1-b42c-d7bd17a75439	639ebe39-4ccb-48ae-a87c-7f706ebf0c18	5	uhhiupiupvgi	kbiuuupgu	f
-ac2e2201-9705-44e0-bec8-ee2406b14215	82df9561-0f01-4836-b07e-d4f365ea5776	b5c684f0-24d7-436f-b752-71cd9e361c8f	639ebe39-4ccb-48ae-a87c-7f706ebf0c18	5	hlvlhhvlvjh	jvhvhvg	f
-eb2c03e8-fa81-4bf9-a190-ac7fb3a48f22	82df9561-0f01-4836-b07e-d4f365ea5776	54bb3bab-94a3-420a-99da-57717c1c075a	4c0b4238-9d6b-4008-a677-96fe61d97f21	4	si	si	f
-db0e95e8-7110-481c-96c8-9b1a500b5519	b4bcad2d-9e33-42c7-b844-0ba90e44392e	386e63ba-dc8f-4af6-9447-44f7976a4a0c	62653857-76fa-488e-858b-2c8e68779d34	5	Tuvo un gran desempeño	nah	f
-b55f8a6b-b365-41b2-b305-cfd4b7d52321	adb9fd06-2c2b-4d0d-84cf-d9f9bdd75e05	5f096705-11c3-49b1-b42c-d7bd17a75439	d16a497a-ae1d-4867-9d41-0b5a90430c80	5	Gran desempeño	No hay	f
-d82d6759-ba41-4890-9468-9a10fa1f7e82	b4bcad2d-9e33-42c7-b844-0ba90e44392e	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	fe159399-861c-4192-8fcc-0a0ce22d8d7c	5	Gran trabajo	No hay	f
+0f97d65e-be47-488a-944e-e6d9f6c8d9a6	8583e274-0063-44f3-a6c9-314d3263d285	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	af95e861-067b-45eb-b929-d67a5dd1358a	4	Gran atención al detalle, detecta casos límite que pasan desapercibidos para otros.\nDocumentación clara y completa de los bugs encontrados. Excelente colaboración con el equipo de desarrollo para reproducir errores.	Fortalecer automatización de pruebas; podría beneficiarse de más experiencia con herramientas como Cypress o Playwright. En ocasiones, podría priorizar mejor los issues según su impacto en negocio.	f
+6181f46e-92f0-4e07-8f5a-821e8f2cb298	8583e274-0063-44f3-a6c9-314d3263d285	54bb3bab-94a3-420a-99da-57717c1c075a	af95e861-067b-45eb-b929-d67a5dd1358a	4	Muy hábil resolviendo problemas técnicos complejos, especialmente en backend. Buena disposición para ayudar a otros desarrolladores. Código limpio y bien estructurado.	Podría mejorar su manejo del tiempo en entregas críticas. Fomentar más comunicación proactiva en los dailies para visibilizar avances.	f
+113dc59e-d63f-46a4-9a4d-4a054490ec2b	8583e274-0063-44f3-a6c9-314d3263d285	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	af95e861-067b-45eb-b929-d67a5dd1358a	5	Excelente trabajo en el desarrollo frontend, con un gran sentido de usabilidad y diseño. Muy comprometida con los objetivos del sprint. Alta calidad en pruebas unitarias.	Involucrarse más en decisiones técnicas de alto nivel para ganar perspectiva arquitectónica. Aumentar visibilidad en revisión de PRs de otros compañeros.	f
+7257f05f-2756-48b4-ad1b-fa4050e28a41	8583e274-0063-44f3-a6c9-314d3263d285	3912d459-b96e-4150-9a2a-fb9135ebc374	af95e861-067b-45eb-b929-d67a5dd1358a	3	Contribuciones consistentes en tareas asignadas, especialmente en refactorización. Buena capacidad para adaptarse a cambios en requerimientos.	Mejorar documentación del código y comentarios técnicos. Reforzar conocimientos en testing automatizado para reducir bugs en producción.	f
+6b7cb322-9479-42f8-87e4-761f7e909c66	8583e274-0063-44f3-a6c9-314d3263d285	30258a1f-f307-4728-8f1c-045e56548153	af95e861-067b-45eb-b929-d67a5dd1358a	5	Traduce muy bien las necesidades del negocio a requerimientos técnicos. Facilita sesiones efectivas de refinamiento con el equipo. Buena visión estratégica del producto.	Podría mejorar la priorización de funcionalidades según valor de negocio y esfuerzo técnico. Fomentar mayor uso de métricas para evaluar el impacto de los releases.	f
+20a8c3c4-bbc8-474f-b2a6-be04d27cb17e	8583e274-0063-44f3-a6c9-314d3263d285	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	af95e861-067b-45eb-b929-d67a5dd1358a	4	Muy detallado en los entregables y documentación funcional. Buena capacidad para mapear procesos de negocio complejos.	Mejorar comunicación con stakeholders técnicos durante cambios de alcance. Podría beneficiarse de un enfoque más ágil para manejar incertidumbre y feedback en ciclos cortos.	f
+d93e903a-6902-4586-a414-23997beace04	3d38bf85-9e8b-4fc3-8192-7adbb5d9884f	5f096705-11c3-49b1-b42c-d7bd17a75439	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	5	Excelente manejo de arquitectura de servicios y bases de datos. Resuelve incidencias complejas con rapidez y sin comprometer calidad. Buen uso de principios SOLID y patrones de diseño.	Involucrarse más en las sesiones de planeación para proponer soluciones desde el inicio. Mejorar la cobertura de pruebas en endpoints menos críticos que tienden a quedarse sin test.	f
+82fba5cb-1805-4dc9-b8b8-a0c8474c81b6	3d38bf85-9e8b-4fc3-8192-7adbb5d9884f	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	4	Buen dominio de Kotlin y Jetpack Compose; interfaces limpias y responsivas. Se adapta rápidamente a cambios en requerimientos funcionales. Aplica buenas prácticas de diseño y consumo de APIs REST.	Mayor énfasis en pruebas unitarias y de UI. Reforzar el versionamiento y documentación técnica en releases móviles.	f
+ad17b879-e28b-4401-a52a-72f3ac3dd430	3d38bf85-9e8b-4fc3-8192-7adbb5d9884f	36abc818-b3a6-440f-933a-79ff41fe5b67	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	4	Mantiene el equipo enfocado y alineado con los objetivos del sprint. Fomenta la mejora continua a través de retrospectivas efectivas. Buena gestión de bloqueos y seguimiento con stakeholders.	Promover más activamente la autoorganización en el equipo técnico. Puede equilibrar mejor la facilitación con la toma de decisiones cuando hay ambigüedad.	f
+f7d9b8b9-2190-487c-9cdc-16f3b3d94b2b	3d38bf85-9e8b-4fc3-8192-7adbb5d9884f	1fbfe562-cea4-4b33-b830-0c9f5f301251	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	5	Alta capacidad para identificar errores funcionales antes del release. Proactiva al colaborar con el equipo en la definición de criterios de aceptación. Documentación de bugs clara y ordenada en Jira.	Incrementar el uso de pruebas automatizadas en regresión. Promover la ejecución de pruebas exploratorias en ambientes previos a producción.	f
+0bfeff27-a90b-408c-822f-93238d2f7f19	b4bcad2d-9e33-42c7-b844-0ba90e44392e	b5c684f0-24d7-436f-b752-71cd9e361c8f	2537aedd-2585-4e1f-973d-fb1a007d7d3e	4	Excelente dominio de React y uso avanzado de Tailwind y componentes reutilizables. Muy buena sinergia con diseño; implementaciones visualmente fieles. Proactiva detectando inconsistencias entre prototipo y requerimientos funcionales.	Puede optimizar el manejo de estado global para escalar mejor en proyectos grandes. Aumentar su involucramiento en decisiones de arquitectura frontend.	f
 \.
 
 
@@ -6124,54 +6116,25 @@ d82d6759-ba41-4890-9468-9a10fa1f7e82	b4bcad2d-9e33-42c7-b844-0ba90e44392e	5ad0bb
 --
 
 COPY "public"."Historial" ("id", "ID_Empleado", "NombrePosition", "NombreEmpresa", "Fecha_inicio", "Fecha_final", "Descripcion", "Currentjob", "created_at", "ID_Proyecto") FROM stdin;
-7cfcf59a-6bb3-42e3-8be5-f5183fe9a024	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	Frontend Dev	proyecto: Aplicación web para un restaurante : Cafetería café	2025-06-05	\N	Una aplicación para mostrar el menú.	t	2025-06-05 21:35:59.859158+00	\N
-b87ef08d-33c6-4174-a0d9-de880797c4c7	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Lider de proyecto	proyecto: Aplicación web para un restaurante : Cafetería café	2025-06-05	\N	Una aplicación para mostrar el menú.	t	2025-06-05 21:35:59.929187+00	\N
-218ab44d-51b0-4388-a214-9236370c87b7	5f096705-11c3-49b1-b42c-d7bd17a75439	Perkeo	proyecto: Proyecto B.A.L : Atro	2025-06-05	2025-06-05	B.A.L es un proyecto de desarollo web	f	2025-06-05 22:17:51.669887+00	4c0b4238-9d6b-4008-a677-96fe61d97f21
-b528194f-ee6e-4b00-b1a7-ff62f85f68c2	54bb3bab-94a3-420a-99da-57717c1c075a	Jimbo	proyecto: Proyecto B.A.L : Atro	2025-06-05	2025-06-05	B.A.L es un proyecto de desarollo web	f	2025-06-05 22:17:52.08225+00	4c0b4238-9d6b-4008-a677-96fe61d97f21
-83f68d21-bc2a-48b9-8f53-e70a7c9124fe	36abc818-b3a6-440f-933a-79ff41fe5b67	Jimbo	proyecto: Proyecto B.A.L : Atro	2025-06-05	2025-06-05	B.A.L es un proyecto de desarollo web	f	2025-06-05 22:17:52.430282+00	4c0b4238-9d6b-4008-a677-96fe61d97f21
-69652386-102f-4d0d-956d-c90ef467f2eb	386e63ba-dc8f-4af6-9447-44f7976a4a0c	Lider de proyecto	proyecto: Proyecto B.A.L : Atro	2025-06-05	2025-06-05	B.A.L es un proyecto de desarollo web	f	2025-06-05 22:17:52.801946+00	4c0b4238-9d6b-4008-a677-96fe61d97f21
-40e2d82a-81af-45a0-ab69-1fe7a0911e3c	5f096705-11c3-49b1-b42c-d7bd17a75439	yippie	proyecto: Proyecto de prueba de activos (Tec)	2025-06-06	2025-06-06	Prueba para ver que funciona los proyectos activos	f	2025-06-06 08:51:57.553569+00	89c59da6-027e-40e9-b150-0a8a61ad8310
-6d8f2910-33bb-4f3a-a08f-6425ec1361b3	386e63ba-dc8f-4af6-9447-44f7976a4a0c	Lider de proyecto	proyecto: Proyecto de prueba de activos (Tec)	2025-06-06	2025-06-06	Prueba para ver que funciona los proyectos activos	f	2025-06-06 08:51:57.943508+00	89c59da6-027e-40e9-b150-0a8a61ad8310
-4a2a44b5-b491-45ed-938a-5fef0edfabcd	1fbfe562-cea4-4b33-b830-0c9f5f301251	as	proyecto: yippie (a)	2025-06-06	2025-06-06	yippie	f	2025-06-06 16:35:28.822683+00	2ad6a956-8754-4859-9c6c-785f419fb205
-9689ec82-237c-4013-9568-27e06f5f5e39	5f096705-11c3-49b1-b42c-d7bd17a75439	BA	BA Banco	2025-02-06	\N	BA	t	2025-05-23 23:38:41.375513+00	\N
-1fa9f7c2-9ffa-40b3-9187-e1f442ed057f	5f096705-11c3-49b1-b42c-d7bd17a75439	Dev	Banco 	2025-02-01	2025-05-28	djs	f	2025-05-29 18:42:46.844014+00	\N
-e259c4e5-1e41-4799-ab2b-950e2069a6f5	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Developer	El proyecto	2025-05-30	2025-05-31	Hacer todo un sitio web	f	2025-05-29 22:14:45.367933+00	\N
-40d864c4-cb1e-44a4-9775-d8217fff8b59	b5c684f0-24d7-436f-b752-71cd9e361c8f	yi	proyecto: yippie (a)	2025-06-06	2025-06-06	yippie	f	2025-06-06 16:35:29.420449+00	2ad6a956-8754-4859-9c6c-785f419fb205
-33d2fb7a-de75-4fdb-90fb-c37153b2a93b	5f096705-11c3-49b1-b42c-d7bd17a75439	Lider de proyecto	proyecto: yippie (a)	2025-06-06	2025-06-06	yippie	f	2025-06-06 16:35:29.740879+00	2ad6a956-8754-4859-9c6c-785f419fb205
-cfbffc50-f10c-4784-96d2-8d5f8f18057b	5f096705-11c3-49b1-b42c-d7bd17a75439	developer	proyecto y	2025-05-30	\N	hb	t	2025-05-30 20:53:10.109042+00	\N
-e44f70c0-78e3-4a01-b9ee-ad3440c7ee5b	1fbfe562-cea4-4b33-b830-0c9f5f301251	UX/UI	Diseño multiplataforma	2025-06-01	\N	a	t	2025-06-03 05:26:16.618829+00	\N
-af1eb21e-8ba8-4abd-ba4a-ee5847c54ac8	1fbfe562-cea4-4b33-b830-0c9f5f301251	a	a	2025-06-02	\N	a	t	2025-06-03 05:27:30.406857+00	\N
-6575f8c0-503c-4b0a-9a41-3a5b946d488e	1fbfe562-cea4-4b33-b830-0c9f5f301251	UX	s	2025-06-02	\N	s	t	2025-06-03 05:28:36.710556+00	\N
-45992131-25f5-43d7-bc5a-423fe67e2ac7	5f096705-11c3-49b1-b42c-d7bd17a75439	dr	proyecto: Proyecto 2 (supa)	2025-06-06	2025-06-06	yuppi	f	2025-06-06 22:38:08.131929+00	1b58ea3b-478d-433f-b11b-89ec6268f5e8
-ecd5bde6-aabd-4a3e-97b9-a3cc7c786ff3	b5c684f0-24d7-436f-b752-71cd9e361c8f	dr	proyecto: Proyecto 2 (supa)	2025-06-06	2025-06-06	yuppi	f	2025-06-06 22:38:08.679439+00	1b58ea3b-478d-433f-b11b-89ec6268f5e8
-1d9bc4a4-78b7-4c44-bcc8-02414017b1be	36abc818-b3a6-440f-933a-79ff41fe5b67	Lider de proyecto	proyecto: Proyecto 2 (supa)	2025-06-06	2025-06-06	yuppi	f	2025-06-06 22:38:09.214692+00	1b58ea3b-478d-433f-b11b-89ec6268f5e8
-9515c438-dd8c-415d-9c40-5e67ca5b7cae	1fbfe562-cea4-4b33-b830-0c9f5f301251	Scrum Master	proyecto: SafeCity App (Gobierno Municipal de Monterrey)	2025-06-08	2025-06-08	Aplicación ciudadana para reportar incidentes urbanos (seguridad, baches, alumbrado) con geolocalización y seguimiento de casos.	f	2025-06-08 10:53:54.566869+00	616ec85c-8418-4809-b255-424848c2079e
-a8c2fc7d-4804-4b24-ae0f-b54875dec9e6	36abc818-b3a6-440f-933a-79ff41fe5b67	Mobile developer	proyecto: SafeCity App (Gobierno Municipal de Monterrey)	2025-06-08	2025-06-08	Aplicación ciudadana para reportar incidentes urbanos (seguridad, baches, alumbrado) con geolocalización y seguimiento de casos.	f	2025-06-08 10:53:55.40174+00	616ec85c-8418-4809-b255-424848c2079e
-bdc4f466-1fa9-497d-b55b-d7cc55bf7969	86315508-992d-4200-a53d-3a2a99f47329	Fullstack developer	proyecto: SafeCity App (Gobierno Municipal de Monterrey)	2025-06-08	2025-06-08	Aplicación ciudadana para reportar incidentes urbanos (seguridad, baches, alumbrado) con geolocalización y seguimiento de casos.	f	2025-06-08 10:53:55.911241+00	616ec85c-8418-4809-b255-424848c2079e
-2ab2ef5f-6a89-48c8-8242-94ced2c4b91c	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Lider de proyecto	proyecto: SafeCity App (Gobierno Municipal de Monterrey)	2025-06-08	2025-06-08	Aplicación ciudadana para reportar incidentes urbanos (seguridad, baches, alumbrado) con geolocalización y seguimiento de casos.	f	2025-06-08 10:53:56.565704+00	616ec85c-8418-4809-b255-424848c2079e
-24926176-70e3-4144-92ca-2b9987e3a4fe	b5c684f0-24d7-436f-b752-71cd9e361c8f	DevOps	proyecto: AgroTrack (AgroSolutions S.A)	2025-06-08	2025-06-08	Desarrollo de una plataforma web y móvil para el monitoreo en tiempo real de cultivos agrícolas utilizando sensores IoT y visualización con mapas	f	2025-06-08 21:19:12.537025+00	639ebe39-4ccb-48ae-a87c-7f706ebf0c18
-6d186f54-d058-432e-a279-d1c2850a61d8	5f096705-11c3-49b1-b42c-d7bd17a75439	Backend Developer	proyecto: AgroTrack (AgroSolutions S.A)	2025-06-08	2025-06-08	Desarrollo de una plataforma web y móvil para el monitoreo en tiempo real de cultivos agrícolas utilizando sensores IoT y visualización con mapas	f	2025-06-08 21:19:13.009335+00	639ebe39-4ccb-48ae-a87c-7f706ebf0c18
-14dc965e-1774-4001-bc33-ebbc2acea270	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	Backend Developer	proyecto: AgroTrack (AgroSolutions S.A)	2025-06-08	2025-06-08	Desarrollo de una plataforma web y móvil para el monitoreo en tiempo real de cultivos agrícolas utilizando sensores IoT y visualización con mapas	f	2025-06-08 21:19:13.363402+00	639ebe39-4ccb-48ae-a87c-7f706ebf0c18
-a05f3858-5abc-4b01-af62-61705955b066	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Frontend Developer	proyecto: AgroTrack (AgroSolutions S.A)	2025-06-08	2025-06-08	Desarrollo de una plataforma web y móvil para el monitoreo en tiempo real de cultivos agrícolas utilizando sensores IoT y visualización con mapas	f	2025-06-08 21:19:13.848456+00	639ebe39-4ccb-48ae-a87c-7f706ebf0c18
-d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5	386e63ba-dc8f-4af6-9447-44f7976a4a0c	Lider de proyecto	proyecto: AgroTrack (AgroSolutions S.A)	2025-06-08	2025-06-08	Desarrollo de una plataforma web y móvil para el monitoreo en tiempo real de cultivos agrícolas utilizando sensores IoT y visualización con mapas	f	2025-06-08 21:19:14.309311+00	639ebe39-4ccb-48ae-a87c-7f706ebf0c18
-7e6a034c-3eb9-40b8-bfc9-2d8e9d8f1af9	1fbfe562-cea4-4b33-b830-0c9f5f301251	QA	proyecto: Proyecto software evaluativo (Balatro Balatrez)	2025-06-11	2025-06-11	Evaluacion de proyectos de software mediante estrategias	f	2025-06-11 22:09:16.851559+00	eb9096c3-293a-4a13-97e2-aa8738a95ff3
-ec3a5797-4b40-4ab3-a33f-1928afb69b0d	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	hu	proyecto: Testing 2 (woah)	2025-06-10	2025-06-10	-	f	2025-06-10 04:12:05.960085+00	fe159399-861c-4192-8fcc-0a0ce22d8d7c
-27412dc3-6501-455e-a179-12192eef990a	5f096705-11c3-49b1-b42c-d7bd17a75439	Lider de proyecto	proyecto: Testing 2 (woah)	2025-06-10	2025-06-10	-	f	2025-06-10 04:12:06.505315+00	fe159399-861c-4192-8fcc-0a0ce22d8d7c
-94e00a17-4b80-4096-96e8-6a07e63a55df	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	QA	proyecto: Proyecto firefox (firefox)	2025-06-12	2025-06-12	Proyecto de aplicacion nativa para firefox	f	2025-06-12 04:05:44.278254+00	4f58c7ed-7eab-40f4-97fd-58c9028782a1
-23386db9-de19-4dd5-88d6-067ba9e73ca6	5f096705-11c3-49b1-b42c-d7bd17a75439	Lider de proyecto	proyecto: Proyecto firefox (firefox)	2025-06-12	2025-06-12	Proyecto de aplicacion nativa para firefox	f	2025-06-12 04:05:45.380653+00	4f58c7ed-7eab-40f4-97fd-58c9028782a1
-bfe79a3e-c0c2-4245-a577-e6ba9aec0e12	386e63ba-dc8f-4af6-9447-44f7976a4a0c	Geostats	Proyecto con sentido social	2025-06-10	2025-06-11	Proyecto	f	2025-06-10 06:42:36.201152+00	\N
-bba8d3da-b408-4ed7-b737-b817367d7ba6	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	UI/UX	proyecto: EduPlus LMS (Instituto Educativo Nuevo Horizonte)	2025-06-09	2025-06-09	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	f	2025-06-09 01:21:56.598107+00	62653857-76fa-488e-858b-2c8e68779d34
-147de0c8-d796-45b9-86e0-d3c0fb2f75be	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	UI/UX	proyecto: EduPlus LMS (Instituto Educativo Nuevo Horizonte)	2025-06-09	2025-06-09	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	f	2025-06-09 01:21:57.291457+00	62653857-76fa-488e-858b-2c8e68779d34
-8d5618fe-e7d9-4670-ab48-d36a342b5c33	386e63ba-dc8f-4af6-9447-44f7976a4a0c	Fullstack	proyecto: EduPlus LMS (Instituto Educativo Nuevo Horizonte)	2025-06-09	2025-06-09	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	f	2025-06-09 01:21:57.937828+00	62653857-76fa-488e-858b-2c8e68779d34
-73bef93c-1165-41b3-a662-73cfd8dd628f	5f096705-11c3-49b1-b42c-d7bd17a75439	Lider de proyecto	proyecto: EduPlus LMS (Instituto Educativo Nuevo Horizonte)	2025-06-09	2025-06-09	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	f	2025-06-09 01:21:58.512586+00	62653857-76fa-488e-858b-2c8e68779d34
-f5166032-35df-48ed-936f-e7424b330880	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	UI/UX	proyecto: EduPlus LMS (Instituto Educativo Nuevo Horizonte)	2025-06-09	2025-06-09	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	f	2025-06-09 01:21:58.955175+00	62653857-76fa-488e-858b-2c8e68779d34
-fb4adac7-2f77-4371-aa0b-b8611ec9d89c	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	UI/UX	proyecto: EduPlus LMS (Instituto Educativo Nuevo Horizonte)	2025-06-09	2025-06-09	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	f	2025-06-09 01:21:59.512473+00	62653857-76fa-488e-858b-2c8e68779d34
-02f9bf3d-1781-49ed-b0f6-2609113decd3	386e63ba-dc8f-4af6-9447-44f7976a4a0c	Fullstack	proyecto: EduPlus LMS (Instituto Educativo Nuevo Horizonte)	2025-06-09	2025-06-09	Sistema de gestión de aprendizaje (LMS) personalizado con módulos de evaluación, asistencia y reportes en línea.	f	2025-06-09 01:22:00.522437+00	62653857-76fa-488e-858b-2c8e68779d34
-ecb71090-6c8c-4d2f-b4a2-4b57433da0c9	5f096705-11c3-49b1-b42c-d7bd17a75439	IA developer	proyecto: Autonomia vehicular (Industrias autonomas)	2025-06-09	2025-06-09	Se planea implementar una app a un vehiculo para poder dirigirlo a una direccion y rastrear el vehiculo.	f	2025-06-09 06:19:43.500487+00	d16a497a-ae1d-4867-9d41-0b5a90430c80
-ec4d87e3-52f1-4f00-a701-d2732fff64bc	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Lider de proyecto	proyecto: Autonomia vehicular (Industrias autonomas)	2025-06-09	2025-06-09	Se planea implementar una app a un vehiculo para poder dirigirlo a una direccion y rastrear el vehiculo.	f	2025-06-09 06:19:44.046986+00	d16a497a-ae1d-4867-9d41-0b5a90430c80
-d493b56a-ab71-4584-ae39-bba7fd62ae04	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	Developer	proyecto: Proyecto software evaluativo (Balatro Balatrez)	2025-06-11	2025-06-11	Evaluacion de proyectos de software mediante estrategias	f	2025-06-11 22:09:16.659014+00	eb9096c3-293a-4a13-97e2-aa8738a95ff3
-b9f7598d-7f9c-4a95-9ad1-edc24beb6fbf	36abc818-b3a6-440f-933a-79ff41fe5b67	Lider de proyecto	proyecto: Proyecto software evaluativo (Balatro Balatrez)	2025-06-11	2025-06-11	Evaluacion de proyectos de software mediante estrategias	f	2025-06-11 22:09:16.945612+00	eb9096c3-293a-4a13-97e2-aa8738a95ff3
-b109e883-7f41-4e04-a31e-158ef680bd03	54bb3bab-94a3-420a-99da-57717c1c075a	Developer	proyecto: Proyecto firefox (firefox)	2025-06-12	2025-06-12	Proyecto de aplicacion nativa para firefox	f	2025-06-12 04:05:44.995046+00	4f58c7ed-7eab-40f4-97fd-58c9028782a1
+58d6ca03-cd15-4990-9b61-c27f731bb7a8	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	Mobile Developer	proyecto: Aplicación Móvil de Pedidos para Restaurantes (Grupo Alsea)	2025-06-13	2025-06-13	Aplicación móvil para clientes finales que permite realizar pedidos, pagar desde la app, seleccionar sucursales cercanas, y hacer seguimiento en tiempo real del pedido. Incluye un módulo de promociones personalizadas basado en historial de compras, sistema de recompensas y notificaciones push. Soporta múltiples marcas del grupo (Domino's, Starbucks, Vips) con una arquitectura modular por marca. También se desarrolló una consola de administración para restaurantes y soporte en tiempo real vía chat.	f	2025-06-13 05:21:12.332692+00	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e
+c7881a7b-4d2d-4e9a-9859-a1cdb5ba4ed4	1fbfe562-cea4-4b33-b830-0c9f5f301251	Mobile Developer	proyecto: Aplicación Móvil de Pedidos para Restaurantes (Grupo Alsea)	2025-06-13	2025-06-13	Aplicación móvil para clientes finales que permite realizar pedidos, pagar desde la app, seleccionar sucursales cercanas, y hacer seguimiento en tiempo real del pedido. Incluye un módulo de promociones personalizadas basado en historial de compras, sistema de recompensas y notificaciones push. Soporta múltiples marcas del grupo (Domino's, Starbucks, Vips) con una arquitectura modular por marca. También se desarrolló una consola de administración para restaurantes y soporte en tiempo real vía chat.	f	2025-06-13 05:21:12.839774+00	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e
+f08df843-2cba-44b6-a652-7b7179a8896f	5f096705-11c3-49b1-b42c-d7bd17a75439	Backend Developer	proyecto: Aplicación Móvil de Pedidos para Restaurantes (Grupo Alsea)	2025-06-13	2025-06-13	Aplicación móvil para clientes finales que permite realizar pedidos, pagar desde la app, seleccionar sucursales cercanas, y hacer seguimiento en tiempo real del pedido. Incluye un módulo de promociones personalizadas basado en historial de compras, sistema de recompensas y notificaciones push. Soporta múltiples marcas del grupo (Domino's, Starbucks, Vips) con una arquitectura modular por marca. También se desarrolló una consola de administración para restaurantes y soporte en tiempo real vía chat.	f	2025-06-13 05:21:13.459446+00	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e
+ff0d66cc-228a-4bc7-90ba-2588f2747942	36abc818-b3a6-440f-933a-79ff41fe5b67	Scrum Master	proyecto: Aplicación Móvil de Pedidos para Restaurantes (Grupo Alsea)	2025-06-13	2025-06-13	Aplicación móvil para clientes finales que permite realizar pedidos, pagar desde la app, seleccionar sucursales cercanas, y hacer seguimiento en tiempo real del pedido. Incluye un módulo de promociones personalizadas basado en historial de compras, sistema de recompensas y notificaciones push. Soporta múltiples marcas del grupo (Domino's, Starbucks, Vips) con una arquitectura modular por marca. También se desarrolló una consola de administración para restaurantes y soporte en tiempo real vía chat.	f	2025-06-13 05:21:14.064512+00	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e
+a6e6a90b-0426-40d2-b2c8-f54ee6b2ec03	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	QA Tester	proyecto: Aplicación Móvil de Pedidos para Restaurantes (Grupo Alsea)	2025-06-13	2025-06-13	Aplicación móvil para clientes finales que permite realizar pedidos, pagar desde la app, seleccionar sucursales cercanas, y hacer seguimiento en tiempo real del pedido. Incluye un módulo de promociones personalizadas basado en historial de compras, sistema de recompensas y notificaciones push. Soporta múltiples marcas del grupo (Domino's, Starbucks, Vips) con una arquitectura modular por marca. También se desarrolló una consola de administración para restaurantes y soporte en tiempo real vía chat.	f	2025-06-13 05:21:14.842335+00	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e
+03811c2a-1ff5-4638-991e-262a14fe991d	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	Machine Learning Engineer	proyecto: Chatbot de Atención a Clientes (BBVA)	2025-06-13	2025-06-13	Implementación de un asistente conversacional inteligente para responder preguntas frecuentes de usuarios en canales web y móvil. Utiliza modelos de procesamiento de lenguaje natural para interpretar intenciones, gestionar diálogos complejos y derivar a humanos si es necesario. Se integró con la base de datos de productos financieros, calendario de pagos, historial de cliente y mecanismos de verificación de identidad para evitar fraudes. La solución se desplegó en la nube y cumple con estándares bancarios de seguridad.	f	2025-06-13 05:09:46.267227+00	af95e861-067b-45eb-b929-d67a5dd1358a
+2be52a6d-fcdd-4597-a8a9-03078fca9679	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	Machine Learning Engineer	proyecto: Chatbot de Atención a Clientes (BBVA)	2025-06-13	2025-06-13	Implementación de un asistente conversacional inteligente para responder preguntas frecuentes de usuarios en canales web y móvil. Utiliza modelos de procesamiento de lenguaje natural para interpretar intenciones, gestionar diálogos complejos y derivar a humanos si es necesario. Se integró con la base de datos de productos financieros, calendario de pagos, historial de cliente y mecanismos de verificación de identidad para evitar fraudes. La solución se desplegó en la nube y cumple con estándares bancarios de seguridad.	f	2025-06-13 05:09:46.810481+00	af95e861-067b-45eb-b929-d67a5dd1358a
+de3079f9-1b3f-4266-a13e-dc5c24015207	30258a1f-f307-4728-8f1c-045e56548153	Backend Developer	proyecto: Chatbot de Atención a Clientes (BBVA)	2025-06-13	2025-06-13	Implementación de un asistente conversacional inteligente para responder preguntas frecuentes de usuarios en canales web y móvil. Utiliza modelos de procesamiento de lenguaje natural para interpretar intenciones, gestionar diálogos complejos y derivar a humanos si es necesario. Se integró con la base de datos de productos financieros, calendario de pagos, historial de cliente y mecanismos de verificación de identidad para evitar fraudes. La solución se desplegó en la nube y cumple con estándares bancarios de seguridad.	f	2025-06-13 05:09:47.423999+00	af95e861-067b-45eb-b929-d67a5dd1358a
+196190f0-9d0f-4450-9263-24896afeec51	54bb3bab-94a3-420a-99da-57717c1c075a	Backend Developer	proyecto: Chatbot de Atención a Clientes (BBVA)	2025-06-13	2025-06-13	Implementación de un asistente conversacional inteligente para responder preguntas frecuentes de usuarios en canales web y móvil. Utiliza modelos de procesamiento de lenguaje natural para interpretar intenciones, gestionar diálogos complejos y derivar a humanos si es necesario. Se integró con la base de datos de productos financieros, calendario de pagos, historial de cliente y mecanismos de verificación de identidad para evitar fraudes. La solución se desplegó en la nube y cumple con estándares bancarios de seguridad.	f	2025-06-13 05:09:47.816239+00	af95e861-067b-45eb-b929-d67a5dd1358a
+0eb8751c-ad3b-4e7a-bbf8-17ffe750e84d	3912d459-b96e-4150-9a2a-fb9135ebc374	Conversational Designer	proyecto: Chatbot de Atención a Clientes (BBVA)	2025-06-13	2025-06-13	Implementación de un asistente conversacional inteligente para responder preguntas frecuentes de usuarios en canales web y móvil. Utiliza modelos de procesamiento de lenguaje natural para interpretar intenciones, gestionar diálogos complejos y derivar a humanos si es necesario. Se integró con la base de datos de productos financieros, calendario de pagos, historial de cliente y mecanismos de verificación de identidad para evitar fraudes. La solución se desplegó en la nube y cumple con estándares bancarios de seguridad.	f	2025-06-13 05:09:48.290036+00	af95e861-067b-45eb-b929-d67a5dd1358a
+03adf507-ff20-41d3-b497-fd3ea0ec05b5	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	Project Manager	proyecto: Chatbot de Atención a Clientes (BBVA)	2025-06-13	2025-06-13	Implementación de un asistente conversacional inteligente para responder preguntas frecuentes de usuarios en canales web y móvil. Utiliza modelos de procesamiento de lenguaje natural para interpretar intenciones, gestionar diálogos complejos y derivar a humanos si es necesario. Se integró con la base de datos de productos financieros, calendario de pagos, historial de cliente y mecanismos de verificación de identidad para evitar fraudes. La solución se desplegó en la nube y cumple con estándares bancarios de seguridad.	f	2025-06-13 05:09:49.013865+00	af95e861-067b-45eb-b929-d67a5dd1358a
+16053473-387e-42a9-90c2-d47b0672e462	36abc818-b3a6-440f-933a-79ff41fe5b67	Lider de proyecto	proyecto: Chatbot de Atención a Clientes (BBVA)	2025-06-13	2025-06-13	Implementación de un asistente conversacional inteligente para responder preguntas frecuentes de usuarios en canales web y móvil. Utiliza modelos de procesamiento de lenguaje natural para interpretar intenciones, gestionar diálogos complejos y derivar a humanos si es necesario. Se integró con la base de datos de productos financieros, calendario de pagos, historial de cliente y mecanismos de verificación de identidad para evitar fraudes. La solución se desplegó en la nube y cumple con estándares bancarios de seguridad.	f	2025-06-13 05:09:49.610664+00	af95e861-067b-45eb-b929-d67a5dd1358a
+87a50775-e4df-4e4d-928e-7879c6c3b545	b5c684f0-24d7-436f-b752-71cd9e361c8f	Lider de proyecto	proyecto: Aplicación Móvil de Pedidos para Restaurantes (Grupo Alsea)	2025-06-13	2025-06-13	Aplicación móvil para clientes finales que permite realizar pedidos, pagar desde la app, seleccionar sucursales cercanas, y hacer seguimiento en tiempo real del pedido. Incluye un módulo de promociones personalizadas basado en historial de compras, sistema de recompensas y notificaciones push. Soporta múltiples marcas del grupo (Domino's, Starbucks, Vips) con una arquitectura modular por marca. También se desarrolló una consola de administración para restaurantes y soporte en tiempo real vía chat.	f	2025-06-13 05:21:15.476919+00	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e
+c1b09ad5-5d88-4a6a-aa4f-3d69a633931c	36abc818-b3a6-440f-933a-79ff41fe5b67	Frontend Developer	proyecto: Plataforma de Gestión de Talento (Accenture)	2025-06-13	2025-06-13	Desarrollo de una plataforma web interna para la gestión del talento humano, orientada a la administración de perfiles profesionales, asignación de empleados a proyectos según sus capacidades, y seguimiento del desarrollo profesional a través de cursos, certificaciones e intereses personales. El sistema incluye dashboards personalizados por rol (empleado, Capability Lead, Talent Lead, administrador), autenticación con múltiples niveles de permisos, y generación de reportes de cargabilidad y desempeño. Se buscó optimizar la trazabilidad del talento, reducir tiempos de asignación y mejorar la retención del personal.	f	2025-06-13 05:27:28.319436+00	2537aedd-2585-4e1f-973d-fb1a007d7d3e
+5877e32e-ce57-4348-a09c-37bc64fc443e	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	Frontend Developer	proyecto: Plataforma de Gestión de Talento (Accenture)	2025-06-13	2025-06-13	Desarrollo de una plataforma web interna para la gestión del talento humano, orientada a la administración de perfiles profesionales, asignación de empleados a proyectos según sus capacidades, y seguimiento del desarrollo profesional a través de cursos, certificaciones e intereses personales. El sistema incluye dashboards personalizados por rol (empleado, Capability Lead, Talent Lead, administrador), autenticación con múltiples niveles de permisos, y generación de reportes de cargabilidad y desempeño. Se buscó optimizar la trazabilidad del talento, reducir tiempos de asignación y mejorar la retención del personal.	f	2025-06-13 05:27:28.817954+00	2537aedd-2585-4e1f-973d-fb1a007d7d3e
+532fcaaa-7a5e-4118-a543-399af4af04bd	3912d459-b96e-4150-9a2a-fb9135ebc374	Backend Developer	proyecto: Plataforma de Gestión de Talento (Accenture)	2025-06-13	2025-06-13	Desarrollo de una plataforma web interna para la gestión del talento humano, orientada a la administración de perfiles profesionales, asignación de empleados a proyectos según sus capacidades, y seguimiento del desarrollo profesional a través de cursos, certificaciones e intereses personales. El sistema incluye dashboards personalizados por rol (empleado, Capability Lead, Talent Lead, administrador), autenticación con múltiples niveles de permisos, y generación de reportes de cargabilidad y desempeño. Se buscó optimizar la trazabilidad del talento, reducir tiempos de asignación y mejorar la retención del personal.	f	2025-06-13 05:27:29.411641+00	2537aedd-2585-4e1f-973d-fb1a007d7d3e
+91cc7776-75c2-4eb3-8e3a-fc08827c1b1b	b5c684f0-24d7-436f-b752-71cd9e361c8f	Product Owner	proyecto: Plataforma de Gestión de Talento (Accenture)	2025-06-13	2025-06-13	Desarrollo de una plataforma web interna para la gestión del talento humano, orientada a la administración de perfiles profesionales, asignación de empleados a proyectos según sus capacidades, y seguimiento del desarrollo profesional a través de cursos, certificaciones e intereses personales. El sistema incluye dashboards personalizados por rol (empleado, Capability Lead, Talent Lead, administrador), autenticación con múltiples niveles de permisos, y generación de reportes de cargabilidad y desempeño. Se buscó optimizar la trazabilidad del talento, reducir tiempos de asignación y mejorar la retención del personal.	f	2025-06-13 05:27:29.904664+00	2537aedd-2585-4e1f-973d-fb1a007d7d3e
+8e655652-af20-4092-8adc-141bcabdf15a	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	UX/UI Designer	proyecto: Plataforma de Gestión de Talento (Accenture)	2025-06-13	2025-06-13	Desarrollo de una plataforma web interna para la gestión del talento humano, orientada a la administración de perfiles profesionales, asignación de empleados a proyectos según sus capacidades, y seguimiento del desarrollo profesional a través de cursos, certificaciones e intereses personales. El sistema incluye dashboards personalizados por rol (empleado, Capability Lead, Talent Lead, administrador), autenticación con múltiples niveles de permisos, y generación de reportes de cargabilidad y desempeño. Se buscó optimizar la trazabilidad del talento, reducir tiempos de asignación y mejorar la retención del personal.	f	2025-06-13 05:27:30.570397+00	2537aedd-2585-4e1f-973d-fb1a007d7d3e
+ed994cb4-20a7-4f85-aa0e-6024357b073a	5f096705-11c3-49b1-b42c-d7bd17a75439	Lider de proyecto	proyecto: Plataforma de Gestión de Talento (Accenture)	2025-06-13	2025-06-13	Desarrollo de una plataforma web interna para la gestión del talento humano, orientada a la administración de perfiles profesionales, asignación de empleados a proyectos según sus capacidades, y seguimiento del desarrollo profesional a través de cursos, certificaciones e intereses personales. El sistema incluye dashboards personalizados por rol (empleado, Capability Lead, Talent Lead, administrador), autenticación con múltiples niveles de permisos, y generación de reportes de cargabilidad y desempeño. Se buscó optimizar la trazabilidad del talento, reducir tiempos de asignación y mejorar la retención del personal.	f	2025-06-13 05:27:30.944968+00	2537aedd-2585-4e1f-973d-fb1a007d7d3e
 \.
 
 
@@ -6180,184 +6143,88 @@ b109e883-7f41-4e04-a31e-158ef680bd03	54bb3bab-94a3-420a-99da-57717c1c075a	Develo
 --
 
 COPY "public"."Historial_Habilidades" ("id", "ID_Habilidad", "nivel", "ID_Historial") FROM stdin;
-1e7fd968-4ad2-4ee9-becb-a60d185566d0	8708ab6a-2b7f-4af1-b717-9604bf86db37	expert	9689ec82-237c-4013-9568-27e06f5f5e39
-0c1fe349-f0a7-4102-90de-0a24243ef6d5	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	9689ec82-237c-4013-9568-27e06f5f5e39
-b1dbad6b-b75c-4131-8ef2-7b3494803410	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	intermediate	9689ec82-237c-4013-9568-27e06f5f5e39
-d48eb3cc-af05-429e-847a-98ccc4f63b8c	533bf8cc-cc18-4362-8279-db7935dee292	intermediate	1fa9f7c2-9ffa-40b3-9187-e1f442ed057f
-e7f91d40-3962-49d3-ace5-2cdece7936f2	21693cd7-7f96-4d9e-a964-5bc8ab4cfc71	expert	1fa9f7c2-9ffa-40b3-9187-e1f442ed057f
-51096126-2a46-440c-951b-c32f64d915db	4a0fd123-a85d-4f31-84d2-9b7907f03a16	expert	1fa9f7c2-9ffa-40b3-9187-e1f442ed057f
-a5bbe0a2-87d8-4768-baff-ed9143765236	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	intermediate	e259c4e5-1e41-4799-ab2b-950e2069a6f5
-be312dac-6de5-4031-88db-f972b116f335	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner	e259c4e5-1e41-4799-ab2b-950e2069a6f5
-25ee17e4-2c12-4e9a-b9ad-bcb783d30d1e	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	beginner	e259c4e5-1e41-4799-ab2b-950e2069a6f5
-29a284ec-9fa2-4710-af5e-e5ff44e5557f	df6c6b6d-dd31-4ddd-a12d-d4fb2de289b6	beginner	e259c4e5-1e41-4799-ab2b-950e2069a6f5
-2fc46f25-7515-4cc8-b836-fcf17c664a62	d169a29d-2f2c-4329-90c6-9b450caf065a	beginner	e259c4e5-1e41-4799-ab2b-950e2069a6f5
-c036c197-8dfd-4bec-b128-304f9eedf694	8fce50e5-eea2-4871-a5ad-43c24c58d554	beginner	e259c4e5-1e41-4799-ab2b-950e2069a6f5
-a469850a-af40-40b4-8177-08e36728b697	b2eaf535-4759-46d7-b4e4-6e2ef685daff	beginner	e259c4e5-1e41-4799-ab2b-950e2069a6f5
-88b7c035-05b8-425d-8d6b-a55694d33909	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	218ab44d-51b0-4388-a214-9236370c87b7
-7991ef6c-4233-44b9-b9af-673342437036	065a0459-d3df-4cb7-b598-35ba9d072670	intermediate	218ab44d-51b0-4388-a214-9236370c87b7
-66426bc4-e2fc-465f-993f-3ac6e0f0c034	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	b528194f-ee6e-4b00-b1a7-ff62f85f68c2
-1f6bf043-09f1-4f6f-98fb-c51897404aa7	fd220edb-1a58-4004-9592-b5d016fd9ff9	expert	cfbffc50-f10c-4784-96d2-8d5f8f18057b
-478c07ea-5726-4ad4-aed5-a16d42192d4d	533bf8cc-cc18-4362-8279-db7935dee292	intermediate	cfbffc50-f10c-4784-96d2-8d5f8f18057b
-f0909855-9a09-4326-b8b6-ee333bf9e180	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner	cfbffc50-f10c-4784-96d2-8d5f8f18057b
-407c51e3-2ecc-4861-9ab3-00238d1a9e78	4a0fd123-a85d-4f31-84d2-9b7907f03a16	beginner	cfbffc50-f10c-4784-96d2-8d5f8f18057b
-4aa853d5-260f-4040-ad79-d458173a2c71	4a3e1a83-87b3-4e4a-a074-bba81ff64fe6	beginner	cfbffc50-f10c-4784-96d2-8d5f8f18057b
-57e5770c-6988-4aef-8207-8b58be41f225	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	cfbffc50-f10c-4784-96d2-8d5f8f18057b
-7ffceac8-53b8-47dd-b1dd-53020215fc04	cb5348d5-f606-460f-8b55-7f689fbbf6e3	beginner	cfbffc50-f10c-4784-96d2-8d5f8f18057b
-bae8bf65-755b-4acb-98b4-947add101b9a	881d65ee-752e-4515-80c6-691a8d8a1d17	beginner	cfbffc50-f10c-4784-96d2-8d5f8f18057b
-1c744b3a-2036-4947-b38b-8ef2b9c36c63	040eab96-f02a-40e3-a000-046c402403c0	beginner	cfbffc50-f10c-4784-96d2-8d5f8f18057b
-109be552-67b1-4c76-88e3-075e84856ed3	21693cd7-7f96-4d9e-a964-5bc8ab4cfc71	beginner	e44f70c0-78e3-4a01-b9ee-ad3440c7ee5b
-926652b0-68d9-492c-ad92-7a8024a9f2d3	65fbe470-1e0a-4be8-beb8-7f053d487a55	intermediate	e44f70c0-78e3-4a01-b9ee-ad3440c7ee5b
-481a7a9b-3926-4b32-9d37-5b28c5d74bfd	87198029-a315-47c8-ba42-e0d1fa52b848	expert	e44f70c0-78e3-4a01-b9ee-ad3440c7ee5b
-ee4149c5-3d38-42f5-ab74-9927eabebb68	065a0459-d3df-4cb7-b598-35ba9d072670	intermediate	b528194f-ee6e-4b00-b1a7-ff62f85f68c2
-633121df-f129-45d5-a436-a4a6ae5d3413	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert	b528194f-ee6e-4b00-b1a7-ff62f85f68c2
-783a61a2-c548-4d0e-af23-8c43f958ca2d	1024287b-2a78-4fba-8fe4-ed68d571b901	beginner	e44f70c0-78e3-4a01-b9ee-ad3440c7ee5b
-4498a379-be70-4534-b7e3-9d5693d296af	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner	af1eb21e-8ba8-4abd-ba4a-ee5847c54ac8
-f2f80fd6-7c6f-4361-ba85-e99579ced204	533bf8cc-cc18-4362-8279-db7935dee292	intermediate	af1eb21e-8ba8-4abd-ba4a-ee5847c54ac8
-2dc47717-9ad3-40a6-a1dc-42c13bbab7a1	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	expert	af1eb21e-8ba8-4abd-ba4a-ee5847c54ac8
-16314593-110d-48b8-acaf-f6436782a85f	21693cd7-7f96-4d9e-a964-5bc8ab4cfc71	beginner	af1eb21e-8ba8-4abd-ba4a-ee5847c54ac8
-30fbe849-8792-43c9-a27f-07c192a7fe54	65fbe470-1e0a-4be8-beb8-7f053d487a55	beginner	af1eb21e-8ba8-4abd-ba4a-ee5847c54ac8
-6733be4a-ce05-4a64-80ba-027369dc41c7	87198029-a315-47c8-ba42-e0d1fa52b848	beginner	af1eb21e-8ba8-4abd-ba4a-ee5847c54ac8
-960ec2ee-a2df-4b39-8f27-ce903a70cb3d	1024287b-2a78-4fba-8fe4-ed68d571b901	beginner	af1eb21e-8ba8-4abd-ba4a-ee5847c54ac8
-b9de794d-8236-4cc1-9856-c9ce2bb56f3e	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner	6575f8c0-503c-4b0a-9a41-3a5b946d488e
-21f35c4d-928c-49d0-88d6-16a83124a633	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner	6575f8c0-503c-4b0a-9a41-3a5b946d488e
-5446080c-9a3c-4c40-99bc-8f9e40cb822f	533bf8cc-cc18-4362-8279-db7935dee292	beginner	6575f8c0-503c-4b0a-9a41-3a5b946d488e
-b5ab9f8d-4b7a-4dee-bf9e-d969de080062	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner	6575f8c0-503c-4b0a-9a41-3a5b946d488e
-a2295bdf-8dde-4cc5-912e-6466cbbdde90	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	83f68d21-bc2a-48b9-8f53-e70a7c9124fe
-5e39c87a-3aaa-4d88-9221-a0fe6257f529	065a0459-d3df-4cb7-b598-35ba9d072670	intermediate	83f68d21-bc2a-48b9-8f53-e70a7c9124fe
-cbfdf38f-13a2-4911-af7a-fa5b01808e01	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert	83f68d21-bc2a-48b9-8f53-e70a7c9124fe
-d9c25964-7789-4665-bfcf-6bf7ab53c31a	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner	69652386-102f-4d0d-956d-c90ef467f2eb
-2e88512a-536e-4a0e-9cf5-28d5539d6413	4e3ee8f2-28ca-49eb-87bb-e3f9a585d711	intermediate	69652386-102f-4d0d-956d-c90ef467f2eb
-89c2b648-0465-4233-b4b9-4968b37bc544	3da6a1a3-e832-4143-9d78-ed1805524309	expert	69652386-102f-4d0d-956d-c90ef467f2eb
-c12fe489-9eb2-4ac1-9b77-8d7c23de32ed	fd220edb-1a58-4004-9592-b5d016fd9ff9	expert	69652386-102f-4d0d-956d-c90ef467f2eb
-3038da72-8c3f-4af5-be51-cbcf629c7b54	533bf8cc-cc18-4362-8279-db7935dee292	intermediate	69652386-102f-4d0d-956d-c90ef467f2eb
-0fdb7023-9ffd-4878-b59f-5e07fcdcf34d	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner	69652386-102f-4d0d-956d-c90ef467f2eb
-eed5e217-6405-4412-8eab-333365621704	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	40e2d82a-81af-45a0-ab69-1fe7a0911e3c
-14acc9c9-a4df-4fc2-8727-98598fd301f9	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	40e2d82a-81af-45a0-ab69-1fe7a0911e3c
-a90ff9dd-77ad-4300-a71b-b97e265115e2	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	40e2d82a-81af-45a0-ab69-1fe7a0911e3c
-a0ab4bf9-b2b8-4566-869a-a5a07bf5c5ee	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	4a2a44b5-b491-45ed-938a-5fef0edfabcd
-2da86d54-f3e2-4152-b875-e346b5380a9e	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	4a2a44b5-b491-45ed-938a-5fef0edfabcd
-ecded2f1-f1c3-4a0f-a7d3-835cdb0c1e1d	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert	4a2a44b5-b491-45ed-938a-5fef0edfabcd
-db3ee842-6662-4199-a21c-25170577e247	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	40d864c4-cb1e-44a4-9775-d8217fff8b59
-0da1b49b-a52c-40a8-b85d-19eb3539e6cc	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	40d864c4-cb1e-44a4-9775-d8217fff8b59
-4fbeeed9-61d4-4b3b-b595-dea0d0b5c335	8f071bad-dcc3-4ff8-9638-3301c66c379c	beginner	33d2fb7a-de75-4fdb-90fb-c37153b2a93b
-b1b97315-bfe6-4dc9-9cdd-0036d4df5043	c7dc3d27-4c5b-4fa4-ab73-c9750ed4e11b	intermediate	33d2fb7a-de75-4fdb-90fb-c37153b2a93b
-6436acdc-ef7a-40b2-8eea-888c676a4504	94cf7721-e030-4ce7-9037-7baf2185c335	expert	33d2fb7a-de75-4fdb-90fb-c37153b2a93b
-af58baa8-c859-4fa4-b84e-2d01f7fa0f3d	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	45992131-25f5-43d7-bc5a-423fe67e2ac7
-1ab0b682-0d37-4528-a918-1e4873407a57	065a0459-d3df-4cb7-b598-35ba9d072670	intermediate	45992131-25f5-43d7-bc5a-423fe67e2ac7
-c287803a-6ffc-4a36-8d26-ec115d297251	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert	45992131-25f5-43d7-bc5a-423fe67e2ac7
-acd06c48-9b6b-419f-aff8-9dac2709d9f7	a592cb72-d120-4f4b-a56f-a7736d726601	intermediate	45992131-25f5-43d7-bc5a-423fe67e2ac7
-e9834c1a-a995-4050-baa0-0cf7f0fbd631	acca6120-7d32-4683-8300-d82679b41ffb	expert	45992131-25f5-43d7-bc5a-423fe67e2ac7
-8ced5967-0bab-4c0f-b4ba-020426366892	4a0fd123-a85d-4f31-84d2-9b7907f03a16	expert	45992131-25f5-43d7-bc5a-423fe67e2ac7
-50940396-568a-4320-bd7b-3530a199d7e1	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	ecd5bde6-aabd-4a3e-97b9-a3cc7c786ff3
-e7886cc3-fcb7-40b3-9293-97afc541bf38	065a0459-d3df-4cb7-b598-35ba9d072670	intermediate	ecd5bde6-aabd-4a3e-97b9-a3cc7c786ff3
-9234e470-bdb8-495d-bf27-5d6d0977bb6f	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert	ecd5bde6-aabd-4a3e-97b9-a3cc7c786ff3
-e0af929e-ad0d-4a92-84e1-67ccce8e10ce	a592cb72-d120-4f4b-a56f-a7736d726601	intermediate	ecd5bde6-aabd-4a3e-97b9-a3cc7c786ff3
-8264a501-19dd-4f0a-89a2-31f4bdc95e6f	acca6120-7d32-4683-8300-d82679b41ffb	expert	ecd5bde6-aabd-4a3e-97b9-a3cc7c786ff3
-12fee86c-de7d-4e26-8d41-829494db4798	4a0fd123-a85d-4f31-84d2-9b7907f03a16	expert	ecd5bde6-aabd-4a3e-97b9-a3cc7c786ff3
-e7a30535-491d-4849-be9e-7b248e8456a0	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner	1d9bc4a4-78b7-4c44-bcc8-02414017b1be
-a244249f-87db-4214-8619-00a86223853c	533bf8cc-cc18-4362-8279-db7935dee292	beginner	1d9bc4a4-78b7-4c44-bcc8-02414017b1be
-cfa97a2e-f656-4a9b-b45a-af0768cb8d1f	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner	1d9bc4a4-78b7-4c44-bcc8-02414017b1be
-ee9af762-d0b5-46b7-a761-25ae627441a3	a592cb72-d120-4f4b-a56f-a7736d726601	beginner	1d9bc4a4-78b7-4c44-bcc8-02414017b1be
-d48736fb-b132-4512-89de-9ffbe12dcfaf	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	expert	1d9bc4a4-78b7-4c44-bcc8-02414017b1be
-d5d533f7-6bfe-42d5-bf9b-18feeb9ccf01	7a8b4541-f100-40b3-9970-e1caa50a6f20	expert	1d9bc4a4-78b7-4c44-bcc8-02414017b1be
-b7ec1d6a-262d-43ae-85ff-a37cb8fa7e2d	8667ebd3-7442-4600-8490-41a802796744	expert	1d9bc4a4-78b7-4c44-bcc8-02414017b1be
-3b4c7356-6039-4430-8cdf-c03c168b4c70	2f69207f-4729-4121-b5ad-05ce29b29178	expert	9515c438-dd8c-415d-9c40-5e67ca5b7cae
-1ef6451c-faa6-41e4-a547-132bd78bbd82	4446909a-cd49-4b10-8188-febbac5a908c	intermediate	9515c438-dd8c-415d-9c40-5e67ca5b7cae
-bba4cfb4-4016-421a-bed2-079fc701b2de	d169a29d-2f2c-4329-90c6-9b450caf065a	expert	9515c438-dd8c-415d-9c40-5e67ca5b7cae
-fbadcaa5-26a9-4df1-aeef-87296ef7ecf5	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	intermediate	9515c438-dd8c-415d-9c40-5e67ca5b7cae
-470376f7-70d9-4351-9481-afcd91929d6e	d50e05f6-6945-45bc-973d-c59c45fe9140	expert	a8c2fc7d-4804-4b24-ae0f-b54875dec9e6
-d23d998d-586a-4d33-a91d-98bdbdf88bf1	2df644f9-15b3-4524-9563-2ccdbf2ad36d	intermediate	a8c2fc7d-4804-4b24-ae0f-b54875dec9e6
-d3b62a8b-ccca-425c-86d3-c2bd08a207df	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	bdc4f466-1fa9-497d-b55b-d7cc55bf7969
-62cf795e-3a3f-46a6-bbe8-ea8c4e4b5064	2b32d4c6-8d78-4e3b-b55b-63dde2f2b782	expert	bdc4f466-1fa9-497d-b55b-d7cc55bf7969
-e2b6f21a-b7d4-4607-a06f-07331eb55289	b1645f7b-af90-4252-a6b7-b871354655fe	expert	bdc4f466-1fa9-497d-b55b-d7cc55bf7969
-4e02a578-fe73-4cbb-a671-3b6007f4d580	ed0a9353-0bfc-498d-9cba-5f302548d2fd	beginner	2ab2ef5f-6a89-48c8-8242-94ced2c4b91c
-21ae4b85-1fc5-40d4-92b8-fd557ef73e20	7a73b9ca-2b6f-4861-8477-ade13fa1e110	beginner	2ab2ef5f-6a89-48c8-8242-94ced2c4b91c
-8cf1147e-ff8b-47ad-b0cd-f34162d81a8f	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner	94e00a17-4b80-4096-96e8-6a07e63a55df
-62a046e9-4e67-4894-babc-196b5283e976	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	b109e883-7f41-4e04-a31e-158ef680bd03
-8cf96a6c-bad8-4d2c-92dd-8137db3cf274	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	23386db9-de19-4dd5-88d6-067ba9e73ca6
-d8b72b66-7c44-49f4-9827-a92f6fae5ee7	2f69207f-4729-4121-b5ad-05ce29b29178	beginner	2ab2ef5f-6a89-48c8-8242-94ced2c4b91c
-e63823a2-8e1d-48ea-9ee4-29079a2b4956	2df644f9-15b3-4524-9563-2ccdbf2ad36d	beginner	2ab2ef5f-6a89-48c8-8242-94ced2c4b91c
-c6c3b266-e397-4935-bf57-19aa293e3a9a	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	94e00a17-4b80-4096-96e8-6a07e63a55df
-42aa1518-3fe6-414d-a962-5788d254ae99	4e3ee8f2-28ca-49eb-87bb-e3f9a585d711	beginner	94e00a17-4b80-4096-96e8-6a07e63a55df
-77bd5c8b-17c7-4069-9f34-c42d1c4512b5	a592cb72-d120-4f4b-a56f-a7736d726601	beginner	23386db9-de19-4dd5-88d6-067ba9e73ca6
-397b974b-03cb-4d92-ac9e-ccc36b3ef0d9	4a0fd123-a85d-4f31-84d2-9b7907f03a16	beginner	23386db9-de19-4dd5-88d6-067ba9e73ca6
-d3bbe35c-3a99-4d53-90a7-8e2a45a689cf	4446909a-cd49-4b10-8188-febbac5a908c	beginner	2ab2ef5f-6a89-48c8-8242-94ced2c4b91c
-8792fb6e-556b-4b17-b2b8-cea965a5dfda	2ad521e1-bc36-4398-8392-e7ef00f927d5	beginner	2ab2ef5f-6a89-48c8-8242-94ced2c4b91c
-e5ce874b-c075-4a3a-ad14-0d4c9ac15b21	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	94e00a17-4b80-4096-96e8-6a07e63a55df
-c51f0cb9-a869-48f4-9e04-626bf84213f4	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	b109e883-7f41-4e04-a31e-158ef680bd03
-1416557a-cd7c-4efa-be50-ec2633ec3dab	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	23386db9-de19-4dd5-88d6-067ba9e73ca6
-0c625b59-fce4-4636-b287-3debb4847755	acca6120-7d32-4683-8300-d82679b41ffb	beginner	23386db9-de19-4dd5-88d6-067ba9e73ca6
-7f1a3ac6-b6bd-4f31-9b1d-14441f18b141	d169a29d-2f2c-4329-90c6-9b450caf065a	beginner	2ab2ef5f-6a89-48c8-8242-94ced2c4b91c
-883b0de5-250b-4e86-aae7-f932c73a18ba	dc07e798-993b-4d9e-bdd8-b4b3194942a1	beginner	2ab2ef5f-6a89-48c8-8242-94ced2c4b91c
-33dde901-9260-48d7-970f-3e5d523867e8	040eab96-f02a-40e3-a000-046c402403c0	expert	24926176-70e3-4144-92ca-2b9987e3a4fe
-13669a7e-1fc3-41e3-8afa-a790db65ffb3	3816ade2-5862-4a97-b7e6-11be86d273b0	intermediate	24926176-70e3-4144-92ca-2b9987e3a4fe
-55f06d2f-77ca-44cb-ab3f-839aca3da20f	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner	6d186f54-d058-432e-a279-d1c2850a61d8
-f541589f-b8f9-43f1-b3fc-92ff909a7337	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	expert	6d186f54-d058-432e-a279-d1c2850a61d8
-494dafcf-5b5f-4361-857b-4ce54510648b	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	intermediate	6d186f54-d058-432e-a279-d1c2850a61d8
-c5200e50-d924-4d13-ad1a-80bb0d4212b5	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner	14dc965e-1774-4001-bc33-ebbc2acea270
-76b3a65f-0989-4035-b794-2f7b35f153e1	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	expert	14dc965e-1774-4001-bc33-ebbc2acea270
-af0a98bf-97d2-4217-ae33-72ba00751302	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	intermediate	14dc965e-1774-4001-bc33-ebbc2acea270
-2bc2ab7d-549d-4ba6-8f53-7ee7c78fd0bd	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	beginner	a05f3858-5abc-4b01-af62-61705955b066
-0697e5e1-c654-457e-9eb0-159eb48451c2	6ece11bc-45db-4c4d-80a2-69a57e65414c	expert	a05f3858-5abc-4b01-af62-61705955b066
-b3268d64-5c9f-44e3-a4cb-29fc2e9c75fd	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-130ae1f7-e47d-4f6d-83fa-6def34068e59	533bf8cc-cc18-4362-8279-db7935dee292	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-1d03db8e-71cf-4a7a-b395-8ecfe41e962d	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-a652d6c5-ff92-43e8-b6b4-52f1de8d187b	21693cd7-7f96-4d9e-a964-5bc8ab4cfc71	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-c3caac21-3808-4895-9d58-0e7afe3fb9be	0472c9c0-8285-4d2e-be9f-4e2e1301b64e	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-3f4ed642-c857-4ff0-bcce-4422b717a7d0	e5c3a27d-9b0b-485a-89a0-edf69e11e4ef	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-98db0feb-42b9-44d1-b55b-c2c93f3022bb	83add269-b1f5-44c4-bc75-77da70676593	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-86009ed3-8e23-4fbf-98fa-d7a48c0e7046	044069fb-5c0d-4e16-ad53-d965a366c0ad	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-7d7662c1-5e40-4f1c-aa81-0c597f268551	bbb3f378-ec58-4101-a52e-1d632cd987e3	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-2138eced-280b-43ed-b277-27b5b7b1d8ac	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-ba04f01a-5009-4d0d-ac7a-07e006e52730	065566f8-0486-4a66-8ea8-32acd1f9690a	beginner	d2f87edb-bd2b-4e92-a4ca-c41bee0e08e5
-94cc1ddd-6151-47a8-8fc8-d0e9209b125f	05688ce9-d897-4439-9958-ab0e9be1bc8a	beginner	bba8d3da-b408-4ed7-b737-b817367d7ba6
-07923f2c-56ac-4ffc-94b4-699e349cdb60	82e2cf5a-a089-414b-ac38-2ece8179e9d0	intermediate	bba8d3da-b408-4ed7-b737-b817367d7ba6
-f17ce515-ce5b-4345-b881-6f5f3fe13da2	2ad521e1-bc36-4398-8392-e7ef00f927d5	expert	bba8d3da-b408-4ed7-b737-b817367d7ba6
-85ca72ec-ab37-43bd-82c9-023d0cff0942	8d6cf07c-3734-43b2-a122-09005eaaf9b0	expert	bba8d3da-b408-4ed7-b737-b817367d7ba6
-5f454373-319e-4c25-af5f-7d6e39a23fb9	05688ce9-d897-4439-9958-ab0e9be1bc8a	beginner	147de0c8-d796-45b9-86e0-d3c0fb2f75be
-254b31aa-f376-49b0-8778-9bb06bdfd3c1	82e2cf5a-a089-414b-ac38-2ece8179e9d0	intermediate	147de0c8-d796-45b9-86e0-d3c0fb2f75be
-45e56ac0-a958-4044-bbac-905c02a17592	2ad521e1-bc36-4398-8392-e7ef00f927d5	expert	147de0c8-d796-45b9-86e0-d3c0fb2f75be
-ed5f3acb-987b-4968-b62a-176ee57ecf6b	8d6cf07c-3734-43b2-a122-09005eaaf9b0	expert	147de0c8-d796-45b9-86e0-d3c0fb2f75be
-f277bd3c-f0e7-4fcd-a819-99744a93c51b	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	beginner	8d5618fe-e7d9-4670-ab48-d36a342b5c33
-b41cfd45-898f-441f-9123-a39057bd07a4	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	expert	8d5618fe-e7d9-4670-ab48-d36a342b5c33
-adcc2391-02bd-4e30-bdf8-1ad7865635d3	7a64266f-81ba-4989-b00a-b207d4e2c8a9	expert	8d5618fe-e7d9-4670-ab48-d36a342b5c33
-fed5bc10-6032-4449-8185-62106e4ff6f3	2f69207f-4729-4121-b5ad-05ce29b29178	expert	8d5618fe-e7d9-4670-ab48-d36a342b5c33
-97bc36f5-d98f-49c1-a0de-7ee4099491ae	a592cb72-d120-4f4b-a56f-a7736d726601	beginner	73bef93c-1165-41b3-a662-73cfd8dd628f
-0ae931b8-9ff6-41d1-b17f-c3c000888178	acca6120-7d32-4683-8300-d82679b41ffb	beginner	73bef93c-1165-41b3-a662-73cfd8dd628f
-df146952-8073-4930-bd50-917985032c5d	4a3e1a83-87b3-4e4a-a074-bba81ff64fe6	beginner	73bef93c-1165-41b3-a662-73cfd8dd628f
-f427dcf7-59db-4393-b782-7d2ff1426bfc	2f69207f-4729-4121-b5ad-05ce29b29178	beginner	73bef93c-1165-41b3-a662-73cfd8dd628f
-5d51a100-ddaf-4c13-bf60-c863da7a070f	4446909a-cd49-4b10-8188-febbac5a908c	beginner	73bef93c-1165-41b3-a662-73cfd8dd628f
-683b8376-d97b-4bb9-a78e-efdd4aea0d09	05688ce9-d897-4439-9958-ab0e9be1bc8a	beginner	f5166032-35df-48ed-936f-e7424b330880
-7fff7947-4ad7-4bc8-bc78-23fa5f20c54c	d169a29d-2f2c-4329-90c6-9b450caf065a	beginner	73bef93c-1165-41b3-a662-73cfd8dd628f
-7a4df34c-320b-4b66-9a8c-f6337596aa65	82e2cf5a-a089-414b-ac38-2ece8179e9d0	intermediate	f5166032-35df-48ed-936f-e7424b330880
-a22e6d24-1890-43ea-bc59-812200eb72ae	c994a102-6672-46b7-b5c9-3648ed4ef5b1	beginner	73bef93c-1165-41b3-a662-73cfd8dd628f
-639ac721-5f84-4000-9508-11222cc637fd	2ad521e1-bc36-4398-8392-e7ef00f927d5	expert	f5166032-35df-48ed-936f-e7424b330880
-a73357e1-6cf8-4dd0-9dc3-225f5dca41f0	b4462a72-9eb7-46dc-a462-7ee02805d6f9	beginner	73bef93c-1165-41b3-a662-73cfd8dd628f
-e55e6a62-29cf-4dd5-8143-b1ae8836bc3f	8d6cf07c-3734-43b2-a122-09005eaaf9b0	expert	f5166032-35df-48ed-936f-e7424b330880
-6e988f8c-89ce-44a8-9f95-1a7fc990774f	05688ce9-d897-4439-9958-ab0e9be1bc8a	beginner	fb4adac7-2f77-4371-aa0b-b8611ec9d89c
-313c2ee8-ef50-4c5c-88eb-bb0a95599dd1	82e2cf5a-a089-414b-ac38-2ece8179e9d0	intermediate	fb4adac7-2f77-4371-aa0b-b8611ec9d89c
-18f1bc48-62e1-45cc-808d-b63ec9147ade	2ad521e1-bc36-4398-8392-e7ef00f927d5	expert	fb4adac7-2f77-4371-aa0b-b8611ec9d89c
-00a0fb8d-fffe-4d4d-aed2-0787fdfdc745	8d6cf07c-3734-43b2-a122-09005eaaf9b0	expert	fb4adac7-2f77-4371-aa0b-b8611ec9d89c
-fcb1fd73-81ac-4f36-b12e-444460a99054	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	beginner	02f9bf3d-1781-49ed-b0f6-2609113decd3
-6a347870-afb6-4120-aee2-a5222d7f2df6	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	expert	02f9bf3d-1781-49ed-b0f6-2609113decd3
-97460204-fc7e-4477-af98-da6f30c503e3	7a64266f-81ba-4989-b00a-b207d4e2c8a9	expert	02f9bf3d-1781-49ed-b0f6-2609113decd3
-7f16819b-9df2-48f4-92b4-36f18c660f48	2f69207f-4729-4121-b5ad-05ce29b29178	expert	02f9bf3d-1781-49ed-b0f6-2609113decd3
-0d8579cd-a393-4c0c-9c5d-e2e7a022fb37	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	94e00a17-4b80-4096-96e8-6a07e63a55df
-8a864825-f666-4340-baa1-6d29c07c8b3c	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	b109e883-7f41-4e04-a31e-158ef680bd03
-ed436f33-41eb-4e82-8cb0-332d9ecea803	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	23386db9-de19-4dd5-88d6-067ba9e73ca6
-5a316a8b-2aa2-477a-b34b-f9d94fff2440	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	ecb71090-6c8c-4d2f-b4a2-4b57433da0c9
-2e7449ee-5e26-443e-a8de-5d525e5a40ed	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	ecb71090-6c8c-4d2f-b4a2-4b57433da0c9
-eedb407c-3d3c-4c3a-93db-cf42956affa0	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	ecb71090-6c8c-4d2f-b4a2-4b57433da0c9
-e3b0b4de-d127-4d22-a17e-0ad26830bfed	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	ec4d87e3-52f1-4f00-a701-d2732fff64bc
-6ee89da6-988f-487b-916f-157a048ff0ea	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	ec4d87e3-52f1-4f00-a701-d2732fff64bc
-925d5157-cd06-494c-89d3-c79f7d4a92cd	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	ec4d87e3-52f1-4f00-a701-d2732fff64bc
-ea770797-0098-4ddb-8686-d2e6ef8f1ce6	96fba1d1-c35e-4fea-9810-e8d417f945ff	beginner	ec4d87e3-52f1-4f00-a701-d2732fff64bc
-bc8fbb75-6130-4ac2-9d05-0ce444c2d371	8ed7519f-0ef3-404d-9890-8f0ca0e203dd	beginner	ec4d87e3-52f1-4f00-a701-d2732fff64bc
-3458e7ab-c795-429d-bd9f-dbd5bea255ca	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	ec3a5797-4b40-4ab3-a33f-1928afb69b0d
-8c83ac71-ae66-4ae3-b659-ade77684dbec	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	ec3a5797-4b40-4ab3-a33f-1928afb69b0d
-e6c0a022-2000-4c93-96a3-65df69bfea01	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	ec3a5797-4b40-4ab3-a33f-1928afb69b0d
-c2251b77-57ee-46f7-9985-0cc78b8a1cbe	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	27412dc3-6501-455e-a179-12192eef990a
-c107c76a-067f-4258-b749-57714c7bb251	2d81d189-0941-49fd-ba68-b20f6f1ca691	beginner	27412dc3-6501-455e-a179-12192eef990a
+1c6b01d3-acee-4543-8fac-dc83d1609bd2	8667ebd3-7442-4600-8490-41a802796744	intermediate	03811c2a-1ff5-4638-991e-262a14fe991d
+81b6588b-f25d-4645-a78e-e64e31e35a4c	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	intermediate	03811c2a-1ff5-4638-991e-262a14fe991d
+5a5b53f3-a712-400a-a67c-3612c70d7046	e5c3a27d-9b0b-485a-89a0-edf69e11e4ef	intermediate	03811c2a-1ff5-4638-991e-262a14fe991d
+00e8251b-b40c-42fc-9919-b0754c25db6d	70968781-b42c-4e10-b7d2-797ec2cb319b	beginner	03811c2a-1ff5-4638-991e-262a14fe991d
+407a0ef2-13ae-4fba-a365-eaaaff978395	8667ebd3-7442-4600-8490-41a802796744	intermediate	2be52a6d-fcdd-4597-a8a9-03078fca9679
+0b2010a0-b556-4cf8-a62b-a9ab58c437fa	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	intermediate	2be52a6d-fcdd-4597-a8a9-03078fca9679
+8d90f8be-7466-4934-9a61-93b72b5f647b	e5c3a27d-9b0b-485a-89a0-edf69e11e4ef	intermediate	2be52a6d-fcdd-4597-a8a9-03078fca9679
+37b0c711-2a1c-4585-a223-f44f2bc77385	70968781-b42c-4e10-b7d2-797ec2cb319b	beginner	2be52a6d-fcdd-4597-a8a9-03078fca9679
+6cfe17f4-a085-49d8-aba4-87996d90f4fe	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	expert	de3079f9-1b3f-4266-a13e-dc5c24015207
+01e42ded-9629-48b2-814e-6eb789b78ab3	7d205024-8a61-4b64-9b3e-25970af1c8cf	intermediate	de3079f9-1b3f-4266-a13e-dc5c24015207
+33577981-dc53-4ce1-81c5-bb59d3595b5d	210ed5bd-788b-4972-8396-cb9b048a48d0	expert	de3079f9-1b3f-4266-a13e-dc5c24015207
+49a5fc83-240c-4ccf-ae04-19980751fc7b	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	expert	196190f0-9d0f-4450-9263-24896afeec51
+dedd41d0-d554-4d82-86d8-fb95f2736354	7d205024-8a61-4b64-9b3e-25970af1c8cf	intermediate	196190f0-9d0f-4450-9263-24896afeec51
+ae7ac994-99e0-4b82-89a9-141f1b302b5c	210ed5bd-788b-4972-8396-cb9b048a48d0	expert	196190f0-9d0f-4450-9263-24896afeec51
+e59c6e30-1f21-43a5-aad1-5f9be229a037	05688ce9-d897-4439-9958-ab0e9be1bc8a	expert	0eb8751c-ad3b-4e7a-bbf8-17ffe750e84d
+c977eb70-8846-471a-940f-5693e4584a75	ba9a99fc-5b26-418a-9fe2-435b6a088387	intermediate	0eb8751c-ad3b-4e7a-bbf8-17ffe750e84d
+8e92b638-0699-42fe-9e51-e881f1a42330	2ad521e1-bc36-4398-8392-e7ef00f927d5	expert	0eb8751c-ad3b-4e7a-bbf8-17ffe750e84d
+598bb812-2303-4f66-b62d-19800b424ac8	8fdf5e43-977e-4be4-8b3f-3096c2dab92b	intermediate	0eb8751c-ad3b-4e7a-bbf8-17ffe750e84d
+047e1508-f4fd-4cd3-9560-f41f1beed26e	cacd3d23-95f5-4d48-b1f2-b106e9a50219	intermediate	0eb8751c-ad3b-4e7a-bbf8-17ffe750e84d
+a045f032-5cb2-4c0b-ab39-b93ccb564f8e	6e326454-f7e4-493e-a47c-d2446adc26fc	expert	03adf507-ff20-41d3-b497-fd3ea0ec05b5
+49f96127-9afb-4f7b-b223-55eaae302123	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	intermediate	03adf507-ff20-41d3-b497-fd3ea0ec05b5
+92d3bdb5-7b06-4893-853a-2678c9b4d4ba	d169a29d-2f2c-4329-90c6-9b450caf065a	expert	03adf507-ff20-41d3-b497-fd3ea0ec05b5
+01699814-8156-4411-865f-2df5db3080da	4446909a-cd49-4b10-8188-febbac5a908c	intermediate	03adf507-ff20-41d3-b497-fd3ea0ec05b5
+6fbd8edb-2b0c-4b42-9730-76e84e29c4d4	2f69207f-4729-4121-b5ad-05ce29b29178	intermediate	03adf507-ff20-41d3-b497-fd3ea0ec05b5
+5e8c6177-2640-48d8-96a8-1d62af1314de	040eab96-f02a-40e3-a000-046c402403c0	expert	16053473-387e-42a9-90c2-d47b0672e462
+b05b3791-5208-4eaa-80ef-35af02b98061	466e0f5e-5062-4a34-9813-ec6c98172842	beginner	16053473-387e-42a9-90c2-d47b0672e462
+21b0927f-79b2-45eb-aa6c-cd2e20f1fd67	59f5a65d-e25f-4035-89a2-cd617aec6f03	intermediate	16053473-387e-42a9-90c2-d47b0672e462
+474f5d78-230d-427f-9abf-1fb518f465b5	7a8b4541-f100-40b3-9970-e1caa50a6f20	expert	16053473-387e-42a9-90c2-d47b0672e462
+cb80990e-e368-4a9a-bdad-d9546ba737c4	8667ebd3-7442-4600-8490-41a802796744	intermediate	16053473-387e-42a9-90c2-d47b0672e462
+69612cea-7148-42b4-b101-b8fd97117a65	888a7391-e313-4718-aa0f-1e53d8bcc94e	beginner	16053473-387e-42a9-90c2-d47b0672e462
+636dafe5-f6c4-49a2-8f54-00765e7cc0ec	cb5348d5-f606-460f-8b55-7f689fbbf6e3	expert	16053473-387e-42a9-90c2-d47b0672e462
+5ba446d5-4637-45bd-a114-ba9e624ba2ec	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	expert	16053473-387e-42a9-90c2-d47b0672e462
+354250ef-6952-4be9-882e-8acf53d67975	a29bed8a-7db6-450d-b7b0-a368d5c34945	intermediate	58d6ca03-cd15-4990-9b61-c27f731bb7a8
+42d4d1af-2d12-4140-b74e-1347edd58227	096bec29-e452-42ed-a2ad-efd8aa361066	beginner	58d6ca03-cd15-4990-9b61-c27f731bb7a8
+3a39519e-1fc0-4a0a-b886-a32dd73a2da4	2df644f9-15b3-4524-9563-2ccdbf2ad36d	expert	58d6ca03-cd15-4990-9b61-c27f731bb7a8
+707a3b25-aca9-4399-9c8e-b53f1f720a2c	dc07e798-993b-4d9e-bdd8-b4b3194942a1	expert	58d6ca03-cd15-4990-9b61-c27f731bb7a8
+a3a1d573-3c02-4a8b-8453-acc868886fa5	a29bed8a-7db6-450d-b7b0-a368d5c34945	intermediate	c7881a7b-4d2d-4e9a-9859-a1cdb5ba4ed4
+10011d85-ea64-4bee-b5d2-a0ea62934992	096bec29-e452-42ed-a2ad-efd8aa361066	beginner	c7881a7b-4d2d-4e9a-9859-a1cdb5ba4ed4
+63e289db-0221-4afa-8328-4ad6dcc0ea71	2df644f9-15b3-4524-9563-2ccdbf2ad36d	expert	c7881a7b-4d2d-4e9a-9859-a1cdb5ba4ed4
+b7cea59a-13b5-470b-ae1f-6f8a5e69c2f1	dc07e798-993b-4d9e-bdd8-b4b3194942a1	expert	c7881a7b-4d2d-4e9a-9859-a1cdb5ba4ed4
+1c9cae28-fa2e-438a-9116-c105ebe277ca	50ad3f12-b375-4cea-b450-a877bb353ca2	beginner	f08df843-2cba-44b6-a652-7b7179a8896f
+3b36528c-c3b4-40d8-a6f8-fca4bae186f0	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	intermediate	f08df843-2cba-44b6-a652-7b7179a8896f
+28441863-5b22-4317-9797-9ee252a67fd7	092210a9-4270-4e2a-bb90-73525f532013	intermediate	f08df843-2cba-44b6-a652-7b7179a8896f
+fdb36e52-30c0-41a6-946d-8f605ff9b4af	7d205024-8a61-4b64-9b3e-25970af1c8cf	expert	f08df843-2cba-44b6-a652-7b7179a8896f
+0262f3f6-f87d-4695-a626-85c333111e54	1024287b-2a78-4fba-8fe4-ed68d571b901	beginner	ff0d66cc-228a-4bc7-90ba-2588f2747942
+58ef1ca5-985d-4ad5-b116-d04302b999ee	6e8bd1a7-2282-4958-9860-86a8e94dc815	beginner	ff0d66cc-228a-4bc7-90ba-2588f2747942
+f5b21650-fca3-4d3b-a105-fcc50a3d38d3	a29bed8a-7db6-450d-b7b0-a368d5c34945	beginner	ff0d66cc-228a-4bc7-90ba-2588f2747942
+9c6ada7d-c905-4c1a-b6a2-00cbc33424ba	cc477daa-209f-4751-8f09-1a77d74657ad	beginner	ff0d66cc-228a-4bc7-90ba-2588f2747942
+5cedcf80-8abc-4a0b-a0aa-6ffe6d787d34	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner	ff0d66cc-228a-4bc7-90ba-2588f2747942
+7690417d-44fa-43ac-9991-f1a24b60c196	21693cd7-7f96-4d9e-a964-5bc8ab4cfc71	beginner	ff0d66cc-228a-4bc7-90ba-2588f2747942
+deb6b6a7-d943-4713-8314-f1e0f627717f	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner	a6e6a90b-0426-40d2-b2c8-f54ee6b2ec03
+0197efb0-bca9-496c-a905-86535fb49467	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner	a6e6a90b-0426-40d2-b2c8-f54ee6b2ec03
+f71e8232-7712-4da4-9d16-635f40a68df6	5087f7a6-026a-4f74-a55d-828d5d1255a7	expert	a6e6a90b-0426-40d2-b2c8-f54ee6b2ec03
+130a431c-e7d6-4506-828c-f3b0b2187ea4	490e6f6d-c98c-44c0-9044-c66c56ec7347	expert	a6e6a90b-0426-40d2-b2c8-f54ee6b2ec03
+4518c06a-39d7-44b9-ada4-412fffe293f5	cacd3d23-95f5-4d48-b1f2-b106e9a50219	expert	a6e6a90b-0426-40d2-b2c8-f54ee6b2ec03
+94c9a3d5-6368-4c90-a22a-62c407be8599	2f5c0984-6d16-49be-bdb1-4e43719a3b4d	beginner	87a50775-e4df-4e4d-928e-7879c6c3b545
+12a59b5c-3f20-4726-ae76-7501dce74c07	a29bed8a-7db6-450d-b7b0-a368d5c34945	beginner	87a50775-e4df-4e4d-928e-7879c6c3b545
+23698e81-be3d-40fd-a025-6c11199e1ca1	e8c84e8a-d01b-4f56-82bf-8cbf8e9c8e9b	beginner	87a50775-e4df-4e4d-928e-7879c6c3b545
+c5774b65-cbaf-4022-bf4d-18ae72a6818f	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner	87a50775-e4df-4e4d-928e-7879c6c3b545
+e01c7d42-284c-4613-8d9a-43a82490ed04	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	intermediate	c1b09ad5-5d88-4a6a-aa4f-3d69a633931c
+375d138f-1252-45de-9c96-21a807874f0c	17a1738e-dcb9-42ee-93de-b7098f810b45	expert	c1b09ad5-5d88-4a6a-aa4f-3d69a633931c
+687ed4f6-8c11-494f-a84b-f430bec4d686	acca6120-7d32-4683-8300-d82679b41ffb	expert	c1b09ad5-5d88-4a6a-aa4f-3d69a633931c
+ffa99945-853e-4f06-9584-e14f5f9cfc07	7d205024-8a61-4b64-9b3e-25970af1c8cf	expert	c1b09ad5-5d88-4a6a-aa4f-3d69a633931c
+6d233250-8259-4f78-85e0-577429d52ea5	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	intermediate	5877e32e-ce57-4348-a09c-37bc64fc443e
+9ac87f4f-27d5-4ab3-9e10-ebaef39c7163	17a1738e-dcb9-42ee-93de-b7098f810b45	expert	5877e32e-ce57-4348-a09c-37bc64fc443e
+2ee32649-1a29-4ac5-b1f4-b2d83de72af9	acca6120-7d32-4683-8300-d82679b41ffb	expert	5877e32e-ce57-4348-a09c-37bc64fc443e
+9e84f127-5bb8-44b5-8ed6-cb1043591168	7d205024-8a61-4b64-9b3e-25970af1c8cf	expert	5877e32e-ce57-4348-a09c-37bc64fc443e
+cb46bbf0-7314-480a-90cd-8bb5bfaa3c56	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	beginner	532fcaaa-7a5e-4118-a543-399af4af04bd
+1c3a15f0-8180-475b-b10c-a25266057d20	48efe874-73e4-4633-8def-594d3a919920	beginner	532fcaaa-7a5e-4118-a543-399af4af04bd
+24c91362-b789-46f9-a040-431693f6fb37	59f5a65d-e25f-4035-89a2-cd617aec6f03	intermediate	532fcaaa-7a5e-4118-a543-399af4af04bd
+9aa521a4-5968-491c-a197-75f2133f50b5	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	intermediate	91cc7776-75c2-4eb3-8e3a-fc08827c1b1b
+0874684f-c1db-4ac0-ab8e-3d4f940ab062	df6c6b6d-dd31-4ddd-a12d-d4fb2de289b6	expert	91cc7776-75c2-4eb3-8e3a-fc08827c1b1b
+dc151796-8c0c-4226-a97c-d6c4174065dc	1024287b-2a78-4fba-8fe4-ed68d571b901	beginner	91cc7776-75c2-4eb3-8e3a-fc08827c1b1b
+59094b63-149a-4887-a740-642276371af2	6e8bd1a7-2282-4958-9860-86a8e94dc815	expert	91cc7776-75c2-4eb3-8e3a-fc08827c1b1b
+67180a6e-2485-472d-8269-041b546856e1	a29bed8a-7db6-450d-b7b0-a368d5c34945	expert	91cc7776-75c2-4eb3-8e3a-fc08827c1b1b
+8c0aa3e3-ed11-4dd0-a0b6-350663109176	05688ce9-d897-4439-9958-ab0e9be1bc8a	intermediate	8e655652-af20-4092-8adc-141bcabdf15a
+5f9c8311-be1b-4da8-925c-53034fa03a95	cacd3d23-95f5-4d48-b1f2-b106e9a50219	intermediate	8e655652-af20-4092-8adc-141bcabdf15a
+7aa7ce35-cf8b-4826-b2fb-27f682da93e2	8fdf5e43-977e-4be4-8b3f-3096c2dab92b	expert	8e655652-af20-4092-8adc-141bcabdf15a
+50b7a56d-553a-4525-82fd-7c5f90deb145	533bf8cc-cc18-4362-8279-db7935dee292	expert	ed994cb4-20a7-4f85-aa0e-6024357b073a
+d867ea22-0326-4eab-91d4-112a83ae9b83	8129c4e0-c789-4283-86b7-a27fd2937851	beginner	ed994cb4-20a7-4f85-aa0e-6024357b073a
+a6639aa0-e1e5-4544-a465-5506a95d255b	bbb3f378-ec58-4101-a52e-1d632cd987e3	intermediate	ed994cb4-20a7-4f85-aa0e-6024357b073a
+7f3ec62a-46ee-4daa-86e0-ed7ad76262c5	d169a29d-2f2c-4329-90c6-9b450caf065a	beginner	ed994cb4-20a7-4f85-aa0e-6024357b073a
 \.
 
 
@@ -6366,13 +6233,6 @@ c107c76a-067f-4258-b749-57714c7bb251	2d81d189-0941-49fd-ba68-b20f6f1ca691	beginn
 --
 
 COPY "public"."Intereses" ("ID_Interes", "Descripcion", "ID_Empleado") FROM stdin;
-e72b5d3f-0a9f-4bdb-9966-baac308c8daf	Inteligencia artificial	5f096705-11c3-49b1-b42c-d7bd17a75439
-8a53e425-2d31-4341-87d7-64f878b142af	Interfaz grafica	900fdfaf-7517-4876-8d20-b83da73a8347
-d86e342a-ae4a-4631-953a-c9eda797cb4c	Desarrollo web	5f096705-11c3-49b1-b42c-d7bd17a75439
-8ea40be3-3a42-487c-9a10-85c29b9fd834	C++	5f096705-11c3-49b1-b42c-d7bd17a75439
-41cc0b86-9163-4e31-9087-716c62553745	Programacion	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-375dc7bd-dad9-424d-803d-6cd7db78c871	No me gusta linux	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-17e6d536-2cc6-4bb0-9e9f-6028938547bc	No me gusta tailwind	386e63ba-dc8f-4af6-9447-44f7976a4a0c
 \.
 
 
@@ -6381,15 +6241,9 @@ d86e342a-ae4a-4631-953a-c9eda797cb4c	Desarrollo web	5f096705-11c3-49b1-b42c-d7bd
 --
 
 COPY "public"."Metas" ("ID_meta", "Nombre", "Tipo_Meta", "Plazo", "Descripcion", "Fecha_limite", "ID_Empleado", "Registrada", "Estado", "Self_Reflection", "Fecha_Inicio") FROM stdin;
-eb7a0b39-02cb-4638-9057-4076227a57ac	Aprender IA	capability	Corto	Aprender  IA en menos de 1mes	2025-06-30	5f096705-11c3-49b1-b42c-d7bd17a75439	f	Completada	\N	2025-06-12
-e97d4f0e-b664-4273-bc5a-bc4dbdc16c5d	Aprender .NET con C#	curso/certificacion	Corto	Quiero aprender C# para usarlo con .NET para desarrollo web	2025-05-23	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	En Progreso	\N	2025-05-23
-9f1747be-9b38-4793-86ba-5e9343385c00	Python	curso/certificacion	Corto	Quiero aprender Python	2025-05-23	386e63ba-dc8f-4af6-9447-44f7976a4a0c	f	En Progreso	\N	2025-05-23
-48cd62b6-1a3f-4b50-b275-8157a1c6c9c0	aprender react	curso/certificacion	Corto	descripcion de aprender react	2025-07-30	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	f	En Progreso	\N	2025-06-04
-c8b6313d-b8f2-4534-95dd-796b22adf5c8	Aprender React con Java	capability	Corto	Java React	2025-05-31	b5c684f0-24d7-436f-b752-71cd9e361c8f	f	En Progreso	\N	2025-05-30
-d6d3ec5b-d928-4f6a-a2da-1c80eec2e71d	daasd	capability	Corto	das	2025-06-06	36abc818-b3a6-440f-933a-79ff41fe5b67	f	Completada	\N	2025-06-06
-58efda7e-665d-4b76-816d-85298cfb8a3f	Curso python avanzado	curso/certificacion	Corto	Aprender python	2025-06-10	5f096705-11c3-49b1-b42c-d7bd17a75439	f	Completada	\N	2025-06-11
-b9ecfa5c-7d90-4f40-890a-c3e69cdf496e	Aprender .NET con C#	curso/certificacion	Corto	Aprender. Net con C# para ser un mejor desarrollador fullstack	2025-06-30	5f096705-11c3-49b1-b42c-d7bd17a75439	f	Completada	\N	2025-06-06
-f1bcfe11-b0fe-446d-b23f-a6cd0fb94409	a	capability	Corto	a	2025-06-11	5f096705-11c3-49b1-b42c-d7bd17a75439	f	Cancelada	\N	2025-06-11
+9c97bf1d-24ff-4e38-a5a1-85019c3cec1d	Liderar un proyecto	proyecto	Corto	Ser responsable del diseño, ejecución y entrega de al menos un proyecto completo (de alcance mediano), incluyendo documentación, gestión de tareas y colaboración multidisciplinaria.	2025-08-13	5f096705-11c3-49b1-b42c-d7bd17a75439	f	Completada	Liderar este proyecto fue una experiencia valiosa que me permitió desarrollar habilidades de gestión, comunicación y coordinación de equipos. Enfrenté desafíos como cambios en los requerimientos y bloqueos técnicos, pero logré mantener el enfoque del equipo y cumplir con los objetivos. Esta experiencia fortaleció mi confianza para asumir mayores responsabilidades y liderar proyectos más complejos en el futuro.	2025-06-13
+0f00c6af-4f76-41b9-967c-3dcc0d70c70b	Obtener una certificación en Scrum Product Owner (CSPO)	curso/certificacion	Corto	Validar conocimientos técnicos o de gestión y fortalecer el perfil profesional.	2025-07-31	5f096705-11c3-49b1-b42c-d7bd17a75439	f	Completada	Obtener la certificación CSPO fue un paso importante para consolidar mis conocimientos en gestión ágil y liderazgo de producto. El proceso me permitió entender mejor el rol del Product Owner, la importancia de priorizar según valor de negocio y cómo aportar mayor claridad al equipo. Esta certificación fortalece mi perfil profesional y me prepara mejor para liderar iniciativas ágiles con enfoque estratégico.	2025-06-12
+2d2976ab-fd42-40d4-bd24-b58af90b03bc	Obtener una certificación en AWS Certified Developer	curso/certificacion	Corto	Validar conocimientos técnicos o de gestión y fortalecer el perfil profesional.	2025-09-20	5f096705-11c3-49b1-b42c-d7bd17a75439	f	Completada	Aunque no logré completar la certificación AWS Certified Developer, el proceso de preparación me permitió profundizar en servicios clave como Lambda, API Gateway y DynamoDB. Si bien los tiempos del proyecto y otras prioridades afectaron el seguimiento, sigo considerando esta certificación como una meta relevante a mediano plazo para fortalecer mi perfil técnico en entornos cloud. Aprendí la importancia de balancear la formación con la carga operativa y planificar mejor los tiempos de estudio.	2025-06-13
 \.
 
 
@@ -6411,9 +6265,7 @@ COPY "public"."People_lead" ("ID", "ID_Empleado") FROM stdin;
 4fde1b00-e11e-41c5-88c8-9e38d71facce	36abc818-b3a6-440f-933a-79ff41fe5b67
 92360b89-f39a-4a6a-9401-8e0aa6420b12	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1
 32db3c78-6b1f-4b8a-9234-ec406ae54ee9	fc1276e7-efc6-4ec5-b2cd-bfab2005930e
-3cb8081b-1a2b-4e32-a007-fae5c77735ba	386e63ba-dc8f-4af6-9447-44f7976a4a0c
 a1802e13-17ee-428d-8cce-c464ea140559	7b23b8a4-8f26-40a9-86c0-c591b423ea6a
-d6e27de4-9ba3-42ac-b6f8-bc99a8365591	86315508-992d-4200-a53d-3a2a99f47329
 e88f17d8-ef2c-4dfd-aa68-3aa0a60e9b46	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04
 \.
 
@@ -6423,34 +6275,18 @@ e88f17d8-ef2c-4dfd-aa68-3aa0a60e9b46	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04
 --
 
 COPY "public"."Puesto_proyecto" ("id", "ID_Proyecto", "Puesto", "N_puestos", "Completo") FROM stdin;
-9de9fd25-0b84-47df-92a5-945d66ae4585	639ebe39-4ccb-48ae-a87c-7f706ebf0c18	DevOps	1	t
-68061735-9d53-45bf-bf36-2061873976d0	62653857-76fa-488e-858b-2c8e68779d34	UI/UX	2	t
-795e8aed-1b28-497d-93f6-6c82d556b95a	d16a497a-ae1d-4867-9d41-0b5a90430c80	IA developer	1	t
-fe27ad50-22f0-40a5-864a-926204e28453	31f3912a-ad69-44f5-9176-13702c2bdda3	IA Dev	1	f
-31821d07-ef4a-4b4b-b2e3-a3ef9a80f640	fe159399-861c-4192-8fcc-0a0ce22d8d7c	hu	1	t
-347d2236-893c-490c-8307-8e9722f26cdb	def6f4fa-1e79-49fc-a1af-f78ebbf25a21	Puesto 2	2	f
-d058ccf2-5c43-4d3e-89e4-655456f992cb	70978aae-596c-4196-9df6-53b77dea2ee0	Business Analyst	1	\N
-7e944615-1c02-48d4-b9e1-ce181b31c773	31f3912a-ad69-44f5-9176-13702c2bdda3	IA P	1	t
-bd21c09f-c681-49d4-a657-b1e3e3c4b87d	eb9096c3-293a-4a13-97e2-aa8738a95ff3	Developer	1	t
-64e6a25e-65cd-4fbf-97d6-51066eff5d68	eb9096c3-293a-4a13-97e2-aa8738a95ff3	QA	1	t
-f55b9678-12f0-4441-97f9-2823c0aa3501	517daacf-9119-4054-aafe-1238518e20d0	Developer	1	t
-d859a30d-2e7c-4186-b0f2-da155f6a835d	b154888b-5599-4ff1-b3a6-182d406b4f79	Frontend Dev	1	t
-39e7d767-3c2c-4102-b582-841329f88306	4c0b4238-9d6b-4008-a677-96fe61d97f21	Perkeo	1	t
-537dfc38-4f92-4a74-a711-d7c25deb0d47	4c0b4238-9d6b-4008-a677-96fe61d97f21	Jimbo	2	t
-0ae75bee-eb40-4f37-b743-bb4ef9603619	89c59da6-027e-40e9-b150-0a8a61ad8310	yippie	1	t
-62abc4fa-8e2e-4484-a6c3-a68eb37d43ed	2ad6a956-8754-4859-9c6c-785f419fb205	as	1	t
-cfb85e22-d54c-4105-a549-d54cb6121090	2ad6a956-8754-4859-9c6c-785f419fb205	yi	1	t
-029d3b27-5ba8-4d12-83c9-77fbfc4c5777	1b58ea3b-478d-433f-b11b-89ec6268f5e8	dr	2	t
-aade43be-68d5-4c82-b508-4402b71c51d9	62653857-76fa-488e-858b-2c8e68779d34	Fullstack	1	t
-a7f5dd1b-d002-464b-8073-33ca98a4686f	616ec85c-8418-4809-b255-424848c2079e	Scrum Master	1	t
-5eb4d05c-173d-4f9a-b190-2321323fa0a6	616ec85c-8418-4809-b255-424848c2079e	Mobile developer	1	t
-2d1010f1-7361-4381-be28-b0e61e05c511	616ec85c-8418-4809-b255-424848c2079e	Fullstack developer	1	t
-bb34bf1d-2adc-46dd-acba-8771da8c45f6	639ebe39-4ccb-48ae-a87c-7f706ebf0c18	Backend Developer	2	t
-1cc7aac2-ae44-4952-b1de-345116f2a722	639ebe39-4ccb-48ae-a87c-7f706ebf0c18	Frontend Developer	1	t
-c5e0d73d-8301-4dea-96cd-63dd43933023	517daacf-9119-4054-aafe-1238518e20d0	QA	1	t
-68eced88-f332-4172-a79c-bb03b0232a77	4f58c7ed-7eab-40f4-97fd-58c9028782a1	QA	1	t
-064e885f-c1b6-4fed-8b24-df6f0b4951c4	def6f4fa-1e79-49fc-a1af-f78ebbf25a21	Puesto 1	1	f
-74836539-5811-44c5-9925-e4bd977a4463	4f58c7ed-7eab-40f4-97fd-58c9028782a1	Developer	1	t
+f2ccb48d-ac19-417b-a544-489e0af60a96	af95e861-067b-45eb-b929-d67a5dd1358a	Machine Learning Engineer	2	t
+d78e3d52-55af-45df-a17f-8ad683b9c9db	af95e861-067b-45eb-b929-d67a5dd1358a	Backend Developer	2	t
+da6ba0e6-90f3-4456-b671-b6b6807e0452	af95e861-067b-45eb-b929-d67a5dd1358a	Conversational Designer	1	t
+d00a1390-2e56-49a8-8d84-e36800dfdb5b	af95e861-067b-45eb-b929-d67a5dd1358a	Project Manager	1	t
+8fa0f537-c10b-4030-8034-052867c81545	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	Mobile Developer	2	t
+45b138ca-e769-4293-877c-0838e533ef47	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	Backend Developer	1	t
+1b4bf2bc-f025-40b7-a19f-69f7d7c7adcc	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	Scrum Master	1	t
+c46f3b1a-132e-457c-97b8-56de286d6461	5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	QA Tester	1	t
+b7afe17f-c0f2-47d5-9dfe-93cff101383c	2537aedd-2585-4e1f-973d-fb1a007d7d3e	Frontend Developer	2	t
+cff8f946-09b3-4e6c-9c80-964833dabf5f	2537aedd-2585-4e1f-973d-fb1a007d7d3e	Backend Developer	1	t
+43ee838d-e066-490f-94b3-c3fe6c3a1829	2537aedd-2585-4e1f-973d-fb1a007d7d3e	Product Owner	1	t
+9d449b5d-9c4a-436d-84d9-3c0404590c3c	2537aedd-2585-4e1f-973d-fb1a007d7d3e	UX/UI Designer	1	t
 \.
 
 
@@ -6459,7 +6295,6 @@ c5e0d73d-8301-4dea-96cd-63dd43933023	517daacf-9119-4054-aafe-1238518e20d0	QA	1	t
 --
 
 COPY "public"."Postulaciones" ("id", "ID_empleado", "ID_Proyecto", "ID_Puesto") FROM stdin;
-450af62d-f5be-44c7-9f4b-3302473c5d10	5f096705-11c3-49b1-b42c-d7bd17a75439	def6f4fa-1e79-49fc-a1af-f78ebbf25a21	064e885f-c1b6-4fed-8b24-df6f0b4951c4
 \.
 
 
@@ -6468,74 +6303,22 @@ COPY "public"."Postulaciones" ("id", "ID_empleado", "ID_Proyecto", "ID_Puesto") 
 --
 
 COPY "public"."Proyecto_Habilidades" ("ID_Proyecto", "ID_Habilidad", "nivel") FROM stdin;
-d16a497a-ae1d-4867-9d41-0b5a90430c80	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner
-d16a497a-ae1d-4867-9d41-0b5a90430c80	065a0459-d3df-4cb7-b598-35ba9d072670	beginner
-d16a497a-ae1d-4867-9d41-0b5a90430c80	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner
-d16a497a-ae1d-4867-9d41-0b5a90430c80	96fba1d1-c35e-4fea-9810-e8d417f945ff	beginner
-d16a497a-ae1d-4867-9d41-0b5a90430c80	8ed7519f-0ef3-404d-9890-8f0ca0e203dd	beginner
-fe159399-861c-4192-8fcc-0a0ce22d8d7c	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner
-fe159399-861c-4192-8fcc-0a0ce22d8d7c	2d81d189-0941-49fd-ba68-b20f6f1ca691	beginner
-31f3912a-ad69-44f5-9176-13702c2bdda3	8667ebd3-7442-4600-8490-41a802796744	beginner
-31f3912a-ad69-44f5-9176-13702c2bdda3	7a8b4541-f100-40b3-9970-e1caa50a6f20	beginner
-31f3912a-ad69-44f5-9176-13702c2bdda3	e5c3a27d-9b0b-485a-89a0-edf69e11e4ef	beginner
-31f3912a-ad69-44f5-9176-13702c2bdda3	17a1738e-dcb9-42ee-93de-b7098f810b45	beginner
-4f58c7ed-7eab-40f4-97fd-58c9028782a1	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner
-4f58c7ed-7eab-40f4-97fd-58c9028782a1	065a0459-d3df-4cb7-b598-35ba9d072670	beginner
-4f58c7ed-7eab-40f4-97fd-58c9028782a1	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner
-4f58c7ed-7eab-40f4-97fd-58c9028782a1	a592cb72-d120-4f4b-a56f-a7736d726601	beginner
-4f58c7ed-7eab-40f4-97fd-58c9028782a1	4a0fd123-a85d-4f31-84d2-9b7907f03a16	beginner
-4f58c7ed-7eab-40f4-97fd-58c9028782a1	acca6120-7d32-4683-8300-d82679b41ffb	beginner
-def6f4fa-1e79-49fc-a1af-f78ebbf25a21	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner
-def6f4fa-1e79-49fc-a1af-f78ebbf25a21	065a0459-d3df-4cb7-b598-35ba9d072670	beginner
-b154888b-5599-4ff1-b3a6-182d406b4f79	8708ab6a-2b7f-4af1-b717-9604bf86db37	intermediate
-b154888b-5599-4ff1-b3a6-182d406b4f79	065a0459-d3df-4cb7-b598-35ba9d072670	beginner
-b154888b-5599-4ff1-b3a6-182d406b4f79	4a0fd123-a85d-4f31-84d2-9b7907f03a16	beginner
-4c0b4238-9d6b-4008-a677-96fe61d97f21	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner
-4c0b4238-9d6b-4008-a677-96fe61d97f21	4e3ee8f2-28ca-49eb-87bb-e3f9a585d711	intermediate
-4c0b4238-9d6b-4008-a677-96fe61d97f21	3da6a1a3-e832-4143-9d78-ed1805524309	expert
-4c0b4238-9d6b-4008-a677-96fe61d97f21	fd220edb-1a58-4004-9592-b5d016fd9ff9	expert
-4c0b4238-9d6b-4008-a677-96fe61d97f21	533bf8cc-cc18-4362-8279-db7935dee292	intermediate
-4c0b4238-9d6b-4008-a677-96fe61d97f21	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner
-2ad6a956-8754-4859-9c6c-785f419fb205	8f071bad-dcc3-4ff8-9638-3301c66c379c	beginner
-2ad6a956-8754-4859-9c6c-785f419fb205	c7dc3d27-4c5b-4fa4-ab73-c9750ed4e11b	intermediate
-2ad6a956-8754-4859-9c6c-785f419fb205	94cf7721-e030-4ce7-9037-7baf2185c335	expert
-70978aae-596c-4196-9df6-53b77dea2ee0	1140c183-a3a0-48f5-a35a-51cfe6fe5434	beginner
-70978aae-596c-4196-9df6-53b77dea2ee0	87f29071-5a9f-48a7-9f2a-ddab08f4875d	beginner
-70978aae-596c-4196-9df6-53b77dea2ee0	16b3ea47-6a1a-4812-b28e-1483f6052d92	beginner
-1b58ea3b-478d-433f-b11b-89ec6268f5e8	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner
-1b58ea3b-478d-433f-b11b-89ec6268f5e8	533bf8cc-cc18-4362-8279-db7935dee292	beginner
-1b58ea3b-478d-433f-b11b-89ec6268f5e8	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner
-1b58ea3b-478d-433f-b11b-89ec6268f5e8	a592cb72-d120-4f4b-a56f-a7736d726601	beginner
-1b58ea3b-478d-433f-b11b-89ec6268f5e8	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	expert
-1b58ea3b-478d-433f-b11b-89ec6268f5e8	7a8b4541-f100-40b3-9970-e1caa50a6f20	expert
-1b58ea3b-478d-433f-b11b-89ec6268f5e8	8667ebd3-7442-4600-8490-41a802796744	expert
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	533bf8cc-cc18-4362-8279-db7935dee292	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	21693cd7-7f96-4d9e-a964-5bc8ab4cfc71	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	0472c9c0-8285-4d2e-be9f-4e2e1301b64e	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	e5c3a27d-9b0b-485a-89a0-edf69e11e4ef	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	83add269-b1f5-44c4-bc75-77da70676593	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	044069fb-5c0d-4e16-ad53-d965a366c0ad	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	bbb3f378-ec58-4101-a52e-1d632cd987e3	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	beginner
-639ebe39-4ccb-48ae-a87c-7f706ebf0c18	065566f8-0486-4a66-8ea8-32acd1f9690a	beginner
-62653857-76fa-488e-858b-2c8e68779d34	a592cb72-d120-4f4b-a56f-a7736d726601	beginner
-62653857-76fa-488e-858b-2c8e68779d34	acca6120-7d32-4683-8300-d82679b41ffb	beginner
-62653857-76fa-488e-858b-2c8e68779d34	4a3e1a83-87b3-4e4a-a074-bba81ff64fe6	beginner
-62653857-76fa-488e-858b-2c8e68779d34	2f69207f-4729-4121-b5ad-05ce29b29178	beginner
-62653857-76fa-488e-858b-2c8e68779d34	4446909a-cd49-4b10-8188-febbac5a908c	beginner
-62653857-76fa-488e-858b-2c8e68779d34	d169a29d-2f2c-4329-90c6-9b450caf065a	beginner
-62653857-76fa-488e-858b-2c8e68779d34	c994a102-6672-46b7-b5c9-3648ed4ef5b1	beginner
-62653857-76fa-488e-858b-2c8e68779d34	b4462a72-9eb7-46dc-a462-7ee02805d6f9	beginner
-616ec85c-8418-4809-b255-424848c2079e	2f69207f-4729-4121-b5ad-05ce29b29178	beginner
-616ec85c-8418-4809-b255-424848c2079e	4446909a-cd49-4b10-8188-febbac5a908c	beginner
-616ec85c-8418-4809-b255-424848c2079e	ed0a9353-0bfc-498d-9cba-5f302548d2fd	beginner
-616ec85c-8418-4809-b255-424848c2079e	d169a29d-2f2c-4329-90c6-9b450caf065a	beginner
-616ec85c-8418-4809-b255-424848c2079e	2df644f9-15b3-4524-9563-2ccdbf2ad36d	beginner
-616ec85c-8418-4809-b255-424848c2079e	2ad521e1-bc36-4398-8392-e7ef00f927d5	beginner
-616ec85c-8418-4809-b255-424848c2079e	7a73b9ca-2b6f-4861-8477-ade13fa1e110	beginner
-616ec85c-8418-4809-b255-424848c2079e	dc07e798-993b-4d9e-bdd8-b4b3194942a1	beginner
+2537aedd-2585-4e1f-973d-fb1a007d7d3e	533bf8cc-cc18-4362-8279-db7935dee292	expert
+2537aedd-2585-4e1f-973d-fb1a007d7d3e	8129c4e0-c789-4283-86b7-a27fd2937851	beginner
+2537aedd-2585-4e1f-973d-fb1a007d7d3e	bbb3f378-ec58-4101-a52e-1d632cd987e3	intermediate
+2537aedd-2585-4e1f-973d-fb1a007d7d3e	d169a29d-2f2c-4329-90c6-9b450caf065a	beginner
+af95e861-067b-45eb-b929-d67a5dd1358a	8667ebd3-7442-4600-8490-41a802796744	intermediate
+af95e861-067b-45eb-b929-d67a5dd1358a	7a8b4541-f100-40b3-9970-e1caa50a6f20	expert
+af95e861-067b-45eb-b929-d67a5dd1358a	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	expert
+af95e861-067b-45eb-b929-d67a5dd1358a	59f5a65d-e25f-4035-89a2-cd617aec6f03	intermediate
+af95e861-067b-45eb-b929-d67a5dd1358a	888a7391-e313-4718-aa0f-1e53d8bcc94e	beginner
+af95e861-067b-45eb-b929-d67a5dd1358a	466e0f5e-5062-4a34-9813-ec6c98172842	beginner
+af95e861-067b-45eb-b929-d67a5dd1358a	cb5348d5-f606-460f-8b55-7f689fbbf6e3	expert
+af95e861-067b-45eb-b929-d67a5dd1358a	040eab96-f02a-40e3-a000-046c402403c0	expert
+5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	2f5c0984-6d16-49be-bdb1-4e43719a3b4d	beginner
+5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	e8c84e8a-d01b-4f56-82bf-8cbf8e9c8e9b	beginner
+5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner
+5b0cf129-c25c-4548-a68e-a6af4b6b5c6e	a29bed8a-7db6-450d-b7b0-a368d5c34945	beginner
 \.
 
 
@@ -6544,78 +6327,57 @@ b154888b-5599-4ff1-b3a6-182d406b4f79	4a0fd123-a85d-4f31-84d2-9b7907f03a16	beginn
 --
 
 COPY "public"."Puesto_habilidades" ("Id_puesto", "Id_habilidad", "nivel", "id") FROM stdin;
-537dfc38-4f92-4a74-a711-d7c25deb0d47	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	e16da38e-3ce1-4e0f-9d26-505b6fd27cbb
-537dfc38-4f92-4a74-a711-d7c25deb0d47	065a0459-d3df-4cb7-b598-35ba9d072670	intermediate	f2238f99-8023-4597-9de6-14d8f7898f09
-537dfc38-4f92-4a74-a711-d7c25deb0d47	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert	314dad7a-1042-4923-a655-f898f40cda12
-39e7d767-3c2c-4102-b582-841329f88306	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	a795d5d5-46d4-4baa-b969-67c8b08501d1
-39e7d767-3c2c-4102-b582-841329f88306	065a0459-d3df-4cb7-b598-35ba9d072670	intermediate	586b47ae-03dd-4360-999e-ccf6022e32e2
-62abc4fa-8e2e-4484-a6c3-a68eb37d43ed	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	443e66cb-faf9-43f0-b32c-b404cf898aa7
-62abc4fa-8e2e-4484-a6c3-a68eb37d43ed	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	d6d636e9-8795-433f-abbc-b3f6f568dd13
-62abc4fa-8e2e-4484-a6c3-a68eb37d43ed	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert	f3c717b3-02e1-4f80-b17f-cf32a063e956
-0ae75bee-eb40-4f37-b743-bb4ef9603619	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	4ff13b33-49d1-4f86-a2e6-4266f6cdc369
-0ae75bee-eb40-4f37-b743-bb4ef9603619	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	a928d912-ae09-4328-af12-836cdcc1b0a7
-0ae75bee-eb40-4f37-b743-bb4ef9603619	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	e073f7b6-0fed-4c38-a25d-c81b26901bc8
-029d3b27-5ba8-4d12-83c9-77fbfc4c5777	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	e1ae3eae-a735-4ac6-b375-e7ae150bff09
-029d3b27-5ba8-4d12-83c9-77fbfc4c5777	065a0459-d3df-4cb7-b598-35ba9d072670	intermediate	a27930a2-ee60-4683-8d38-01b9bc292330
-029d3b27-5ba8-4d12-83c9-77fbfc4c5777	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert	386b7ce6-e06b-4e80-9902-baf1861636f0
-029d3b27-5ba8-4d12-83c9-77fbfc4c5777	a592cb72-d120-4f4b-a56f-a7736d726601	intermediate	6bd04830-2ca2-4add-84f1-84dc1c9fbe11
-029d3b27-5ba8-4d12-83c9-77fbfc4c5777	acca6120-7d32-4683-8300-d82679b41ffb	expert	8ed56136-daa0-40b7-bdd6-4161554e9e69
-029d3b27-5ba8-4d12-83c9-77fbfc4c5777	4a0fd123-a85d-4f31-84d2-9b7907f03a16	expert	58681b5f-b30f-4889-b9ef-4be187d0f0fb
-cfb85e22-d54c-4105-a549-d54cb6121090	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	73926214-6d22-48d5-886f-ce0dc0b16dad
-cfb85e22-d54c-4105-a549-d54cb6121090	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	b0d0dbd4-1d55-4e87-b2a1-901606cf201c
-bb34bf1d-2adc-46dd-acba-8771da8c45f6	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner	423c07be-5be8-4e2a-8010-3a44d30bcd37
-bb34bf1d-2adc-46dd-acba-8771da8c45f6	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	expert	0038745c-268a-494b-85b0-2fe5c3288e07
-bb34bf1d-2adc-46dd-acba-8771da8c45f6	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	intermediate	55ea1f6b-155c-4fa5-924f-89e7cc8db338
-1cc7aac2-ae44-4952-b1de-345116f2a722	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	beginner	27c31f6f-0b58-40d4-b6df-17782d8781b7
-1cc7aac2-ae44-4952-b1de-345116f2a722	6ece11bc-45db-4c4d-80a2-69a57e65414c	expert	234b3829-f0a3-4b94-bd65-639b610d72c9
-9de9fd25-0b84-47df-92a5-945d66ae4585	040eab96-f02a-40e3-a000-046c402403c0	expert	84d8d731-10b0-48e0-9b2a-45d3c22c6c4f
-9de9fd25-0b84-47df-92a5-945d66ae4585	3816ade2-5862-4a97-b7e6-11be86d273b0	intermediate	c3193376-4f6b-49c7-bce8-25173dc9205a
-aade43be-68d5-4c82-b508-4402b71c51d9	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	beginner	ee458193-6e04-4553-a0f9-88844fa4765c
-aade43be-68d5-4c82-b508-4402b71c51d9	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	expert	05869e76-3b84-46a1-b687-d4b9c8f886f2
-aade43be-68d5-4c82-b508-4402b71c51d9	7a64266f-81ba-4989-b00a-b207d4e2c8a9	expert	687530a1-c870-4a71-99a8-087f06fa1fca
-aade43be-68d5-4c82-b508-4402b71c51d9	2f69207f-4729-4121-b5ad-05ce29b29178	expert	9de69197-268a-4816-811d-488a49e195e2
-68061735-9d53-45bf-bf36-2061873976d0	05688ce9-d897-4439-9958-ab0e9be1bc8a	beginner	31a6f0ca-a5ea-4986-9d43-ce21f6e33cd5
-68061735-9d53-45bf-bf36-2061873976d0	82e2cf5a-a089-414b-ac38-2ece8179e9d0	intermediate	e9a7d6ff-595e-43cd-9e28-4e2472128563
-68061735-9d53-45bf-bf36-2061873976d0	2ad521e1-bc36-4398-8392-e7ef00f927d5	expert	80e3666a-e89d-4305-bdac-d6196a4ed4e0
-68061735-9d53-45bf-bf36-2061873976d0	8d6cf07c-3734-43b2-a122-09005eaaf9b0	expert	2e65741c-301f-4cc0-bf23-a18925bc1fee
-a7f5dd1b-d002-464b-8073-33ca98a4686f	2f69207f-4729-4121-b5ad-05ce29b29178	expert	b50e8ea1-b7d8-400b-93f8-4ba26017b2ff
-a7f5dd1b-d002-464b-8073-33ca98a4686f	4446909a-cd49-4b10-8188-febbac5a908c	intermediate	d82d0289-7ccf-4685-87fc-35995beed45b
-a7f5dd1b-d002-464b-8073-33ca98a4686f	d169a29d-2f2c-4329-90c6-9b450caf065a	expert	e7b83e62-317b-4038-8db5-228612c588aa
-a7f5dd1b-d002-464b-8073-33ca98a4686f	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	intermediate	c3b03e2e-4d9a-4ae7-8105-9e464004e4c4
-2d1010f1-7361-4381-be28-b0e61e05c511	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	3e2b3742-9194-4739-b5a7-97a6e844cc53
-2d1010f1-7361-4381-be28-b0e61e05c511	2b32d4c6-8d78-4e3b-b55b-63dde2f2b782	expert	51b21e6f-1c9a-48af-9a7f-94a66ea08bd6
-2d1010f1-7361-4381-be28-b0e61e05c511	b1645f7b-af90-4252-a6b7-b871354655fe	expert	b8a27cd1-9bb3-43f7-8015-3530f1e8f982
-5eb4d05c-173d-4f9a-b190-2321323fa0a6	d50e05f6-6945-45bc-973d-c59c45fe9140	expert	6b68714d-9cfe-4a62-8a84-d0e0bd35d998
-5eb4d05c-173d-4f9a-b190-2321323fa0a6	2df644f9-15b3-4524-9563-2ccdbf2ad36d	intermediate	e1e564d9-8bb3-436b-bc88-aaa9f93206cb
-795e8aed-1b28-497d-93f6-6c82d556b95a	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	d63c306e-6051-46f5-9571-0e2395acf975
-795e8aed-1b28-497d-93f6-6c82d556b95a	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	8a340715-2ac0-4557-a5af-45c9e250017e
-795e8aed-1b28-497d-93f6-6c82d556b95a	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	c89427b4-a804-4599-801f-f5edf9109aba
-fe27ad50-22f0-40a5-864a-926204e28453	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	12a80914-b427-44a3-90b3-ad6da7d0a4aa
-fe27ad50-22f0-40a5-864a-926204e28453	065a0459-d3df-4cb7-b598-35ba9d072670	intermediate	596e4e27-59d7-4a86-985a-2f630ab22a14
-fe27ad50-22f0-40a5-864a-926204e28453	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert	aa9127eb-70f1-45c9-b168-0748307d6d93
-31821d07-ef4a-4b4b-b2e3-a3ef9a80f640	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	907f9a92-cf02-4acc-b375-afd5773eda94
-31821d07-ef4a-4b4b-b2e3-a3ef9a80f640	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	a52a351d-f6bf-4afa-91e5-f94d3b5b1478
-31821d07-ef4a-4b4b-b2e3-a3ef9a80f640	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	22a3c81d-4791-4489-95ab-20a93a898cb8
-7e944615-1c02-48d4-b9e1-ce181b31c773	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	f9fab094-d0ae-4750-9bc6-1904bab8f21b
-7e944615-1c02-48d4-b9e1-ce181b31c773	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner	d7730571-dc61-46e3-94b1-82b3b9df3312
-7e944615-1c02-48d4-b9e1-ce181b31c773	4e3ee8f2-28ca-49eb-87bb-e3f9a585d711	beginner	9c876247-c069-4e5f-907f-c65ebffbafa8
-7e944615-1c02-48d4-b9e1-ce181b31c773	3da6a1a3-e832-4143-9d78-ed1805524309	beginner	3a104755-36bc-45fe-ba3c-6867a6036157
-7e944615-1c02-48d4-b9e1-ce181b31c773	b1645f7b-af90-4252-a6b7-b871354655fe	beginner	ffe532e3-d3db-4362-928a-f175d94f1443
-7e944615-1c02-48d4-b9e1-ce181b31c773	58a5ff05-d44b-4581-8e30-ea47ae9d004e	beginner	a2b918df-8112-4288-8c5f-d55866ea35a4
-7e944615-1c02-48d4-b9e1-ce181b31c773	1798dba4-e6bd-4095-acbd-42aaefa508dd	beginner	39f0e986-611f-44f0-9c12-97a5d91e7c21
-74836539-5811-44c5-9925-e4bd977a4463	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	515c6059-7952-422d-8254-9c126b85816e
-74836539-5811-44c5-9925-e4bd977a4463	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	91ebf039-988d-4a3a-bc3c-7a0453b45273
-74836539-5811-44c5-9925-e4bd977a4463	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	d34014f2-9657-49f4-980d-12b0c1f829f0
-68eced88-f332-4172-a79c-bb03b0232a77	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	23043dac-4ea1-4620-873b-e03732d4ac58
-68eced88-f332-4172-a79c-bb03b0232a77	065a0459-d3df-4cb7-b598-35ba9d072670	beginner	760d711c-bb92-4525-be89-baa04d84d45a
-68eced88-f332-4172-a79c-bb03b0232a77	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	c2e64361-eb30-4451-a90a-a25f9863321f
-68eced88-f332-4172-a79c-bb03b0232a77	cedfe05b-d069-496d-a3d2-80b52a4d2637	beginner	eb3bf9c8-5055-4c01-9d89-fdc7b8bcd96e
-68eced88-f332-4172-a79c-bb03b0232a77	4e3ee8f2-28ca-49eb-87bb-e3f9a585d711	beginner	722293a3-a8e3-48c5-a9d2-62b5c261f33a
-064e885f-c1b6-4fed-8b24-df6f0b4951c4	8708ab6a-2b7f-4af1-b717-9604bf86db37	beginner	17bec59c-3865-4c0e-a6a2-1ac96b9c9406
-064e885f-c1b6-4fed-8b24-df6f0b4951c4	065a0459-d3df-4cb7-b598-35ba9d072670	expert	ad17e100-c3c5-48e1-9c3e-e9e07072ad97
-064e885f-c1b6-4fed-8b24-df6f0b4951c4	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	beginner	f50bc6bb-b723-447e-8fcf-ba4942a2dd4c
-064e885f-c1b6-4fed-8b24-df6f0b4951c4	bbb3f378-ec58-4101-a52e-1d632cd987e3	beginner	cda96013-fbec-4e0d-bf41-2d081e268dd1
-064e885f-c1b6-4fed-8b24-df6f0b4951c4	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	beginner	c50233bf-fc2a-4f54-9f49-157e8677c7a0
+b7afe17f-c0f2-47d5-9dfe-93cff101383c	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	intermediate	7676af54-719e-4124-917a-b06f6bdbbc5f
+b7afe17f-c0f2-47d5-9dfe-93cff101383c	17a1738e-dcb9-42ee-93de-b7098f810b45	expert	3968f04c-5c27-4ce1-83e2-07826527fb1a
+b7afe17f-c0f2-47d5-9dfe-93cff101383c	acca6120-7d32-4683-8300-d82679b41ffb	expert	ad76fc39-fa98-4fcb-86dc-e58608c15a54
+b7afe17f-c0f2-47d5-9dfe-93cff101383c	7d205024-8a61-4b64-9b3e-25970af1c8cf	expert	6b49b586-fd83-4ab3-9fee-f35a07a517cd
+cff8f946-09b3-4e6c-9c80-964833dabf5f	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	beginner	6d02128b-c7a2-420b-8e99-78182665e6db
+cff8f946-09b3-4e6c-9c80-964833dabf5f	48efe874-73e4-4633-8def-594d3a919920	beginner	a9a4004e-252d-4224-93ab-b101d6ef8412
+cff8f946-09b3-4e6c-9c80-964833dabf5f	59f5a65d-e25f-4035-89a2-cd617aec6f03	intermediate	e72a2b93-d2ed-4ac4-b8df-9024a98cb8f3
+9d449b5d-9c4a-436d-84d9-3c0404590c3c	05688ce9-d897-4439-9958-ab0e9be1bc8a	intermediate	65a79e10-79f1-48cb-9133-0e70f818a72f
+9d449b5d-9c4a-436d-84d9-3c0404590c3c	cacd3d23-95f5-4d48-b1f2-b106e9a50219	intermediate	dead07ff-70c0-4404-bf14-8f0621dd11d1
+9d449b5d-9c4a-436d-84d9-3c0404590c3c	8fdf5e43-977e-4be4-8b3f-3096c2dab92b	expert	7a1457d1-b919-4abe-a0e3-185450e63722
+43ee838d-e066-490f-94b3-c3fe6c3a1829	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	intermediate	bc802689-3bef-45fc-8f33-d181f4e075e0
+43ee838d-e066-490f-94b3-c3fe6c3a1829	df6c6b6d-dd31-4ddd-a12d-d4fb2de289b6	expert	2bf034b7-ca9a-4ad5-95b9-48f14c4c6a7d
+43ee838d-e066-490f-94b3-c3fe6c3a1829	1024287b-2a78-4fba-8fe4-ed68d571b901	beginner	bdcafc24-baff-4e0f-99a9-0f9cfc916f83
+43ee838d-e066-490f-94b3-c3fe6c3a1829	6e8bd1a7-2282-4958-9860-86a8e94dc815	expert	607fadd4-f18a-43d9-a766-6240fdce4938
+43ee838d-e066-490f-94b3-c3fe6c3a1829	a29bed8a-7db6-450d-b7b0-a368d5c34945	expert	b900f134-03db-4127-b414-93da0c02cbd1
+f2ccb48d-ac19-417b-a544-489e0af60a96	8667ebd3-7442-4600-8490-41a802796744	intermediate	fcab6659-69ea-4780-8917-590a4a6ff561
+f2ccb48d-ac19-417b-a544-489e0af60a96	e6b2f12a-cd8b-48c6-a9b8-5547f936457d	intermediate	a6e1c65e-4372-45cb-80b2-f104e215838e
+f2ccb48d-ac19-417b-a544-489e0af60a96	e5c3a27d-9b0b-485a-89a0-edf69e11e4ef	intermediate	17cd60f0-5f70-465e-ad93-a8a1a169792d
+f2ccb48d-ac19-417b-a544-489e0af60a96	70968781-b42c-4e10-b7d2-797ec2cb319b	beginner	0ab99280-a0da-40ac-b820-3f4b58368633
+d78e3d52-55af-45df-a17f-8ad683b9c9db	08339e28-5fd9-4b94-95a2-ebd48ae86d1e	expert	e9c57b02-366d-41b3-affc-7a79b9c89b89
+d78e3d52-55af-45df-a17f-8ad683b9c9db	7d205024-8a61-4b64-9b3e-25970af1c8cf	intermediate	418b728e-681d-4b76-ae0e-69e7ff5bad01
+d78e3d52-55af-45df-a17f-8ad683b9c9db	210ed5bd-788b-4972-8396-cb9b048a48d0	expert	e0d2251d-5e8e-4048-8655-4ad5df1eede0
+da6ba0e6-90f3-4456-b671-b6b6807e0452	05688ce9-d897-4439-9958-ab0e9be1bc8a	expert	1fcccb74-1406-481c-8fa9-093931dad4f6
+da6ba0e6-90f3-4456-b671-b6b6807e0452	ba9a99fc-5b26-418a-9fe2-435b6a088387	intermediate	c1d3fa51-4ae4-4a36-bb17-5849e6ae32a1
+da6ba0e6-90f3-4456-b671-b6b6807e0452	2ad521e1-bc36-4398-8392-e7ef00f927d5	expert	f1309a83-baf4-4f9d-adb6-02be377235ed
+da6ba0e6-90f3-4456-b671-b6b6807e0452	8fdf5e43-977e-4be4-8b3f-3096c2dab92b	intermediate	64706e6f-067f-4d00-93fd-433ec7559038
+da6ba0e6-90f3-4456-b671-b6b6807e0452	cacd3d23-95f5-4d48-b1f2-b106e9a50219	intermediate	8974503a-3707-4299-adda-fbf91e41afb7
+d00a1390-2e56-49a8-8d84-e36800dfdb5b	6e326454-f7e4-493e-a47c-d2446adc26fc	expert	a232dfaf-80da-41f1-b20e-f7af1c94c758
+d00a1390-2e56-49a8-8d84-e36800dfdb5b	d40bb7e7-323e-4bbb-a3c2-87e195f7748c	intermediate	48a00b34-83fc-4e84-b451-78a927c0c439
+d00a1390-2e56-49a8-8d84-e36800dfdb5b	d169a29d-2f2c-4329-90c6-9b450caf065a	expert	518117dd-530a-43b8-9316-69f033b04d41
+d00a1390-2e56-49a8-8d84-e36800dfdb5b	4446909a-cd49-4b10-8188-febbac5a908c	intermediate	a1abaca7-7d31-4e03-928f-be65738c137c
+d00a1390-2e56-49a8-8d84-e36800dfdb5b	2f69207f-4729-4121-b5ad-05ce29b29178	intermediate	08c703c9-7c0e-46e4-8795-7b4dd53667cc
+8fa0f537-c10b-4030-8034-052867c81545	a29bed8a-7db6-450d-b7b0-a368d5c34945	intermediate	e1ec3211-7b0e-40a0-bd05-87bf1e96d815
+8fa0f537-c10b-4030-8034-052867c81545	096bec29-e452-42ed-a2ad-efd8aa361066	beginner	9ab57f2f-0dbd-425b-9745-f7b19eac8957
+8fa0f537-c10b-4030-8034-052867c81545	2df644f9-15b3-4524-9563-2ccdbf2ad36d	expert	522363b9-df44-4544-908a-4c31cf415fee
+8fa0f537-c10b-4030-8034-052867c81545	dc07e798-993b-4d9e-bdd8-b4b3194942a1	expert	be0f2e30-276a-43bf-a4db-9c92e5c111e3
+45b138ca-e769-4293-877c-0838e533ef47	50ad3f12-b375-4cea-b450-a877bb353ca2	beginner	3d9c84d5-717e-453e-89d8-ddb540a7de12
+45b138ca-e769-4293-877c-0838e533ef47	19f0b92e-23e5-4d81-ba51-07706e7cc5e0	intermediate	6336c627-52e8-4011-8b51-e47f73ac3730
+45b138ca-e769-4293-877c-0838e533ef47	092210a9-4270-4e2a-bb90-73525f532013	intermediate	35f97b6d-77d0-40e1-b555-672c5561a43f
+45b138ca-e769-4293-877c-0838e533ef47	7d205024-8a61-4b64-9b3e-25970af1c8cf	expert	1346d7f8-efbd-4417-89cb-d88480d47b10
+c46f3b1a-132e-457c-97b8-56de286d6461	fd220edb-1a58-4004-9592-b5d016fd9ff9	beginner	5d1d5d48-cb8e-4a40-b4a0-9cc8591b3fc8
+c46f3b1a-132e-457c-97b8-56de286d6461	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner	c8d818f0-7234-4c53-8985-3c5601142044
+c46f3b1a-132e-457c-97b8-56de286d6461	5087f7a6-026a-4f74-a55d-828d5d1255a7	expert	3679e83a-0eb9-4058-8e12-8a966215f25f
+c46f3b1a-132e-457c-97b8-56de286d6461	490e6f6d-c98c-44c0-9044-c66c56ec7347	expert	310445fe-0bb4-4d17-b53a-1e0892df4319
+c46f3b1a-132e-457c-97b8-56de286d6461	cacd3d23-95f5-4d48-b1f2-b106e9a50219	expert	d4de330d-7078-4959-922b-27612f15305b
+1b4bf2bc-f025-40b7-a19f-69f7d7c7adcc	1024287b-2a78-4fba-8fe4-ed68d571b901	beginner	4ce4bed4-4020-49fd-9875-0f9179d68af2
+1b4bf2bc-f025-40b7-a19f-69f7d7c7adcc	6e8bd1a7-2282-4958-9860-86a8e94dc815	beginner	d145463e-9acc-40d1-8ec6-879111612472
+1b4bf2bc-f025-40b7-a19f-69f7d7c7adcc	a29bed8a-7db6-450d-b7b0-a368d5c34945	beginner	fb7670c2-50a9-4231-b9b4-dcceb0d648e8
+1b4bf2bc-f025-40b7-a19f-69f7d7c7adcc	cc477daa-209f-4751-8f09-1a77d74657ad	beginner	b7cc0789-fcaf-465f-9a4f-effc81d464a1
+1b4bf2bc-f025-40b7-a19f-69f7d7c7adcc	2b4754dc-2be4-4dbe-8efa-cb61eeb3125f	beginner	6d74b350-2ce6-43f5-9096-ff3719f8336f
+1b4bf2bc-f025-40b7-a19f-69f7d7c7adcc	21693cd7-7f96-4d9e-a964-5bc8ab4cfc71	beginner	c84e45b6-a938-4fad-8710-1b9c31c291f4
 \.
 
 
@@ -6624,32 +6386,22 @@ fe27ad50-22f0-40a5-864a-926204e28453	04daaa2f-eda4-4301-9f6f-e8bda7a83ac6	expert
 --
 
 COPY "public"."Puesto_persona" ("id", "ID_Empleado", "ID_Puesto", "isReviewed") FROM stdin;
-d23c95d4-65d8-4886-a416-b463cf95bd0a	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	d859a30d-2e7c-4186-b0f2-da155f6a835d	t
-2f5205a7-7150-453e-87e8-8fd73e53dfa3	1fbfe562-cea4-4b33-b830-0c9f5f301251	a7f5dd1b-d002-464b-8073-33ca98a4686f	t
-104da232-19c7-4c35-a1f1-7488332ab653	1fbfe562-cea4-4b33-b830-0c9f5f301251	62abc4fa-8e2e-4484-a6c3-a68eb37d43ed	t
-d11c09a8-1496-4156-b52b-55dfb9566029	86315508-992d-4200-a53d-3a2a99f47329	2d1010f1-7361-4381-be28-b0e61e05c511	t
-cf68b4b8-ffa4-4cc4-94a3-724248604448	36abc818-b3a6-440f-933a-79ff41fe5b67	5eb4d05c-173d-4f9a-b190-2321323fa0a6	t
-f36b3754-0906-4306-bbe1-451c622556aa	36abc818-b3a6-440f-933a-79ff41fe5b67	537dfc38-4f92-4a74-a711-d7c25deb0d47	t
-b8ad3d1d-7a77-42eb-97cb-8a46cc4bc37b	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	bb34bf1d-2adc-46dd-acba-8771da8c45f6	t
-217a3eae-2290-4fba-9c5e-7fa037e4687e	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	68061735-9d53-45bf-bf36-2061873976d0	t
-7459e1fe-0a2c-443a-b6b9-4eb745279b6b	b5c684f0-24d7-436f-b752-71cd9e361c8f	9de9fd25-0b84-47df-92a5-945d66ae4585	t
-8bcd16c9-3f98-4c96-b066-ceb054154909	b5c684f0-24d7-436f-b752-71cd9e361c8f	cfb85e22-d54c-4105-a549-d54cb6121090	t
-fd9d47ef-cd28-4596-aec3-e20d2c63976c	b5c684f0-24d7-436f-b752-71cd9e361c8f	029d3b27-5ba8-4d12-83c9-77fbfc4c5777	t
-8c73a158-b520-4c48-9464-d605672405cf	54bb3bab-94a3-420a-99da-57717c1c075a	537dfc38-4f92-4a74-a711-d7c25deb0d47	t
-5d399e4f-4583-4b72-aa4f-52098ff9f351	386e63ba-dc8f-4af6-9447-44f7976a4a0c	aade43be-68d5-4c82-b508-4402b71c51d9	t
-64aae06c-7ced-446c-b8e2-5a360d3a43f7	5f096705-11c3-49b1-b42c-d7bd17a75439	bb34bf1d-2adc-46dd-acba-8771da8c45f6	t
-bb8b8279-a334-41ae-9317-ee3897189a30	5f096705-11c3-49b1-b42c-d7bd17a75439	39e7d767-3c2c-4102-b582-841329f88306	t
-b242529a-1fb6-48fd-bb5f-496cb393da48	5f096705-11c3-49b1-b42c-d7bd17a75439	0ae75bee-eb40-4f37-b743-bb4ef9603619	t
-f22f5ff9-a91c-4749-82bb-91b4d9b64c5c	5f096705-11c3-49b1-b42c-d7bd17a75439	029d3b27-5ba8-4d12-83c9-77fbfc4c5777	t
-8452b0df-575c-43a6-96e5-d8efb09f160d	5f096705-11c3-49b1-b42c-d7bd17a75439	795e8aed-1b28-497d-93f6-6c82d556b95a	t
-1e9da994-7cac-4803-b12d-a01e5d2c7d8f	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	1cc7aac2-ae44-4952-b1de-345116f2a722	t
-47d12198-cae5-47cb-8c74-3aba84658688	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	68061735-9d53-45bf-bf36-2061873976d0	t
-4735bddf-239f-4a3c-87f5-35cd006d44bf	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	31821d07-ef4a-4b4b-b2e3-a3ef9a80f640	t
-e57c5f1d-9ead-4dba-b9a4-202339907d0f	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	bd21c09f-c681-49d4-a657-b1e3e3c4b87d	f
-57f20e2a-9438-4450-bf24-5fde31c7d33e	1fbfe562-cea4-4b33-b830-0c9f5f301251	64e6a25e-65cd-4fbf-97d6-51066eff5d68	f
-46a87fd3-a9a1-4e8d-b727-cbd99533291d	76db1355-d074-41ef-ab95-5701689639ae	347d2236-893c-490c-8307-8e9722f26cdb	f
-1658a04c-9b2e-4560-9ed8-0a5845d4a0b7	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	68eced88-f332-4172-a79c-bb03b0232a77	f
-49d3a55c-5696-42d9-8c3e-87a4b3bdaedc	54bb3bab-94a3-420a-99da-57717c1c075a	74836539-5811-44c5-9925-e4bd977a4463	f
+b5253010-5992-432f-beaa-f05d6d277cbd	7b23b8a4-8f26-40a9-86c0-c591b423ea6a	f2ccb48d-ac19-417b-a544-489e0af60a96	t
+010451dd-7dc7-413a-8a38-a2ea16dbc2b6	54bb3bab-94a3-420a-99da-57717c1c075a	d78e3d52-55af-45df-a17f-8ad683b9c9db	t
+fa70b1d4-97db-4d8d-b49f-3e34f8b59341	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	f2ccb48d-ac19-417b-a544-489e0af60a96	t
+658d82fc-aa3d-4fb8-82a6-3a4ae7f95d86	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	9d449b5d-9c4a-436d-84d9-3c0404590c3c	t
+a48174e5-59e1-44cb-97a7-9b3a46c40614	3912d459-b96e-4150-9a2a-fb9135ebc374	da6ba0e6-90f3-4456-b671-b6b6807e0452	t
+13278d41-164e-4e26-9eff-32551d136b8d	3912d459-b96e-4150-9a2a-fb9135ebc374	cff8f946-09b3-4e6c-9c80-964833dabf5f	t
+91ae0235-2e41-4ed3-8eed-468f9ea9e52e	30258a1f-f307-4728-8f1c-045e56548153	d78e3d52-55af-45df-a17f-8ad683b9c9db	t
+3882c349-0477-4e83-a381-522345fe1a51	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	d00a1390-2e56-49a8-8d84-e36800dfdb5b	t
+91b5d4c4-ece1-44c0-a812-738c6a35806c	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	c46f3b1a-132e-457c-97b8-56de286d6461	t
+d1dfb532-9421-4cc1-b9cb-bd79d43fd939	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04	b7afe17f-c0f2-47d5-9dfe-93cff101383c	t
+829dc5dc-7331-41e5-b33d-012f002637e4	5f096705-11c3-49b1-b42c-d7bd17a75439	45b138ca-e769-4293-877c-0838e533ef47	t
+6d25ce0a-fc56-4ae7-a43f-e0cf9bee9b10	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	8fa0f537-c10b-4030-8034-052867c81545	t
+ec7714b0-b90b-416f-97f7-1c263454a304	36abc818-b3a6-440f-933a-79ff41fe5b67	1b4bf2bc-f025-40b7-a19f-69f7d7c7adcc	t
+858e03f2-1b38-46ea-a699-fce1dd86567e	36abc818-b3a6-440f-933a-79ff41fe5b67	b7afe17f-c0f2-47d5-9dfe-93cff101383c	t
+6304b4c8-7da8-47bd-9899-febf92b0dcb7	1fbfe562-cea4-4b33-b830-0c9f5f301251	8fa0f537-c10b-4030-8034-052867c81545	t
+4b06e60c-81ad-4b88-8583-b0aa56e386a8	b5c684f0-24d7-436f-b752-71cd9e361c8f	43ee838d-e066-490f-94b3-c3fe6c3a1829	t
 \.
 
 
@@ -6658,16 +6410,9 @@ e57c5f1d-9ead-4dba-b9a4-202339907d0f	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	bd21c0
 --
 
 COPY "public"."Revisor_Meta" ("ID_Revisor", "ID_EmpleadoRevisor", "ID_meta", "ID_Empleado", "Retroalimentacion") FROM stdin;
-4a9e84d5-c36a-4d59-93e5-1d580f317236	b5c684f0-24d7-436f-b752-71cd9e361c8f	e97d4f0e-b664-4273-bc5a-bc4dbdc16c5d	386e63ba-dc8f-4af6-9447-44f7976a4a0c	\N
-4df2551f-8ea2-47d6-b787-800d5f5e1404	b5c684f0-24d7-436f-b752-71cd9e361c8f	9f1747be-9b38-4793-86ba-5e9343385c00	386e63ba-dc8f-4af6-9447-44f7976a4a0c	\N
-531b52d3-d9f2-4c17-9101-20824c589bdc	36abc818-b3a6-440f-933a-79ff41fe5b67	48cd62b6-1a3f-4b50-b275-8157a1c6c9c0	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	\N
-6e216bee-4d4f-4655-a6e8-d80e923e8ec3	54bb3bab-94a3-420a-99da-57717c1c075a	48cd62b6-1a3f-4b50-b275-8157a1c6c9c0	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	\N
-e03e93d8-255a-469f-aea7-0c7216de52b5	386e63ba-dc8f-4af6-9447-44f7976a4a0c	c8b6313d-b8f2-4534-95dd-796b22adf5c8	b5c684f0-24d7-436f-b752-71cd9e361c8f	\N
-05da1d59-e9e3-4e74-95a4-78eb3eb766e3	5f096705-11c3-49b1-b42c-d7bd17a75439	d6d3ec5b-d928-4f6a-a2da-1c80eec2e71d	36abc818-b3a6-440f-933a-79ff41fe5b67	IT'S TV TIME
-4042a260-3a71-4483-b0eb-15cab72b4962	1fbfe562-cea4-4b33-b830-0c9f5f301251	58efda7e-665d-4b76-816d-85298cfb8a3f	5f096705-11c3-49b1-b42c-d7bd17a75439	\N
-b27dc69d-dd58-4ed9-b47e-a9e8888329e5	1fbfe562-cea4-4b33-b830-0c9f5f301251	b9ecfa5c-7d90-4f40-890a-c3e69cdf496e	5f096705-11c3-49b1-b42c-d7bd17a75439	\N
-e54d2cf0-229b-4b3e-8aa3-bb5a3b241d54	1fbfe562-cea4-4b33-b830-0c9f5f301251	f1bcfe11-b0fe-446d-b23f-a6cd0fb94409	5f096705-11c3-49b1-b42c-d7bd17a75439	\N
-d1737681-0526-4f49-b367-096078784909	54bb3bab-94a3-420a-99da-57717c1c075a	eb7a0b39-02cb-4638-9057-4076227a57ac	5f096705-11c3-49b1-b42c-d7bd17a75439	El empleado cumplio muy bien con su meta en tiempo y forma de manera destacada
+6c0176a6-88ac-4832-993a-e94fa0ac1b36	1fbfe562-cea4-4b33-b830-0c9f5f301251	9c97bf1d-24ff-4e38-a5a1-85019c3cec1d	5f096705-11c3-49b1-b42c-d7bd17a75439	Sergio lideró con éxito un proyecto de alcance mediano, cumpliendo con los objetivos en tiempo y forma. Mostró habilidades sólidas en gestión, comunicación y resolución de problemas, manteniendo al equipo enfocado ante desafíos. Su desempeño evidencia preparación para asumir proyectos de mayor complejidad.
+89b45be9-ac9b-4e73-a25a-49febc493e97	1fbfe562-cea4-4b33-b830-0c9f5f301251	0f00c6af-4f76-41b9-967c-3dcc0d70c70b	5f096705-11c3-49b1-b42c-d7bd17a75439	Sergio logró completar con éxito la certificación CSPO, demostrando compromiso con su desarrollo profesional. Esta certificación refuerza su comprensión del rol del Product Owner y su capacidad para liderar iniciativas ágiles con enfoque estratégico. Su aprendizaje contribuye directamente al fortalecimiento del equipo y a la entrega de mayor valor de negocio.
+931e1a98-16b9-4e25-8512-37ebbf1d9202	1fbfe562-cea4-4b33-b830-0c9f5f301251	2d2976ab-fd42-40d4-bd24-b58af90b03bc	5f096705-11c3-49b1-b42c-d7bd17a75439	Aunque la certificación no se completó, Sergio aprovechó el proceso de preparación para fortalecer su conocimiento en servicios clave de AWS. Mostró iniciativa y claridad al reconocer las prioridades del proyecto y reflexionar sobre la necesidad de mejorar la planificación del tiempo. Se valora su enfoque de aprendizaje continuo y su intención de retomar esta meta a mediano plazo.
 \.
 
 
@@ -6680,7 +6425,6 @@ COPY "public"."Talent_Lead" ("ID_TalentLead", "ID_Departamento", "Rol", "ID_Empl
 1154e943-d47d-4825-9a05-d33118a8b379	\N	\N	36abc818-b3a6-440f-933a-79ff41fe5b67
 0dee8a59-34e6-41ae-86a0-6a233f5512d4	\N	\N	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1
 8b70ceca-50b7-4e8f-9e45-437cebed58bf	\N	\N	fc1276e7-efc6-4ec5-b2cd-bfab2005930e
-32e898b6-898c-475d-abf6-a00f0ea0c578	\N	\N	386e63ba-dc8f-4af6-9447-44f7976a4a0c
 984b305f-99a7-4f10-93c0-f28c14d9b47b	\N	\N	7b23b8a4-8f26-40a9-86c0-c591b423ea6a
 \.
 
@@ -6690,86 +6434,6 @@ COPY "public"."Talent_Lead" ("ID_TalentLead", "ID_Departamento", "Rol", "ID_Empl
 --
 
 COPY "public"."Talent_Discussion" ("ID_TalentDiscussion", "Discussion", "ID_TalentLead", "Nivel", "Fecha_Inicio", "Fecha_Final", "Estado", "created_at") FROM stdin;
-d9265667-39ee-45fe-a95b-c9eea493c74b	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:35:20.297654+00
-40a1f9f5-d38a-4954-be58-108f8f816334	Prueba En Progreso	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-26	2025-06-27	Finalizada	2025-06-09 08:13:33.447083+00
-83a12012-97c6-4ccd-a1d8-df7bf7c664fd	Talent discussion prueba chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-26	2025-06-27	Pendiente	2025-06-09 08:26:13.875113+00
-9cc930be-ccf7-4682-aa6a-301753b35987	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:35:20.94288+00
-8de375e9-2d6e-4a7f-83b7-5ef3b6c2c1ae	Prueba para En Progreso chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Finalizada	2025-06-09 08:26:14.367346+00
-ad0613ce-f385-491e-813c-7360245e5f91	Talent discussion prueba firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-26	2025-06-27	Cancelada	2025-06-09 08:26:18.182598+00
-15f0393e-c5ea-4ce6-9449-f6b3a4f7a633	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:35:26.732122+00
-adf7c9f2-be57-478a-b08e-65d9c45aabeb	Prueba para En Progreso firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Finalizada	2025-06-09 08:26:24.79588+00
-995854f7-ca8a-4301-8066-2a04560350ff	Prueba People Lead 1	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 11:19:52.887071+00
-bca7e61a-580c-4969-8628-7d23fd961111	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:01:19.791927+00
-b3160872-0446-41ce-b244-b862945e689a	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:01:19.836078+00
-4f04ddab-cf8e-470b-ae62-b15bdd2e56f9	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:01:20.180271+00
-23de4b35-8a76-4fcb-a57d-3f92f1f163ca	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:01:20.548211+00
-3de1b9c1-7b03-4efe-85df-9fa6c7126054	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:01:20.876931+00
-a05055f0-d96e-4953-822a-a9a4adeb39f6	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:01:21.491416+00
-99da0c8a-47ca-45af-a7ab-bd8ce145ee85	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:03:29.144279+00
-7da05c9d-710e-4098-bacd-9760d3e698ac	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:03:29.326193+00
-98723995-6050-4575-a4d4-f75d94c6f882	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:03:29.649496+00
-d0ecfcb7-d899-483b-b918-b4e2a7daa029	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:03:32.208594+00
-6130d052-092d-45b1-adcf-4d9310ab2de0	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:03:33.054304+00
-9f97bf48-4fcd-43f2-bf59-8e5363b43c75	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:03:33.903743+00
-cc888264-d0d3-470e-be56-a3357c989141	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:09:12.291565+00
-a8e1e1d2-1e1f-4802-afd9-b2899bb51ac3	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:09:12.364137+00
-545fdeac-af55-45a6-9c34-52ed4bd340e6	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:09:12.43223+00
-daf4e226-0416-416b-9f82-219c4bb263ea	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:09:16.969996+00
-c72c0f7d-6604-456a-a51b-a71c65e323e6	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:09:17.953376+00
-bc51bf01-d2f2-4d11-b6e2-b7900dbc8229	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:09:18.815704+00
-f4452f6a-da71-4878-a8c8-1c7ed17d830f	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:14:41.667756+00
-151f6ec4-06b0-4837-ada1-071bb581f07d	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:14:41.95581+00
-d80d15f7-a3a2-42eb-8d14-a89e0eaf12a1	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:14:42.837314+00
-f237d511-4859-462a-939c-d769e11853f1	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:14:50.207091+00
-1702ee70-1f8b-4f19-8ec7-dbcdf054526a	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:14:51.11313+00
-78ccca6b-a553-459d-a997-8bafe96890cf	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:19:21.141375+00
-a2a379b7-86bb-47af-8ad5-04dd07cc2dcb	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:19:21.652087+00
-b508831b-b8f9-45f5-b6ac-83db27481762	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:19:24.08769+00
-589ec154-7485-4e97-8d17-243cc3650cf9	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:19:26.62075+00
-173d9786-fc0a-4ff7-b889-1ab945b6d867	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:19:27.891957+00
-90db9062-2b1a-482c-b184-8e34ee00d899	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:19:29.016975+00
-befdc5d0-8af1-4079-ad71-62f6263a03e3	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:24:26.311311+00
-9f2e65ad-10ea-470a-963c-dc7fa95c2012	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:24:26.873909+00
-84a21913-2987-4254-9e6a-417299001188	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:24:28.155687+00
-37351136-434d-48a4-8d2f-752f803b4af0	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:24:30.222718+00
-a29aff70-c333-4567-814d-452245897715	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:24:31.206762+00
-eb6b0100-70b7-480c-98a0-e35b244dd502	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:24:32.57334+00
-4977b626-c880-4173-80c0-9a84cc039910	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:30:22.014469+00
-064b9df4-3656-4b6f-b2fe-c1f0844c6458	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:30:23.147963+00
-2de6265f-a0ae-4d29-90ab-df993801672f	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:30:24.006994+00
-3fea4225-114e-445c-8b06-5cd7255a3c4c	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:30:26.190729+00
-92dc9f8d-ff61-44ae-8f03-8cb45f9dea4e	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:30:27.554523+00
-7243f82c-239a-4514-b9f3-b2b4ce14e575	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:30:29.516743+00
-ac82d2df-ec6f-40ae-8e9f-91d273fd286d	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:35:19.99158+00
-92e689ec-53c5-4ac6-9273-32793893665e	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:35:27.619747+00
-0eb36ea3-245b-429d-b5e7-2bf9c35be94a	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:35:29.318321+00
-954f66ed-0fb2-4c52-bd6b-aee819e54965	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:39:17.986916+00
-6001741e-0913-4ab7-808c-c9d2db680f3b	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:39:18.515033+00
-19b87cad-4935-481c-b9a0-671b57d6d455	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:39:19.778777+00
-730fb9e1-77a6-47e4-b206-54e185a18062	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:39:21.496561+00
-63d3833b-7710-4dda-bebe-68ecc3e9e2a3	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:39:23.499849+00
-23d0b2c2-48b1-428d-9e88-c87ebcb3f12f	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:39:24.672066+00
-9f3e96e7-ca0d-455d-8827-b2437e130138	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:44:55.984701+00
-11ee8668-02cc-4977-8019-9103fb9d5d69	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:44:56.908009+00
-7ded2ac1-fbab-470e-b33a-e5227c9dc86b	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:44:56.983256+00
-30873183-2407-400c-b8b2-b424d70034d2	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:44:59.016175+00
-021fbe68-6497-4b68-8811-2d37c9e50d9b	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:45:01.380236+00
-1adbad25-db3c-4c51-afc8-bf086ccf379a	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:45:03.070871+00
-af8c7036-c5f6-484f-b943-398589c55a16	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:49:45.905174+00
-9dc59e76-e13d-431a-b6c0-b1afd02e698f	Prueba People Lead No Nominar chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:49:46.05509+00
-93edce34-864b-4bf8-b1f3-c66192514f51	Prueba People Lead Error Bono chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:49:46.415683+00
-67630702-37ea-4290-87f4-1697fdf09a24	Prueba People Lead No Nominar firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:49:49.880609+00
-a6913ecb-0988-40f2-843f-ef7c916a8a71	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:49:51.94734+00
-fbbc170a-b8d3-49b7-8628-d233e43f559c	Prueba People Lead Error Bono firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-09 12:49:52.529387+00
-93630885-e071-4b0e-a40a-abd4d0f24017	Talent discussion prueba chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-26	2025-06-27	Pendiente	2025-06-11 23:27:18.012779+00
-591ec111-c0c4-454e-a6bc-0e4d1169c77e	Talent discussion prueba chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-26	2025-06-27	Pendiente	2025-06-11 23:55:24.310826+00
-54df6cc2-e541-4613-9cd6-a47966e2897a	Talent discussion prueba firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-26	2025-06-27	Pendiente	2025-06-11 23:55:25.908113+00
-3894f542-de3a-4bb5-bcb0-cb85ab980d4f	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-12 00:16:29.882378+00
-1c489d49-2eea-4d5a-addc-ba8821338b40	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-12 00:16:31.352116+00
-0fc46a23-769b-4594-85d4-fd260c5a1f5e	Talent discussion prueba chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-26	2025-06-27	Pendiente	2025-06-12 00:17:56.035022+00
-1a78306e-54c9-428b-be3e-1ae086f2c8c0	Prueba People Lead chromium	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-12 00:18:00.635145+00
-00641354-9b13-49c9-8b90-23dab21e5a0f	Talent discussion prueba firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-26	2025-06-27	Pendiente	2025-06-12 00:18:12.597293+00
-b4fecf22-866a-4cc9-8037-28ccd577ea44	Prueba People Lead firefox	32e898b6-898c-475d-abf6-a00f0ea0c578	1	2025-06-27	2025-06-28	Pendiente	2025-06-12 00:18:20.49947+00
 \.
 
 
@@ -6778,31 +6442,6 @@ b4fecf22-866a-4cc9-8037-28ccd577ea44	Prueba People Lead firefox	32e898b6-898c-47
 --
 
 COPY "public"."TD_Capability_Lead" ("ID_TD_Capability_Lead", "ID_TalentDiscussion", "ID_CapabilityLead") FROM stdin;
-64c58c92-f876-4f1f-9ed3-41b19d45288c	40a1f9f5-d38a-4954-be58-108f8f816334	544d651e-e128-4450-bc92-3be631a52790
-10c0e0cb-a874-4546-ae48-23abb22075db	8de375e9-2d6e-4a7f-83b7-5ef3b6c2c1ae	544d651e-e128-4450-bc92-3be631a52790
-e3c90461-0f0b-4747-bfd3-3a47d7ddbfc2	adf7c9f2-be57-478a-b08e-65d9c45aabeb	544d651e-e128-4450-bc92-3be631a52790
-039d490a-e514-4726-8362-c3acbae91cb1	995854f7-ca8a-4301-8066-2a04560350ff	544d651e-e128-4450-bc92-3be631a52790
-0229171c-5b32-4ea1-9e2a-786856f19671	a8e1e1d2-1e1f-4802-afd9-b2899bb51ac3	544d651e-e128-4450-bc92-3be631a52790
-6d91db14-cdcc-474d-92c7-03cc0bbad9e6	bc51bf01-d2f2-4d11-b6e2-b7900dbc8229	544d651e-e128-4450-bc92-3be631a52790
-4e4f7f4d-153c-4209-847f-aeb9f33d5d08	f4452f6a-da71-4878-a8c8-1c7ed17d830f	544d651e-e128-4450-bc92-3be631a52790
-a2c92a5f-0691-4bb6-a0a8-afb466cc3db1	f237d511-4859-462a-939c-d769e11853f1	544d651e-e128-4450-bc92-3be631a52790
-89f7726f-93fd-4a88-8d03-31d9a1ab2172	b508831b-b8f9-45f5-b6ac-83db27481762	544d651e-e128-4450-bc92-3be631a52790
-79ecc172-ae20-4f15-9497-e5a30e70a921	90db9062-2b1a-482c-b184-8e34ee00d899	544d651e-e128-4450-bc92-3be631a52790
-93654760-e891-43bb-a93b-e07df947f960	9f2e65ad-10ea-470a-963c-dc7fa95c2012	544d651e-e128-4450-bc92-3be631a52790
-cf9e7c2f-36c7-4984-b12f-260eaca2c5da	37351136-434d-48a4-8d2f-752f803b4af0	544d651e-e128-4450-bc92-3be631a52790
-e9a22418-e5c1-433f-baf8-23eaf509bdad	064b9df4-3656-4b6f-b2fe-c1f0844c6458	544d651e-e128-4450-bc92-3be631a52790
-8ecd77fd-d14d-4304-b898-e7a8c83573f1	3fea4225-114e-445c-8b06-5cd7255a3c4c	544d651e-e128-4450-bc92-3be631a52790
-3c31e395-fe63-4269-87a9-cb436db3a9e7	9cc930be-ccf7-4682-aa6a-301753b35987	544d651e-e128-4450-bc92-3be631a52790
-0488b6e2-639d-4bf0-bb91-3ca764545961	0eb36ea3-245b-429d-b5e7-2bf9c35be94a	544d651e-e128-4450-bc92-3be631a52790
-c8b4caea-5aaa-424c-afcc-437865dccae4	19b87cad-4935-481c-b9a0-671b57d6d455	544d651e-e128-4450-bc92-3be631a52790
-4ea284ca-6950-45ce-9279-96cbbc7da017	23d0b2c2-48b1-428d-9e88-c87ebcb3f12f	544d651e-e128-4450-bc92-3be631a52790
-890c1109-7c86-4501-9898-545ed3fe1157	7ded2ac1-fbab-470e-b33a-e5227c9dc86b	544d651e-e128-4450-bc92-3be631a52790
-091c18fc-abeb-4e2d-931e-302e357819f0	1adbad25-db3c-4c51-afc8-bf086ccf379a	544d651e-e128-4450-bc92-3be631a52790
-6b4da96f-0f5d-4ad3-9a9b-c776e9561e30	af8c7036-c5f6-484f-b943-398589c55a16	544d651e-e128-4450-bc92-3be631a52790
-7cae2eee-971f-49af-8fff-e9928a14746b	a6913ecb-0988-40f2-843f-ef7c916a8a71	544d651e-e128-4450-bc92-3be631a52790
-08a2be5c-6973-4e32-bbcd-46f3505cf606	1c489d49-2eea-4d5a-addc-ba8821338b40	544d651e-e128-4450-bc92-3be631a52790
-51dcca28-be00-4605-83e7-e6aafb36abd0	1a78306e-54c9-428b-be3e-1ae086f2c8c0	544d651e-e128-4450-bc92-3be631a52790
-8c924a75-5317-4e3b-a8ce-2d34cc7bc074	b4fecf22-866a-4cc9-8037-28ccd577ea44	544d651e-e128-4450-bc92-3be631a52790
 \.
 
 
@@ -6811,166 +6450,6 @@ c8b4caea-5aaa-424c-afcc-437865dccae4	19b87cad-4935-481c-b9a0-671b57d6d455	544d65
 --
 
 COPY "public"."TD_Employee" ("ID_TD_Employee", "ID_TalentDiscussion", "ID_Empleado") FROM stdin;
-f4ec3a62-62f6-4d2e-a829-62b160efe63a	40a1f9f5-d38a-4954-be58-108f8f816334	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-ea3bee0e-d198-4f58-aa1e-4a5b9144b607	40a1f9f5-d38a-4954-be58-108f8f816334	5f096705-11c3-49b1-b42c-d7bd17a75439
-4fbaae5d-e545-4152-a0c6-65e15fa02cfe	83a12012-97c6-4ccd-a1d8-df7bf7c664fd	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-94389a60-4d54-48d3-92f5-425aa22a90fd	83a12012-97c6-4ccd-a1d8-df7bf7c664fd	5f096705-11c3-49b1-b42c-d7bd17a75439
-b3057573-a765-43d7-a3d1-828d3a221996	8de375e9-2d6e-4a7f-83b7-5ef3b6c2c1ae	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-9312c802-ed1b-4d88-8cd5-af03ab058016	8de375e9-2d6e-4a7f-83b7-5ef3b6c2c1ae	5f096705-11c3-49b1-b42c-d7bd17a75439
-e6069041-3050-419a-a097-e64241ba270a	ad0613ce-f385-491e-813c-7360245e5f91	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-728df6ff-01f6-4abe-a035-f69d8a833f5b	ad0613ce-f385-491e-813c-7360245e5f91	5f096705-11c3-49b1-b42c-d7bd17a75439
-877a72d1-b72c-4d41-a796-5c071647fd80	adf7c9f2-be57-478a-b08e-65d9c45aabeb	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-3ae3b36a-6cbc-4437-950e-489952e7623d	adf7c9f2-be57-478a-b08e-65d9c45aabeb	5f096705-11c3-49b1-b42c-d7bd17a75439
-fd97d7e1-d806-4aca-8e70-22603c7500df	995854f7-ca8a-4301-8066-2a04560350ff	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-81726b32-4232-405b-9e92-0592f880fa21	995854f7-ca8a-4301-8066-2a04560350ff	5f096705-11c3-49b1-b42c-d7bd17a75439
-8971290e-d48a-45e8-ad92-49ba18bad1ad	bca7e61a-580c-4969-8628-7d23fd961111	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-4479b2fe-8d0a-4f52-be0e-cd4ec571d221	bca7e61a-580c-4969-8628-7d23fd961111	5f096705-11c3-49b1-b42c-d7bd17a75439
-bbf8344b-b25a-416d-a4e2-235e86191100	b3160872-0446-41ce-b244-b862945e689a	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-4b07d21c-9d1f-4365-8861-7d1f74ac89a8	b3160872-0446-41ce-b244-b862945e689a	5f096705-11c3-49b1-b42c-d7bd17a75439
-0d2a52a8-494a-4212-9c99-d6e284a711ac	4f04ddab-cf8e-470b-ae62-b15bdd2e56f9	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-f41675a8-2595-45fa-8bf4-0bea68c3281d	4f04ddab-cf8e-470b-ae62-b15bdd2e56f9	5f096705-11c3-49b1-b42c-d7bd17a75439
-6ef40ae8-61c3-4e34-a3f9-850dcc9a3aea	23de4b35-8a76-4fcb-a57d-3f92f1f163ca	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-19568f32-b067-4a2e-8c1d-8e6276ec36d1	23de4b35-8a76-4fcb-a57d-3f92f1f163ca	5f096705-11c3-49b1-b42c-d7bd17a75439
-806f45e8-fb96-4d20-a703-bf0c0fbb0502	3de1b9c1-7b03-4efe-85df-9fa6c7126054	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-ecae4b80-49aa-421d-891a-5a741eee332d	3de1b9c1-7b03-4efe-85df-9fa6c7126054	5f096705-11c3-49b1-b42c-d7bd17a75439
-03c432f6-effa-4c31-925f-1cb9fa0cc8da	a05055f0-d96e-4953-822a-a9a4adeb39f6	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-77443905-42ce-4768-80d7-668fcbe9f70e	a05055f0-d96e-4953-822a-a9a4adeb39f6	5f096705-11c3-49b1-b42c-d7bd17a75439
-7d5522ce-ce92-4fce-a975-90ff59b5f921	99da0c8a-47ca-45af-a7ab-bd8ce145ee85	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-e37afa03-74bb-490e-a77c-74fc4b49531c	99da0c8a-47ca-45af-a7ab-bd8ce145ee85	5f096705-11c3-49b1-b42c-d7bd17a75439
-51aae38d-3273-4bac-8d30-619d19a9d360	7da05c9d-710e-4098-bacd-9760d3e698ac	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-03200b5b-0e6a-4030-9f48-381d3cc17ac6	7da05c9d-710e-4098-bacd-9760d3e698ac	5f096705-11c3-49b1-b42c-d7bd17a75439
-b413e0f9-85a9-4225-a1af-e9fa5c7c6881	98723995-6050-4575-a4d4-f75d94c6f882	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-ce4d2880-dbf4-49c9-84c8-286485845624	98723995-6050-4575-a4d4-f75d94c6f882	5f096705-11c3-49b1-b42c-d7bd17a75439
-c832a32f-b9bd-4e35-9737-76f91d765368	d0ecfcb7-d899-483b-b918-b4e2a7daa029	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-2cb0bde7-efa1-468a-8652-937cbed5e2c3	d0ecfcb7-d899-483b-b918-b4e2a7daa029	5f096705-11c3-49b1-b42c-d7bd17a75439
-0a7460fb-294e-46a6-b67f-6f80405c9a13	6130d052-092d-45b1-adcf-4d9310ab2de0	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-ec4b5bf7-612b-4a3d-8c16-5faf5f3e07a5	6130d052-092d-45b1-adcf-4d9310ab2de0	5f096705-11c3-49b1-b42c-d7bd17a75439
-5a00aaa1-b89f-430e-b44b-7e6b67be2ab0	9f97bf48-4fcd-43f2-bf59-8e5363b43c75	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-c0ea57bb-4a5b-48b6-b83d-97eafeac5c67	9f97bf48-4fcd-43f2-bf59-8e5363b43c75	5f096705-11c3-49b1-b42c-d7bd17a75439
-ce4442a2-9779-41eb-856f-502c86062068	cc888264-d0d3-470e-be56-a3357c989141	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-4863ba8a-0614-4734-b4bc-fc3c97014ca3	cc888264-d0d3-470e-be56-a3357c989141	5f096705-11c3-49b1-b42c-d7bd17a75439
-bb86a6f2-5c3b-4874-bed0-987a531dffcf	a8e1e1d2-1e1f-4802-afd9-b2899bb51ac3	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-74004021-17e4-4b10-8e09-206d709e6428	a8e1e1d2-1e1f-4802-afd9-b2899bb51ac3	5f096705-11c3-49b1-b42c-d7bd17a75439
-70f0ccfd-e6ab-4fdb-bc37-cbef9e3a71e5	545fdeac-af55-45a6-9c34-52ed4bd340e6	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-0f085ea4-7ff9-40f1-ac60-4519cbe8787d	545fdeac-af55-45a6-9c34-52ed4bd340e6	5f096705-11c3-49b1-b42c-d7bd17a75439
-06aba6e6-e87e-45ba-bc11-0ba9149ca832	daf4e226-0416-416b-9f82-219c4bb263ea	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-e6912e4b-6a26-404e-be9e-92e6f50b7fe8	daf4e226-0416-416b-9f82-219c4bb263ea	5f096705-11c3-49b1-b42c-d7bd17a75439
-cc0350b1-b930-44e7-89aa-6d5453255509	c72c0f7d-6604-456a-a51b-a71c65e323e6	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-d092c437-428f-4923-b81b-7b1ae351c37e	c72c0f7d-6604-456a-a51b-a71c65e323e6	5f096705-11c3-49b1-b42c-d7bd17a75439
-f05eee2c-3563-4fff-9285-b87abff6cfcf	bc51bf01-d2f2-4d11-b6e2-b7900dbc8229	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-29aece29-7b46-46f0-a8ee-2916414184ea	bc51bf01-d2f2-4d11-b6e2-b7900dbc8229	5f096705-11c3-49b1-b42c-d7bd17a75439
-13381b3b-a272-40f1-b292-2df5b80e2900	f4452f6a-da71-4878-a8c8-1c7ed17d830f	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-e4ce03c5-1b7b-4bb9-aeb9-bb4270121d2d	f4452f6a-da71-4878-a8c8-1c7ed17d830f	5f096705-11c3-49b1-b42c-d7bd17a75439
-1a8d8eb6-17f1-4f97-9675-3cb010b3d57a	151f6ec4-06b0-4837-ada1-071bb581f07d	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-48d865bd-14d0-4f97-991d-c9dd61cf214a	151f6ec4-06b0-4837-ada1-071bb581f07d	5f096705-11c3-49b1-b42c-d7bd17a75439
-072b2c32-8dc8-43d8-aaa5-2a772bffb2ff	d80d15f7-a3a2-42eb-8d14-a89e0eaf12a1	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-fb421d2d-78db-4c07-93e8-cfcd06194eca	d80d15f7-a3a2-42eb-8d14-a89e0eaf12a1	5f096705-11c3-49b1-b42c-d7bd17a75439
-4e342158-2f92-49ce-ac9b-cae24d4346ec	f237d511-4859-462a-939c-d769e11853f1	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-79129e87-ae5f-4e1e-b5fe-53ec1bf528ae	f237d511-4859-462a-939c-d769e11853f1	5f096705-11c3-49b1-b42c-d7bd17a75439
-6949bfcb-c5fa-45b4-b397-0e0cbe871e8b	1702ee70-1f8b-4f19-8ec7-dbcdf054526a	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-96285907-f6c8-4814-9630-6197c147be44	1702ee70-1f8b-4f19-8ec7-dbcdf054526a	5f096705-11c3-49b1-b42c-d7bd17a75439
-48ab50cf-3207-4a21-9018-0adb1c930c05	78ccca6b-a553-459d-a997-8bafe96890cf	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-b970c309-c918-4e98-82e4-638b4a1e1400	78ccca6b-a553-459d-a997-8bafe96890cf	5f096705-11c3-49b1-b42c-d7bd17a75439
-14ccf8c1-4769-4f1d-aabb-f5027d0bf092	a2a379b7-86bb-47af-8ad5-04dd07cc2dcb	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-eb213807-3461-4bbc-81a9-020b5ba7bb04	a2a379b7-86bb-47af-8ad5-04dd07cc2dcb	5f096705-11c3-49b1-b42c-d7bd17a75439
-74154031-9aa7-424a-9050-2034464ec5bd	b508831b-b8f9-45f5-b6ac-83db27481762	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-2d9748e9-c84a-468f-94c3-de6052fdefa6	b508831b-b8f9-45f5-b6ac-83db27481762	5f096705-11c3-49b1-b42c-d7bd17a75439
-5dcd8eb2-8a6b-4973-9312-5aff58d070d4	589ec154-7485-4e97-8d17-243cc3650cf9	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-9d2485ee-5bba-4c47-a2d9-bd3755facc47	589ec154-7485-4e97-8d17-243cc3650cf9	5f096705-11c3-49b1-b42c-d7bd17a75439
-105a0108-dd91-47ab-ba71-cc8ea389864b	173d9786-fc0a-4ff7-b889-1ab945b6d867	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-0b97d914-c97f-471a-a575-3d05bf63ba33	173d9786-fc0a-4ff7-b889-1ab945b6d867	5f096705-11c3-49b1-b42c-d7bd17a75439
-ce6ddcba-7248-4253-a76b-c652565a62c3	90db9062-2b1a-482c-b184-8e34ee00d899	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-38b4841c-8428-4d55-84bb-e0476438dc5b	90db9062-2b1a-482c-b184-8e34ee00d899	5f096705-11c3-49b1-b42c-d7bd17a75439
-3226bb42-c27e-4fb9-ace2-d089ed479e36	befdc5d0-8af1-4079-ad71-62f6263a03e3	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-25a95483-da83-40cb-b78b-a290847e21e3	befdc5d0-8af1-4079-ad71-62f6263a03e3	5f096705-11c3-49b1-b42c-d7bd17a75439
-33dda02b-50a3-4b41-ab58-6df59506f6e7	9f2e65ad-10ea-470a-963c-dc7fa95c2012	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-ca94eb0f-36d5-40a4-a0d9-36916710c6ee	9f2e65ad-10ea-470a-963c-dc7fa95c2012	5f096705-11c3-49b1-b42c-d7bd17a75439
-eaf217ea-019d-414c-9cf3-9743cbb46979	84a21913-2987-4254-9e6a-417299001188	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-a4687e02-c6a5-4b04-86e3-3af29cc9ff46	84a21913-2987-4254-9e6a-417299001188	5f096705-11c3-49b1-b42c-d7bd17a75439
-1d2d166a-fa09-4fed-910f-b7553a9b9f05	37351136-434d-48a4-8d2f-752f803b4af0	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-0d85d314-7f0c-479a-92a5-8c62de29957a	37351136-434d-48a4-8d2f-752f803b4af0	5f096705-11c3-49b1-b42c-d7bd17a75439
-e6b0683c-254c-4f15-8cc0-56ddb77429f3	a29aff70-c333-4567-814d-452245897715	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-549ec728-c535-4f79-9754-ae3d64985fd0	a29aff70-c333-4567-814d-452245897715	5f096705-11c3-49b1-b42c-d7bd17a75439
-dfd0ed48-b4cd-4756-b1e4-2d8cf586128d	eb6b0100-70b7-480c-98a0-e35b244dd502	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-c286d44a-b83d-4296-93b9-83a2f5974cac	eb6b0100-70b7-480c-98a0-e35b244dd502	5f096705-11c3-49b1-b42c-d7bd17a75439
-e82adece-a8b5-4e1b-8bc2-c396056a7dc6	4977b626-c880-4173-80c0-9a84cc039910	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-af7fc74e-7e33-4c5e-8aab-3302ffbaec89	4977b626-c880-4173-80c0-9a84cc039910	5f096705-11c3-49b1-b42c-d7bd17a75439
-6dd818d1-e765-4553-9148-af96440b1171	064b9df4-3656-4b6f-b2fe-c1f0844c6458	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-385735b0-2902-468d-a535-3ae3a84ce106	064b9df4-3656-4b6f-b2fe-c1f0844c6458	5f096705-11c3-49b1-b42c-d7bd17a75439
-877ef255-3ac7-4bbe-87ad-3cbc20f9cdc5	2de6265f-a0ae-4d29-90ab-df993801672f	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-b896cead-c326-40fb-a966-0fb315a21572	2de6265f-a0ae-4d29-90ab-df993801672f	5f096705-11c3-49b1-b42c-d7bd17a75439
-d58f1986-078d-46e7-b2d0-6824b33464db	3fea4225-114e-445c-8b06-5cd7255a3c4c	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-bb8def3c-0b54-4385-8eae-6af76319232c	3fea4225-114e-445c-8b06-5cd7255a3c4c	5f096705-11c3-49b1-b42c-d7bd17a75439
-f66217f2-c2d8-4b17-a0fd-88bf63b6fac9	92dc9f8d-ff61-44ae-8f03-8cb45f9dea4e	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-74e93258-dc2e-45d9-a590-01126d83217e	92dc9f8d-ff61-44ae-8f03-8cb45f9dea4e	5f096705-11c3-49b1-b42c-d7bd17a75439
-8b1f7f5e-c8af-4217-a96c-876436413aaf	7243f82c-239a-4514-b9f3-b2b4ce14e575	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-5dbc43fb-2966-43a6-87fa-ff618cb4b181	7243f82c-239a-4514-b9f3-b2b4ce14e575	5f096705-11c3-49b1-b42c-d7bd17a75439
-a8246664-8374-47de-8bcc-05f203602a48	ac82d2df-ec6f-40ae-8e9f-91d273fd286d	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-e0fbd17d-c368-4aac-8be9-0f2b52d3e82b	ac82d2df-ec6f-40ae-8e9f-91d273fd286d	5f096705-11c3-49b1-b42c-d7bd17a75439
-f534dc34-93be-43e2-94a9-bb9ac8d70f51	d9265667-39ee-45fe-a95b-c9eea493c74b	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-3f16366e-992f-4ace-a595-dc931cadd65d	d9265667-39ee-45fe-a95b-c9eea493c74b	5f096705-11c3-49b1-b42c-d7bd17a75439
-277358d0-5cab-413a-affc-7353d797935b	9cc930be-ccf7-4682-aa6a-301753b35987	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-fecc9458-502c-457e-9138-6f8b3d2ac9cc	9cc930be-ccf7-4682-aa6a-301753b35987	5f096705-11c3-49b1-b42c-d7bd17a75439
-ada19d96-08bd-45a7-921f-42cdcc22dd9f	15f0393e-c5ea-4ce6-9449-f6b3a4f7a633	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-c6c60750-dc68-4443-a8aa-368b7bebc0ad	15f0393e-c5ea-4ce6-9449-f6b3a4f7a633	5f096705-11c3-49b1-b42c-d7bd17a75439
-daac855b-5e68-44f8-8c41-3e5d527099f8	92e689ec-53c5-4ac6-9273-32793893665e	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-28257bce-f12e-45f2-97c1-867d958f80d0	92e689ec-53c5-4ac6-9273-32793893665e	5f096705-11c3-49b1-b42c-d7bd17a75439
-c41c6bac-531e-4400-9f98-6a636b05dcd6	0eb36ea3-245b-429d-b5e7-2bf9c35be94a	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-01ae05d5-ba6b-4b3b-86ec-24092b01900f	0eb36ea3-245b-429d-b5e7-2bf9c35be94a	5f096705-11c3-49b1-b42c-d7bd17a75439
-eeab98d9-5df7-4cec-b309-04819e5496fa	954f66ed-0fb2-4c52-bd6b-aee819e54965	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-78253e5c-a020-40ec-8a3f-9cc49aebb855	954f66ed-0fb2-4c52-bd6b-aee819e54965	5f096705-11c3-49b1-b42c-d7bd17a75439
-5e94d75e-de8f-49f1-973f-25ae78c28608	6001741e-0913-4ab7-808c-c9d2db680f3b	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-c251976a-b044-47a2-b542-7fdfe071f2a7	6001741e-0913-4ab7-808c-c9d2db680f3b	5f096705-11c3-49b1-b42c-d7bd17a75439
-de6e6e04-05c8-42d1-a2d5-82f8b98c95dc	19b87cad-4935-481c-b9a0-671b57d6d455	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-49e638db-c59b-42fb-a1dd-7d3a3d6167fa	19b87cad-4935-481c-b9a0-671b57d6d455	5f096705-11c3-49b1-b42c-d7bd17a75439
-a2f761e1-9065-4040-b1d0-8281e664cf36	730fb9e1-77a6-47e4-b206-54e185a18062	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-82c6a859-9456-4db7-925e-2e0f47503afb	730fb9e1-77a6-47e4-b206-54e185a18062	5f096705-11c3-49b1-b42c-d7bd17a75439
-5154f0aa-396e-4de6-baf3-6b5eeb897694	63d3833b-7710-4dda-bebe-68ecc3e9e2a3	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-6a156b03-542f-4715-914a-15ee89f25664	63d3833b-7710-4dda-bebe-68ecc3e9e2a3	5f096705-11c3-49b1-b42c-d7bd17a75439
-8d404264-986e-444a-abaf-65c7d73f5cae	23d0b2c2-48b1-428d-9e88-c87ebcb3f12f	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-da70a16d-a277-4b5c-9361-3519ef5f41f2	23d0b2c2-48b1-428d-9e88-c87ebcb3f12f	5f096705-11c3-49b1-b42c-d7bd17a75439
-8d8f6ac4-a5d2-4f00-9f36-68f84077a239	9f3e96e7-ca0d-455d-8827-b2437e130138	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-76408be2-4ded-4504-812d-76bec1b7697e	9f3e96e7-ca0d-455d-8827-b2437e130138	5f096705-11c3-49b1-b42c-d7bd17a75439
-3230c1f0-535a-4652-8d0b-3434f1a69906	11ee8668-02cc-4977-8019-9103fb9d5d69	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-020ebeb1-b897-45d1-93b4-302f9bde3804	11ee8668-02cc-4977-8019-9103fb9d5d69	5f096705-11c3-49b1-b42c-d7bd17a75439
-70c35dc2-7544-4abb-ba8a-87953dd4fb56	7ded2ac1-fbab-470e-b33a-e5227c9dc86b	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-852626d8-f3fe-417d-b7d1-1a026a892ea9	7ded2ac1-fbab-470e-b33a-e5227c9dc86b	5f096705-11c3-49b1-b42c-d7bd17a75439
-e6805220-4c63-4d64-aab8-580f7d58d38a	30873183-2407-400c-b8b2-b424d70034d2	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-e3e0ae74-8fb3-448b-9f08-6d2e465c241e	30873183-2407-400c-b8b2-b424d70034d2	5f096705-11c3-49b1-b42c-d7bd17a75439
-39883914-18af-45b8-b704-293e6d9b5d69	021fbe68-6497-4b68-8811-2d37c9e50d9b	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-bac6d2cc-3e32-41ee-8ece-57b150dc558d	021fbe68-6497-4b68-8811-2d37c9e50d9b	5f096705-11c3-49b1-b42c-d7bd17a75439
-c0d16ec3-2600-463d-afde-f9421e8ea313	1adbad25-db3c-4c51-afc8-bf086ccf379a	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-d3f91b65-25d7-46cd-9948-136180d72ae0	1adbad25-db3c-4c51-afc8-bf086ccf379a	5f096705-11c3-49b1-b42c-d7bd17a75439
-5f3b07b5-d8fa-40fb-969d-d7eca76aa778	af8c7036-c5f6-484f-b943-398589c55a16	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-61d867eb-ff2f-42fa-b4a0-f0a8f4a1fb83	af8c7036-c5f6-484f-b943-398589c55a16	5f096705-11c3-49b1-b42c-d7bd17a75439
-2864933d-0f65-47b7-80df-d44ee1f8f3dd	9dc59e76-e13d-431a-b6c0-b1afd02e698f	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-0e27ed40-8feb-4288-b983-4aea30b1d8e0	9dc59e76-e13d-431a-b6c0-b1afd02e698f	5f096705-11c3-49b1-b42c-d7bd17a75439
-8e19b023-e4ab-4f7f-b6cd-146b29445948	93edce34-864b-4bf8-b1f3-c66192514f51	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-ecbc0579-0e71-4d28-8697-5262d1b4430b	93edce34-864b-4bf8-b1f3-c66192514f51	5f096705-11c3-49b1-b42c-d7bd17a75439
-0e1d4839-39ce-4151-8ab8-cfedc0d4f03e	67630702-37ea-4290-87f4-1697fdf09a24	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-7bc54bcc-f324-47e1-b8d3-f96c631e7985	67630702-37ea-4290-87f4-1697fdf09a24	5f096705-11c3-49b1-b42c-d7bd17a75439
-7a0dc45a-8fc3-471d-8a5c-555db45cb486	a6913ecb-0988-40f2-843f-ef7c916a8a71	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-ad615d74-5872-42b9-869d-ad2eb3ac6980	a6913ecb-0988-40f2-843f-ef7c916a8a71	5f096705-11c3-49b1-b42c-d7bd17a75439
-b6e36329-f92f-477d-a05a-7046ca4915e6	fbbc170a-b8d3-49b7-8628-d233e43f559c	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-aa8c92e4-7293-4459-91b5-d9fdce8d5fe0	fbbc170a-b8d3-49b7-8628-d233e43f559c	5f096705-11c3-49b1-b42c-d7bd17a75439
-4afbcc16-0564-440f-94ad-df5a188a34bf	93630885-e071-4b0e-a40a-abd4d0f24017	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-bf3d66ec-53da-4a6a-9df9-23f4aae15dc2	93630885-e071-4b0e-a40a-abd4d0f24017	5f096705-11c3-49b1-b42c-d7bd17a75439
-fc52d03f-c669-48ec-b005-6ed891d5b089	591ec111-c0c4-454e-a6bc-0e4d1169c77e	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-11de4bb8-c5a0-4e90-a812-481676af1e19	591ec111-c0c4-454e-a6bc-0e4d1169c77e	5f096705-11c3-49b1-b42c-d7bd17a75439
-1b38bd3c-562d-4bfd-8423-8c3c5ebc989b	54df6cc2-e541-4613-9cd6-a47966e2897a	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-914503f9-4a1e-4317-a2d6-ef9d4c91912e	54df6cc2-e541-4613-9cd6-a47966e2897a	5f096705-11c3-49b1-b42c-d7bd17a75439
-6c96d912-0349-4bde-bb77-ce94d7ae4e27	3894f542-de3a-4bb5-bcb0-cb85ab980d4f	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-91c765cb-0c41-4990-a68a-58cba0366d0e	3894f542-de3a-4bb5-bcb0-cb85ab980d4f	5f096705-11c3-49b1-b42c-d7bd17a75439
-c2dec2c0-c6a8-4032-a9a9-51797f238e51	1c489d49-2eea-4d5a-addc-ba8821338b40	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-6a9f125d-6d67-405b-9b40-18a6dfdf51dd	1c489d49-2eea-4d5a-addc-ba8821338b40	5f096705-11c3-49b1-b42c-d7bd17a75439
-8e06961e-f342-41c1-b37a-99e18c0f2db5	0fc46a23-769b-4594-85d4-fd260c5a1f5e	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-ed8efbb1-c63f-463f-9170-3ea42a9c2764	0fc46a23-769b-4594-85d4-fd260c5a1f5e	5f096705-11c3-49b1-b42c-d7bd17a75439
-12a9b3d9-21b5-4e2e-b78c-9222cb6bd62c	1a78306e-54c9-428b-be3e-1ae086f2c8c0	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-49af5811-f433-498c-9d40-79082ac25284	1a78306e-54c9-428b-be3e-1ae086f2c8c0	5f096705-11c3-49b1-b42c-d7bd17a75439
-f8e7939f-3964-4b2e-82b1-7ee56d8a8b4a	00641354-9b13-49c9-8b90-23dab21e5a0f	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-c5144725-d7e2-4c81-9d6a-a1b8de98f723	00641354-9b13-49c9-8b90-23dab21e5a0f	5f096705-11c3-49b1-b42c-d7bd17a75439
-1f07f27d-b33b-42c3-9a93-3f53c396c43b	b4fecf22-866a-4cc9-8037-28ccd577ea44	386e63ba-dc8f-4af6-9447-44f7976a4a0c
-ada12a67-6bd2-4dd5-80f4-564c14ef8e34	b4fecf22-866a-4cc9-8037-28ccd577ea44	5f096705-11c3-49b1-b42c-d7bd17a75439
 \.
 
 
@@ -6979,38 +6458,6 @@ ada12a67-6bd2-4dd5-80f4-564c14ef8e34	b4fecf22-866a-4cc9-8037-28ccd577ea44	5f0967
 --
 
 COPY "public"."TD_Employee_Request" ("ID_TD_Employee_Request", "ID_TalentDiscussion", "ID_TD_Employee", "Descripcion", "Estado", "Resultado") FROM stdin;
-c299046f-1843-4ed4-bd39-e8dccc63d8f7	40a1f9f5-d38a-4954-be58-108f8f816334	f4ec3a62-62f6-4d2e-a829-62b160efe63a	Omitida por talent lead	No Asignado	Omitida por talent lead
-e83bc3bf-9225-4052-a021-6f4f107ba082	40a1f9f5-d38a-4954-be58-108f8f816334	ea3bee0e-d198-4f58-aa1e-4a5b9144b607	Bono: Quiere Bono\nPromoción: Quiere Promocion	Aprobada	Aceptado
-e0dca69a-7655-4cbc-9eca-d790910cc150	8de375e9-2d6e-4a7f-83b7-5ef3b6c2c1ae	b3057573-a765-43d7-a3d1-828d3a221996	Omitida por talent lead	No Asignado	Omitida por talent lead
-174ec130-331e-48dc-bf3e-d8a4a01fb23c	8de375e9-2d6e-4a7f-83b7-5ef3b6c2c1ae	9312c802-ed1b-4d88-8cd5-af03ab058016	Bono: Quiere bono\nPromoción: Quiere Promocion	Aprobada	Aceptado
-cb780c68-0d47-4951-bbc8-c17b251b15cc	ad0613ce-f385-491e-813c-7360245e5f91	e6069041-3050-419a-a097-e64241ba270a	Omitida por talent lead	No Asignado	Omitida por talent lead
-b5826fbc-8365-4f6b-aeea-d702fc65e791	ad0613ce-f385-491e-813c-7360245e5f91	728df6ff-01f6-4abe-a035-f69d8a833f5b	Omitida por talent lead	No Asignado	Omitida por talent lead
-e25f5255-57b9-4afb-bc86-7f257d209520	adf7c9f2-be57-478a-b08e-65d9c45aabeb	877a72d1-b72c-4d41-a796-5c071647fd80	Omitida por talent lead	No Asignado	Omitida por talent lead
-d3e00970-03aa-4481-a402-a4c228a10a60	adf7c9f2-be57-478a-b08e-65d9c45aabeb	3ae3b36a-6cbc-4437-950e-489952e7623d	Bono: Quiere bono\nPromoción: Quiere Promocion	Aprobada	Aceptado
-425d4318-7d18-48b0-914c-be14a27f54fc	995854f7-ca8a-4301-8066-2a04560350ff	81726b32-4232-405b-9e92-0592f880fa21	Bono: Quiere Bono\nPromoción: Quiere promocion	Pendiente	\N
-0a98f4a2-6b9d-4ad9-800a-e82e39ae71a1	a8e1e1d2-1e1f-4802-afd9-b2899bb51ac3	74004021-17e4-4b10-8e09-206d709e6428	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-5ec97cec-3d08-4813-a262-2cbfe646065e	bc51bf01-d2f2-4d11-b6e2-b7900dbc8229	29aece29-7b46-46f0-a8ee-2916414184ea	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-cbbca42f-a9fa-4d96-98d0-79afda301676	f4452f6a-da71-4878-a8c8-1c7ed17d830f	e4ce03c5-1b7b-4bb9-aeb9-bb4270121d2d	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-a3d4f874-7735-4bef-8492-2b6b6c7e5dba	f237d511-4859-462a-939c-d769e11853f1	79129e87-ae5f-4e1e-b5fe-53ec1bf528ae	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-649bf875-8663-45cf-bd76-e08f58533efc	b508831b-b8f9-45f5-b6ac-83db27481762	2d9748e9-c84a-468f-94c3-de6052fdefa6	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-f943e816-ef4b-4317-8150-93c815738010	90db9062-2b1a-482c-b184-8e34ee00d899	38b4841c-8428-4d55-84bb-e0476438dc5b	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-0f5f935e-2b9b-4511-93a6-c8750fd7c517	9f2e65ad-10ea-470a-963c-dc7fa95c2012	ca94eb0f-36d5-40a4-a0d9-36916710c6ee	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-44a4b2a2-9979-40c6-b244-8127eb0a25fb	37351136-434d-48a4-8d2f-752f803b4af0	0d85d314-7f0c-479a-92a5-8c62de29957a	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-a41aebab-e1db-42df-b1fd-b1c4d27ac4f6	064b9df4-3656-4b6f-b2fe-c1f0844c6458	385735b0-2902-468d-a535-3ae3a84ce106	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-6f2a4eb5-f125-45f4-ad8e-92cc684af022	3fea4225-114e-445c-8b06-5cd7255a3c4c	bb8def3c-0b54-4385-8eae-6af76319232c	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-3453773e-c8c3-4e3a-acd4-0d9bc42fda9e	92dc9f8d-ff61-44ae-8f03-8cb45f9dea4e	74e93258-dc2e-45d9-a590-01126d83217e	No Participa	No Asignado	No participa(establecido por people lead)
-2beead8f-8c70-49d0-acf1-e5f60a5727fd	9cc930be-ccf7-4682-aa6a-301753b35987	fecc9458-502c-457e-9138-6f8b3d2ac9cc	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-f15cc55d-cf32-425e-8376-590b5d17713b	0eb36ea3-245b-429d-b5e7-2bf9c35be94a	01ae05d5-ba6b-4b3b-86ec-24092b01900f	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-f6c88901-5c7d-425a-ba9e-3e2c93139034	19b87cad-4935-481c-b9a0-671b57d6d455	49e638db-c59b-42fb-a1dd-7d3a3d6167fa	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-ce94e877-5f37-485a-8fa2-8dac62569ff4	23d0b2c2-48b1-428d-9e88-c87ebcb3f12f	da70a16d-a277-4b5c-9361-3519ef5f41f2	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-adb503d0-4105-47b6-a409-6a49a2bf5e66	7ded2ac1-fbab-470e-b33a-e5227c9dc86b	852626d8-f3fe-417d-b7d1-1a026a892ea9	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-7c5f8f19-aec4-4197-946c-9289129b88cb	1adbad25-db3c-4c51-afc8-bf086ccf379a	d3f91b65-25d7-46cd-9948-136180d72ae0	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-25aed79c-d976-45d0-af5d-c1d5a10b9352	af8c7036-c5f6-484f-b943-398589c55a16	61d867eb-ff2f-42fa-b4a0-f0a8f4a1fb83	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-2023ec78-22f0-4a43-8da9-a0ec257e8943	67630702-37ea-4290-87f4-1697fdf09a24	7bc54bcc-f324-47e1-b8d3-f96c631e7985	No Participa	No Asignado	No participa(establecido por people lead)
-6b9d1f78-b8e9-42cd-84bb-0c8331a6b06f	a6913ecb-0988-40f2-843f-ef7c916a8a71	ad615d74-5872-42b9-869d-ad2eb3ac6980	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-d74cf405-36c5-40f8-9995-c882b5b57ac1	1c489d49-2eea-4d5a-addc-ba8821338b40	6a9f125d-6d67-405b-9b40-18a6dfdf51dd	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-497e2057-1a4e-4bc4-b94c-86cb3bf71cad	1a78306e-54c9-428b-be3e-1ae086f2c8c0	49af5811-f433-498c-9d40-79082ac25284	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
-e1f78424-ea3b-482e-a417-f989d1f1e86f	b4fecf22-866a-4cc9-8037-28ccd577ea44	ada12a67-6bd2-4dd5-80f4-564c14ef8e34	Bono: Quiere bono\nPromoción: Quiere Promocion	Pendiente	\N
 \.
 
 
@@ -7019,166 +6466,6 @@ e1f78424-ea3b-482e-a417-f989d1f1e86f	b4fecf22-866a-4cc9-8037-28ccd577ea44	ada12a
 --
 
 COPY "public"."TD_People_Lead" ("ID_TD_People_Lead", "ID_TalentDiscussion", "ID_People_Lead", "Estado") FROM stdin;
-bb528652-6488-44ec-ae2f-36d8a9128f4e	40a1f9f5-d38a-4954-be58-108f8f816334	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-f7527220-e9b7-49af-909f-3f04e641c67a	40a1f9f5-d38a-4954-be58-108f8f816334	4fde1b00-e11e-41c5-88c8-9e38d71facce	No Asignados
-6b85e81f-579a-461b-9f3e-0845ce37794e	83a12012-97c6-4ccd-a1d8-df7bf7c664fd	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-b6031a38-0d52-4e90-bf7a-3d3fbd5098f3	83a12012-97c6-4ccd-a1d8-df7bf7c664fd	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-d7d3326f-58dd-460a-9912-b2519c02fbe4	8de375e9-2d6e-4a7f-83b7-5ef3b6c2c1ae	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-25c78a07-9783-4f6d-99a3-07db0daa8bee	8de375e9-2d6e-4a7f-83b7-5ef3b6c2c1ae	4fde1b00-e11e-41c5-88c8-9e38d71facce	No Asignados
-0bdd3e86-0997-4cf7-9ba0-544cf6b486b5	ad0613ce-f385-491e-813c-7360245e5f91	4fde1b00-e11e-41c5-88c8-9e38d71facce	No Asignados
-791ec780-a564-471f-a844-6270224541b2	ad0613ce-f385-491e-813c-7360245e5f91	3cb8081b-1a2b-4e32-a007-fae5c77735ba	No Asignados
-c58f2631-a26e-4df6-b1f5-8bcdbd926970	adf7c9f2-be57-478a-b08e-65d9c45aabeb	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-9853c68d-395c-4b2c-9bf6-64b433693311	adf7c9f2-be57-478a-b08e-65d9c45aabeb	4fde1b00-e11e-41c5-88c8-9e38d71facce	No Asignados
-f71fcdfc-baad-401d-a66f-7d0a7e61467f	995854f7-ca8a-4301-8066-2a04560350ff	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-50204a1a-d540-46b1-9eba-97c2b5cb08ff	995854f7-ca8a-4301-8066-2a04560350ff	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-ba792c35-bb01-49a0-81ae-2fbf458bf544	bca7e61a-580c-4969-8628-7d23fd961111	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-6b1f7f21-4652-4977-ba61-1b1c2ed9f368	bca7e61a-580c-4969-8628-7d23fd961111	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-8b564825-3284-421b-9e4e-e91a794aea3e	b3160872-0446-41ce-b244-b862945e689a	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-12ff26ef-db44-4eb7-9ab7-17682b0c9200	b3160872-0446-41ce-b244-b862945e689a	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-17464d17-5fc0-48d2-acc7-840c62edf1a8	4f04ddab-cf8e-470b-ae62-b15bdd2e56f9	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-2e586905-bfc1-49bd-950a-71c9d75cce1e	4f04ddab-cf8e-470b-ae62-b15bdd2e56f9	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-816934c8-549a-4939-a0e6-e14360e5fc6b	23de4b35-8a76-4fcb-a57d-3f92f1f163ca	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-4bdc17d7-a553-43c1-b54d-777c582c7447	23de4b35-8a76-4fcb-a57d-3f92f1f163ca	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-97d19192-965e-4cca-b978-27260fa1206e	3de1b9c1-7b03-4efe-85df-9fa6c7126054	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-d7d9e6e7-8105-4d85-8d90-de26c43059e1	3de1b9c1-7b03-4efe-85df-9fa6c7126054	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-c4bb9970-e689-4cc5-9ad2-c51b87729700	a05055f0-d96e-4953-822a-a9a4adeb39f6	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-859d06cf-48ca-40ac-ac7e-5796ae41f6d9	a05055f0-d96e-4953-822a-a9a4adeb39f6	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-519c9fcf-3d98-4a73-85c3-b772434537c4	99da0c8a-47ca-45af-a7ab-bd8ce145ee85	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-5904fee2-7e83-45be-8e3a-4df876ee9a34	99da0c8a-47ca-45af-a7ab-bd8ce145ee85	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-2ed33747-de55-4397-ab89-ab85893284ca	7da05c9d-710e-4098-bacd-9760d3e698ac	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-88c5157e-c710-4051-bb22-e118e072cf9a	7da05c9d-710e-4098-bacd-9760d3e698ac	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-5c6f32fe-db90-4bb9-ac00-fd1d244fda67	98723995-6050-4575-a4d4-f75d94c6f882	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-84b4104c-fef9-4e90-8810-ca003ed99c7f	98723995-6050-4575-a4d4-f75d94c6f882	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-3291d25f-fbe4-4746-97bb-2961106373bf	d0ecfcb7-d899-483b-b918-b4e2a7daa029	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-2bdc248c-cd7c-4a30-b6ae-2bc702200203	d0ecfcb7-d899-483b-b918-b4e2a7daa029	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-f8596eb3-b82d-4a5b-9498-b6f222ed577f	6130d052-092d-45b1-adcf-4d9310ab2de0	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-cb81c436-e9b3-4130-8d5d-5a2f3e1a8210	6130d052-092d-45b1-adcf-4d9310ab2de0	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-6123b78d-4af9-40bf-89ac-130b2b19e74c	9f97bf48-4fcd-43f2-bf59-8e5363b43c75	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-480d159c-4361-44e0-8655-8576dce3a5f1	9f97bf48-4fcd-43f2-bf59-8e5363b43c75	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-459ed5e3-7308-4b4d-9f48-fba6f5ae8983	cc888264-d0d3-470e-be56-a3357c989141	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-4a9b90c6-e2c3-4f55-900c-e648d467b8c1	cc888264-d0d3-470e-be56-a3357c989141	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-95ca9363-5225-4f06-b370-2ec8f8104899	a8e1e1d2-1e1f-4802-afd9-b2899bb51ac3	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-7ee1a38a-f7a9-4e7c-b13c-eb67f11206af	545fdeac-af55-45a6-9c34-52ed4bd340e6	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-aa564f07-bf5d-454d-b0ce-1fd754c5332e	545fdeac-af55-45a6-9c34-52ed4bd340e6	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-e4f2901f-b884-435b-87b3-ee3880830063	a8e1e1d2-1e1f-4802-afd9-b2899bb51ac3	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-0dea7f86-65dc-4cb4-81fa-47319b46300a	daf4e226-0416-416b-9f82-219c4bb263ea	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-65312869-d1c7-45bf-82ed-9f245ba12c18	daf4e226-0416-416b-9f82-219c4bb263ea	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-ede50448-e79c-4d75-844b-9466c76c3d9b	c72c0f7d-6604-456a-a51b-a71c65e323e6	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-ecc3b6c1-20aa-4242-81fa-6e7eb6997d95	c72c0f7d-6604-456a-a51b-a71c65e323e6	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-36cfe44d-f0b8-4782-8358-f6df7db395c2	bc51bf01-d2f2-4d11-b6e2-b7900dbc8229	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-bbe61231-179d-4d28-b460-2d239a20c7c6	bc51bf01-d2f2-4d11-b6e2-b7900dbc8229	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-08cda274-94ec-4330-8e6f-cb85ac639cd4	f4452f6a-da71-4878-a8c8-1c7ed17d830f	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-7d06b0d8-6e63-410e-bc6a-45e9e855327e	151f6ec4-06b0-4837-ada1-071bb581f07d	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-91daf3fe-67b6-4ffa-b2d3-e100acc0b625	151f6ec4-06b0-4837-ada1-071bb581f07d	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-86957d99-4dfc-4cbd-8df3-b06a93f12755	d80d15f7-a3a2-42eb-8d14-a89e0eaf12a1	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-ad63feda-4718-4b60-9224-0ffa24fac592	d80d15f7-a3a2-42eb-8d14-a89e0eaf12a1	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-83adb645-43f1-4f49-a985-0020d75664bd	f4452f6a-da71-4878-a8c8-1c7ed17d830f	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-b26b78ce-8821-42fe-a014-800602187eaf	f237d511-4859-462a-939c-d769e11853f1	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-06f54975-0fd4-4c13-bba3-8fb04bb79c34	1702ee70-1f8b-4f19-8ec7-dbcdf054526a	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-427c2890-9ff3-40e3-833c-4fa7b5bef9cd	1702ee70-1f8b-4f19-8ec7-dbcdf054526a	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-5d8e43dc-d756-4458-a19b-0deba8114157	f237d511-4859-462a-939c-d769e11853f1	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-6d442c58-3720-4699-8204-536698ae800e	78ccca6b-a553-459d-a997-8bafe96890cf	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-1515cfc2-a105-4cf9-8b9c-d028d0794c17	78ccca6b-a553-459d-a997-8bafe96890cf	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-e1a3dfcf-75e4-4a3c-ad04-ff859c3cf9e1	a2a379b7-86bb-47af-8ad5-04dd07cc2dcb	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-88de2d18-7aa0-444c-be81-9eaa1d970ab5	a2a379b7-86bb-47af-8ad5-04dd07cc2dcb	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-84f02b2e-0003-44b6-a71a-d45fc0543e20	b508831b-b8f9-45f5-b6ac-83db27481762	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-98f707bc-e6c0-422e-bd18-64062c899157	589ec154-7485-4e97-8d17-243cc3650cf9	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-4e7ea099-61a8-40d7-a235-756335ec2314	589ec154-7485-4e97-8d17-243cc3650cf9	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-f68464c3-fa06-4b94-a7a7-c88d53d38184	173d9786-fc0a-4ff7-b889-1ab945b6d867	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-4c8b3412-8b56-4a08-ae8d-bc1135a835b6	173d9786-fc0a-4ff7-b889-1ab945b6d867	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-5ce05b54-4ece-48a1-a7e8-240f9e2d45d3	b508831b-b8f9-45f5-b6ac-83db27481762	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-5010d7f2-ccc6-450e-b57e-421e159d881d	90db9062-2b1a-482c-b184-8e34ee00d899	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-27a88995-c99d-4f3d-88b7-f6786f331af7	90db9062-2b1a-482c-b184-8e34ee00d899	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-dfa09b6b-af3b-4dbc-bada-a9bb8eb04f2a	befdc5d0-8af1-4079-ad71-62f6263a03e3	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-82f17c37-7b41-4074-b412-61b14f7433d7	befdc5d0-8af1-4079-ad71-62f6263a03e3	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-77210b2a-6091-4969-98dd-dfaa3ec5defa	9f2e65ad-10ea-470a-963c-dc7fa95c2012	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-3b8ef4da-fa67-4590-9052-c0df492fca39	84a21913-2987-4254-9e6a-417299001188	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-6f89a62d-ed57-4a7a-a43d-2c32f3af1948	84a21913-2987-4254-9e6a-417299001188	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-357a69a9-d67e-44b3-a4e7-5bf445a304e6	37351136-434d-48a4-8d2f-752f803b4af0	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-f8d99186-bf5d-4a59-a01c-dbbefc324884	a29aff70-c333-4567-814d-452245897715	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-109cda7f-7943-4787-ba28-133a85613219	a29aff70-c333-4567-814d-452245897715	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-e83e5558-458a-4abb-a2fb-68115d6c3083	9f2e65ad-10ea-470a-963c-dc7fa95c2012	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-d62f2a1d-6f53-4a14-a893-fc8b118bc42d	eb6b0100-70b7-480c-98a0-e35b244dd502	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-f00b1d48-6057-47af-91b7-827af8d2ae4e	eb6b0100-70b7-480c-98a0-e35b244dd502	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-310b2cb3-8c66-4ad5-a414-e147da660568	37351136-434d-48a4-8d2f-752f803b4af0	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-cddac06c-157f-41cd-bc14-5d4b88c66a00	4977b626-c880-4173-80c0-9a84cc039910	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-0b321082-67e6-41c9-be01-58c7865e96c2	4977b626-c880-4173-80c0-9a84cc039910	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-fa3af104-c792-4728-b037-5b7e260872d5	064b9df4-3656-4b6f-b2fe-c1f0844c6458	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-481b904f-b5a6-4d45-95e7-6d5086859db0	2de6265f-a0ae-4d29-90ab-df993801672f	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-a980b98c-6984-4d8c-ae7f-ce5a5b742d44	2de6265f-a0ae-4d29-90ab-df993801672f	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-95aa0a72-9a76-458c-a8f4-50f9e1c156de	3fea4225-114e-445c-8b06-5cd7255a3c4c	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-a465d215-2330-4ff9-bce2-d224674b9364	3fea4225-114e-445c-8b06-5cd7255a3c4c	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-943dbaa7-d8de-4c30-9f4c-cc6581e28f3e	92dc9f8d-ff61-44ae-8f03-8cb45f9dea4e	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-7cc3aec4-f181-4a74-8514-dde4afb479b8	064b9df4-3656-4b6f-b2fe-c1f0844c6458	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-a16db5f9-8a90-4b7e-8e76-cfe1843457e6	7243f82c-239a-4514-b9f3-b2b4ce14e575	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-354a3261-b629-4f25-8db6-c8fd9ca4cce8	7243f82c-239a-4514-b9f3-b2b4ce14e575	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-d542c4b2-a012-4ad5-b93f-89c3539b369d	92dc9f8d-ff61-44ae-8f03-8cb45f9dea4e	3cb8081b-1a2b-4e32-a007-fae5c77735ba	No Asignados
-08baaa0a-4e57-48e8-9b29-66fc7a885f5e	ac82d2df-ec6f-40ae-8e9f-91d273fd286d	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-2b7efbfd-edcf-4a33-9403-cffe2d7dce57	ac82d2df-ec6f-40ae-8e9f-91d273fd286d	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-4ae81839-5b31-4af1-871a-7582cd913635	d9265667-39ee-45fe-a95b-c9eea493c74b	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-ee5952cb-375f-469a-90ef-7c350814edd9	d9265667-39ee-45fe-a95b-c9eea493c74b	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-b8aef6f9-7a00-400e-98db-1fc84598e3ef	9cc930be-ccf7-4682-aa6a-301753b35987	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-144d44ba-18f2-42a2-92f2-add87fc55a14	9cc930be-ccf7-4682-aa6a-301753b35987	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-5a6a3c44-f32b-4e75-a14c-b8272087f676	15f0393e-c5ea-4ce6-9449-f6b3a4f7a633	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-09e60ced-a42b-412f-a679-610770bc4c9f	15f0393e-c5ea-4ce6-9449-f6b3a4f7a633	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-bcb134d1-fa3e-48e7-a6e0-923750808446	92e689ec-53c5-4ac6-9273-32793893665e	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-370ce628-a6d8-436a-b67b-ed64be795f02	92e689ec-53c5-4ac6-9273-32793893665e	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-696a8329-7952-410e-bb4d-c939736fcd03	0eb36ea3-245b-429d-b5e7-2bf9c35be94a	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-15fbfe35-c293-40a2-b232-4739000cf906	0eb36ea3-245b-429d-b5e7-2bf9c35be94a	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-ec86011b-19fc-4b54-afa3-049ba1863ea6	954f66ed-0fb2-4c52-bd6b-aee819e54965	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-e0030025-0ed7-45dd-9898-15aab2fc56e1	954f66ed-0fb2-4c52-bd6b-aee819e54965	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-5bcd0d77-2599-4cee-9218-369770a46b67	6001741e-0913-4ab7-808c-c9d2db680f3b	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-bf5ec2ab-ccd8-4545-b5a0-0a44d5b80742	6001741e-0913-4ab7-808c-c9d2db680f3b	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-575679d5-e984-42e2-8ac2-53f0090910bd	19b87cad-4935-481c-b9a0-671b57d6d455	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-8c2c9ce1-d79b-40cf-a99c-24e3d808a2da	730fb9e1-77a6-47e4-b206-54e185a18062	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-cdd90268-1aca-4363-ae48-482fbbf3a806	730fb9e1-77a6-47e4-b206-54e185a18062	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-c78e6b57-8bc0-4850-9caf-272fcb9a778f	63d3833b-7710-4dda-bebe-68ecc3e9e2a3	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-c534c523-1241-4f06-b1a7-9c2f8fd5a9a9	63d3833b-7710-4dda-bebe-68ecc3e9e2a3	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-4eb8cf5f-795e-4157-86c7-f88db7d76620	19b87cad-4935-481c-b9a0-671b57d6d455	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-13856fe5-5533-4889-91de-aca260387272	23d0b2c2-48b1-428d-9e88-c87ebcb3f12f	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-9a496a02-2f4c-4ffb-84a0-36146d885f0a	23d0b2c2-48b1-428d-9e88-c87ebcb3f12f	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-babaa904-d6e6-4d06-98ba-5645e499d415	9f3e96e7-ca0d-455d-8827-b2437e130138	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-afa1f364-fccc-4cd1-bafd-3bd84b6fb74d	9f3e96e7-ca0d-455d-8827-b2437e130138	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-ed484a1b-7e50-46ec-815f-6fe7f394e211	11ee8668-02cc-4977-8019-9103fb9d5d69	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-d3ef82f7-a983-48ba-a8ff-701585ec7e24	11ee8668-02cc-4977-8019-9103fb9d5d69	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-c30f7fad-c0c1-44dc-aad0-21ec53ccd631	7ded2ac1-fbab-470e-b33a-e5227c9dc86b	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-94120194-fa8b-4d64-b6df-14a805509cd0	30873183-2407-400c-b8b2-b424d70034d2	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-43295750-aca8-4dc0-a9ab-c8bd83b0e270	30873183-2407-400c-b8b2-b424d70034d2	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-9d4acbf2-471b-4c5f-8366-3f44ee7ec9a7	021fbe68-6497-4b68-8811-2d37c9e50d9b	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-2e6c9379-4864-4c81-bf29-e0f3f489a79e	021fbe68-6497-4b68-8811-2d37c9e50d9b	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-45bf2530-a7d6-4e6e-a304-b448c6dad278	7ded2ac1-fbab-470e-b33a-e5227c9dc86b	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-647a4703-f6d1-41f2-a699-63f5b5b4d17d	1adbad25-db3c-4c51-afc8-bf086ccf379a	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-3c38fcf0-1d11-4046-a62c-806fb9650356	1adbad25-db3c-4c51-afc8-bf086ccf379a	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-c7ddb954-22a7-454a-8932-ebf8065c3b58	af8c7036-c5f6-484f-b943-398589c55a16	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-4a43d2c0-748d-4bf8-a64e-2f5604913670	9dc59e76-e13d-431a-b6c0-b1afd02e698f	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-85f2b6b0-6715-462c-a85d-4c70820b3003	9dc59e76-e13d-431a-b6c0-b1afd02e698f	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-996a933c-6b3e-47cb-bad3-771d8ab7f472	93edce34-864b-4bf8-b1f3-c66192514f51	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-d3d91379-41de-40cf-bc8b-7f338b8dd057	93edce34-864b-4bf8-b1f3-c66192514f51	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-b23de08f-18ad-4179-b66c-39ce27f44f10	67630702-37ea-4290-87f4-1697fdf09a24	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-9f88a12e-c643-4f4c-835c-2b3f3b55f166	af8c7036-c5f6-484f-b943-398589c55a16	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-381e4dec-bcd1-480d-92b7-8588be3002c8	a6913ecb-0988-40f2-843f-ef7c916a8a71	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-fb94586e-b33d-4024-a141-8081733fa101	fbbc170a-b8d3-49b7-8628-d233e43f559c	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-c12174af-5f6a-4020-81db-f646557774ec	fbbc170a-b8d3-49b7-8628-d233e43f559c	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-e76ee7d0-76af-4b85-a532-01eb6e0f458a	67630702-37ea-4290-87f4-1697fdf09a24	3cb8081b-1a2b-4e32-a007-fae5c77735ba	No Asignados
-c20a5ec1-8347-4ecc-b7c6-be7eb80fd51b	a6913ecb-0988-40f2-843f-ef7c916a8a71	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-09920491-2a16-4989-a8ce-ac069a90746b	93630885-e071-4b0e-a40a-abd4d0f24017	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-ec6c2651-41e8-4e4c-87dc-17fb02d727b1	93630885-e071-4b0e-a40a-abd4d0f24017	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-21bb03cf-d6e9-446c-9f52-5071266a24cc	591ec111-c0c4-454e-a6bc-0e4d1169c77e	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-e0ee4f03-eb41-4118-8589-67e42dd15410	591ec111-c0c4-454e-a6bc-0e4d1169c77e	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-98fe6363-513a-4f3d-b74e-a6c91e9060e0	54df6cc2-e541-4613-9cd6-a47966e2897a	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-f88bf777-79ed-4b52-b496-267047299584	54df6cc2-e541-4613-9cd6-a47966e2897a	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-15a11ab8-68d5-4aa8-b2ff-39d38e6d5722	3894f542-de3a-4bb5-bcb0-cb85ab980d4f	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-372db3d8-8f1f-4f83-9e47-4a255a79bae3	3894f542-de3a-4bb5-bcb0-cb85ab980d4f	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-e165c400-2fba-4656-a645-2529842c915d	1c489d49-2eea-4d5a-addc-ba8821338b40	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-23e873c7-3657-44a9-ab54-b853f88d4cbb	1c489d49-2eea-4d5a-addc-ba8821338b40	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-e73f0ea0-8547-4f98-a597-b7e97d0e9648	0fc46a23-769b-4594-85d4-fd260c5a1f5e	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-67d16425-6357-4db5-895c-f531895db76f	0fc46a23-769b-4594-85d4-fd260c5a1f5e	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-6f3d6f22-1329-4a31-a8d5-dcc0e6e62ec3	1a78306e-54c9-428b-be3e-1ae086f2c8c0	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-63442cd7-9eed-49ef-8485-6f701f9bae23	1a78306e-54c9-428b-be3e-1ae086f2c8c0	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
-9649733f-04f6-4cf6-bf7e-e44fd2c6a2ed	00641354-9b13-49c9-8b90-23dab21e5a0f	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-310e25d1-2dd4-425e-aef0-b1de30604da8	00641354-9b13-49c9-8b90-23dab21e5a0f	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Pendiente
-138b8bba-c2ae-4723-b8de-d4484fa81633	b4fecf22-866a-4cc9-8037-28ccd577ea44	4fde1b00-e11e-41c5-88c8-9e38d71facce	Pendiente
-e7fc283e-5a2c-409c-aab5-70372f4fc7dd	b4fecf22-866a-4cc9-8037-28ccd577ea44	3cb8081b-1a2b-4e32-a007-fae5c77735ba	Asignados
 \.
 
 
@@ -7222,11 +6509,10 @@ b8fead1e-5a48-4ded-9193-d460412f90dd	documentos	5f096705-11c3-49b1-b42c-d7bd17a7
 c7535737-001a-48cb-b87d-3ccaf9dc6873	documentos	5f096705-11c3-49b1-b42c-d7bd17a75439/CertificadoPM.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 20:54:50.347127+00	2025-04-25 20:54:50.347127+00	2025-04-25 20:54:50.347127+00	{"eTag": "\\"4085b9434cddc8384525209d6bfc7ee8\\"", "size": 1217186, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-04-25T20:54:51.000Z", "contentLength": 1217186, "httpStatusCode": 200}	fa8cd402-f312-4f99-a97e-6a78e2562e7b	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 be84eed0-8dfe-4cad-9dcf-e7942a43b04c	project-images	proyectos/fdef6b3f-fbca-408a-9bf4-c3142bdbe1b6/imagen.jpeg	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-03 04:15:13.107601+00	2025-06-03 04:15:13.107601+00	2025-06-03 04:15:13.107601+00	{"eTag": "\\"30ca1e757088adcd4415aebb1daeae65\\"", "size": 6393, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-06-03T04:15:14.000Z", "contentLength": 6393, "httpStatusCode": 200}	039f6eb3-6e08-42e3-9dae-a9b650c1e4ef	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 f0fa2f72-1985-4975-8391-6f7c54aa29b4	documentos	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1/CertificadoDBIsaac.pdf	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	2025-04-25 20:58:56.021032+00	2025-04-25 20:58:56.021032+00	2025-04-25 20:58:56.021032+00	{"eTag": "\\"619ee7b1b78de5ea3d4467d23df0a13b\\"", "size": 1222396, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-04-25T20:58:56.000Z", "contentLength": 1222396, "httpStatusCode": 200}	0a1b511e-a0d5-4ea8-8c54-a84569033834	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	{}
-95b16f4d-a301-4d6b-93d5-bee504d16bb5	profile-pictures	5f096705-11c3-49b1-b42c-d7bd17a75439/perfil	3912d459-b96e-4150-9a2a-fb9135ebc374	2025-04-25 18:25:15.951954+00	2025-04-25 21:34:04.254946+00	2025-04-25 18:25:15.951954+00	{"eTag": "\\"ffb0dd63a42feb4bde36b32c953b26bd\\"", "size": 382970, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-04-25T21:34:04.000Z", "contentLength": 382970, "httpStatusCode": 200}	4d7fa78d-5f40-43ea-8e96-2f250ef7ee33	3912d459-b96e-4150-9a2a-fb9135ebc374	{}
 33120404-c073-4af2-aa81-aed6991b874c	project-images	proyectos/a26e2f01-a7ae-4f75-8586-e6057978ee5e/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-04 15:26:49.885798+00	2025-06-04 15:26:49.885798+00	2025-06-04 15:26:49.885798+00	{"eTag": "\\"6d1f5b17c8ab601783daa9faeec96492\\"", "size": 76359, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-04T15:26:50.000Z", "contentLength": 76359, "httpStatusCode": 200}	ab563d78-d2a8-4350-8b41-ca679502388f	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+95b16f4d-a301-4d6b-93d5-bee504d16bb5	profile-pictures	5f096705-11c3-49b1-b42c-d7bd17a75439/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-25 18:25:15.951954+00	2025-06-13 04:22:43.830801+00	2025-04-25 18:25:15.951954+00	{"eTag": "\\"89d1494f7e37700b29025401e2c7c5dc\\"", "size": 217990, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:22:44.000Z", "contentLength": 217990, "httpStatusCode": 200}	bbc007f1-15e6-4cd9-a06b-db96b48c9995	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 3bd17207-555d-4ae2-865d-e31f895100ca	project-images	proyectos/4e8e1301-f06c-418c-b6c5-71e289d5c1d5/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-03 03:06:54.440854+00	2025-06-03 03:06:54.440854+00	2025-06-03 03:06:54.440854+00	{"eTag": "\\"6d1f5b17c8ab601783daa9faeec96492\\"", "size": 76359, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-03T03:06:55.000Z", "contentLength": 76359, "httpStatusCode": 200}	14074426-e437-4387-aeaa-8b5d03ed00b4	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 4fb86d28-07fc-42c3-8192-f40d8fb7d0c3	documentos	36abc818-b3a6-440f-933a-79ff41fe5b67/M5_A00837999.pdf	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-04-25 23:17:48.640692+00	2025-04-25 23:17:48.640692+00	2025-04-25 23:17:48.640692+00	{"eTag": "\\"032afdba54f833ece99518099eaf5631\\"", "size": 270519, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-04-25T23:17:49.000Z", "contentLength": 270519, "httpStatusCode": 200}	a7db0436-3097-4172-914e-51fa749e3158	36abc818-b3a6-440f-933a-79ff41fe5b67	{}
-54fda307-43a7-43b7-a378-b3a45f8ea241	profile-pictures	fc1276e7-efc6-4ec5-b2cd-bfab2005930e/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-29 22:03:03.901704+00	2025-06-03 04:57:59.747654+00	2025-04-29 22:03:03.901704+00	{"eTag": "\\"529b591a5f03bed30437fb66e0cd24b5\\"", "size": 35891, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-03T04:58:00.000Z", "contentLength": 35891, "httpStatusCode": 200}	a65c2a7a-2191-49f2-8118-deca195d849a	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 195c123b-5da9-46d7-b7a9-20610f1d4fbb	documentos	fc1276e7-efc6-4ec5-b2cd-bfab2005930e/Application_Form_Incomings (2).pdf	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	2025-04-29 22:06:56.504453+00	2025-04-29 22:06:56.504453+00	2025-04-29 22:06:56.504453+00	{"eTag": "\\"4a63ea7baa3da152ea47dd2b03b64706\\"", "size": 41514, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-04-29T22:06:57.000Z", "contentLength": 41514, "httpStatusCode": 200}	a6a86c53-1692-40df-967e-37cdc21277ff	fc1276e7-efc6-4ec5-b2cd-bfab2005930e	{}
 846c4e92-360d-4514-8f21-dc29a12ff0a8	project-images	proyectos/1784d4c2-1b56-43cd-b6b2-79c0db623759/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-04 07:48:16.936309+00	2025-06-04 07:48:16.936309+00	2025-06-04 07:48:16.936309+00	{"eTag": "\\"529b591a5f03bed30437fb66e0cd24b5\\"", "size": 35891, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-04T07:48:17.000Z", "contentLength": 35891, "httpStatusCode": 200}	be9fb153-922c-423b-9c7a-1fd21977ebb8	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 8746caa5-430b-4da0-83dc-d08f447a1927	documentos	5f096705-11c3-49b1-b42c-d7bd17a75439/Avance de proyecto y nuevo sprint.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-05-21 21:54:05.110615+00	2025-05-21 21:54:05.110615+00	2025-05-21 21:54:05.110615+00	{"eTag": "\\"4e0b99b89bafca3a60f461af24dab647\\"", "size": 278962, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-05-21T21:54:05.000Z", "contentLength": 278962, "httpStatusCode": 200}	df9993ae-aeda-4573-8d82-23156d8466ed	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
@@ -7234,8 +6520,9 @@ cdb14a5d-e239-476d-8ca3-07e34d77dcf4	reportes	386e63ba-dc8f-4af6-9447-44f7976a4a
 d5fe5db3-5969-496f-9cd1-f9f6bb748b97	project-images	proyectos/0adc1689-d126-45b2-a2e9-84079e40fdcc/imagen.jpeg	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-05 09:51:31.394616+00	2025-06-05 09:51:31.394616+00	2025-06-05 09:51:31.394616+00	{"eTag": "\\"30ca1e757088adcd4415aebb1daeae65\\"", "size": 6393, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-06-05T09:51:32.000Z", "contentLength": 6393, "httpStatusCode": 200}	2dc26fc7-4cfa-4f94-887e-3d4cef63f8cf	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 c7a47580-89cc-4b6b-a8e0-2a37cae361d6	project-images	proyectos/4c0b4238-9d6b-4008-a677-96fe61d97f21/imagen.jpeg	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-05 09:54:02.261705+00	2025-06-05 09:54:02.261705+00	2025-06-05 09:54:02.261705+00	{"eTag": "\\"30ca1e757088adcd4415aebb1daeae65\\"", "size": 6393, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-06-05T09:54:03.000Z", "contentLength": 6393, "httpStatusCode": 200}	dd2a899a-d8c2-4411-a7e9-8b5613a051d0	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 eb6c10c6-8a52-4907-a8f5-957280d9be36	project-images	proyectos/b154888b-5599-4ff1-b3a6-182d406b4f79/imagen.jpg	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	2025-06-05 20:50:24.4346+00	2025-06-05 20:50:24.4346+00	2025-06-05 20:50:24.4346+00	{"eTag": "\\"ffb0dd63a42feb4bde36b32c953b26bd\\"", "size": 382970, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-06-05T20:50:25.000Z", "contentLength": 382970, "httpStatusCode": 200}	110fe459-c349-45ee-ac3d-d724430a1277	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1	{}
-c67e8a05-af37-4a81-ae0b-32435e37b3ae	profile-pictures	386e63ba-dc8f-4af6-9447-44f7976a4a0c/perfil	\N	2025-05-22 19:45:12.441957+00	2025-05-22 19:45:45.747287+00	2025-05-22 19:45:12.441957+00	{"eTag": "\\"9743753103caad61b5abf54bd0189c9f\\"", "size": 8159, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-05-22T19:45:46.000Z", "contentLength": 8159, "httpStatusCode": 200}	f39550c8-178e-4aba-a8e3-58d8f1854b58	\N	\N
 4af913a5-36f4-4a0e-ac24-3d5dee3dad56	reportes	386e63ba-dc8f-4af6-9447-44f7976a4a0c/reporte_386e63ba-dc8f-4af6-9447-44f7976a4a0c_1749158562177.pdf	54bb3bab-94a3-420a-99da-57717c1c075a	2025-06-05 21:22:43.771708+00	2025-06-05 21:22:43.771708+00	2025-06-05 21:22:43.771708+00	{"eTag": "\\"396c046ca7aa2bd945127a9c44eebf33\\"", "size": 15251, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-05T21:22:44.000Z", "contentLength": 15251, "httpStatusCode": 200}	f0db47bd-7f3c-4115-9fa0-737766695b91	54bb3bab-94a3-420a-99da-57717c1c075a	{}
+c67e8a05-af37-4a81-ae0b-32435e37b3ae	profile-pictures	386e63ba-dc8f-4af6-9447-44f7976a4a0c/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-05-22 19:45:12.441957+00	2025-06-13 04:02:49.93026+00	2025-05-22 19:45:12.441957+00	{"eTag": "\\"ae1d6c54f56467be827f0aee9d5a6bc0\\"", "size": 475772, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:02:50.000Z", "contentLength": 475772, "httpStatusCode": 200}	40638767-2a87-4953-aefe-bf8f4718e0e5	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+54fda307-43a7-43b7-a378-b3a45f8ea241	profile-pictures	fc1276e7-efc6-4ec5-b2cd-bfab2005930e/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-04-29 22:03:03.901704+00	2025-06-13 04:27:12.475244+00	2025-04-29 22:03:03.901704+00	{"eTag": "\\"2d6eb62b7d683889a54907b54456b221\\"", "size": 31610, "mimetype": "image/webp", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:27:13.000Z", "contentLength": 31610, "httpStatusCode": 200}	b7e8d131-ede8-45ca-8f1b-4b6e5904b89e	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 9adc3551-414d-4d6d-8c84-0aadc5447d6e	reportes	386e63ba-dc8f-4af6-9447-44f7976a4a0c/reporte_386e63ba-dc8f-4af6-9447-44f7976a4a0c_1749159780385.pdf	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-05 21:43:00.756891+00	2025-06-05 21:43:00.756891+00	2025-06-05 21:43:00.756891+00	{"eTag": "\\"96c35440581d870e25913336b64c0683\\"", "size": 17385, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-05T21:43:01.000Z", "contentLength": 17385, "httpStatusCode": 200}	307b4ad7-3b42-4a53-a002-008a0a00d088	36abc818-b3a6-440f-933a-79ff41fe5b67	{}
 e8334e77-c01e-43f4-badd-a2c305cce849	project-images	proyectos/1b58ea3b-478d-433f-b11b-89ec6268f5e8/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-06 11:02:41.712921+00	2025-06-06 11:02:41.712921+00	2025-06-06 11:02:41.712921+00	{"eTag": "\\"3c01d0e90bc464bc4476d98491d2829b\\"", "size": 338275, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-06T11:02:42.000Z", "contentLength": 338275, "httpStatusCode": 200}	1e7eb8aa-f1fc-4ffb-b825-b87182932d93	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 c2f3a180-900f-481c-ac34-c2be9cfeac70	project-images	proyectos/639ebe39-4ccb-48ae-a87c-7f706ebf0c18/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-06 20:10:44.869225+00	2025-06-06 20:10:44.869225+00	2025-06-06 20:10:44.869225+00	{"eTag": "\\"49d09e49e85f8492f87d28cee04975d2\\"", "size": 4990792, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-06T20:10:45.000Z", "contentLength": 4990792, "httpStatusCode": 200}	c44c1b56-6792-419b-9900-8e39756a6045	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
@@ -7244,6 +6531,9 @@ fd62a968-6b83-46d9-a3d9-1d4e785ff8a6	project-images	proyectos/62653857-76fa-488e
 53cd55b8-fdb8-4922-977e-134135d7ab04	project-images	proyectos/31f3912a-ad69-44f5-9176-13702c2bdda3/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-09 09:11:52.041605+00	2025-06-09 09:11:52.041605+00	2025-06-09 09:11:52.041605+00	{"eTag": "\\"a8e1bd43e54b1295a821f4f0c2c1353d\\"", "size": 3864397, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-09T09:11:52.000Z", "contentLength": 3864397, "httpStatusCode": 200}	53174476-eb5e-402c-ae74-183ee411d92f	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 387c5777-d813-41f0-8afc-31a8320f1ea1	reportes	386e63ba-dc8f-4af6-9447-44f7976a4a0c/reporte_386e63ba-dc8f-4af6-9447-44f7976a4a0c_1749569018623.pdf	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-10 15:23:37.024983+00	2025-06-10 15:23:37.024983+00	2025-06-10 15:23:37.024983+00	{"eTag": "\\"5a82c482473285e33bc81870ea4ccdb3\\"", "size": 16753, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-10T15:23:37.000Z", "contentLength": 16753, "httpStatusCode": 200}	1cd500a9-d169-4970-9330-1bd0ffe84b17	386e63ba-dc8f-4af6-9447-44f7976a4a0c	{}
 80e1840c-37e6-4e70-a9ad-9201cd1ea7bf	project-images	proyectos/70978aae-596c-4196-9df6-53b77dea2ee0/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-12 22:21:26.80001+00	2025-06-12 22:21:26.80001+00	2025-06-12 22:21:26.80001+00	{"eTag": "\\"0c580e6536373fa512702ec54cdecee1\\"", "size": 31933, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-12T22:21:27.000Z", "contentLength": 31933, "httpStatusCode": 200}	709be37f-fe47-40dd-9e6e-531fff9862ee	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+481eb86b-4d25-42c5-950e-5faf93a49d3c	project-images	proyectos/2537aedd-2585-4e1f-973d-fb1a007d7d3e/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 03:23:16.458807+00	2025-06-13 03:23:16.458807+00	2025-06-13 03:23:16.458807+00	{"eTag": "\\"cfa277adc3eb353f74d2d1ed3c33ff65\\"", "size": 15574, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T03:23:17.000Z", "contentLength": 15574, "httpStatusCode": 200}	29b0a468-bbe3-4657-93c2-75f76d771ccd	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+548f2517-4265-4fe3-8f45-474cb30e4c0b	profile-pictures	bcc88bf8-1ea9-4552-b2a5-1983a8ea9a04/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 04:00:27.867525+00	2025-06-13 04:00:27.867525+00	2025-06-13 04:00:27.867525+00	{"eTag": "\\"0585ae80e11bfe411a86ed3f96a8327e\\"", "size": 27114, "mimetype": "image/webp", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:00:28.000Z", "contentLength": 27114, "httpStatusCode": 200}	928f679f-82b9-4aaf-b4a0-5fc1f97abb6c	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+55adfac1-e5cf-4df7-93e4-d71efcb25a9d	profile-pictures	30258a1f-f307-4728-8f1c-045e56548153/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 04:03:39.649741+00	2025-06-13 04:03:39.649741+00	2025-06-13 04:03:39.649741+00	{"eTag": "\\"192cba13c8795e5ba0ea06d25248823f\\"", "size": 18228, "mimetype": "image/webp", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:03:40.000Z", "contentLength": 18228, "httpStatusCode": 200}	42d26a88-52a8-454d-8ed0-6c7c63b2ff3a	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 1005951c-0c12-45cb-83a1-ad016313436a	reportes	7b23b8a4-8f26-40a9-86c0-c591b423ea6a/reporte_7b23b8a4-8f26-40a9-86c0-c591b423ea6a_1749586506087.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-10 20:15:06.760148+00	2025-06-10 20:15:06.760148+00	2025-06-10 20:15:06.760148+00	{"eTag": "\\"f11ecbe3a9fb2b2173e5de1150ad7a9d\\"", "size": 13596, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-10T20:15:07.000Z", "contentLength": 13596, "httpStatusCode": 200}	6e3aca43-7ea5-43ac-82b9-9e5901f40bf0	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 4769a8e7-83c9-46c2-8f85-5e3ff3493212	documentos	36abc818-b3a6-440f-933a-79ff41fe5b67/Avance de proyecto y nuevo sprint.pdf	36abc818-b3a6-440f-933a-79ff41fe5b67	2025-06-10 22:55:19.595261+00	2025-06-10 22:55:19.595261+00	2025-06-10 22:55:19.595261+00	{"eTag": "\\"4e0b99b89bafca3a60f461af24dab647\\"", "size": 278962, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-10T22:55:20.000Z", "contentLength": 278962, "httpStatusCode": 200}	46a60bdc-bdcd-452d-bb99-b8855272a8cc	36abc818-b3a6-440f-933a-79ff41fe5b67	{}
 9eac7a1e-a980-4f5a-9fdd-fa030292d1d2	reportes	b5c684f0-24d7-436f-b752-71cd9e361c8f/reporte_b5c684f0-24d7-436f-b752-71cd9e361c8f_1749632374993.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-11 08:59:36.078066+00	2025-06-11 08:59:36.078066+00	2025-06-11 08:59:36.078066+00	{"eTag": "\\"d4f1c56e7e23282632e14c590d113d6a\\"", "size": 16529, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-11T08:59:36.000Z", "contentLength": 16529, "httpStatusCode": 200}	2da27f38-ce3d-46d6-b770-41e602d9c310	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
@@ -7254,6 +6544,16 @@ fed7abb5-ac7d-445e-9569-1b37f0d7aac7	project-images	proyectos/4f58c7ed-7eab-40f4
 fd7b62f8-b324-4746-b582-14d5557d35a1	project-images	proyectos/517daacf-9119-4054-aafe-1238518e20d0/imagen.jpg	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-11 19:49:37.680888+00	2025-06-11 19:49:37.680888+00	2025-06-11 19:49:37.680888+00	{"eTag": "\\"c8934d74062639cf5d7006dcb625abeb\\"", "size": 54954, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-06-11T19:49:38.000Z", "contentLength": 54954, "httpStatusCode": 200}	7c852a61-6b8a-4d28-94ac-0c5343bb42a5	386e63ba-dc8f-4af6-9447-44f7976a4a0c	{}
 f26e12bf-ec59-411b-8fe7-a11b0354cf0e	reportes	54bb3bab-94a3-420a-99da-57717c1c075a/reporte_54bb3bab-94a3-420a-99da-57717c1c075a_1749722900218.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-12 10:08:23.586562+00	2025-06-12 10:08:23.586562+00	2025-06-12 10:08:23.586562+00	{"eTag": "\\"f28db3633f5bdcbbb99c454056489d9c\\"", "size": 4182861, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-12T10:08:24.000Z", "contentLength": 4182861, "httpStatusCode": 200}	227643af-687b-4b72-ab6b-25147acfcf1f	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 3efe999d-bda2-484b-8b51-caa09804e7d2	reportes	386e63ba-dc8f-4af6-9447-44f7976a4a0c/reporte_386e63ba-dc8f-4af6-9447-44f7976a4a0c_1749763048857.pdf	386e63ba-dc8f-4af6-9447-44f7976a4a0c	2025-06-12 21:17:29.240624+00	2025-06-12 21:17:29.240624+00	2025-06-12 21:17:29.240624+00	{"eTag": "\\"c5155aae965b48798e1c01d6d8721d1c\\"", "size": 4189352, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-12T21:17:30.000Z", "contentLength": 4189352, "httpStatusCode": 200}	cdac0f8e-856a-4262-97c7-ed5bfd4c04f7	386e63ba-dc8f-4af6-9447-44f7976a4a0c	{}
+02a1b6f4-6db5-4f0f-a32a-bfce2abc38d5	profile-pictures	7b23b8a4-8f26-40a9-86c0-c591b423ea6a/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 04:05:10.392281+00	2025-06-13 04:05:10.392281+00	2025-06-13 04:05:10.392281+00	{"eTag": "\\"d2daa8f94c6fa44378a418db578e3ba1\\"", "size": 254602, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:05:11.000Z", "contentLength": 254602, "httpStatusCode": 200}	ce52922d-a1c2-4b60-8f7d-629094646854	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+acddc681-acb6-4ac4-98db-58fa266fc411	profile-pictures	b5c684f0-24d7-436f-b752-71cd9e361c8f/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 04:15:38.125551+00	2025-06-13 04:15:38.125551+00	2025-06-13 04:15:38.125551+00	{"eTag": "\\"f11913fdcd46880b1c996dee3c7cde22\\"", "size": 5098, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:15:39.000Z", "contentLength": 5098, "httpStatusCode": 200}	0f9d63c7-dfb7-4918-a4bf-3c200782d93d	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+b07f170a-b466-4489-bb01-cfb0504dcfaf	profile-pictures	5ad0bb87-f4fc-413c-adba-ef4b0b9402d1/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 04:16:38.498112+00	2025-06-13 04:16:38.498112+00	2025-06-13 04:16:38.498112+00	{"eTag": "\\"a78e6afbdc7fff08be89633d406665e3\\"", "size": 169895, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:16:39.000Z", "contentLength": 169895, "httpStatusCode": 200}	cdfd05b5-aa60-4dd9-ba4a-5ffd98bf7ff3	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+60b189d9-f165-4259-9dea-9776c44081ea	profile-pictures	36abc818-b3a6-440f-933a-79ff41fe5b67/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 04:25:19.933698+00	2025-06-13 04:25:19.933698+00	2025-06-13 04:25:19.933698+00	{"eTag": "\\"bbf7fa4f0df9c1acf389fc84b46bceae\\"", "size": 215877, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:25:20.000Z", "contentLength": 215877, "httpStatusCode": 200}	d8899b8c-d26e-4ab1-901c-07953f3a3162	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+23d3dd02-473f-4274-898c-9edab95b0771	profile-pictures	3912d459-b96e-4150-9a2a-fb9135ebc374/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 04:26:30.460598+00	2025-06-13 04:26:30.460598+00	2025-06-13 04:26:30.460598+00	{"eTag": "\\"5da076391c793ac129bf5834f7bb84fe\\"", "size": 60355, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:26:31.000Z", "contentLength": 60355, "httpStatusCode": 200}	9c11b770-5492-4e93-8fbc-7566b09bdc8d	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+85916b95-8349-4273-b76f-1defaa841d24	profile-pictures	1fbfe562-cea4-4b33-b830-0c9f5f301251/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 04:20:17.714024+00	2025-06-13 04:20:17.714024+00	2025-06-13 04:20:17.714024+00	{"eTag": "\\"cd04f4b73b8abdf6507e869728bfe353\\"", "size": 114973, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:20:18.000Z", "contentLength": 114973, "httpStatusCode": 200}	6777988a-ed50-4584-840e-b62ea9910fbd	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+a0fb0592-99a9-48a8-bd76-d9c2f0bdd551	profile-pictures	54bb3bab-94a3-420a-99da-57717c1c075a/perfil	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 04:24:19.243582+00	2025-06-13 04:24:19.243582+00	2025-06-13 04:24:19.243582+00	{"eTag": "\\"90208d8f95da8522ff03ce6a3a2b10e2\\"", "size": 380098, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T04:24:20.000Z", "contentLength": 380098, "httpStatusCode": 200}	2137c5e7-7a53-4b6f-9476-b251e4ac553f	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+11f35efe-bf3a-4f01-a756-164a293efb33	project-images	proyectos/af95e861-067b-45eb-b929-d67a5dd1358a/imagen.png	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 05:08:21.290558+00	2025-06-13 05:08:21.290558+00	2025-06-13 05:08:21.290558+00	{"eTag": "\\"484e16240b05bdcc575857d3123b3ab7\\"", "size": 57385, "mimetype": "image/png", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T05:08:22.000Z", "contentLength": 57385, "httpStatusCode": 200}	c916b0a4-cae6-4018-b9b4-1af5d646474d	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+689d4756-4a22-4967-ac51-3121a4a0ae37	project-images	proyectos/5b0cf129-c25c-4548-a68e-a6af4b6b5c6e/imagen.jpg	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 05:19:00.776967+00	2025-06-13 05:19:00.776967+00	2025-06-13 05:19:00.776967+00	{"eTag": "\\"1f5c5de7292d63c28c603a1a1d6086a6\\"", "size": 51154, "mimetype": "image/jpeg", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T05:19:01.000Z", "contentLength": 51154, "httpStatusCode": 200}	670e4808-6161-4bb2-ae5c-f8a77023d859	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
+5e20b6fa-1f9d-41cd-a729-4ded99e48ff6	reportes	5f096705-11c3-49b1-b42c-d7bd17a75439/reporte_5f096705-11c3-49b1-b42c-d7bd17a75439_1749796725112.pdf	5f096705-11c3-49b1-b42c-d7bd17a75439	2025-06-13 06:38:48.533486+00	2025-06-13 06:38:48.533486+00	2025-06-13 06:38:48.533486+00	{"eTag": "\\"4002c5d18b8b0b1085604d918aed22b7\\"", "size": 4197916, "mimetype": "application/pdf", "cacheControl": "max-age=3600", "lastModified": "2025-06-13T06:38:49.000Z", "contentLength": 4197916, "httpStatusCode": 200}	010ee8c3-ffbf-4f63-89e5-455425b9ec4f	5f096705-11c3-49b1-b42c-d7bd17a75439	{}
 \.
 
 
@@ -7277,7 +6577,7 @@ COPY "storage"."s3_multipart_uploads_parts" ("id", "upload_id", "size", "part_nu
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 3629, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 3637, true);
 
 
 --
