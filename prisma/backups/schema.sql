@@ -1,4 +1,6 @@
 
+\restrict cptq8qIO5lvcLbkjRL2Ol8LtgdFtezbvO8E4glM9vIKmGk3vudOw8IkokmsHyWm
+
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -3562,5 +3564,7 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Lead" TO "anon";
 
 
 
+
+\unrestrict cptq8qIO5lvcLbkjRL2Ol8LtgdFtezbvO8E4glM9vIKmGk3vudOw8IkokmsHyWm
 
 RESET ALL;
