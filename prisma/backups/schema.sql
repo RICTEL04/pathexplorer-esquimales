@@ -1,5 +1,5 @@
 
-\restrict SsU1yib24sXtaqKRdZW6Fd09meCrriblqEHnRw2iK6fCb4tc1RRzqNSayrIiYn2
+\restrict wzFKf3nqe2008E24fvgtxeIkEe82lKfjlcz54drjcguYcDr0gErlGKChcneXsQE
 
 
 SET statement_timeout = 0;
@@ -3565,6 +3565,6 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Lead" TO "anon";
 
 
 
-\unrestrict SsU1yib24sXtaqKRdZW6Fd09meCrriblqEHnRw2iK6fCb4tc1RRzqNSayrIiYn2
+\unrestrict wzFKf3nqe2008E24fvgtxeIkEe82lKfjlcz54drjcguYcDr0gErlGKChcneXsQE
 
 RESET ALL;
