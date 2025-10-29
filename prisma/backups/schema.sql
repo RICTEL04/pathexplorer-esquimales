@@ -3565,4 +3565,3 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "public"."Talent_Lead" TO "anon";
 
 
 
-RESET ALL;
