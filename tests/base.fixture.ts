@@ -71,8 +71,8 @@ async function authenticateUser(page: any, config: AuthConfig) {
   await page.getByRole('textbox', { name: 'Email' }).fill(config.email);
   await page.getByRole('textbox', { name: 'Contraseña' }).fill(config.password);
   await page.getByRole('button', { name: 'Sign in' }).click();
-  
   if (config.redirectTo) {
+    await page.waitForTimeout(2000)
     await page.goto(config.redirectTo);
   }
 }
