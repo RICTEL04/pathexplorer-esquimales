@@ -4,7 +4,7 @@ SET session_replication_role = replica;
 -- PostgreSQL database dump
 --
 
--- \restrict eihJ1G8pyueQgeN8vWxhJwNE8Pe09gCChsGcCVXbkzJDOPAv1NUNqezfOSZS1rB
+-- \restrict Ld8rhFHto6xgfqJ0V71y4Yj65SRn9tV5cbZmUsmMV7UZl7bSzMhL4hdD7Oi7XVb
 
 -- Dumped from database version 15.8
 -- Dumped by pg_dump version 17.6
@@ -5298,10 +5298,18 @@ COPY "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "
 
 
 --
+-- Data for Name: custom_oauth_providers; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY "auth"."custom_oauth_providers" ("id", "provider_type", "identifier", "name", "client_id", "client_secret", "acceptable_client_ids", "scopes", "pkce_enabled", "attribute_mapping", "authorization_params", "enabled", "email_optional", "issuer", "discovery_url", "skip_nonce_check", "cached_discovery", "discovery_cached_at", "authorization_url", "token_url", "userinfo_url", "jwks_uri", "created_at", "updated_at") FROM stdin;
+\.
+
+
+--
 -- Data for Name: flow_state; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
-COPY "auth"."flow_state" ("id", "user_id", "auth_code", "code_challenge_method", "code_challenge", "provider_type", "provider_access_token", "provider_refresh_token", "created_at", "updated_at", "authentication_method", "auth_code_issued_at") FROM stdin;
+COPY "auth"."flow_state" ("id", "user_id", "auth_code", "code_challenge_method", "code_challenge", "provider_type", "provider_access_token", "provider_refresh_token", "created_at", "updated_at", "authentication_method", "auth_code_issued_at", "invite_token", "referrer", "oauth_client_state_id", "linking_target_id", "email_optional") FROM stdin;
 \.
 
 
@@ -5365,7 +5373,7 @@ COPY "auth"."instances" ("id", "uuid", "raw_base_config", "created_at", "updated
 -- Data for Name: oauth_clients; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
-COPY "auth"."oauth_clients" ("id", "client_secret_hash", "registration_type", "redirect_uris", "grant_types", "client_name", "client_uri", "logo_uri", "created_at", "updated_at", "deleted_at", "client_type") FROM stdin;
+COPY "auth"."oauth_clients" ("id", "client_secret_hash", "registration_type", "redirect_uris", "grant_types", "client_name", "client_uri", "logo_uri", "created_at", "updated_at", "deleted_at", "client_type", "token_endpoint_auth_method") FROM stdin;
 \.
 
 
@@ -5564,6 +5572,22 @@ COPY "auth"."saml_relay_states" ("id", "sso_provider_id", "request_id", "for_ema
 --
 
 COPY "auth"."sso_domains" ("id", "sso_provider_id", "domain", "created_at", "updated_at") FROM stdin;
+\.
+
+
+--
+-- Data for Name: webauthn_challenges; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY "auth"."webauthn_challenges" ("id", "user_id", "challenge_type", "session_data", "created_at", "expires_at") FROM stdin;
+\.
+
+
+--
+-- Data for Name: webauthn_credentials; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY "auth"."webauthn_credentials" ("id", "user_id", "credential_id", "public_key", "attestation_type", "aaguid", "sign_count", "transports", "backup_eligible", "backed_up", "friendly_name", "created_at", "updated_at", "last_used_at") FROM stdin;
 \.
 
 
@@ -6740,6 +6764,6 @@ SELECT pg_catalog.setval('"public"."Notificaciones_id_seq"', 2, true);
 -- PostgreSQL database dump complete
 --
 
--- \unrestrict eihJ1G8pyueQgeN8vWxhJwNE8Pe09gCChsGcCVXbkzJDOPAv1NUNqezfOSZS1rB
+-- \unrestrict Ld8rhFHto6xgfqJ0V71y4Yj65SRn9tV5cbZmUsmMV7UZl7bSzMhL4hdD7Oi7XVb
 
 RESET ALL;
