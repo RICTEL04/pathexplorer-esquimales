@@ -32,13 +32,6 @@ CREATE EXTENSION IF NOT EXISTS "pgsodium";
 ALTER SCHEMA "public" OWNER TO "postgres";
 
 
-CREATE EXTENSION IF NOT EXISTS "pg_graphql" WITH SCHEMA "graphql";
-
-
-
-
-
-
 CREATE EXTENSION IF NOT EXISTS "pg_stat_statements" WITH SCHEMA "extensions";
 
 
@@ -3163,9 +3156,6 @@ ALTER PUBLICATION "supabase_realtime" ADD TABLE ONLY "public"."Proyectos";
 REVOKE USAGE ON SCHEMA "public" FROM PUBLIC;
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
-
-
-
 
 
 
