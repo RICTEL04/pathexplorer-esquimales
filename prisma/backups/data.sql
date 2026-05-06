@@ -4,7 +4,7 @@ SET session_replication_role = replica;
 -- PostgreSQL database dump
 --
 
--- \restrict zbCdbXEbaRXiI1o8Q6AdyuptCnIWV92oNUCJGGajSxPD82a2XpzTtkIdqXM33TG
+-- \restrict UQdBZbSa1qnOA3hVoYYkUgqvN9H9CD6gXh6lNVmrPnYi48WgH5S8sNgUAHa1lzk
 
 -- Dumped from database version 15.8
 -- Dumped by pg_dump version 17.6
@@ -6764,6 +6764,6 @@ SELECT pg_catalog.setval('"public"."Notificaciones_id_seq"', 2, true);
 -- PostgreSQL database dump complete
 --
 
--- \unrestrict zbCdbXEbaRXiI1o8Q6AdyuptCnIWV92oNUCJGGajSxPD82a2XpzTtkIdqXM33TG
+-- \unrestrict UQdBZbSa1qnOA3hVoYYkUgqvN9H9CD6gXh6lNVmrPnYi48WgH5S8sNgUAHa1lzk
 
 RESET ALL;
